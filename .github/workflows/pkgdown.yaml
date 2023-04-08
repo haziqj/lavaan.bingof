@@ -34,7 +34,7 @@ jobs:
           needs: website
 
       - uses: r-lib/actions/setup-tinytex@v2
-        run: tlmgr --version
+      - run: tlmgr --version
 
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
