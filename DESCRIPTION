@@ -1,0 +1,15 @@
+Package: lavaan.bingof
+Type: Package
+Title: Limited Information Goodness of Fit Tests for Binary Factor Models
+Version: 0.1.0
+Authors@R: person(
+  "Haziq", "Jamil", 
+  email = "haziq.jamil@gmail.com",
+  role = c("aut", "cre"),
+  comment = c(ORCID = "0000-0003-3298-1010")
+  )
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: GPL (>= 3)
+Encoding: UTF-8
+LazyData: true

@@ -1,0 +1,452 @@
+# Create population ------------------------------------------------------------
+make_population <- function(model.no = 1, seed = 123, H1 = FALSE,
+                            return_all = FALSE) {
+
+  set.seed(seed)
+
+  # Set up the loadings and covariance matrices --------------------------------
+  Lambda      <- loading_mat(model.no)
+  neta        <- ncol(Lambda)
+  nitems      <- nrow(Lambda)
+  Psi         <- cov_lv_mat(model.no)
+  Theta       <- matrix(0, nrow = nitems, ncol = nitems)
+  diag(Theta) <- 1 - diag(Lambda %*% Psi %*% t(Lambda))
+  tau         <- get_tau(model.no)
+
+  # Prepare population data ----------------------------------------------------
+  letters <- c(letters, sapply(letters, function(x) paste0(x, letters)))
+  pop <-
+    tibble(type = LETTERS[1:3],
+           nschools = c(400, 1000, 600),
+           avg_class_size = c(15, 25, 20)) %>%
+    rowwise() %>%
+    mutate(school = list(seq_len(nschools))) %>%
+    unnest_longer(school) %>%
+    mutate(nstudents = round(rnorm(n(), 500, sd = 100))) %>%
+    rowwise() %>%
+    mutate(class = list(sample(letters[seq_len(nstudents / avg_class_size)],
+                               size = nstudents, replace = TRUE))) %>%
+    unnest_longer(class) %>%
+    select(type, school, class) %>%
+    arrange(type, school, class)
+  N <- nrow(pop)
+
+  # Generate the data ----------------------------------------------------------
+  eta     <- mnormt::rmnorm(n = N, mean = rep(0, neta), varcov = Psi)
+  epsilon <- mnormt::rmnorm(n = N, mean = rep(0, nitems), varcov = Theta)
+  ystar   <- tcrossprod(eta, Lambda) + epsilon
+
+  if (isTRUE(H1)) {
+    # Add an extra factor to misspecify the model fit (for power simulations)
+    ystar <- ystar +
+      t((Lambda[, 1, drop = FALSE] + rnorm(nitems, sd = 0.1)) %*% rnorm(N))
+    ystar <- scale(ystar)
+  }
+
+  # repair eta
+  eta <- as.data.frame(eta)
+  colnames(eta) <- paste0("eta", seq_len(neta))
+
+  # Stratify according to latent variable --------------------------------------
+  abil_order <-
+    as_tibble(eta) %>%
+    mutate(z = rowSums(across(everything())),
+           rn = row_number()) %>%
+    select(z, rn) %>%
+    arrange(desc(z)) %>%
+    mutate(type = pop$type) %>%
+    group_by(type) %>%
+    mutate(rn2 = sample(n(), replace = FALSE)) %>%
+    arrange(type, rn2) %>%
+    pull(rn)
+  ystar <- ystar[abil_order, ]
+
+  # Get the response patterns --------------------------------------------------
+  y <-
+    t(apply(ystar, 1, function(x) as.numeric(x > tau))) %>%
+    as.data.frame()
+  colnames(y) <- paste0("y", seq_len(nitems))
+
+  ystar <- as.data.frame(ystar)
+  colnames(ystar) <- paste0("ystar", seq_len(nitems))
+
+  if (isTRUE(return_all)) {
+    bind_cols(pop, y, ystar, eta[abil_order, , drop = FALSE])
+  } else {
+    bind_cols(pop, y)
+  }
+}
+
+# Sampling ---------------------------------------------------------------------
+gen_data_bin_srs <- function(population = make_population(1), n = 3000,
+                             seed = NULL) {
+  set.seed(seed)
+  slice_sample(population, n = n) %>%
+    mutate(across(starts_with("y"), ordered))
+}
+
+gen_data_bin_complex1 <- function(population = make_population(1), npsu = 1000,
+                                  seed = NULL) {
+  # 1-stage stratified sampling
+  set.seed(seed)
+
+  # Weights
+  school_info <-
+    population %>%
+    group_by(type) %>%
+    summarise(
+      students_in_school_type = n(),
+    ) %>%
+    mutate(
+      prob = npsu / students_in_school_type,
+      wt = 1 / prob
+    )
+
+  # Sampling of PSUs
+  psu_sampled <- population %>%
+    group_by(type) %>%
+    slice_sample(n = npsu) %>%
+    ungroup()
+
+  sampled <- psu_sampled %>%
+    left_join(school_info, by = c("type")) %>%
+    select(-starts_with("ystar")) %>%
+    select(type, school, class, wt, starts_with("y")) %>%
+    mutate(wt = wt / sum(wt) * n(),
+           across(starts_with("y"), ordered)) %>%
+    arrange(type, school, class)
+
+  sampled
+}
+
+gen_data_bin_complex2 <- function(population = make_population(1), npsu = 150,
+                                  seed = NULL) {
+  # 2-stage cluster sampling
+  set.seed(seed)
+
+  # Sampling of PSUs
+  psu_sampled <- population %>%
+    select(type, school, class) %>%
+    group_by(type, school) %>%
+    summarise(
+      nstudents = n(),
+      pr_class_selected = 1 / length(unique(class)),
+      .groups = "drop"
+    ) %>%
+    # mutate(pr_school_selected = npsu / n()) %>%
+    slice_sample(n = npsu, weight_by = nstudents, replace = FALSE) %>%
+    mutate(
+      pr_school_selected = nstudents / sum(nstudents),
+      prob = pr_school_selected * pr_class_selected,
+      wt = 1 / prob
+    )  %>%
+    arrange(type, school)
+
+  # Sampling of classes within PSUs (using SRS)
+  classes_sampled <-
+    inner_join(population, psu_sampled, by = c("type", "school")) %>%
+    distinct(type, school, class) %>%
+    group_by(type, school) %>%
+    slice_sample(n = 1) %>%
+    ungroup()
+
+  sampled <-
+    inner_join(population, classes_sampled,
+               by = c("type", "school", "class")) %>%
+    left_join(psu_sampled, by = c("type", "school")) %>%
+    select(type, school, class, wt, starts_with("y")) %>%
+    mutate(wt = wt / sum(wt) * n(),
+           across(starts_with("y"), ordered)) %>%
+    arrange(type, school, class)
+
+  sampled
+}
+
+gen_data_bin_complex3 <- function(population = make_population(1), npsu = 50,
+                                  seed = NULL) {
+  # 2-stage stratified cluster sampling
+  set.seed(seed)
+
+  # Weights
+  school_info <- population %>%
+    select(type, school, class) %>%
+    group_by(type, school) %>%
+    summarise(
+      nstudents = n(),
+      pr_class_selected = 1 / length(unique(class)),
+      .groups = "drop"
+    ) %>%
+    group_by(type) %>%
+    mutate(pr_school_selected = npsu / n(),
+           prob = pr_school_selected * pr_class_selected,
+           wt = 1 / prob)
+
+  # Sampling of PSUs
+  psu_sampled <- population %>%
+    distinct(type, school) %>%
+    group_by(type) %>%
+    slice_sample(n = npsu)
+
+  # Sampling of classes within PSUs (using SRS)
+  classes_sampled <-
+    inner_join(population, psu_sampled, by = c("type", "school")) %>%
+    distinct(type, school, class) %>%
+    group_by(type, school) %>%
+    slice_sample(n = 1) %>%
+    ungroup()
+
+  sampled <-
+    inner_join(population, classes_sampled,
+               by = c("type", "school", "class")) %>%
+    left_join(school_info, by = c("type", "school")) %>%
+    select(type, school, class, wt, starts_with("y")) %>%
+    mutate(wt = wt / sum(wt) * n(),
+           across(starts_with("y"), ordered)) %>%
+    arrange(type, school, class)
+
+  sampled
+
+}
+
+# Sample -----------------------------------------------------------------------
+# dat <- gen_data_bin_strat(population = pop, seed = NULL)
+#
+# # ignore weights
+# fit1 <- sem(model = mod, data = dat, estimator = "PML", std.lv = TRUE)
+# # with weights
+# fit2 <- sem(model = mod, data = dat, estimator = "PML", std.lv = TRUE,
+#             sampling.weights = "wt")
+#
+# coef(fit1)
+# coef(fit2)
+#
+# # Comparison of sample statistics
+# tibble(
+#   names = 1:15,
+#   a = with(get_uni_bi_moments(fit), c(pdot1, pdot2)),  # pop
+#   c = with(get_uni_bi_moments(fit1), c(pdot1, pdot2)),  # ignore weights
+#   b = with(get_uni_bi_moments(fit2), c(pdot1, pdot2)),  # weights
+# ) %>%
+#   pivot_longer(-names) %>%
+#   mutate(name = factor(name, labels = c("Population", "Weights",
+#                                         "Ignore weights"))) %>%
+#   ggplot(aes(names, value, shape = name, linetype = name, col = name)) +
+#   geom_line(position = position_dodge(width = 0.1)) +
+#   geom_point(position = position_dodge(width = 0.1)) +
+#   scale_x_continuous(breaks = 1:15, labels = c(names(prop1), paste0(
+#     names(prop1)[combn(5, 2)[1, ]],
+#     names(prop1)[combn(5, 2)[2, ]]
+#   ))) +
+#   labs(col = NULL, linetype = NULL, x = NULL, shape = NULL, y = "Proportion")
+#
+# # Comparison of model fit
+# tibble(
+#   names = 1:15,
+#   a = with(get_uni_bi_moments(fit), c(pidot1, pidot2)),  # pop
+#   c = with(get_uni_bi_moments(fit1), c(pidot1, pidot2)),  # ignore weights
+#   b = with(get_uni_bi_moments(fit2), c(pidot1, pidot2))  # weights
+# )  %>%
+#   pivot_longer(-names) %>%
+#   mutate(name = factor(name, labels = c("Population", "Weights",
+#                                         "Ignore weights"))) %>%
+#   ggplot(aes(names, value, shape = name, linetype = name, col = name)) +
+#   geom_line(position = position_dodge(width = 0.1)) +
+#   geom_point(position = position_dodge(width = 0.1)) +
+#   scale_x_continuous(breaks = 1:15, labels = c(names(prop1), paste0(
+#     names(prop1)[combn(5, 2)[1, ]],
+#     names(prop1)[combn(5, 2)[2, ]]
+#   ))) +
+#   labs(col = NULL, linetype = NULL, x = NULL, shape = NULL, y = "Proportion")
+#
+# # This uses the wrong estimator. Need to adjust using weights.
+# # Compare Sigma2 matrix
+# tibble(
+#   # names = 1:15,
+#   a = create_Sigma2_matrix(fit)[upper.tri(diag(15))],  # pop
+#   # c = create_Sigma2_matrix(fit1)[upper.tri(diag(15))],  # ignore weights
+#   b = create_Sigma2_matrix(fit2)[upper.tri(diag(15))]  # weights
+# ) %>%
+#   mutate(names = row_number()) %>%
+#   pivot_longer(-names) %>%
+#   mutate(name = factor(name, labels = c("Population", "Weights"))) %>%
+#   ggplot(aes(names, value, shape = name, linetype = name, col = name)) +
+#   geom_line(position = position_dodge(width = 0.1)) +
+#   geom_point(position = position_dodge(width = 0.1)) +
+#   labs(col = NULL, linetype = NULL, x = NULL, shape = NULL, y = "Proportion")
+#
+#
+# compare_matrix_plot <- function(fn, logplot = FALSE) {
+#   mat1 <- fn(fit)  # pop
+#   mat2 <- fn(fit2)  # weight
+#   mat3 <- fn(fit1)  # unweighted
+#
+#   p <- tibble(
+#     pop = c(mat1),
+#     weight = c(mat2),
+#     unweight = c(mat3)
+#   ) %>%
+#     pivot_longer(-pop) %>%
+#     ggplot(aes(pop, value, col = name)) +
+#     geom_point() +
+#     geom_abline(slope = 1, intercept = 0)
+#
+#   if (isTRUE(logplot)) {
+#     p + scale_x_log10() + scale_y_log10()
+#   } else {
+#     p
+#   }
+#
+# }
+#
+# compare_matrix_plot(create_Sigma2_matrix)
+# compare_matrix_plot(get_sensitivity_inv_mat)
+# compare_matrix_plot(function(x) Delta_mats(x)$Delta2)
+# compare_matrix_plot(function(x) Delta_mats(x)$Delta_til)
+# compare_matrix_plot(function(x) unlist(lavaan:::lav_tables_pairwise_model_pi(x)))
+# compare_matrix_plot(function(x) MASS::ginv(calc_test_stuff(x)$Omega2))
+# compare_matrix_plot(function(x) diag(calc_test_stuff(x)$Omega2))
+#
+#
+# create_Sigma2_matrix_complex <- function(.lavobject) {
+#   list2env(extract_lavaan_info(.lavobject), environment())
+#   list2env(get_uni_bi_moments(.lavobject), environment())
+#
+#   # Here the strata information is not available!!!
+#   Ns <- length(unique(dat$wt))
+#   dat <-
+#     dat %>%
+#     mutate(strat = factor(wt, labels = 1:Ns))
+#
+#   tmp <- dat %>%
+#     select(starts_with("y")) %>%
+#     mutate(across(starts_with("y"), function(x) as.numeric(x == 2)))
+#
+#   id <- combn(p, 2)
+#   the_names <- paste0("y", 1:5)
+#   the_names <- c(the_names, paste0(the_names[id[1, ]], the_names[id[2, ]]))
+#   tmp2 <- as_tibble(((tmp[, id[1, ]] == 1) + (tmp[, id[2, ]] == 1)) == 2) %>%
+#     mutate(across(everything(), as.numeric))
+#   colnames(tmp2) <- the_names[-(1:5)]
+#   tmp <- bind_cols(dat %>% select(-starts_with("y")), tmp, tmp2)
+#
+#   the_pi <- c(pidot1, pidot2)
+#   Sigma <- list()
+#   for (i in 1:3) {
+#     current_dat <- tmp %>%
+#       filter(strat == i)
+#     y <- current_dat %>%
+#       select(starts_with("y")) %>%
+#       mutate(across(starts_with("y"), function(x) as.numeric(x == 1))) %>%
+#       as.matrix()
+#     na <- nrow(y)
+#     uab <- sweep(y, 2, the_pi, "-") * current_dat$wt / N
+#     ubar <- apply(uab, 2, mean)
+#
+#     Sigma[[i]] <- crossprod(
+#       sweep(uab, 2, ubar, "-")
+#     ) * na / (na - 1)
+#   }
+#   Reduce("+", Sigma) * N
+# }
+#
+#
+# mat1 <- create_Sigma2_matrix(fit)  # pop
+# mat2 <- create_Sigma2_matrix_complex(fit)  # weight
+# mat3 <- create_Sigma2_matrix_complex(fit2)  # unweighted
+#
+# tibble(
+#   pop = c(mat1),
+#   weight = c(mat2),
+#   chris = c(mat3)
+# ) %>%
+#   pivot_longer(-pop) %>%
+#   ggplot(aes(pop, value, col = name)) +
+#   geom_point() +
+#   geom_abline(slope = 1, intercept = 0)
+#
+
+
+# Simulation -------------------------------------------------------------------
+# library(tidyverse)
+# library(ggridges)
+# library(kableExtra)
+# library(lavaan)
+# library(survey)
+# library(truncnorm)
+# theme_set(theme_bw())
+# library(doSNOW)
+# library(foreach)
+#
+# pop <- make_population(1)
+# true_vals <- c(loading_mat(1), get_tau(1))
+# mod <- txt_mod(1)
+#
+# B <- 1000  # no of simulations
+# no.cores <- parallel::detectCores() - 2
+# pb <- txtProgressBar(min = 0, max = B, style = 3)
+# progress <- function(i) setTxtProgressBar(pb, i)
+#
+# cl <- makeCluster(no.cores)
+# registerDoSNOW(cl)
+# res <- foreach(
+#   b = 1:B,
+#   .combine = bind_rows,
+#   .errorhandling = "remove",
+#   .packages = c("lavaan", "tidyverse", "survey"),
+#   .options.snow = list(progress = progress)
+# ) %dopar% {
+#
+#   # Stratified sampling
+#   dat <- gen_data_bin_complex1(population = pop)
+#   fit11 <- sem(model = mod, data = dat, estimator = "PML", std.lv = TRUE)
+#   fit21 <- sem(model = mod, data = dat, estimator = "PML", std.lv = TRUE,
+#                sampling.weights = "wt")
+#
+#   # 2-stage cluster sampling
+#   dat <- gen_data_bin_complex2(population = pop)
+#   fit12 <- sem(model = mod, data = dat, estimator = "PML", std.lv = TRUE)
+#   fit22 <- sem(model = mod, data = dat, estimator = "PML", std.lv = TRUE,
+#                sampling.weights = "wt")
+#
+#   # 2-stage stratified cluster sampling
+#   dat <- gen_data_bin_complex3(population = pop)
+#   fit13 <- sem(model = mod, data = dat, estimator = "PML", std.lv = TRUE)
+#   fit23 <- sem(model = mod, data = dat, estimator = "PML", std.lv = TRUE,
+#                sampling.weights = "wt")
+#
+#   bind_rows(
+#     tibble(
+#       B = b, param = names(coef(fit11)), Sampling = "Stratified",
+#       type = c(rep("Loadings", 5), rep("Thresholds", 5)),
+#       "truth" = as.numeric(true_vals),
+#       "PML" = as.numeric(coef(fit11)), "PML (wt)" = as.numeric(coef(fit21))
+#     ),
+#     tibble(
+#       B = b, param = names(coef(fit11)), Sampling = "2S Cluster",
+#       type = c(rep("Loadings", 5), rep("Thresholds", 5)),
+#       "truth" = as.numeric(true_vals),
+#       "PML" = as.numeric(coef(fit12)), "PML (wt)" = as.numeric(coef(fit22))
+#     ),
+#     tibble(
+#       B = b, param = names(coef(fit11)), Sampling = "2S Strat-Clust",
+#       type = c(rep("Loadings", 5), rep("Thresholds", 5)),
+#       "truth" = as.numeric(true_vals),
+#       "PML" = as.numeric(coef(fit13)), "PML (wt)" = as.numeric(coef(fit23))
+#     )
+#   )
+# }
+# close(pb)
+# stopCluster(cl)
+#
+# res %>%
+#   mutate(across(starts_with("PML"), ~ abs(as.numeric(. - truth)))) %>%
+#   select(-truth) %>%
+#   pivot_longer(-c(B, param, Sampling, type)) %>%
+#   mutate(Sampling = factor(Sampling, levels = c("Stratified",
+#                                                 "2S Cluster",
+#                                                 "2S Strat-Clust"))) %>%
+#   ggplot(aes(param, value, fill = name)) +
+#   geom_boxplot(outlier.shape = NA) +
+#   # coord_cartesian(ylim = c(0, 1)) +
+#   facet_grid(Sampling ~ type, scales = "free_x") +
+#   labs(x = NULL, y = "Absolute bias", fill = "Estimation")
