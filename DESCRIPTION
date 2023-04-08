@@ -13,5 +13,8 @@ Description: More about what it does (maybe more than one line)
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/haziqj/lavaan.bingof
+URL: https://github.com/haziqj/lavaan.bingof,
+    http://haziqj.ml/lavaan.bingof/
 BugReports: https://github.com/haziqj/lavaan.bingof/issues
+Suggests: 
+    rmarkdown
