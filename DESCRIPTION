@@ -13,3 +13,5 @@ Description: More about what it does (maybe more than one line)
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
+URL: https://github.com/haziqj/lavaan.bingof
+BugReports: https://github.com/haziqj/lavaan.bingof/issues
