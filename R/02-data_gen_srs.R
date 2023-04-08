@@ -1,5 +1,3 @@
-source("01-utilities.R")
-
 gen_data_bin <- function(model.no = 1, n = 1000, seed = NULL, H1 = FALSE,
                          return_all = FALSE) {
   # Generate data for simple random sample
