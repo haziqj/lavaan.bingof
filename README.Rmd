@@ -23,4 +23,20 @@ This is the accompanying R package for the paper
 
 > Goodness-of-fit tests for composite likelihood estimation under simple random and complex survey sampling
 
+## Usage
+
+```{r}
+library(lavaan.bingof)
+
+# Simulate binary data
+(dat <- gen_data_bin(n = 1000, seed = 123))
+
+# Fit lavaan model using PML estimation
+(mod <- txt_mod(model.no = 1))
+fit <- lavaan::sem(mod, dat, std.lv = TRUE, estimator = "PML")
+
+# Test statistics
+all_tests(fit)
+```
+
 

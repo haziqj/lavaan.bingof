@@ -1,3 +1,15 @@
+#' Title
+#'
+#' @param model.no
+#' @param n
+#' @param seed
+#' @param H1
+#' @param return_all
+#'
+#' @return
+#' @export
+#'
+#' @examples
 gen_data_bin <- function(model.no = 1, n = 1000, seed = NULL, H1 = FALSE,
                          return_all = FALSE) {
   # Generate data for simple random sample
@@ -27,7 +39,7 @@ gen_data_bin <- function(model.no = 1, n = 1000, seed = NULL, H1 = FALSE,
   y <-
     t(apply(ystar, 1, function(x) as.numeric(x > tau))) %>%
     as.data.frame() %>%
-    mutate(across(everything), ordered)
+    mutate(across(everything(), ordered))
   colnames(y) <- paste0("y", seq_len(nitems))
 
   ystar <- as.data.frame(ystar)

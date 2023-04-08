@@ -6,7 +6,7 @@
 \alias{lavaan.bingof-package}
 \title{lavaan.bingof: Limited Information Goodness of Fit Tests for Binary Factor Models}
 \description{
-More about what it does (maybe more than one line) Use four spaces when indenting paragraphs within the Description.
+This is the accompanying R package for the paper "Goodness-of-fit tests for composite likelihood estimation under simple random and complex survey sampling". After fitting a binary factor model in lavaan, the user can call several functions to compute the goodness-of-fit test statistics based off of lower order marginals and compute the corresponding p-values.
 }
 \seealso{
 Useful links:

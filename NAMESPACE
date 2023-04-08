@@ -2,6 +2,9 @@
 
 export(Wald_test)
 export(Wald_test_v3)
+export(all_tests)
+export(gen_data_bin)
+export(txt_mod)
 importFrom(MASS,ginv)
 importFrom(Matrix,rankMatrix)
 importFrom(dplyr,across)

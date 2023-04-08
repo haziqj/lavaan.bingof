@@ -789,6 +789,20 @@ Multn_test <- function(lavobject, approx_Omega2 = FALSE, svy_design = NULL,
   cbind(out, name = paste0("Multn,MM", .order))
 }
 
+#' Title
+#'
+#' @param fit
+#' @param svy_design
+#' @param sim
+#' @param H_inv
+#' @param Delta_mat_list
+#' @param Sigma2
+#' @param pi_tilde
+#'
+#' @return
+#' @export
+#'
+#' @examples
 all_tests <- function(fit, svy_design = NULL, sim = 1, H_inv, Delta_mat_list,
                       Sigma2, pi_tilde) {
   test_stuff <- calc_test_stuff(fit, svy_design, H_inv, Delta_mat_list, Sigma2,

@@ -10,6 +10,14 @@
 # library(foreach)
 
 ## ---- Textual model ----------------------------------------------------------
+#' Title
+#'
+#' @param model.no
+#'
+#' @return
+#' @export
+#'
+#' @examples
 txt_mod <- function(model.no) {
   # Function to return the textual model for lavaan fit, depending on which
   # simulation scenario we are investigating.
