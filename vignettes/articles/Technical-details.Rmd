@@ -1,5 +1,9 @@
 ---
-title: "Introduction"
+title: "Technical details"
+pkgdown:
+  as_is: yes
+  extension: pdf
+output: pdf_document
 ---
 
 ```{r, include = FALSE}
@@ -12,5 +16,3 @@ knitr::opts_chunk$set(
 ```{r setup}
 # library(lavaan.bingof)
 ```
-
-Hello testing

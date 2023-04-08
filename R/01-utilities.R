@@ -2,12 +2,12 @@
 # lavaan textual models, getting the true parameter values, etc.
 
 ## ---- Libraries --------------------------------------------------------------
-library(tidyverse)
+# library(tidyverse)
 # remotes::install_github("haziqj/lavaan")  # modified lavaan to do PL weights
-library(lavaan)
-library(mnormt)
-library(doSNOW)
-library(foreach)
+# library(lavaan)
+# library(mnormt)
+# library(doSNOW)
+# library(foreach)
 
 ## ---- Textual model ----------------------------------------------------------
 txt_mod <- function(model.no) {

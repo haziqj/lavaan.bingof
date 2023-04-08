@@ -1,3 +1,10 @@
+# Export lavaan functions
+lav_model_vcov <- utils::getFromNamespace("lav_model_vcov", "lavaan")
+LongVecTH.Rho <- utils::getFromNamespace("LongVecTH.Rho", "lavaan")
+computeDelta <- utils::getFromNamespace("computeDelta", "lavaan")
+dbinorm <- utils::getFromNamespace("dbinorm", "lavaan")
+lav_tables_pairwise_model_pi <- utils::getFromNamespace("lav_tables_pairwise_model_pi", "lavaan")
+
 ## ---- Utilities --------------------------------------------------------------
 extract_lavaan_info <- function(lavobject) {
   lavdata        <- lavobject@Data
@@ -6,6 +13,7 @@ extract_lavaan_info <- function(lavobject) {
   lavoptions     <- lavobject@Options
   lavcache       <- lavobject@Cache
   lavpartable    <- lavobject@ParTable
+  lavtable       <- suppressWarnings(lavaan::lavTables(lavobject, dimension = 0))
 
   TH      <- lavobject@Fit@TH[[1]]
   th.idx  <- lavobject@Model@th.idx[[1]]
@@ -53,12 +61,12 @@ get_sensitivity_inv_mat <- function(.lavobject, matrix_type = c("Sensitivity",
   # This extracts the inverse of the observed sensitivity matrix H = E(nabla^2
   # pl). It is stored as E.inv as part of the Godambe information matrix (E.inv
   # %*% B0 %*% E.inv) because lavoptions has se = "robust.huber.white"
-  VCOV <- lavaan:::lav_model_vcov(lavmodel       = lavmodel,
-                                  lavsamplestats = lavsamplestats,
-                                  lavoptions     = lavoptions,
-                                  lavdata        = lavdata,
-                                  lavpartable    = lavpartable,
-                                  lavcache       = lavcache)
+  VCOV <- lav_model_vcov(lavmodel       = lavmodel,
+                         lavsamplestats = lavsamplestats,
+                         lavoptions     = lavoptions,
+                         lavdata        = lavdata,
+                         lavpartable    = lavpartable,
+                         lavcache       = lavcache)
   # Note: VCOV here is (H %*% J^{-1} %*% H)^{-1} = H^{-1} %*% J %*% H^{-1} and
   # it is the "full" information matrix. E.inv is therefore the unit information
   # matrix, and J has the full information.
@@ -204,17 +212,17 @@ derModelUnivBivProbToTheta <- function(nvar, TH, th.idx, Sigmahat, lavcache,
   idxCat_var2   <- idxTH_var2[cdtn]
 
   cors <- Sigmahat[lower.tri(Sigmahat)]
-  th.rho.vec <- lavaan:::LongVecTH.Rho(no.x = nvar,
-                                       all.thres = TH,
-                                       index.var.of.thres = th.idx,
-                                       rho.xixj = cors)
+  th.rho.vec <- LongVecTH.Rho(no.x = nvar,
+                              all.thres = TH,
+                              index.var.of.thres = th.idx,
+                              rho.xixj = cors)
 
   # Delta below gives the derivatives of standardised thresholds and polychoric
   # correlations (rows of Delta in this order) with respect to model parameter
   # vector theta. In lavaan in a factor analysis model the order of the
   # individual parameters is: loadings, unstandardized thresholds, factor
   # correlations
-  Delta <- lavaan:::computeDelta(lavmodel = lavmodel)[[1]]
+  Delta <- computeDelta(lavmodel = lavmodel)[[1]]
   noTH <- length(TH)
   derRhoToTheta <- Delta[-c(1:noTH), ]  # der. rhoij wrt theta
   derTauToTheta <- Delta[c(1:noTH), ]  # der. tau (unstd.) wrt theta
@@ -223,9 +231,9 @@ derModelUnivBivProbToTheta <- function(nvar, TH, th.idx, Sigmahat, lavcache,
   prob.vec <- rep(NA, length(idxTH_var1))
   prob.vec[idxTH_var1 == 0 | idxTH_var2 == 0 |
              idxLastTH_var1 | idxLastTH_var2] <- 0
-  prob.vec[is.na(prob.vec)] <- lavaan:::dbinorm(th.rho.vec$thres.var1.of.pair,
-                                                th.rho.vec$thres.var2.of.pair,
-                                                rho = th.rho.vec$rho.vector)
+  prob.vec[is.na(prob.vec)] <- dbinorm(th.rho.vec$thres.var1.of.pair,
+                                       th.rho.vec$thres.var2.of.pair,
+                                       rho = th.rho.vec$rho.vector)
 
   den.term1 <- prob.vec[idxTH_var1 != 0 & idxTH_var2 != 0]
   den.term2 <- prob.vec[idxTH_var1 != 0 & !idxLastTH_var2]
@@ -446,6 +454,8 @@ get_uni_bi_moments <- function(.lavobject) {
 }
 
 ## ---- Sigma multinomial matrices ---------------------------------------------
+#' @importFrom gtools combinations
+#' @importFrom mnormt sadmvn
 create_Sigma2_matrix <- function(.lavobject) {
   list2env(extract_lavaan_info(.lavobject), environment())
   list2env(get_uni_bi_moments(.lavobject), environment())
@@ -558,7 +568,7 @@ calc_test_stuff <- function(lavobject, svy_design = NULL, .H_inv,
     Sigma2 <- .Sigma2
   }
   if (missing(.pi_tilde)) {
-    pi_tilde <- unlist(lavaan:::lav_tables_pairwise_model_pi(lavobject))
+    pi_tilde <- unlist(lav_tables_pairwise_model_pi(lavobject))
   } else {
     pi_tilde <- .pi_tilde
   }
@@ -662,6 +672,18 @@ moment_match <- function(W, Xi, Omega2, df = NULL, order) {
 }
 
 ## ---- GOF test statistics ----------------------------------------------------
+#' Title
+#'
+#' @param lavobject
+#' @param approx_Omega2
+#' @param svy_design
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' @importFrom MASS ginv
+#' @importFrom Matrix rankMatrix
 Wald_test <- function(lavobject, approx_Omega2 = FALSE, svy_design = NULL) {
   list2env(test_begin(lavobject, approx_Omega2, svy_design), environment())
 
@@ -681,6 +703,16 @@ Wald_test_v2 <- function(lavobject, approx_Omega2 = FALSE, svy_design = NULL,
   cbind(out, name = paste0("WaldV2,MM", .order))
 }
 
+#' Title
+#'
+#' @param lavobject
+#' @param svy_design
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' @importFrom mcompanion null_complement
 Wald_test_v3 <- function(lavobject, svy_design = NULL) {
   list2env(test_begin(lavobject, .approx_Omega2 = FALSE, svy_design),
            environment())
