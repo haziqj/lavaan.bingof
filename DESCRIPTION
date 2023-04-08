@@ -8,8 +8,7 @@ Authors@R: person(
   role = c("aut", "cre"),
   comment = c(ORCID = "0000-0003-3298-1010")
   )
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: This is the accompanying R package for the paper "Goodness-of-fit tests for composite likelihood estimation under simple random and complex survey sampling". After fitting a binary factor model in lavaan, the user can call several functions to compute the goodness-of-fit test statistics based off of lower order marginals and compute the corresponding p-values.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
@@ -19,6 +18,7 @@ BugReports: https://github.com/haziqj/lavaan.bingof/issues
 Suggests: 
     rmarkdown
 Imports: 
+    dplyr,
     gtools,
     lavaan (== 0.6-14.9001),
     magrittr,
@@ -28,6 +28,8 @@ Imports:
     methods,
     mnormt,
     stats,
+    tibble,
+    tidyr,
     utils
 Remotes: haziqj/lavaan
 RoxygenNote: 7.2.3

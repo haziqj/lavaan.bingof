@@ -5,6 +5,16 @@ computeDelta <- utils::getFromNamespace("computeDelta", "lavaan")
 dbinorm <- utils::getFromNamespace("dbinorm", "lavaan")
 lav_tables_pairwise_model_pi <- utils::getFromNamespace("lav_tables_pairwise_model_pi", "lavaan")
 
+# No visible binding notes
+globalVariables(c(".", "Delta2", "N", "Omega2", "S", "Sigma2", "TH", "Var_ystar",
+                  "W", "avg_class_size", "dat", "e2_hat", "lavcache", "lavdata",
+                  "lavmodel", "lavoptions", "lavpartable", "lavsamplestats",
+                  "mu_ystar", "n", "nschools", "nstudents", "p", "pdot1",
+                  "pdot2", "pi2_hat", "pidot1", "pidot2", "pr_class_selected",
+                  "pr_school_selected", "prob", "rn", "rn2", "school",
+                  "students_in_school_type", "th.idx", "type", "var1", "var2",
+                  "wt", "z"))
+
 ## ---- Utilities --------------------------------------------------------------
 extract_lavaan_info <- function(lavobject) {
   lavdata        <- lavobject@Data

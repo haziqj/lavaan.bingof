@@ -27,7 +27,7 @@ gen_data_bin <- function(model.no = 1, n = 1000, seed = NULL, H1 = FALSE,
   y <-
     t(apply(ystar, 1, function(x) as.numeric(x > tau))) %>%
     as.data.frame() %>%
-    mutate_all(ordered)
+    mutate(across(everything), ordered)
   colnames(y) <- paste0("y", seq_len(nitems))
 
   ystar <- as.data.frame(ystar)
