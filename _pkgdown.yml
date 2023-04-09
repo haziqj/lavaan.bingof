@@ -43,13 +43,19 @@ reference:
 
 articles:
 - title: Technical details
-  navbar: ~
+  navbar: Technical details
   contents:
   - articles/intro
-- title: Simulation results
+- title: Simulation study
+  navbar: Simulation study
   # desc: >
   #   These articles are used to test various pkgdown features that can not
   #   easily be tested automatically.
   contents:
   - articles/sim_results
   - articles/sim_tables
+- title: Outro
+  contents:
+  - articles/outro
+
+

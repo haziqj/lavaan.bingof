@@ -1,0 +1,18 @@
+---
+title: "Session info"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(lavaan.bingof)
+# my_session <- sessionInfo()
+# save(my_session, file = "my_session.Rdata")
+load("my_session.Rdata")
+```
+
+```{r, echo = FALSE}
+my_session
+``` 
