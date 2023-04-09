@@ -14,7 +14,7 @@ lav_tables_pairwise_model_pi <- utils::getFromNamespace("lav_tables_pairwise_mod
 globalVariables(c(".", "Delta2", "N", "Omega2", "S", "Sigma2", "TH", "Var_ystar",
                   "W", "avg_class_size", "dat", "e2_hat", "lavcache", "lavdata",
                   "lavmodel", "lavoptions", "lavpartable", "lavsamplestats",
-                  "mu_ystar", "n", "nschools", "nstudents", "p", "pdot1",
+                  "mu_ystar", "nschools", "nstudents", "p", "pdot1",
                   "pdot2", "pi2_hat", "pidot1", "pidot2", "pr_class_selected",
                   "pr_school_selected", "prob", "rn", "rn2", "school",
                   "students_in_school_type", "th.idx", "type", "var1", "var2",
@@ -582,7 +582,7 @@ create_Sigma2_matrix_complex <- function(.lavobject, .svy_design) {
   # Get strata information
   strata  <- .svy_design$strata[, 1, drop = FALSE]
   colnames(strata) <- "strata"
-  a <-  unique(strata[, 1])
+  a <- unique(strata[, 1])
 
   # Get cluster information
   cluster <- .svy_design$cluster
@@ -601,7 +601,7 @@ create_Sigma2_matrix_complex <- function(.lavobject, .svy_design) {
   the_names <- paste0("y", 1:p)
   the_names <- c(the_names, paste0(the_names[id[1, ]], the_names[id[2, ]]))
   tmp2 <- as_tibble(((tmp[, id[1, ]] == 1) + (tmp[, id[2, ]] == 1)) == 2) %>%
-    mutate(across(everything(), as.numeric))
+    mutate(across(everything(), as.numeric)) %>% suppressWarnings()
   colnames(tmp2) <- the_names[-(1:p)]
   tmp <- bind_cols(dat %>% select(-starts_with("y")), tmp, tmp2)
 
@@ -610,7 +610,8 @@ create_Sigma2_matrix_complex <- function(.lavobject, .svy_design) {
   for (i in a) {
     # Filter the strata a
     current_dat <- tmp %>%
-      filter(strata == a)
+      filter(strata == i)
+
     # Obtain the responses in this strata (i.e. according to S_ab)
     y <- current_dat %>%
       select(starts_with("y")) %>%

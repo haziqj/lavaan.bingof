@@ -135,6 +135,7 @@ gen_data_bin_srs <- function(population = make_population(1), n = 3000,
 }
 
 #' @rdname gen_data_bin_srs
+#' @export
 gen_data_bin_complex1 <- function(population = make_population(1), npsu = 1000,
                                   seed = NULL) {
   # 1-stage stratified sampling
@@ -170,6 +171,7 @@ gen_data_bin_complex1 <- function(population = make_population(1), npsu = 1000,
 }
 
 #' @rdname gen_data_bin_srs
+#' @export
 gen_data_bin_complex2 <- function(population = make_population(1), npsu = 150,
                                   seed = NULL) {
   # 2-stage cluster sampling
@@ -214,6 +216,7 @@ gen_data_bin_complex2 <- function(population = make_population(1), npsu = 150,
 }
 
 #' @rdname gen_data_bin_srs
+#' @export
 gen_data_bin_complex3 <- function(population = make_population(1), npsu = 50,
                                   seed = NULL) {
   # 2-stage stratified cluster sampling
