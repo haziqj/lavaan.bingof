@@ -11,11 +11,13 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+library(lavaan.bingof)
 ```
 
 # lavaan.bingof
 
 <!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/haziqj/lavaan.bingof/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/haziqj/lavaan.bingof/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
@@ -23,14 +25,31 @@ This is the accompanying R package for the paper
 
 > Goodness-of-fit tests for composite likelihood estimation under simple random and complex survey sampling
 
+This package contains the functions to compute the test statistics and conduct simulation studies described in the above manuscript.
+
+## Installation
+
+Install this package from this GitHub repository:
+
+```{r, eval = FALSE}
+# install.packages("pak") 
+pak::pkg_install("haziqj/lavaan.bingof")
+library(lavaan.bingof)  # load package
+```
+
+Note: This package depends on the modified `{lavaan}` package version 0.6-14.9001, which can be installed from the GitHub repository at "`haziqj/lavaan`".
+
 ## Usage
 
+### Create a simulated data set of ordinal binary responses
+
 ```{r}
-library(lavaan.bingof)
-
-# Simulate binary data
 (dat <- gen_data_bin(n = 1000, seed = 123))
+```
 
+### Obtain the various test statistics and $p$-values
+
+```{r}
 # Fit lavaan model using PML estimation
 (mod <- txt_mod(model.no = 1))
 fit <- lavaan::sem(mod, dat, std.lv = TRUE, estimator = "PML")
@@ -39,4 +58,22 @@ fit <- lavaan::sem(mod, dat, std.lv = TRUE, estimator = "PML")
 all_tests(fit)
 ```
 
+### Test statistics under a complex sampling scheme
 
+```{r}
+# Simulate a two-stage stratified cluster sampling with 50 PSUs sampled per
+# stratum, and 1 cluster sampled within each PSU.
+(dat <- gen_data_bin_complex3(population = make_population(1), npsu = 50, 
+                              seed = 9423))
+
+# Fit lavaan model and create survey object
+fit0 <- lavaan::sem(mod, dat, std.lv = TRUE, estimator = "PML")  # ignore wt
+fit1 <- lavaan::sem(mod, dat, std.lv = TRUE, estimator = "PML",
+                    sampling.weights = "wt")
+svy <- survey::svydesign(ids = ~ school + class, strata = ~ type,
+                         weights = ~ wt, data = dat, nest = TRUE)
+
+# Compare with and without sampling weights
+Wald_test(fit0)
+Wald_test(fit1, svy_design = svy)
+```
