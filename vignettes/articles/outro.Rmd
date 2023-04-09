@@ -1,5 +1,7 @@
 ---
 title: "Session info"
+resource_files:
+  - my_session.Rdata
 ---
 
 ```{r, include = FALSE}
