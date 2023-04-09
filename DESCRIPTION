@@ -19,10 +19,11 @@ LazyData: true
 URL: https://github.com/haziqj/lavaan.bingof, https://haziqj.ml/lavaan.bingof/
 BugReports: https://github.com/haziqj/lavaan.bingof/issues
 Suggests: 
-    rmarkdown,
-    survey
+    rmarkdown
 Imports: 
+    doSNOW,
     dplyr,
+    foreach,
     gtools,
     lavaan (== 0.6-14.9001),
     magrittr,
@@ -31,7 +32,9 @@ Imports:
     mcompanion,
     methods,
     mnormt,
+    parallel,
     stats,
+    survey,
     tibble,
     tidyr,
     utils

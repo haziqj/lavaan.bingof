@@ -944,7 +944,7 @@ all_tests <- function(object, svy_design = NULL, sim = NULL) {
   if (!is.null(sim)) {
     res <- bind_cols(tibble(i = sim), res) %>%
       bind_cols(
-        converged = fit@Fit@converged,
+        converged = object@Fit@converged,
         Omega2_rank = Matrix::rankMatrix(test_stuff$Omega2)
       ) %>%
       suppressWarnings()

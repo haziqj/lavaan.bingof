@@ -2,6 +2,7 @@
 "_PACKAGE"
 
 ## usethis namespace: start
+#' @importFrom doSNOW registerDoSNOW
 #' @importFrom dplyr across
 #' @importFrom dplyr arrange
 #' @importFrom dplyr bind_cols
@@ -23,16 +24,25 @@
 #' @importFrom dplyr starts_with
 #' @importFrom dplyr summarise
 #' @importFrom dplyr ungroup
+#' @importFrom foreach %dopar%
+#' @importFrom foreach foreach
+#' @importFrom lavaan sem
 #' @importFrom magrittr %>%
 #' @importFrom methods is
+#' @importFrom parallel detectCores
+#' @importFrom parallel makeCluster
+#' @importFrom parallel stopCluster
 #' @importFrom stats df
 #' @importFrom stats dnorm
 #' @importFrom stats pchisq
 #' @importFrom stats pnorm
 #' @importFrom stats rnorm
+#' @importFrom survey svydesign
 #' @importFrom tibble as_tibble tibble
 #' @importFrom tidyr unite
 #' @importFrom tidyr unnest_longer
 #' @importFrom utils combn
+#' @importFrom utils setTxtProgressBar
+#' @importFrom utils txtProgressBar
 ## usethis namespace: end
 NULL
