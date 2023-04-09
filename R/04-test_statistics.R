@@ -1,3 +1,8 @@
+#' @importFrom MASS ginv
+#' @importFrom Matrix rankMatrix
+#' @importFrom gtools combinations
+#' @importFrom mnormt sadmvn
+
 # Export lavaan functions
 lav_model_vcov <- utils::getFromNamespace("lav_model_vcov", "lavaan")
 LongVecTH.Rho <- utils::getFromNamespace("LongVecTH.Rho", "lavaan")
@@ -95,28 +100,73 @@ get_sensitivity_inv_mat <- function(.lavobject, matrix_type = c("Sensitivity",
 # ORDER OF THE PROBABILITIES IS IMPORTANT. SHOULD JUST USE LAVAAN's ORDERING?
 # But possible that not all response patterns are observed...
 
+
+#' Create a table of binary response patterns
+#'
+#' @description Ordering is incremental patterns of power 2 from right to left.
+#'
+#' @param p (integer > 0) The number of items.
+#'
+#' @return A [tibble()] containing ordinal binary values (0/1) for the items as
+#'   well as a column indicating one of the \eqn{2^p} response patterns.
+#' @export
+#'
+#' @examples
+#' create_resp_pattern(p = 3)
 create_resp_pattern <- function(p = 3) {
-  # Ordering is incremental patterns of power 2 from right to left (my ordering)
   vars <- list()
   for (P in 1:p) vars[[P]] <- 1:0
   names(vars) <- paste0("y", p:1)
   tab <- expand.grid(vars)[p:1] %>%
     as_tibble() %>%
-    mutate(across(everything(), ordered))
+    unite("pattern", everything(), sep = "", remove = FALSE) %>%
+    mutate(across(starts_with("y"), ordered)) %>%
+    select(starts_with("y"), everything())
 
-  attr(tab, "patterns") <-
-    tab %>%
-    mutate(across(everything(), as.numeric)) %>%
-    unite("r", everything(), sep = "") %>%
-    unlist()
+  # attr(tab, "patterns") <-
+  #   tab %>%
+  #   mutate(across(everything(), as.numeric)) %>%
+  #   unite("r", everything(), sep = "") %>%
+  #   unlist()
 
-    return(tab)
+  return(tab)
 }
 
-G_mat <- function(p = 3) {
-  # Returns a R_tilde x R indicator matrix described in the paper to get
-  # pairwise stuff. Ordering is based on my ordering not lavaan's.
-  dat <- create_resp_pattern(p = p)
+#' Create transformation matrices
+#'
+#' @name transformation-matrices
+#' @rdname transformation-matrices
+#' @description The derived limited information test statistics involves some
+#'   design matrices which act as transformations from the larger \eqn{2^p}
+#'   response pattern space to the lower order univariate and bivariate
+#'   marginals.
+#'
+#' - `create_G_mat()` returns the \eqn{\tilde R \times R} indicator matrix to obtain all pairwise components.
+#'
+#' - `create_T2_mat()` returns the \eqn{p(p+1)/2 \times 2^p} indicator matrix \eqn{T_2} to pick out the unviariate and bivariate moments from the response patterns.
+#'
+#' - `create_Beta_mat()` returns the \eqn{4p \times p(p+1)/2} design matrix \eqn{\Beta} described in the manuscript (used to express parameters in terms of residuals).
+#'
+#' Note that ordering is similar to the ordering in [create_resp_pattern()].
+#' These design matrices currently only apply to binary data. See technical
+#' documents for more details.
+#'
+#' @inheritParams create_resp_pattern
+#'
+#' @return A matrix. Additionally, we may inspect the attributes regarding the
+#'   ordering of the pairwise components of the \eqn{G} matrix.
+#'
+#' @examples
+#' create_G_mat(p = 3)
+#' create_T2_mat(p = 3)
+#' create_Beta_mat(p = 3)
+NULL
+
+#' @rdname transformation-matrices
+#' @export
+create_G_mat <- function(p = 3) {
+  dat <- create_resp_pattern(p = p) %>%
+    select(starts_with("y"))
   id <- combn(p, 2)
   counter <- 0
   G <- list()
@@ -141,7 +191,9 @@ G_mat <- function(p = 3) {
   return(t(G))
 }
 
-T2_mat <- function(p = 3) {
+#' @rdname transformation-matrices
+#' @export
+create_T2_mat <- function(p = 3) {
   dat <- create_resp_pattern(p = p)
   pp <- choose(p, 2)
 
@@ -153,13 +205,18 @@ T2_mat <- function(p = 3) {
   # Only works for binary data right now... the M2 matrix is picking out every
   # 4th row because for binary data there are total of 4 possible choices within
   # the pairwise groups.
-  M2 <- G_mat(p = p)[seq(4, 4 * pp, by = 4), ]
+  M2 <- create_G_mat(p = p)[seq(4, 4 * pp, by = 4), ]
 
   M <- rbind(M1, M2)
   rownames(M) <- NULL
 
   return(M)
 }
+
+#' @rdname transformation-matrices
+#' @export
+#' @author Myrsini Katsikatsou (`create_Beta_mat()`)
+create_Beta_mat <- function(p = 3) Beta_mat_design(nvar = p)
 
 Beta_mat_design <- function(nvar) {
   # Warning: Only applies to binary data.
@@ -383,7 +440,7 @@ derModelUnivBivProbToTheta <- function(nvar, TH, th.idx, Sigmahat, lavcache,
   )
 }
 
-Delta_mats <- function(.lavobject) {
+get_Delta_mats <- function(.lavobject) {
   list2env(extract_lavaan_info(.lavobject), environment())
 
   derivatives <- derModelUnivBivProbToTheta(
@@ -398,12 +455,18 @@ Delta_mats <- function(.lavobject) {
   ))
 }
 
-## ---- Model probabilities ----------------------------------------------------
-get_theoretical_uni_bi_moments <- function(model.no) {
+#' @rdname get_true_values
+#' @param collapse (logical) Should a vector be returned instead of a list
+#'   separating the univariate and bivariate quantities?
+#' @inherit get_uni_bi_moments return
+#' @export
+#' @examples
+#' get_theoretical_uni_bi_moments(1)
+get_theoretical_uni_bi_moments <- function(model.no, collapse = FALSE) {
   Var_ystar <- get_Sigmay(model.no)
   mu_ystar <- rep(0, nrow(Var_ystar))
   TH <- get_tau(model.no)
-  p <- nrow(loading_mat(model.no))
+  p <- nrow(get_Lambda(model.no))
 
   # Univariate -----------------------------------------------------------------
   pidot1 <- rep(NA, p)
@@ -423,12 +486,33 @@ get_theoretical_uni_bi_moments <- function(model.no) {
                                 varcov = Var_ystar[c(i, j), c(i, j)])
   }
 
-  return(list(pidot1 = pidot1, pidot2 = pidot2))
+  if (isTRUE(collapse)) {
+    return(c(pidot1, pidot2))
+  } else {
+    return(list(pidot1 = pidot1, pidot2 = pidot2))
+  }
 }
 
+
+#' Get univariate and bivariate moments
+#'
+#' @description Returns univariate and bivariate moments (i.e. positive
+#'   probabilities only) based on model i.e. `pidot1` and `pidot2` and
+#'   (weighted) sample i.e. `pdot1` and `pdot2`.
+#'
+#'
+#' @param .lavobject A [lavaan::lavaan()] fit object.
+#'
+#' @returns A list of univariate and bivariate moments.
+#' @export
+#'
+#' @seealso [get_theoretical_uni_bi_moments()]
+#'
+#' @examples
+#' fit <- lavaan::sem(txt_mod(1), gen_data_bin(1, n = 500), std.lv = TRUE,
+#'                    estimator = "PML")
+#' get_uni_bi_moments(fit)
 get_uni_bi_moments <- function(.lavobject) {
-  # Function to get univariate and bivariate moments (i.e. positive
-  # probabilities only)
   list2env(extract_lavaan_info(.lavobject), environment())
 
   # Univariate -----------------------------------------------------------------
@@ -437,7 +521,6 @@ get_uni_bi_moments <- function(.lavobject) {
     pdot1[i] <- sum(dat$wt[dat[, i] == 2]) / N
     pidot1[i] <- pnorm(TH[i], mean = mu_ystar[i], sd = sqrt(Var_ystar[i, i]),
                        lower.tail = FALSE)
-
   }
 
   # Bivariate ------------------------------------------------------------------
@@ -464,8 +547,6 @@ get_uni_bi_moments <- function(.lavobject) {
 }
 
 ## ---- Sigma multinomial matrices ---------------------------------------------
-#' @importFrom gtools combinations
-#' @importFrom mnormt sadmvn
 create_Sigma2_matrix <- function(.lavobject) {
   list2env(extract_lavaan_info(.lavobject), environment())
   list2env(get_uni_bi_moments(.lavobject), environment())
@@ -553,6 +634,9 @@ create_Sigma2_matrix_complex <- function(.lavobject, .svy_design) {
 }
 
  ## ---- Test preliminaries ----------------------------------------------------
+
+
+
 calc_test_stuff <- function(lavobject, svy_design = NULL, .H_inv,
                             .Delta_mat_list, .Sigma2, .pi_tilde) {
   # These are all the stuff needed to compute the test statistic W
@@ -564,7 +648,7 @@ calc_test_stuff <- function(lavobject, svy_design = NULL, .H_inv,
     H_inv <- .H_inv
   }
   if (missing(.Delta_mat_list)) {
-    Delta_mat_list <- Delta_mats(.lavobject = lavobject)
+    Delta_mat_list <- get_Delta_mats(.lavobject = lavobject)
   } else {
     Delta_mat_list <- .Delta_mat_list
   }
@@ -612,7 +696,7 @@ calc_test_stuff <- function(lavobject, svy_design = NULL, .H_inv,
   Fisher_mat_inv <- N * get_sensitivity_inv_mat(lavobject, "Sandwich")
   Omega2_approx <- Sigma2 - Delta2 %*% Fisher_mat_inv %*% t(Delta2)
 
-  list(
+  res <- list(
     N = N,               # Sample size
     q = ncol(H_inv),     # No. of parameters
     p = p,               # No. of items
@@ -633,6 +717,8 @@ calc_test_stuff <- function(lavobject, svy_design = NULL, .H_inv,
     B2        = B2,
     Delta2    = Delta2
   )
+  attr(res, "bingof_calc_test_stuff") <- TRUE
+  res
 }
 
 test_begin <- function(.lavobject, .approx_Omega2, .svy_design = NULL) {
@@ -681,50 +767,60 @@ moment_match <- function(W, Xi, Omega2, df = NULL, order) {
   return(out)
 }
 
-## ---- GOF test statistics ----------------------------------------------------
-#' Title
+#' Limited information goodness-of-fit test statistics
 #'
-#' @param lavobject
-#' @param approx_Omega2
-#' @param svy_design
+#' @name ligof-test-stats
+#' @rdname ligof-test-stats
 #'
-#' @return
-#' @export
+#' @param object A [lavaan::lavaan()] fit object.
+#' @param approx_Omega2 (logical) **EXPERIMENTAL** Should an approximate
+#'   residual covariance matrix \eqn{\Omega_2} be used? Defaults to `FALSE`.
+#' @param svy_design A [survey::svydesign()] object. Optional.
+#' @param .order (integer) Either the number of moments to match for the
+#'   chi-square test statistic matching procedure (choose from 1--3), or the
+#'   Rao-Scott type adjustment order (choose from 1 or 2).
+#'
+#' @returns A data frame containing the test statistics \eqn{W}, degrees of
+#'   freedom, name of the test, and the \eqn{p}-value.
+#' @seealso [all_tests()]
 #'
 #' @examples
-#' @importFrom MASS ginv
-#' @importFrom Matrix rankMatrix
-Wald_test <- function(lavobject, approx_Omega2 = FALSE, svy_design = NULL) {
-  list2env(test_begin(lavobject, approx_Omega2, svy_design), environment())
+#' fit <- lavaan::sem(txt_mod(1), gen_data_bin(1, n = 500), std.lv = TRUE,
+#'                    estimator = "PML")
+#' Wald_test(fit)
+NULL
+
+#' @describeIn ligof-test-stats The Wald test statistic.
+#' @export
+Wald_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL) {
+  list2env(test_begin(object, approx_Omega2, svy_design), environment())
 
   Xi <- MASS::ginv(Omega2)
   W <- N * colSums(e2_hat * (Xi %*% e2_hat))
-  data.frame(W = W, df = Matrix::rankMatrix(Omega2) - q, name = "Wald")
+  data.frame(W = W, df = Matrix::rankMatrix(Omega2) - q, name = "Wald") %>%
+    mutate(pval = pchisq(W, df, lower.tail = FALSE))
 }
 
-Wald_test_v2 <- function(lavobject, approx_Omega2 = FALSE, svy_design = NULL,
+#' @describeIn ligof-test-stats The Wald test statistic using a simple diagonal
+#'   \eqn{\Omega_2} matrix.
+#' @export
+Wald_test_v2 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
                          .order = 3) {
-  list2env(test_begin(lavobject, approx_Omega2, svy_design), environment())
+  list2env(test_begin(object, approx_Omega2, svy_design), environment())
 
   Xi <- diag(1 / diag(Omega2))
   # W <- N * colSums(e2_hat * (Xi %*% e2_hat))
   W <- N * sum(e2_hat / diag(Omega2) * e2_hat)
   out <- moment_match(W, Xi, Omega2, df = S - q, order = .order)
-  cbind(out, name = paste0("WaldV2,MM", .order))
+  cbind(out, name = paste0("WaldV2,MM", .order)) %>%
+    mutate(pval = pchisq(W, df, lower.tail = FALSE))
 }
 
-#' Title
-#'
-#' @param lavobject
-#' @param svy_design
-#'
-#' @return
+#' @describeIn ligof-test-stats The Wald test statistic bypassing the
+#'   \eqn{\Omega_2} matrix (uses orthogonal complements of \eqn{\Delta_2}).
 #' @export
-#'
-#' @examples
-#' @importFrom mcompanion null_complement
-Wald_test_v3 <- function(lavobject, svy_design = NULL) {
-  list2env(test_begin(lavobject, .approx_Omega2 = FALSE, svy_design),
+Wald_test_v3 <- function(object, svy_design = NULL) {
+  list2env(test_begin(object, .approx_Omega2 = FALSE, svy_design),
            environment())
 
   Delta2comp <- mcompanion::null_complement(Delta2)
@@ -732,13 +828,16 @@ Wald_test_v3 <- function(lavobject, svy_design = NULL) {
     t(Delta2comp) %*% Sigma2 %*% Delta2comp
   ) %*% t(Delta2comp)
   W <- N * colSums(e2_hat * (Xi %*% e2_hat))
-  data.frame(W = W, df = S - q, name = "WaldV3")
+  data.frame(W = W, df = S - q, name = "WaldV3") %>%
+    mutate(pval = pchisq(W, df, lower.tail = FALSE))
 }
 
-Pearson_test_v1 <- function(lavobject, approx_Omega2 = FALSE, svy_design = NULL,
+#' @describeIn ligof-test-stats The Pearson test with \eqn{p}-values calculated using a Rao-Scott type adjustment.
+#' @export
+Pearson_test_v1 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
                             .order = 2) {
   .order <- match.arg(as.character(.order), c("1", "2"))
-  list2env(test_begin(lavobject, approx_Omega2, svy_design), environment())
+  list2env(test_begin(object, approx_Omega2, svy_design), environment())
 
   Xi <- diag(1 / pi2_hat)
   W <- N * colSums(e2_hat * (Xi %*% e2_hat))
@@ -755,66 +854,81 @@ Pearson_test_v1 <- function(lavobject, approx_Omega2 = FALSE, svy_design = NULL,
     df <- S / (1 + a_sq)
   }
 
-  data.frame(W = W, df = df, name = "Pearson")
+  data.frame(W = W, df = df, name = "Pearson") %>%
+    mutate(pval = pchisq(W, df, lower.tail = FALSE))
 }
 
-Pearson_test_v2 <- function(lavobject, approx_Omega2 = FALSE, svy_design = NULL,
+#' @describeIn ligof-test-stats The Pearson test with \eqn{p}-values calculated using a moment-matching procedure.
+#' @export
+Pearson_test_v2 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
                             .order = "3") {
-  list2env(test_begin(lavobject, approx_Omega2, svy_design), environment())
+  list2env(test_begin(object, approx_Omega2, svy_design), environment())
 
   Xi <- diag(1 / pi2_hat)
   W <- N * colSums(e2_hat * (Xi %*% e2_hat))
   out <- moment_match(W, Xi, Omega2, df = S - q, order = .order)
-  cbind(out, name = paste0("PearsonV2,MM", .order))
+  cbind(out, name = paste0("PearsonV2,MM", .order)) %>%
+    mutate(pval = pchisq(W, df, lower.tail = FALSE))
 }
 
-RSS_test <- function(lavobject, approx_Omega2 = FALSE, svy_design = NULL,
+#' @describeIn ligof-test-stats The residual sum of squares (RSS) test. Uses moment-matching for \eqn{p}-value calculations.
+#' @export
+RSS_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
                      .order = "3") {
-  list2env(test_begin(lavobject, approx_Omega2, svy_design), environment())
+  list2env(test_begin(object, approx_Omega2, svy_design), environment())
 
   Xi <- diag(S)
   # W <- N * colSums(e2_hat * (Xi %*% e2_hat))
   W <- N * sum(e2_hat ^ 2)
   out <- moment_match(W, Xi, Omega2, df = S - q, order = .order)
-  cbind(out, name = paste0("RSS,MM", .order))
+  cbind(out, name = paste0("RSS,MM", .order)) %>%
+    mutate(pval = pchisq(W, df, lower.tail = FALSE))
 }
 
-Multn_test <- function(lavobject, approx_Omega2 = FALSE, svy_design = NULL,
+#' @describeIn ligof-test-stats The multinomial test. Uses moment-matching for \eqn{p}-value calculations.
+#' @export
+Multn_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
                        .order = "3") {
-  list2env(test_begin(lavobject, approx_Omega2, svy_design), environment())
+  list2env(test_begin(object, approx_Omega2, svy_design), environment())
 
   Xi <- solve(Sigma2)
   W <- N * colSums(e2_hat * (Xi %*% e2_hat))
   out <- moment_match(W, Xi, Omega2, df = S - q, order = .order)
-  cbind(out, name = paste0("Multn,MM", .order))
+  cbind(out, name = paste0("Multn,MM", .order)) %>%
+    mutate(pval = pchisq(W, df, lower.tail = FALSE))
 }
 
-#' Title
+
+#' Return all test statistics values
 #'
-#' @param fit
-#' @param svy_design
-#' @param sim
-#' @param H_inv
-#' @param Delta_mat_list
-#' @param Sigma2
-#' @param pi_tilde
+#' @inherit ligof-test-stats params return
+#' @param sim (integer) Optional and used for large-scale simulations.
 #'
-#' @return
+#' @returns Additionally, if `sim` argument is provided, two columns are
+#'   appended: Whether the [lavaan::lavaan()]  fit has `converged` and the
+#'   matrix rank of \eqn{\Omega_2} (useful to see if any computational issues
+#'   arose during model fit.)
 #' @export
 #'
 #' @examples
-all_tests <- function(fit, svy_design = NULL, sim = 1, H_inv, Delta_mat_list,
-                      Sigma2, pi_tilde) {
-  test_stuff <- calc_test_stuff(fit, svy_design, H_inv, Delta_mat_list, Sigma2,
-                                pi_tilde)
+#' fit <- lavaan::sem(txt_mod(1), gen_data_bin(1, n = 500), std.lv = TRUE,
+#'                    estimator = "PML")
+#' all_tests(fit)
+all_tests <- function(object, svy_design = NULL, sim = NULL) {
+  if (isTRUE(attr(object, "bingof_calc_test_stuff"))) {
+    test_stuff <- object
+  } else {
+    test_stuff <- calc_test_stuff(object, svy_design)
+  }
 
-  tibble(i = sim, bind_rows(
+  res <- bind_rows(
     Wald_test(test_stuff),
     # Wald_test_v2(test_stuff, .order = 1),
     # Wald_test_v2(test_stuff, .order = 2),
     Wald_test_v2(test_stuff, .order = 3),
     Wald_test_v3(test_stuff),
-    Pearson_test_v1(test_stuff),
+    # Pearson_test_v1(test_stuff, .order = 1),
+    Pearson_test_v1(test_stuff, .order = 2),
     # Pearson_test_v2(test_stuff, .order = 1),
     # Pearson_test_v2(test_stuff, .order = 2),
     Pearson_test_v2(test_stuff, .order = 3),
@@ -824,11 +938,16 @@ all_tests <- function(fit, svy_design = NULL, sim = 1, H_inv, Delta_mat_list,
     # Multn_test(test_stuff, .order = 1),
     # Multn_test(test_stuff, .order = 2),
     Multn_test(test_stuff, .order = 3)
-  )) %>%
-    mutate(pval = pchisq(W, df, lower.tail = FALSE)) %>%
-    bind_cols(
-      converged = fit@Fit@converged,
-      Omega2_rank = Matrix::rankMatrix(test_stuff$Omega2)
-    ) %>%
-    suppressWarnings()
+  ) %>%
+    as_tibble()
+  if (!is.null(sim)) {
+    res <- bind_cols(tibble(i = sim), res) %>%
+      bind_cols(
+        converged = fit@Fit@converged,
+        Omega2_rank = Matrix::rankMatrix(test_stuff$Omega2)
+      ) %>%
+      suppressWarnings()
+  }
+
+  return(res)
 }

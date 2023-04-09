@@ -2,21 +2,25 @@ Package: lavaan.bingof
 Type: Package
 Title: Limited Information Goodness of Fit Tests for Binary Factor Models
 Version: 0.1.0
-Authors@R: person(
-  "Haziq", "Jamil", 
-  email = "haziq.jamil@gmail.com",
-  role = c("aut", "cre"),
-  comment = c(ORCID = "0000-0003-3298-1010")
-  )
+Authors@R: 
+    c(person("Haziq", "Jamil", 
+             email = "haziq.jamil@gmail.com",
+             role = c("aut", "cre"),
+             comment = c(ORCID = "0000-0003-3298-1010")),
+      person("Irini", "Moustaki", 
+             role = "ctb",
+             comment = c(ORCID = "0000-0001-8371-1251")),             
+      person("Myrsini", "Katsikatsou", 
+             role = "ctb"))
 Description: This is the accompanying R package for the paper "Goodness-of-fit tests for composite likelihood estimation under simple random and complex survey sampling". After fitting a binary factor model in lavaan, the user can call several functions to compute the goodness-of-fit test statistics based off of lower order marginals and compute the corresponding p-values.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/haziqj/lavaan.bingof,
-    http://haziqj.ml/lavaan.bingof/
+URL: https://github.com/haziqj/lavaan.bingof, https://haziqj.ml/lavaan.bingof/
 BugReports: https://github.com/haziqj/lavaan.bingof/issues
 Suggests: 
-    rmarkdown
+    rmarkdown,
+    survey
 Imports: 
     dplyr,
     gtools,
@@ -33,3 +37,4 @@ Imports:
     utils
 Remotes: haziqj/lavaan
 RoxygenNote: 7.2.3
+Roxygen: list(markdown = TRUE)

@@ -1,15 +1,18 @@
-#' Title
+#' Generate independent data samples according to `model.no`
 #'
-#' @param model.no
-#' @param n
-#' @param seed
-#' @param H1
-#' @param return_all
+#' @inheritParams txt_mod
+#' @param n (numeric > 0) Sample size.
+#' @param seed (numeric) The random seed.
+#' @param H1 (logical) Are we generating a data to misspecify the true model?
+#'   For power simulations.
+#' @param return_all (logical) Return the underlying latent variable \eqn{y^*} as
+#'   well?
 #'
-#' @return
+#' @return A [tibble()] containing ordinal binary values (0/1) for the items.
 #' @export
 #'
 #' @examples
+#' gen_data_bin(1)
 gen_data_bin <- function(model.no = 1, n = 1000, seed = NULL, H1 = FALSE,
                          return_all = FALSE) {
   # Generate data for simple random sample

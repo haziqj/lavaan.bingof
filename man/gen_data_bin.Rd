@@ -2,7 +2,7 @@
 % Please edit documentation in R/02-data_gen_srs.R
 \name{gen_data_bin}
 \alias{gen_data_bin}
-\title{Title}
+\title{Generate independent data samples according to \code{model.no}}
 \usage{
 gen_data_bin(
   model.no = 1,
@@ -13,8 +13,24 @@ gen_data_bin(
 )
 }
 \arguments{
-\item{return_all}{}
+\item{model.no}{(integer) Choose from 1--5. See details.}
+
+\item{n}{(numeric > 0) Sample size.}
+
+\item{seed}{(numeric) The random seed.}
+
+\item{H1}{(logical) Are we generating a data to misspecify the true model?
+For power simulations.}
+
+\item{return_all}{(logical) Return the underlying latent variable \eqn{y^*} as
+well?}
+}
+\value{
+A \code{\link[=tibble]{tibble()}} containing ordinal binary values (0/1) for the items.
 }
 \description{
-Title
+Generate independent data samples according to \code{model.no}
+}
+\examples{
+gen_data_bin(1)
 }

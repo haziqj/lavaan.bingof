@@ -9,18 +9,18 @@
 # library(doSNOW)
 # library(foreach)
 
-## ---- Textual model ----------------------------------------------------------
-#' Title
+#' Function to return the textual model for lavaan fit, depending on which
+#' simulation scenario we are investigating.
 #'
-#' @param model.no
+#' @param model.no (integer) Choose from 1--5. See details.
 #'
-#' @return
+#' @return Character vector of factor model to input to [lavaan::lavaan()].
 #' @export
 #'
 #' @examples
-txt_mod <- function(model.no) {
-  # Function to return the textual model for lavaan fit, depending on which
-  # simulation scenario we are investigating.
+#' txt_mod(1)
+txt_mod <- function(model.no= 1L) {
+
   if (model.no == 1) mod <- "eta1 =~ NA*y1 + y2 + y3 + y4 + y5"
   if (model.no == 2) mod <- "eta1 =~ NA*y1 + y2 + y3 + y4 + y5 + y6 + y7 + y8"
   if (model.no == 3) mod <- "eta1 =~ NA*y1 +  y2 +  y3 +  y4 +  y5 +
@@ -97,10 +97,26 @@ get_Sigmay <- function(model.no) {
   Lambda %*% Phi %*% t(Lambda) + Theta
 }
 
-## ---- Get true values --------------------------------------------------------
+#' Returns theoretical true values
+#'
+#' @description
+#'
+#' - `get_true_values()` returns the true values of the freely estimated theta values in this order: \eqn{\lambda} (loadings), \eqn{\rho} (factor correlations), \eqn{\tau} (thresholds)
+#'
+#' - `get_theoretical_uni_bi_moments()` returns the univariate (`pidot1`) and bivariate (`pidot2`) theoretical probabilities of successes.
+#'
+#' @inheritParams txt_mod
+#'
+#' @return A vector of true parameter values used for the simulations.
+#' @export
+#'
+#' @seealso [gen_data_bin()], [gen_data_bin_complex1()],
+#'   [gen_data_bin_complex2()], [gen_data_bin_complex2()], [gen_data_bin_srs()]
+#'
+#' @examples
+#' get_true_values(1)
 get_true_values <- function(model.no) {
-  # Gets the true values of the freely estimated theta values in this order:
-  # lambda (loadings), rho (factor correlations), tau (thresholds)
+
 
   # Loadings -------------------------------------------------------------------
   Lambda <- get_Lambda(model.no)

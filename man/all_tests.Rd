@@ -2,21 +2,28 @@
 % Please edit documentation in R/04-test_statistics.R
 \name{all_tests}
 \alias{all_tests}
-\title{Title}
+\title{Return all test statistics values}
 \usage{
-all_tests(
-  fit,
-  svy_design = NULL,
-  sim = 1,
-  H_inv,
-  Delta_mat_list,
-  Sigma2,
-  pi_tilde
-)
+all_tests(object, svy_design = NULL, sim = NULL)
 }
 \arguments{
-\item{pi_tilde}{}
+\item{object}{A \code{\link[lavaan:lavaan]{lavaan::lavaan()}} fit object.}
+
+\item{svy_design}{A \code{\link[survey:svydesign]{survey::svydesign()}} object. Optional.}
+
+\item{sim}{(integer) Optional and used for large-scale simulations.}
+}
+\value{
+Additionally, if \code{sim} argument is provided, two columns are
+appended: Whether the \code{\link[lavaan:lavaan]{lavaan::lavaan()}}  fit has \code{converged} and the
+matrix rank of \eqn{\Omega_2} (useful to see if any computational issues
+arose during model fit.)
 }
 \description{
-Title
+Return all test statistics values
+}
+\examples{
+fit <- lavaan::sem(txt_mod(1), gen_data_bin(1, n = 500), std.lv = TRUE,
+                   estimator = "PML")
+all_tests(fit)
 }

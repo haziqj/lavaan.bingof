@@ -12,13 +12,19 @@ This is the accompanying R package for the paper "Goodness-of-fit tests for comp
 Useful links:
 \itemize{
   \item \url{https://github.com/haziqj/lavaan.bingof}
-  \item \url{http://haziqj.ml/lavaan.bingof/}
+  \item \url{https://haziqj.ml/lavaan.bingof/}
   \item Report bugs at \url{https://github.com/haziqj/lavaan.bingof/issues}
 }
 
 }
 \author{
 \strong{Maintainer}: Haziq Jamil \email{haziq.jamil@gmail.com} (\href{https://orcid.org/0000-0003-3298-1010}{ORCID})
+
+Other contributors:
+\itemize{
+  \item Irini Moustaki (\href{https://orcid.org/0000-0001-8371-1251}{ORCID}) [contributor]
+  \item Myrsini Katsikatsou [contributor]
+}
 
 }
 \keyword{internal}
