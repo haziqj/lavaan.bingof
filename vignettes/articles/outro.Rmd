@@ -1,7 +1,5 @@
 ---
 title: "Session info"
-resource_files:
-  - my_session.Rdata
 ---
 
 ```{r, include = FALSE}
@@ -13,7 +11,7 @@ library(lavaan.bingof)
 library(devtools)
 # my_session <- devtools::session_info()
 # save(my_session, file = "my_session.Rdata")
-load("my_session.Rdata")
+load("my_session.RData")
 ```
 
 ```{r, echo = FALSE}
