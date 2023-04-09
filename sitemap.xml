@@ -1,57 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://haziqj.ml/lavaan.bingof/404.html</loc>
+    <loc>https://haziqj.ml/lavaan.bingof/404.html</loc>
   </url>
   <url>
-    <loc>http://haziqj.ml/lavaan.bingof/LICENSE.html</loc>
+    <loc>https://haziqj.ml/lavaan.bingof/LICENSE.html</loc>
   </url>
   <url>
-    <loc>http://haziqj.ml/lavaan.bingof/articles/Introduction.html</loc>
+    <loc>https://haziqj.ml/lavaan.bingof/articles/index.html</loc>
   </url>
   <url>
-    <loc>http://haziqj.ml/lavaan.bingof/articles/index.html</loc>
+    <loc>https://haziqj.ml/lavaan.bingof/articles/intro.html</loc>
   </url>
   <url>
-    <loc>http://haziqj.ml/lavaan.bingof/authors.html</loc>
+    <loc>https://haziqj.ml/lavaan.bingof/articles/sim_results.html</loc>
   </url>
   <url>
-    <loc>http://haziqj.ml/lavaan.bingof/index.html</loc>
+    <loc>https://haziqj.ml/lavaan.bingof/authors.html</loc>
   </url>
   <url>
-    <loc>http://haziqj.ml/lavaan.bingof/reference/all_tests.html</loc>
+    <loc>https://haziqj.ml/lavaan.bingof/index.html</loc>
   </url>
   <url>
-    <loc>http://haziqj.ml/lavaan.bingof/reference/create_resp_pattern.html</loc>
+    <loc>https://haziqj.ml/lavaan.bingof/reference/all_tests.html</loc>
   </url>
   <url>
-    <loc>http://haziqj.ml/lavaan.bingof/reference/gen_data_bin.html</loc>
+    <loc>https://haziqj.ml/lavaan.bingof/reference/create_resp_pattern.html</loc>
   </url>
   <url>
-    <loc>http://haziqj.ml/lavaan.bingof/reference/gen_data_bin_srs.html</loc>
+    <loc>https://haziqj.ml/lavaan.bingof/reference/gen_data_bin.html</loc>
   </url>
   <url>
-    <loc>http://haziqj.ml/lavaan.bingof/reference/get_true_values.html</loc>
+    <loc>https://haziqj.ml/lavaan.bingof/reference/gen_data_bin_srs.html</loc>
   </url>
   <url>
-    <loc>http://haziqj.ml/lavaan.bingof/reference/get_uni_bi_moments.html</loc>
+    <loc>https://haziqj.ml/lavaan.bingof/reference/get_true_values.html</loc>
   </url>
   <url>
-    <loc>http://haziqj.ml/lavaan.bingof/reference/index.html</loc>
+    <loc>https://haziqj.ml/lavaan.bingof/reference/get_uni_bi_moments.html</loc>
   </url>
   <url>
-    <loc>http://haziqj.ml/lavaan.bingof/reference/lavaan.bingof-package.html</loc>
+    <loc>https://haziqj.ml/lavaan.bingof/reference/index.html</loc>
   </url>
   <url>
-    <loc>http://haziqj.ml/lavaan.bingof/reference/ligof-test-stats.html</loc>
+    <loc>https://haziqj.ml/lavaan.bingof/reference/lavaan.bingof-package.html</loc>
   </url>
   <url>
-    <loc>http://haziqj.ml/lavaan.bingof/reference/make_population.html</loc>
+    <loc>https://haziqj.ml/lavaan.bingof/reference/ligof-test-stats.html</loc>
   </url>
   <url>
-    <loc>http://haziqj.ml/lavaan.bingof/reference/transformation-matrices.html</loc>
+    <loc>https://haziqj.ml/lavaan.bingof/reference/make_population.html</loc>
   </url>
   <url>
-    <loc>http://haziqj.ml/lavaan.bingof/reference/txt_mod.html</loc>
+    <loc>https://haziqj.ml/lavaan.bingof/reference/transformation-matrices.html</loc>
+  </url>
+  <url>
+    <loc>https://haziqj.ml/lavaan.bingof/reference/txt_mod.html</loc>
   </url>
 </urlset>

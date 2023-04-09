@@ -2,10 +2,11 @@ pandoc: 2.19.2
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
-  Introduction: Introduction.html
-  Technical-details: Technical-details.pdf
-last_built: 2023-04-09T05:30Z
+  intro: intro.html
+  sim_results: sim_results.html
+  sim_tables: sim_tables.pdf
+last_built: 2023-04-09T09:22Z
 urls:
-  reference: http://haziqj.ml/lavaan.bingof/reference
-  article: http://haziqj.ml/lavaan.bingof/articles
+  reference: https://haziqj.ml/lavaan.bingof/reference
+  article: https://haziqj.ml/lavaan.bingof/articles
 

@@ -28,8 +28,9 @@ probabilities only) based on model i.e. pidot1 and pidot2 and
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Introduction.html">Introduction</a>
-    <a class="dropdown-item" href="../articles/Technical-details.pdf">Technical details (PDF)</a>
+    <a class="dropdown-item" href="../articles/intro.html">intro</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="../articles/index.html">More articles...</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -85,20 +86,19 @@ probabilities only) based on model i.e. <code>pidot1</code> and <code>pidot2</co
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html" class="external-link">sem</a></span><span class="op">(</span><span class="fu"><a href="txt_mod.html">txt_mod</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="gen_data_bin.html">gen_data_bin</a></span><span class="op">(</span><span class="fl">1</span>, n <span class="op">=</span> <span class="fl">500</span><span class="op">)</span>, std.lv <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>                   estimator <span class="op">=</span> <span class="st">"PML"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>lavaan WARNING: some estimated ov variances are negative</span>
 <span class="r-in"><span><span class="fu">get_uni_bi_moments</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pdot1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.918 0.720 0.532 0.754 0.868</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.934 0.702 0.558 0.762 0.854</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pidot1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9179947 0.7199342 0.5319796 0.7539728 0.8680347</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9339942 0.7019745 0.5580179 0.7620045 0.8539935</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pdot2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.700 0.522 0.716 0.806 0.424 0.570 0.634 0.422 0.484 0.666</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.686 0.534 0.722 0.810 0.438 0.562 0.634 0.446 0.492 0.662</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pidot2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.6992549 0.5217757 0.7155014 0.8093446 0.4256706 0.5677993 0.6377284</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.4275869 0.4752251 0.6624027</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.6856622 0.5354060 0.7216191 0.8097918 0.4374621 0.5647214 0.6334424</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.4408981 0.4936070 0.6620148</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
