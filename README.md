@@ -30,9 +30,21 @@ library(lavaan.bingof)  # load package
 
 Note: This package depends on the modified `{lavaan}` package version
 0.6-14.9001, which can be installed from the GitHub repository at
-“`haziqj/lavaan`”.
+“[`haziqj/lavaan`](https://github.com/haziqj/lavaan)”.
 
 ## Usage
+
+There are three main functionalities of this package:
+
+1.  Generate simulated data either from an infinite population or from a
+    finite population using a complex sampling procedure.
+
+2.  Obtain the test statistic values, the degrees of freedom of these
+    chi-square variates, and corresponding $p$-values to determine
+    goodness-of-fit.
+
+3.  Wrap functions 1 and 2 in a convenient way to perform simulation
+    studies for Type I errors and power.
 
 ### Create a simulated data set of ordinal binary responses
 
@@ -112,4 +124,12 @@ Wald_test(fit0)
 Wald_test(fit1, svy_design = svy)
 #>          W df name     pval
 #> 1 6.194313  5 Wald 0.287768
+```
+
+### Simulation wrapper
+
+``` r
+lavaan.bingof:::ligof_sims(model.no = 1, nsim = 1000, sample = "strat",
+                           simtype = "power", no.core = 4)
+# Returns a list of output from all_tests() which can be analysed
 ```
