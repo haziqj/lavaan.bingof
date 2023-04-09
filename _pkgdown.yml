@@ -18,6 +18,12 @@ home:
   sidebar:
     structure: [links, license, authors, dev]
 
+# navbar:
+#  components:
+#    news:
+#     text: Project log
+#     href: news/index.html
+
 reference:
 - title: Generating data
   # desc:  Simulating binary ordinal data sets.
