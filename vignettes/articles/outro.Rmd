@@ -8,6 +8,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 library(lavaan.bingof)
+library(devtools)
 # my_session <- devtools::session_info()
 # save(my_session, file = "my_session.Rdata")
 load("my_session.Rdata")
