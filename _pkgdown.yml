@@ -1,4 +1,41 @@
-url: http://haziqj.ml/lavaan.bingof/
+url: https://haziqj.ml/lavaan.bingof/
 template:
   bootstrap: 5
+  bslib:
+    primary: "#0054AD"
+    border-radius: 0.5rem
+    btn-border-radius: 0.25rem
 
+home:
+  sidebar:
+    structure: [links, license, authors, dev]
+
+reference:
+- title: Generating data
+  # desc:  Simulating binary ordinal data sets.
+  contents:
+  - starts_with("gen_data")
+  - make_population
+
+- title: Test statistics
+  contents:
+  - contains("_test")
+
+- title: Utility functions
+  contents:
+  - txt_mod
+  - starts_with("create_")
+  - starts_with("get_")
+
+articles:
+- title: Technical details
+  navbar: ~
+  contents:
+  - articles/intro
+- title: Simulation results
+  # desc: >
+  #   These articles are used to test various pkgdown features that can not
+  #   easily be tested automatically.
+  contents:
+  - articles/sim_results
+  - articles/sim_tables

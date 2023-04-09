@@ -1,5 +1,5 @@
 ---
-title: "Introduction"
+title: "intro"
 ---
 
 ```{r, include = FALSE}
@@ -10,7 +10,5 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-# library(lavaan.bingof)
+library(lavaan.bingof)
 ```
-
-Hello testing
