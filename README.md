@@ -10,7 +10,9 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![R-CMD-check](https://github.com/haziqj/lavaan.bingof/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/haziqj/lavaan.bingof/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-![](analysis/mult_bern_data.png)
+<!-- https://github.com/r-lib/pkgdown/issues/133 -->
+
+![](https://raw.githubusercontent.com/haziqj/lavaan.bingof/main/analysis/mult_bern_data.png)
 
 This is the accompanying R package for the paper
 
@@ -139,6 +141,8 @@ res <- ligof_sims(model.no = 1, nsim = pc, samp = "strat", simtype = "type1",
                   no.cores = pc)
 #>|======================================================================| 100%
 ```
+
+<!-- #>|======================================================================| 100% -->
 
 ``` r
 res %>%
