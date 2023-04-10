@@ -148,7 +148,7 @@ and the log-likelihood for $\btheta$ given the observed frequencies $\hat\bn$ is
 
 It is widely known [@agresti2012categorical] that
 \begin{equation}
-\sqrt N (\bp - \bpi) \xrightarrow{\text D} \N_R (\bzero, \bSigma),
+\sqrt N (\bp - \bpi) \xrightarrow{\text D} {\N}_R (\bzero, \bSigma),
 \end{equation}
 where $\bSigma = \bD - \bpi\bpi^\top$, with $\bD:= \diag(\bpi)$.
 

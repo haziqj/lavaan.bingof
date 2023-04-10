@@ -91,7 +91,7 @@ pop %>%
         "Min.", "Max."
       ))) %>%
   add_header_above(c("Schools" = 2, "Students" = 5, "Class size" = 4)) %>%
-  kable_styling(latex_options = "HOLD_position")
+  kable_styling(latex_options = "HOLD_position", full_width = TRUE)
 ```
 
 In the factor model, the latent variable $\bfeta$ represents the abilities of each individual student, and it is used as a stratifying variable in the following way.
@@ -102,9 +102,11 @@ Students are then arranged in descending order of $z_h$, and based on this arran
 If the observed variables $y$ are test items, this would suggest that school type A would consist of 'high' ability students, type B 'medium' ability student, and type C 'low' ability students.
 Note that the actualised item responses are further subjected to random errors $\epsilon$.
 
+## Probability-based sample
+
 A probability based sampling procedure may be implemented in one of three ways described below.
 
-## Stratified sampling
+### Stratified sampling
 
 From each school type (strata), select 500 students using SRS.
 Let $N_a$ be the total number of students in stratum $a\in\{1,2,3\}$.
@@ -112,7 +114,7 @@ Then the probability of selection of a student in stratum $a$ is
 $\Pr(\text{selection}) = \frac{500}{N_a}$.
 The total sample size is $n= 3 \times 1000 = 3,000$.
 
-## Two-stage cluster sampling
+### Two-stage cluster sampling
 
 Select 150 PSU schools (clusters) using probabilities proportional to size (PPS).
 For each school, select 1 class by SRS, and all students in that class are added to the sample.
@@ -122,7 +124,7 @@ $$
 $$
 The total sample size will vary from sample to sample, but on average will be $n = 150 \times 20 = 3,000$.
 
-## Two-stage stratified cluster sampling
+### Two-stage stratified cluster sampling
 
 For each school type (strata), select 50 schools using SRS.
 Then, within each school, select 1 class by SRS, and all students in that class are added to the sample.
@@ -132,7 +134,7 @@ $$
 $$
 Again, the expected sample size is roughly $n=3,000$.
 
-# Generating the population data
+## Generating the population data
 
 For the purposes of checking the data generation process, we will use *Model 1* parameters to generate the response patterns.
 That is, we assume a 1 factor model with $p=5$ observed response items.
@@ -142,7 +144,7 @@ The true model parameter values $\btheta$ (loadings and thresholds) are as follo
 (true_vals <- get_true_values(1))
 ```
 
-## Comparison of population and model-implied moments
+### Comparison of population and model-implied moments
 
 ```{r pop_psu_compare, cache = TRUE}
 # Univariate moments (model-implied)
@@ -169,7 +171,7 @@ round(prop1, 4)
 round((prop1 - pi1) / pi1 * 100, 2)
 ```
 
-## Model fit
+### Model fit
 
 ```{r modelfit, echo = TRUE}
 # Comparison of lambda values
@@ -181,7 +183,7 @@ round(coef(fit), 2)[-(1:5)]
 true_vals[-(1:5)]
 ```
 
-## Population and model correlations
+### Population and model correlations
 
 ```{r pop_corr, fig.height = 5, fig.width = 5, fig.show="hold", out.width="50%"}
 corr <- cor(pop_cts %>% select(ystar1:ystar5))
@@ -195,7 +197,7 @@ ggcorrplot(lavaan.bingof:::get_Sigmay(1), type = "lower", outline.col = "white",
   labs(title = expression("Model implied correlation"~Sigma[y]))
 ```
 
-## Distribution by school type (strata)
+### Distribution by school type (strata)
 
 ```{r pop_byregion_vars, cache = TRUE, fig.height = 5}
 pop %>%
@@ -217,10 +219,10 @@ pop %>%
 
 
 
-## Distribution within schools (PSU clusters) {.tabset .tabset-fade}
+### Distribution within schools (PSU clusters) {.tabset .tabset-fade}
 
 
-### $y_1$
+#### $y_1$
 
 
 ```{r dist_psu1, cache = TRUE, fig.height = 8}
@@ -242,7 +244,7 @@ pop %>%
 ```
 
 
-### $y_2$
+#### $y_2$
 
 
 ```{r dist_psu2, cache = TRUE, fig.height = 8}
@@ -264,7 +266,7 @@ pop %>%
 ```
 
 
-### $y_3$
+#### $y_3$
 
 
 ```{r dist_psu3, cache = TRUE, fig.height = 8}
@@ -286,7 +288,7 @@ pop %>%
 ```
 
 
-### $y_4$
+#### $y_4$
 
 
 ```{r dist_psu4, cache = TRUE, fig.height = 8}
@@ -308,7 +310,7 @@ pop %>%
 ```
 
 
-### $y_5$
+#### $y_5$
 
 
 ```{r dist_psu5, cache = TRUE, fig.height = 8}
@@ -329,9 +331,8 @@ pop %>%
   scale_fill_viridis_d(option = "turbo", begin = 0.1, end = 0.9)
 ```
 
-## {-}
 
-# Performing a complex sampling procedure 
+## Performing a complex sampling procedure 
 
 There are three functions that perform the three complex sampling procedures described earlier.
 
@@ -347,7 +348,7 @@ There are three functions that perform the three complex sampling procedures des
 ```
 
 
-## Comparison of uni and bivariate moments
+### Comparison of uni and bivariate moments
 
 ```{r fit_sample_models, cache = TRUE}
 # Stratified sample
@@ -410,7 +411,7 @@ tibble(
                          direction = -1)
 ```
 
-## Check bias in model fit
+### Check bias in model fit
 
 To check the bias in model fit, do the following:
 
@@ -441,7 +442,7 @@ res %>%
                          direction = -1)
 ```
 
-# Estimating the multinomial covariance matrix
+## Estimating the multinomial covariance matrix
 
 Let $\bp$ be the $R \times 1$ vector of sample proportions (of response patterns) corresponding to the vector of population proportions $\bpi$.
 Assuming iid observations,
@@ -460,10 +461,10 @@ For convenience, we may do a total normalisation of the weights so that $\sum_h 
 Under suitable conditions, the central limit theorem in \@ref(eq:propclt) still applies, although the covariance matrix $\bSigma$ need not now take a multinomial form.
 
 We now discuss how to estimate $\bSigma$ from a stratified multistage sample scheme where the strata are labelled $a=1,\dots,N_S$ and the PSUs are labelled $b=1,\dots,n_a$, where $n_a$ is the number of PSUs selected in stratum $a$.
-Let $S_{ab}$ be the set of sample units contained within PSU $b$ within stratum $a$.
+Let $\cS{ab}$ be the set of sample units contained within PSU $b$ within stratum $a$.
 Define
 \begin{equation}
-\bu_{ab} = \sum_{h \in S_{ab}} w_h (\by^{(h)} - \hat\bpi).
+\bu_{ab} = \sum_{h \in \cS{ab}} w_h (\by^{(h)} - \hat\bpi).
 \end{equation}
 One may think of these as the 'deviations from the mean' of units in PSU $b$ within stratum $a$. Further define
 \begin{equation}
@@ -477,7 +478,7 @@ Then, a standard estimator of $\bSigma$ is given by
 
 For the three complex sampling procedures discussed earlier,
 
-1. (Stratified sampling) There are three strata $a=1,2,3$ corresponding to the school types, and the PSUs are the individual students within schools in each stratum. An equal size is taken per stratum, so $n_a=1000$, and thus the sample units $S_{ab}$ lists out the students from various schools and classes within each stratum $a$ (there is no sum over $b$).
+1. (Stratified sampling) There are three strata $a=1,2,3$ corresponding to the school types, and the PSUs are the individual students within schools in each stratum. An equal size is taken per stratum, so $n_a=1000$, and thus the sample units $\cS{ab}$ lists out the students from various schools and classes within each stratum $a$ (there is no sum over $b$).
 
 2. (Two-stage cluster sampling) In this case, there is only 1 stratum, $n_a=n$ and $\bu_a=0$.
 
@@ -485,9 +486,9 @@ For the three complex sampling procedures discussed earlier,
 <!-- V(\bar{y}) = \frac{N-n}{N} \left[\frac{1}{m}\sum_{h=1}^H s_h^2 - \frac{n-1}{n}\frac{1}{m^2}\sum_{h=1}^H s_h^2\right] + \frac{n-1}{n} \frac{1}{m}\sum_{h=1}^H \frac{\left(\bar{y}_h - \bar{y}\right)^2}{\omega_h^2}, -->
 <!-- $$ -->
 
-3. (Two-stage stratified cluster sampling) Same as 1, but the sample units $S_{ab}$ lists out the students from school $b$ (from the selected class)  within each stratum $a$.
+3. (Two-stage stratified cluster sampling) Same as 1, but the sample units $\cS{ab}$ lists out the students from school $b$ (from the selected class)  within each stratum $a$.
 
-## Comparison of estimates {.tabset .tabset-fade}
+### Comparison of estimates {.tabset .tabset-fade}
 
 ```{r pop_Sigma}
 Sigma <- cor(pop %>% select(y1:y5))
@@ -504,7 +505,7 @@ svy3 <- svydesign(ids = ~ school + class, strata = ~ type, weights = ~ wt,
                   data = samp3, nest = TRUE)
 ```
 
-### Stratified sample
+#### Stratified sample
 
 ```{r strat_Sigma}
 Sigma1 <- lavaan.bingof:::create_Sigma_univariate_matrix_complex(fit21, svy1)
@@ -515,7 +516,7 @@ ggcorrplot(Sigma1, type = "lower", outline.col = "white",
   labs(title = expression("Stratified sampling covariance"~Sigma~"estimate"))
 ```
 
-### Cluster sample
+#### Cluster sample
 
 ```{r clust_Sigma}
 Sigma2 <- lavaan.bingof:::create_Sigma_univariate_matrix_complex(fit22, svy2)
@@ -526,7 +527,7 @@ ggcorrplot(Sigma2, type = "lower", outline.col = "white",
   labs(title = expression("Cluster sampling covariance"~Sigma~"estimate"))
 ```
 
-### Stratified cluster sample
+#### Stratified cluster sample
 
 ```{r strcl_Sigma}
 Sigma3 <- lavaan.bingof:::create_Sigma_univariate_matrix_complex(fit23, svy3)
@@ -536,21 +537,3 @@ ggcorrplot(Sigma3, type = "lower", outline.col = "white",
            colors = c("#455BCDFF", "white", "#C42503FF")) +
   labs(title = expression("Stratified cluster sampling covariance"~Sigma~"estimate"))
 ```
-
-## {-}
-
-# New header
-
-### Fading tabset {.tabset .tabset-fade}
-
-#### English
-
-Hello!
-
-#### French
-
-Bonjour!
-
-#### German
-
-Guten tag.
