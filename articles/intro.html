@@ -43,6 +43,7 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Technical details</h6>
     <a class="dropdown-item" href="../articles/intro.html">Introduction</a>
+    <a class="dropdown-item" href="../articles/complex_sampling1.html">Details about the complex sampling procedure</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Simulation study</h6>
     <a class="dropdown-item" href="../articles/sim_results.html">Description and results</a>
@@ -103,9 +104,58 @@ When we consider a parametric model with parameter vector <span class="math inli
 \vdots \\
 \pi_{R}({\boldsymbol\theta})  \\
 \end{pmatrix} \in [0,1]^R
-\tag{1}
+\tag{0.1}
 \end{equation}\]</span>
 for the vector of joint probabilities, with <span class="math inline">\(\sum_{r=1}^R \pi_{r}({\boldsymbol\theta}) =1\)</span>.</p>
+<div class="section level2" number="1">
+<h2 id="model-based-probabilities">
+<span class="header-section-number">1</span> Model-based probabilities<a class="anchor" aria-label="anchor" href="#model-based-probabilities"></a>
+</h2>
+<p>We generate a multivariate dichotomous variable <span class="math inline">\({\mathbf y}= (y_1,\dots,y_p)^\top \in \{0,1\}^p\)</span> following a factor analysis model according to an underlying random variable framework.
+Suppose there exists some latent, continuous variable <span class="math inline">\(y_i^*\)</span>, <span class="math inline">\(i=1,\dots,p\)</span>, such that
+<span class="math display">\[\begin{equation}\label{eq:factorreg}
+y_i = \begin{cases}
+1  &amp; y_i^* &gt; \tau_i \\
+0  &amp; y_i^* \leq \tau_i.
+\end{cases}
+\end{equation}\]</span>
+The factor model assumes that
+<span class="math display">\[\begin{equation}
+\myoverbrace{
+\begin{pmatrix}
+y_1^* \\
+\vdots \\
+y_p^*
+\end{pmatrix}}{{\mathbf y}^*}
+=
+\myoverbrace{
+\begin{pmatrix}
+\lambda_{11} &amp;\cdots &amp; \lambda_{1q} \\
+\vdots &amp; \ddots &amp; \vdots \\
+\lambda_{p1} &amp;\cdots &amp; \lambda_{pq} \\
+\end{pmatrix}}{{\boldsymbol\Lambda}}
+\,
+\myoverbrace{
+\begin{pmatrix}
+\eta_1 \\
+\vdots \\
+\eta_q
+\end{pmatrix}}{{\boldsymbol\eta}}
++
+\myoverbrace{
+\begin{pmatrix}
+\epsilon_1 \\
+\vdots \\
+\epsilon_p
+\end{pmatrix}}{{\boldsymbol\epsilon}}
+\end{equation}\]</span>
+with <span class="math inline">\({\boldsymbol\eta}\sim \mathop{\mathrm{N}}_q({\mathbf 0},{\boldsymbol\Psi})\)</span> where <span class="math inline">\({\boldsymbol\Psi}\)</span> is a correlation matrix, and <span class="math inline">\({\boldsymbol\epsilon}\sim \mathop{\mathrm{N}}_p({\mathbf 0},{\boldsymbol\Theta}_\epsilon)\)</span> where <span class="math inline">\({\boldsymbol\Theta}_\epsilon = {\mathbf I}- \diag({\boldsymbol\Lambda}{\boldsymbol\Psi}{\boldsymbol\Lambda}^\top)\)</span>.
+These two assumptions combine to imply that <span class="math inline">\({\mathbf y}^* \sim \mathop{\mathrm{N}}_p({\mathbf 0}, {\boldsymbol\Sigma}_{{\mathbf y}^*})\)</span>, where
+<span class="math display">\[\begin{equation}
+{\boldsymbol\Sigma}_{{\mathbf y}^*}= {\boldsymbol\Lambda}{\boldsymbol\Phi}{\boldsymbol\Lambda}^\top + {\boldsymbol\Theta}_\epsilon.
+\end{equation}\]</span>
+Note that marginally the underlying variables are standard normal but that they are correlated across items.</p>
+</div>
   </main>
 </div>
 
