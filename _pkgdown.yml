@@ -50,6 +50,7 @@ articles:
   navbar: Technical details
   contents:
   - articles/intro
+  - articles/complex_sampling1
 - title: Simulation study
   navbar: Simulation study
   # desc: >

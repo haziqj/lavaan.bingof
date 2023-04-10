@@ -21,6 +21,7 @@ cat(readr::read_file("maths_shortcuts.tex"))
 
 <!-- Extra LaTeX commands -->
 \newcommand{\pimod}[1]{\pi_{#1}(\btheta)}
+\newcommand{\Sigmaystar}{\bSigma_{\by^*}}
 <!-- Extra LaTeX commands -->
 
 Let $\bY = (Y_1, \dots, Y_p)^\top \in \{0,1\}^p$ be a vector of Bernoulli random variables. 
@@ -42,3 +43,52 @@ When we consider a parametric model with parameter vector $\btheta\in\bbR^q$, we
 (\#eq:jointprob)
 \end{equation}
 for the vector of joint probabilities, with $\sum_{r=1}^R \pimod{r} =1$.
+
+# Model-based probabilities
+
+
+We generate a multivariate dichotomous variable $\by = (y_1,\dots,y_p)^\top \in \{0,1\}^p$ following a factor analysis model according to an underlying random variable framework.
+Suppose there exists some latent, continuous variable $y_i^*$, $i=1,\dots,p$, such that
+\begin{equation}\label{eq:factorreg}
+y_i = \begin{cases}
+1  & y_i^* > \tau_i \\
+0  & y_i^* \leq \tau_i.
+\end{cases}
+\end{equation}
+The factor model assumes that
+\begin{equation}
+\myoverbrace{
+\begin{pmatrix}
+y_1^* \\
+\vdots \\
+y_p^*
+\end{pmatrix}}{\by^*}
+=
+\myoverbrace{
+\begin{pmatrix}
+\lambda_{11} &\cdots & \lambda_{1q} \\
+\vdots & \ddots & \vdots \\
+\lambda_{p1} &\cdots & \lambda_{pq} \\
+\end{pmatrix}}{\bLambda}
+\,
+\myoverbrace{
+\begin{pmatrix}
+\eta_1 \\
+\vdots \\
+\eta_q
+\end{pmatrix}}{\bfeta}
++
+\myoverbrace{
+\begin{pmatrix}
+\epsilon_1 \\
+\vdots \\
+\epsilon_p
+\end{pmatrix}}{\bepsilon}
+\end{equation}
+with $\bfeta \sim \N_q(\bzero,\bPsi)$ where $\bPsi$ is a correlation matrix, and $\bepsilon\sim \N_p(\bzero,\bTheta_\epsilon)$ where $\bTheta_\epsilon = \bI - \diag(\bLambda\bPsi\bLambda^\top)$.
+These two assumptions combine to imply that $\by^* \sim \N_p(\bzero, \Sigmaystar)$, where
+\begin{equation}
+\Sigmaystar = \bLambda\bPhi\bLambda^\top + \bTheta_\epsilon.
+\end{equation}
+Note that marginally the underlying variables are standard normal but that they are correlated across items.
+

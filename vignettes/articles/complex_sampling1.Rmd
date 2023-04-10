@@ -1,0 +1,340 @@
+---
+title: "Details about the complex sampling procedure"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  echo = FALSE,
+  cache = TRUE
+)
+library(tidyverse)
+theme_set(theme_bw())
+library(kableExtra)
+library(lavaan)
+library(lavaan.bingof)
+library(survey)
+library(ggcorrplot)
+```
+
+```{r, echo = FALSE, results = "asis"}
+# LaTeX shortcuts 
+cat(readr::read_file("maths_shortcuts.tex"))
+``` 
+
+<!-- Extra LaTeX commands -->
+\newcommand{\Sigmaystar}{\bSigma_{\by^*}}
+<!-- Extra LaTeX commands -->
+
+```{r, cache = TRUE}
+pop <- make_population(model.no = 1, return_all = TRUE, seed = 123)
+pop_cts <- pop %>%
+  select(type:class, contains("ystar"), contains("eta"))
+pop <- pop %>%
+  select(-contains("ystar")) %>%
+  select(type:class, starts_with("y"))
+```
+
+To simulate a complex sampling design, our strategy is to generate data for an entire population inspired by a sampling design in education.
+The population consists of 2,000 schools (Primary Sampling Units, PSU) of three types: "A" (400 units), "B" (1000 units), and "C" (600 units). 
+The school type correlates with the average abilities of its students (explained further below) and therefore gives a way of stratifying the population.
+Each school is assigned a random number of students from the normal distribution $\N(500, 125^2)$ (the number then rounded down to a whole number).
+Students are then assigned randomly into classes of average sizes 15, 25 and 20 respectively for each school type A, B and C.
+The total population size is roughly $N=`r round(nrow(pop) / 1e6, 1)`$ million students.
+The population statistics is summarised in the table below.
+
+```{r, eval = FALSE, echo = TRUE}
+# Make population
+pop <- make_population(model.no = 1, return_all = TRUE, seed = 123)
+```
+
+```{r}
+pop %>% 
+  group_by(type, school, class) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  group_by(type, school) %>%
+  summarise(
+    n_stud = sum(n),
+    avg_class_size = mean(n),
+    sd_class_size = sd(n),
+    min_class_size = min(n),
+    max_class_size = max(n),
+    .groups = "drop"
+  ) %>%
+  group_by(type) %>%
+  summarise(
+    n_schools = length(unique(school)),
+    n_students = sum(n_stud),
+    avg_students = mean(n_stud),
+    sd_students = sd(n_stud),
+    min_students = min(n_stud),
+    max_students = max(n_stud),
+    avg_class_size = mean(avg_class_size),
+    sd_class_size = mean(sd_class_size),
+    min_class_size = min(min_class_size),
+    max_class_size = max(max_class_size),
+    .groups = "drop"
+  ) %>%
+  kbl(booktabs = TRUE, row.names = FALSE, digits = 1, escape = FALSE,
+      format.args = list(big.mark = ","), col.names = linebreak(c(
+        "Type", "$N$", "$N$", "Avg.", "SD", "Min.", "Max.", "Avg.", "SD",
+        "Min.", "Max."
+      ))) %>%
+  add_header_above(c("Schools" = 2, "Students" = 5, "Class size" = 4)) %>%
+  kable_styling(latex_options = "HOLD_position")
+```
+
+In the factor model, the latent variable $\bfeta$ represents the abilities of each individual student, and it is used as a stratifying variable in the following way.
+For each individual $h=1,\dots,N$, let $\bfeta_h$ represent the vector of latent abilities generated from $N_q(\bzero, \bPhi)$ as described above.
+Define $z_h=\sum_{j=1}^q \eta_{jh}$, which is now a normal random variate centered at zero. 
+If all the correlations in $\bPhi$ are positive, then $z_h$ has variance at least $q$.
+Students are then arranged in descending order of $z_h$, and based on this arrangement assigned to the school type A, B or C respectively.
+If the observed variables $y$ are test items, this would suggest that school type A would consist of 'high' ability students, type B 'medium' ability student, and type C 'low' ability students.
+Note that the actualised item responses are further subjected to random errors $\epsilon$.
+
+A probability based sampling procedure may be implemented in one of three ways described below.
+
+## Stratified sampling
+
+From each school type (strata), select 500 students using SRS.
+Let $N_a$ be the total number of students in stratum $a\in\{1,2,3\}$.
+Then the probability of selection of a student in stratum $a$ is 
+$\Pr(\text{selection}) = \frac{500}{N_a}$.
+The total sample size is $n= 3 \times 1000 = 3,000$.
+
+## Two-stage cluster sampling
+
+Select 150 PSU schools (clusters) using probabilities proportional to size (PPS).
+For each school, select 1 class by SRS, and all students in that class are added to the sample.
+The probability of selection of a student in PSU $b=1,\dots,10000$ is then
+$$
+\Pr(\text{selection}) = \Pr(\text{weighted school selection}) \times \frac{1}{\# \text{ classes in school }b}.
+$$
+The total sample size will vary from sample to sample, but on average will be $n = 150 \times 20 = 3,000$.
+
+## Two-stage stratified cluster sampling
+
+For each school type (strata), select 50 schools using SRS.
+Then, within each school, select 1 class by SRS, and all students in that class are added to the sample.
+The probability of selection of a student in PSU $b$ from school type $a$ is
+$$
+\Pr(\text{selection}) = \frac{50}{\# \text{ schools of type } a} \times \frac{1}{\# \text{ classes in school }b}.
+$$
+Again, the expected sample size is roughly $n=3,000$.
+
+# Generating the population data
+
+For the purposes of checking the data generation process, we will use *Model 1* parameters to generate the response patterns.
+That is, we assume a 1 factor model with $p=5$ observed response items.
+The true model parameter values $\btheta$ (loadings and thresholds) are as follows:
+
+```{r true_vals}
+(true_vals <- get_true_values(1))
+```
+
+
+## Comparison of population and model-implied moments
+
+```{r pop_psu_compare, cache = TRUE}
+# Univariate moments (model-implied)
+pi1 <- pnorm(lavaan.bingof:::get_tau(), lower.tail = FALSE)
+names(pi1) <- paste0("y", seq_along(pi1))
+
+# Univariate moments (population statistics)
+prop1 <- summarise(pop, across(y1:y5, mean)) %>% unlist()
+
+# Fit a factor model
+mod <- txt_mod(1)
+fit <- sem(model = mod, data = pop %>% mutate(across(y1:y5, ordered)),
+           estimator = "PML", std.lv = TRUE)
+```
+
+```{r pop_univariate_moments, echo = TRUE}
+# Univariate moments (model-implied)
+round(pi1, 4)
+
+# Univariate moments (population statistics)
+round(prop1, 4)
+
+# Errors (percentage)
+round((prop1 - pi1) / pi1 * 100, 2)
+```
+
+## Model fit
+
+```{r modelfit, echo = TRUE}
+# Comparison of lambda values
+round(coef(fit), 2)[1:5]
+true_vals[1:5]
+
+# Comparison of threshold values
+round(coef(fit), 2)[-(1:5)]
+true_vals[-(1:5)]
+```
+
+## Population and model correlations
+
+```{r pop_corr, fig.height = 5, fig.width = 5, fig.show="hold", out.width="50%"}
+corr <- cor(pop_cts %>% select(ystar1:ystar5))
+ggcorrplot(corr, type = "lower", outline.col = "white",
+           ggtheme = ggplot2::theme_bw, lab = TRUE,
+           colors = c("#455BCDFF", "white", "#C42503FF")) +
+  labs(title = "Tetrachoric correlations")
+ggcorrplot(lavaan.bingof:::get_Sigmay(1), type = "lower", outline.col = "white",
+           ggtheme = ggplot2::theme_bw, lab = TRUE,
+           colors = c("#455BCDFF", "white", "#C42503FF")) +
+  labs(title = expression("Model implied correlation"~Sigma[y]))
+```
+
+## Distribution by school type (strata)
+
+```{r pop_byregion_vars, cache = TRUE, fig.height = 5}
+pop %>%
+  select(type, starts_with("y")) %>%
+  pivot_longer(-type) %>%
+  mutate(value = factor(value)) %>%
+  ggplot(aes(type, fill = value)) +
+  geom_bar(position = "fill") +
+  geom_hline(data = tibble(y = prop1, name = names(prop1)),
+             aes(yintercept = prop1), linetype = "dashed") +
+  facet_grid(~ name, scales = "free_y") +
+  coord_flip() +
+  labs(x = "School type", y = "Population proportion", fill = "Response") +
+  theme(legend.position = "top", axis.text.x = element_text(
+    angle = 45, hjust = 1
+  )) +
+  scale_fill_viridis_d(option = "turbo", begin = 0.1, end = 0.9)
+```
+
+
+## Distribution within schools (PSU clusters)
+
+```{r dist_psu, cache = TRUE, fig.height = 8}
+# Check variation due to clusters (should be invariant BETWEEN clusters)
+pop %>%
+  select(type, school, y3) %>%
+  pivot_longer(school)  %>%
+  mutate(y3 = factor(y3)) %>%
+  ggplot(aes(value, fill = y3)) +
+  geom_bar(position = "fill", width = 1) +
+  geom_hline(yintercept = prop1[3], linetype = "dashed") +
+  facet_wrap(~ type, scales = "free_y", ncol = 5) +
+  coord_flip() +
+  # scale_y_continuous(breaks = c(0, 0.5, 1)) +
+  theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+        legend.position = "top") +
+  labs(x = "Schools", y = "Population proportion", fill = "Response to item y3") +
+  scale_fill_viridis_d(option = "turbo", begin = 0.1, end = 0.9)
+```
+
+# Performing a complex sampling procedure 
+
+There are three functions that perform the three complex sampling procedures described earlier.
+
+```{r complex_sampling_procedure, echo = TRUE, cache = TRUE, size = "footnotesize"}
+# Stratified sampling
+(samp1 <- gen_data_bin_complex1(population = pop, seed = 123))
+
+# Two-stage cluster sampling
+(samp2 <- gen_data_bin_complex2(population = pop, seed = 123))
+
+# Two-stage stratified cluster sampling
+(samp3 <- gen_data_bin_complex3(population = pop, seed = 123))
+```
+
+
+## Comparison of uni and bivariate moments
+
+```{r fit_sample_models, cache = TRUE}
+# Stratified sample
+fit11 <- sem(model = mod, data = samp1, estimator = "PML", std.lv = TRUE)
+fit21 <- sem(model = mod, data = samp1, estimator = "PML", std.lv = TRUE,
+             sampling.weights = "wt")
+
+# Two-stage cluster sample
+fit12 <- sem(model = mod, data = samp2, estimator = "PML", std.lv = TRUE)
+fit22 <- sem(model = mod, data = samp2, estimator = "PML", std.lv = TRUE,
+             sampling.weights = "wt")
+
+# Two-stage stratified cluster sample
+fit13 <- sem(model = mod, data = samp3, estimator = "PML", std.lv = TRUE)
+fit23 <- sem(model = mod, data = samp3, estimator = "PML", std.lv = TRUE,
+             sampling.weights = "wt")
+```
+
+```{r comparison_sample_stats_plot}
+tibble(
+  a = with(get_theoretical_uni_bi_moments(1), c(pidot1, pidot2)),  # theoretical
+  
+  # Stratified sample
+  b = with(get_uni_bi_moments(fit11), c(pdot1, pdot2)),  # no weights
+  c = with(get_uni_bi_moments(fit21), c(pdot1, pdot2)),  # weights
+
+  # Two-stage cluster sample
+  d = with(get_uni_bi_moments(fit12), c(pdot1, pdot2)),  # no weights
+  e = with(get_uni_bi_moments(fit22), c(pdot1, pdot2)),  # weights
+  
+  # Two-stage stratified cluster sample
+  f = with(get_uni_bi_moments(fit13), c(pdot1, pdot2)),  # no weights
+  g = with(get_uni_bi_moments(fit23), c(pdot1, pdot2))   # weights
+) %>%
+  pivot_longer(-a) %>%
+  mutate(name = factor(name, labels = c(
+    "Stratified (no weights)", "Stratified (weights)",
+    "2S Cluster (no weights)", "2S Cluster (weights)",
+    "2S Strat-Clust (no weights)", "2S Strat-Clust (weights)"
+  ))) %>%
+  mutate(
+    col_var = gsub("\\s*\\([^)]*\\)", "", name),
+    shape_var = case_when(
+      grepl("no weights", name) ~ "Ignore weights",
+      TRUE ~ "Weights"
+    )
+  ) %>%
+  mutate(col_var = factor(col_var, levels = c("Stratified",
+                                              "2S Cluster",
+                                              "2S Strat-Clust"))) %>%
+  ggplot(aes(a, value, shape = col_var, col = shape_var)) +
+  geom_point(size = 3) +
+  geom_abline(slope = 1, intercept = 0) +
+  scale_shape_manual(values = c(1, 4, 5), guide = "none") +
+  # scale_y_log10() + scale_x_log10() +
+  facet_grid(. ~ col_var) +
+  labs(x = "Theoretical values", y = "Sample values", col = NULL) +
+  theme(legend.position = "top") +
+  scale_colour_viridis_d(option = "turbo", begin = 0.1, end = 0.9, 
+                         direction = -1)
+```
+
+## Check bias in model fit
+
+To check the bias in model fit, do the following:
+
+1. Generate data sets using `gen_data_bin_complex()` for the stratified, cluster, and stratified cluster methods.
+
+2. Fit the factor model using `{lavaan}` and compare the estimates with the true parameter values `true_vals`.
+
+3. Repeat steps 1 & 2 a total of 1,000 times.
+
+```{r bias_plot, fig.height = 6}
+# Refer to 10-check_complex_bias.R script in analysis/ folder
+load("check_complex_bias.RData")
+res %>%
+  mutate(across(starts_with("PML"), ~ abs(as.numeric(. - truth)))) %>%
+  select(-truth) %>%
+  pivot_longer(-c(B, param, Sampling, type)) %>%
+  mutate(Sampling = factor(Sampling, levels = c("Stratified",
+                                                "2S Cluster",
+                                                "2S Strat-Clust"))) %>%
+  ggplot(aes(param, value, fill = name)) +
+  geom_boxplot(outlier.shape = NA) +
+  # coord_cartesian(ylim = c(0, 1)) +
+  facet_grid(Sampling ~ type, scales = "free_x") +
+  labs(x = NULL, y = "Absolute bias", fill = "Estimation") +
+  theme(legend.position = "top") +
+  coord_cartesian(ylim = c(0, 0.15)) +
+  scale_fill_viridis_d(option = "turbo", begin = 0.1, end = 0.9, 
+                         direction = -1)
+```
+
