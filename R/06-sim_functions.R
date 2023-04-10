@@ -52,7 +52,7 @@ ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
     pop <- make_population(model_no, seed = starting_seed, H1 = H1)
   }
   if (samp == "strat") npsu <- round(samp_size / 3, 0)
-  if (samp == "clust") npsu <- round(samp_size / 20, 0)
+  if (samp == "clust") npsu <- round(samp_size / 21.5, 0)
   if (samp == "strcl") npsu <- round(samp_size / (15 + 20 + 25), 0)
 
   # Random seeds for replication
@@ -85,20 +85,22 @@ ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
       if (samp == "strat") {
         # Stratified sampling --------------------------------------------------
         seed_used <- the_seeds[i, 2]
-        dat <- gen_data_bin_complex1(population = pop, seed = seed_used,
-                                     npsu = samp_size)
+        dat <- gen_data_bin_complex1(population = pop, npsu = npsu,
+                                     seed = seed_used)
         svy <- svydesign(ids = ~ 1, strata = ~ type, weights = ~ wt, data = dat)
       }
       if (samp == "clust") {
         # Cluster sampling -----------------------------------------------------
         seed_used <- the_seeds[i, 3]
-        dat <- gen_data_bin_complex2(population = pop, seed = seed_used)
+        dat <- gen_data_bin_complex2(population = pop, npsu = npsu,
+                                     seed = seed_used)
         svy <- svydesign(ids = ~ school + class, weights = ~ wt, data = dat)
       }
       if (samp == "strcl") {
         # Stratified-cluster sampling ------------------------------------------
         seed_used <- the_seeds[i, 4]
-        dat <- gen_data_bin_complex3(population = pop, seed = seed_used)
+        dat <- gen_data_bin_complex3(population = pop, npsu = npsu,
+                                     seed = seed_used)
         svy <- svydesign(ids = ~ school + class, strata = ~ type,
                          weights = ~ wt, data = dat, nest = TRUE)
       }

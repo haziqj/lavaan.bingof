@@ -108,21 +108,21 @@ A probability based sampling procedure may be implemented in one of three ways d
 
 ### Stratified sampling
 
-From each school type (strata), select 500 students using SRS.
+From each school type (strata), select 1000 students (PSU) using SRS.
 Let $N_a$ be the total number of students in stratum $a\in\{1,2,3\}$.
 Then the probability of selection of a student in stratum $a$ is 
-$\Pr(\text{selection}) = \frac{500}{N_a}$.
-The total sample size is $n= 3 \times 1000 = 3,000$.
+$\Pr(\text{selection}) = \frac{1000}{N_a}$.
+The total sample size is $n= 3 \times 1000 = 3000$.
 
 ### Two-stage cluster sampling
 
-Select 150 PSU schools (clusters) using probabilities proportional to size (PPS).
-For each school, select 1 class by SRS, and all students in that class are added to the sample.
-The probability of selection of a student in PSU $b=1,\dots,10000$ is then
+Select 140 schools (PSU; clusters) using probabilities proportional to size (PPS).
+For each school, select one class by SRS, and all students in that class are added to the sample.
+The probability of selection of a student in PSU $b=1,\dots,2000$ is then
 $$
 \Pr(\text{selection}) = \Pr(\text{weighted school selection}) \times \frac{1}{\# \text{ classes in school }b}.
 $$
-The total sample size will vary from sample to sample, but on average will be $n = 150 \times 20 = 3,000$.
+The total sample size will vary from sample to sample, but on average will be $n = 140 \times 21.5 = 3010$, where $\frac{15 \times 400 + 25 \times 1000 + 20 \times 600} = 21.5$ is the average class size per school.
 
 ### Two-stage stratified cluster sampling
 
@@ -132,7 +132,7 @@ The probability of selection of a student in PSU $b$ from school type $a$ is
 $$
 \Pr(\text{selection}) = \frac{50}{\# \text{ schools of type } a} \times \frac{1}{\# \text{ classes in school }b}.
 $$
-Again, the expected sample size is roughly $n=3,000$.
+Here, the expected sample size is $n=50 \times (15 + 25 + 20) = 3000$.
 
 ## Generating the population data
 
