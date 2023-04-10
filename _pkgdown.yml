@@ -35,6 +35,10 @@ reference:
   contents:
   - contains("_test")
 
+- title: Simulation study
+  contents:
+  - ligof_sims
+
 - title: Utility functions
   contents:
   - txt_mod

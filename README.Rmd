@@ -12,6 +12,7 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 library(lavaan.bingof)
+library(tidyverse)
 ```
 
 # lavaan.bingof
@@ -88,8 +89,17 @@ Wald_test(fit1, svy_design = svy)
 
 ### Simulation wrapper
 
-```{r, eval = FALSE}
-lavaan.bingof:::ligof_sims(model.no = 1, nsim = 1000, sample = "strat",
-                           simtype = "power", no.core = 4)
-# Returns a list of output from all_tests() which can be analysed
+```{r}
+# To conduct a simulation study based on a 5 factor model (25 repetitions only
+# for illustration). Data generated according to a stratified complex sample.
+(pc <- parallel::detectCores())   # how many cores do we have?
+res <- ligof_sims(model.no = 1, nsim = pc, samp = "strat", simtype = "type1",
+                  no.cores = pc)
+```
+
+```{r}
+res %>%
+  bind_rows() %>%
+  group_by(name) %>%
+  summarise(rej_rate = mean(pval < 0.1))
 ```
