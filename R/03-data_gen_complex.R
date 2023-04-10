@@ -58,7 +58,7 @@ make_population <- function(model_no = 1, seed = 123, H1 = FALSE,
     # Add an extra factor to misspecify the model fit (for power simulations)
     extra_Lambda <- Lambda[, 1, drop = FALSE] + rnorm(nitems, sd = 0.1)
     if (model_no <= 3) { extra_Lambda[seq(2, nitems, by = 2), 1] <- 0 }
-    ystar <- ystar + t(extra_Lambda %*% rnorm(n))
+    ystar <- ystar + t(extra_Lambda %*% rnorm(N))
     ystar <- scale(ystar)
   }
 

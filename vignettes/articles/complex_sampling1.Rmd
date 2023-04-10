@@ -37,7 +37,7 @@ cat(readr::read_file("maths_shortcuts.tex"))
 <!-- Extra LaTeX commands -->
 
 ```{r, cache = TRUE}
-pop <- make_population(model.no = 1, return_all = TRUE, seed = 123)
+pop <- make_population(model_no = 1, return_all = TRUE, seed = 123)
 pop_cts <- pop %>%
   select(type:class, contains("ystar"), contains("eta"))
 pop <- pop %>%
@@ -55,7 +55,7 @@ The population statistics is summarised in the table below.
 
 ```{r, eval = FALSE, echo = TRUE}
 # Make population
-pop <- make_population(model.no = 1, return_all = TRUE, seed = 123)
+pop <- make_population(model_no = 1, return_all = TRUE, seed = 123)
 ```
 
 ```{r}
