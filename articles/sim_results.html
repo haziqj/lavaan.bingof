@@ -72,7 +72,7 @@ for (let popover of popovers) {
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Technical details</h6>
     <a class="dropdown-item" href="../articles/intro.html">Introduction</a>
-    <a class="dropdown-item" href="../articles/complex_sampling1.html">Details about the complex sampling procedure</a>
+    <a class="dropdown-item" href="../articles/complex_sampling1.html">Complex sampling procedure</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Simulation study</h6>
     <a class="dropdown-item" href="../articles/sim_results.html">Description and results</a>
@@ -154,28 +154,108 @@ factor was not accounted for.</p>
 <p>It is noted that model fit was problematic when sample size <span class="math inline">\(n\)</span> is small, and <a href="https://lavaan.ugent.be" class="external-link">lavaan</a> was
 either not able to converge or not able to invert the sensitivity matrix
 (or both). These simulations were then removed from the results.</p>
-<div class="section level2">
-<h2 id="plots">Plots<a class="anchor" aria-label="anchor" href="#plots"></a>
+<div class="section level2 tabset">
+<h2 class="tabset" id="srs-type-i-errors">SRS Type I errors<a class="anchor" aria-label="anchor" href="#srs-type-i-errors"></a>
 </h2>
-<div class="section level3">
-<h3 id="srs-type-i-errors">SRS Type I errors<a class="anchor" aria-label="anchor" href="#srs-type-i-errors"></a>
-</h3>
-<p><img src="sim_results_files/figure-html/srs_type1-1.png" width="768"><img src="sim_results_files/figure-html/srs_type1-2.png" width="768"><img src="sim_results_files/figure-html/srs_type1-3.png" width="768"></p>
+
+
+
+<ul class="nav nav-tabs" id="srs-type-i-errors" role="tablist">
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#significance" id="significance-tab" type="button" role="tab" aria-controls="significance" aria-selected="false" class="nav-link">10% significance</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#significance-1" id="significance-1-tab" type="button" role="tab" aria-controls="significance-1" aria-selected="true" class="nav-link active">5% significance</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#significance-2" id="significance-2-tab" type="button" role="tab" aria-controls="significance-2" aria-selected="false" class="nav-link">1% significance</button></li>
+</ul>
+<div class="tab-content">
+<div class="tab-pane" id="significance" role="tabpanel" aria-labelledby="significance-tab">
+
+<p><img src="sim_results_files/figure-html/srs_type1a-1.png" width="768"></p>
 </div>
-<div class="section level3">
-<h3 id="srs-power-plots">SRS Power plots<a class="anchor" aria-label="anchor" href="#srs-power-plots"></a>
-</h3>
-<p><img src="sim_results_files/figure-html/srs_power-1.png" width="768"><img src="sim_results_files/figure-html/srs_power-2.png" width="768"><img src="sim_results_files/figure-html/srs_power-3.png" width="768"></p>
+<div class="active tab-pane" id="significance-1" role="tabpanel" aria-labelledby="significance-1-tab">
+
+<p><img src="sim_results_files/figure-html/srs_type1b-1.png" width="768"></p>
 </div>
-<div class="section level3">
-<h3 id="complex-sampling-type-i-errors">Complex sampling Type I errors<a class="anchor" aria-label="anchor" href="#complex-sampling-type-i-errors"></a>
-</h3>
-<p><img src="sim_results_files/figure-html/complex_type1-1.png" width="768"><img src="sim_results_files/figure-html/complex_type1-2.png" width="768"><img src="sim_results_files/figure-html/complex_type1-3.png" width="768"></p>
+<div class="tab-pane" id="significance-2" role="tabpanel" aria-labelledby="significance-2-tab">
+
+<p><img src="sim_results_files/figure-html/srs_type1c-1.png" width="768"></p>
 </div>
-<div class="section level3">
-<h3 id="complex-sampling-power-plots">Complex sampling Power plots<a class="anchor" aria-label="anchor" href="#complex-sampling-power-plots"></a>
-</h3>
-<p><img src="sim_results_files/figure-html/complex_power-1.png" width="768"><img src="sim_results_files/figure-html/complex_power-2.png" width="768"><img src="sim_results_files/figure-html/complex_power-3.png" width="768"></p>
+</div>
+</div>
+<div class="section level2 tabset">
+<h2 class="tabset" id="srs-power-plots">SRS Power plots<a class="anchor" aria-label="anchor" href="#srs-power-plots"></a>
+</h2>
+
+
+
+<ul class="nav nav-tabs" id="srs-power-plots" role="tablist">
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#significance-3" id="significance-3-tab" type="button" role="tab" aria-controls="significance-3" aria-selected="false" class="nav-link">10% significance</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#significance-4" id="significance-4-tab" type="button" role="tab" aria-controls="significance-4" aria-selected="true" class="nav-link active">5% significance</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#significance-5" id="significance-5-tab" type="button" role="tab" aria-controls="significance-5" aria-selected="false" class="nav-link">1% significance</button></li>
+</ul>
+<div class="tab-content">
+<div class="tab-pane" id="significance-3" role="tabpanel" aria-labelledby="significance-3-tab">
+
+<p><img src="sim_results_files/figure-html/srs_powerd-1.png" width="768"></p>
+</div>
+<div class="active tab-pane" id="significance-4" role="tabpanel" aria-labelledby="significance-4-tab">
+
+<p><img src="sim_results_files/figure-html/srs_powere-1.png" width="768"></p>
+</div>
+<div class="tab-pane" id="significance-5" role="tabpanel" aria-labelledby="significance-5-tab">
+
+<p><img src="sim_results_files/figure-html/srs_powerf-1.png" width="768"></p>
+</div>
+</div>
+</div>
+<div class="section level2 tabset">
+<h2 class="tabset" id="complex-sampling-type-i-errors">Complex sampling Type I errors<a class="anchor" aria-label="anchor" href="#complex-sampling-type-i-errors"></a>
+</h2>
+
+
+
+<ul class="nav nav-tabs" id="complex-sampling-type-i-errors" role="tablist">
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#significance-6" id="significance-6-tab" type="button" role="tab" aria-controls="significance-6" aria-selected="false" class="nav-link">10% significance</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#significance-7" id="significance-7-tab" type="button" role="tab" aria-controls="significance-7" aria-selected="true" class="nav-link active">5% significance</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#significance-8" id="significance-8-tab" type="button" role="tab" aria-controls="significance-8" aria-selected="false" class="nav-link">1% significance</button></li>
+</ul>
+<div class="tab-content">
+<div class="tab-pane" id="significance-6" role="tabpanel" aria-labelledby="significance-6-tab">
+
+<p><img src="sim_results_files/figure-html/complex_type1a-1.png" width="768"></p>
+</div>
+<div class="active tab-pane" id="significance-7" role="tabpanel" aria-labelledby="significance-7-tab">
+
+<p><img src="sim_results_files/figure-html/complex_type1b-1.png" width="768"></p>
+</div>
+<div class="tab-pane" id="significance-8" role="tabpanel" aria-labelledby="significance-8-tab">
+
+<p><img src="sim_results_files/figure-html/complex_type1c-1.png" width="768"></p>
+</div>
+</div>
+</div>
+<div class="section level2 tabset">
+<h2 class="tabset" id="complex-sampling-power-plots">Complex sampling Power plots<a class="anchor" aria-label="anchor" href="#complex-sampling-power-plots"></a>
+</h2>
+
+
+
+<ul class="nav nav-tabs" id="complex-sampling-power-plots" role="tablist">
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#significance-9" id="significance-9-tab" type="button" role="tab" aria-controls="significance-9" aria-selected="false" class="nav-link">10% significance</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#significance-10" id="significance-10-tab" type="button" role="tab" aria-controls="significance-10" aria-selected="true" class="nav-link active">5% significance</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#significance-11" id="significance-11-tab" type="button" role="tab" aria-controls="significance-11" aria-selected="false" class="nav-link">1% significance</button></li>
+</ul>
+<div class="tab-content">
+<div class="tab-pane" id="significance-9" role="tabpanel" aria-labelledby="significance-9-tab">
+
+<p><img src="sim_results_files/figure-html/complex_powerd-1.png" width="768"></p>
+</div>
+<div class="active tab-pane" id="significance-10" role="tabpanel" aria-labelledby="significance-10-tab">
+
+<p><img src="sim_results_files/figure-html/complex_powere-1.png" width="768"></p>
+</div>
+<div class="tab-pane" id="significance-11" role="tabpanel" aria-labelledby="significance-11-tab">
+
+<p><img src="sim_results_files/figure-html/complex_powerf-1.png" width="768"></p>
+</div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

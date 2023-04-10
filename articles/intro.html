@@ -72,7 +72,7 @@ for (let popover of popovers) {
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Technical details</h6>
     <a class="dropdown-item" href="../articles/intro.html">Introduction</a>
-    <a class="dropdown-item" href="../articles/complex_sampling1.html">Details about the complex sampling procedure</a>
+    <a class="dropdown-item" href="../articles/complex_sampling1.html">Complex sampling procedure</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Simulation study</h6>
     <a class="dropdown-item" href="../articles/sim_results.html">Description and results</a>
@@ -213,24 +213,81 @@ The probability mass function of <span class="math inline">\(\hat{\mathbf n}\)</
 <span class="math display">\[\begin{equation}
 f_{\hat{\mathbf n}}(x_1,\dots,x_R) = N! \prod_{r=1}^R \frac{1}{x_r!} \big[\pi_{r}({\boldsymbol\theta})\big]^{x_r},
 \end{equation}\]</span>
-and the log-likelihood for <span class="math inline">\({\boldsymbol\theta}\)</span> given the observed frequencies <span class="math inline">\(\hat{\mathbf n}\)</span> is then
+and the log-likelihood for <span class="math inline">\({\boldsymbol\theta}\)</span> given the observed frequencies <span class="math inline">\(\hat{\mathbf n}\)</span> (ignoring constants) is then
 <span class="math display">\[\begin{equation}
-\ell({\boldsymbol\theta}) = \log f_{\hat{\mathbf n}}(\hat n_1,\dots,\hat n_R) = \text{const.} + \sum_{r=1}^{R} \hat n_r \log \pi_{r}({\boldsymbol\theta}).
+\ell({\boldsymbol\theta}) = \log f_{\hat{\mathbf n}}(\hat n_1,\dots,\hat n_R) = \sum_{r=1}^{R} \hat n_r \log \pi_{r}({\boldsymbol\theta}).
 \end{equation}\]</span></p>
-<p>It is widely known <span class="citation">(<a href="#ref-agresti2012categorical" role="doc-biblioref">Agresti 2012</a>)</span> that
-<span class="math display">\[\begin{equation}
-\sqrt N ({\mathbf p}- {\boldsymbol\pi}) \xrightarrow{\text D} {\mathop{\mathrm{N}}}_R ({\mathbf 0}, {\boldsymbol\Sigma}),
+<p>The maximum likelihood estimator <span class="math inline">\(\hat{\boldsymbol\theta}_{\text{ML}}\)</span> satisfy <span class="math inline">\(\hat{\boldsymbol\theta}_{\text{ML}}= \mathop{\mathrm{argmax}}_{{\boldsymbol\theta}} \ell({\boldsymbol\theta})\)</span>.
+Maximum likelihood theory tells us that, under certain regularity conditions, as <span class="math inline">\(n\to\infty\)</span>,
+<span class="math display">\[\begin{equation}\label{eq:limitdisttheta}
+\sqrt n (\hat{\boldsymbol\theta}- {\boldsymbol\theta}) \xrightarrow{\text D} \mathop{\mathrm{N}}\big(0, {\mathcal I}_1({\boldsymbol\theta})\big),
 \end{equation}\]</span>
-where <span class="math inline">\({\boldsymbol\Sigma}= {\mathbf D}- {\boldsymbol\pi}{\boldsymbol\pi}^\top\)</span>, with <span class="math inline">\({\mathbf D}:= \mathop{\mathrm{diag}}({\boldsymbol\pi})\)</span>.</p>
+where <span class="math inline">\({\mathcal I}_1({\boldsymbol\theta}) \in \mathbb{R}^{t\times t}\)</span> is the <em>unit Fisher information matrix</em>.
+It can be further shown that <span class="math inline">\({\mathcal I}_1({\boldsymbol\theta}) = {\boldsymbol\Delta}^\top {\mathbf D}^{-1} {\boldsymbol\Delta}\)</span>, where</p>
+<ul>
+<li>
+<span class="math inline">\({\boldsymbol\Delta}_{r,k} = \frac{\partial\pi_r({\boldsymbol\theta})}{\partial\theta_k}\)</span>, <span class="math inline">\(r=1,\dots,R\)</span>, <span class="math inline">\(k=1,\dots,t\)</span>; and</li>
+<li>
+<span class="math inline">\({\mathbf D}= \mathop{\mathrm{diag}}({\boldsymbol\pi}({\boldsymbol\theta}))\)</span>.</li>
+</ul>
+<p>Furthermore, the maximum likelihood estimators are a class of <em>best asymptotically normal</em> (BAN) estimators <span class="math inline">\(\hat{\boldsymbol\theta}\)</span> of <span class="math inline">\({\boldsymbol\theta}\)</span> that satisfy
+<span class="math display" id="eq:ban">\[\begin{equation}
+\sqrt n (\hat{\boldsymbol\theta}- {\boldsymbol\theta}) = \sqrt n \, {\mathbf B}\big({\mathbf p}- {\boldsymbol\pi}({\boldsymbol\theta})\big) + o(1)
+\tag{2}
+\end{equation}\]</span>
+for some <span class="math inline">\(t\times R\)</span> matrix <span class="math inline">\({\mathbf B}\)</span>.
+In the specific case of maximum likelihood estimators, we can derive <span class="math inline">\({\mathbf B}\)</span> to be <span class="math inline">\({\mathbf B}= {\mathcal I}^{-1} {\boldsymbol\Delta}^\top {\mathbf D}^{-1}\)</span>.</p>
+<div class="section level3">
+<h3 id="pairwise-likelihood-estimation">Pairwise likelihood estimation<a class="anchor" aria-label="anchor" href="#pairwise-likelihood-estimation"></a>
+</h3>
+<p>In order to define the pairwise likelihood, let <span class="math inline">\(\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})\)</span> be the probability under the model that <span class="math inline">\(Y_i=y_i \in \{0,1\}\)</span> and <span class="math inline">\(Y_j=y_j\in\{0,1\}\)</span> for a pair of variables <span class="math inline">\(Y_i\)</span> and <span class="math inline">\(Y_j\)</span>, <span class="math inline">\(i,j=1,\dots,p\)</span> and <span class="math inline">\(i&lt;j\)</span>.
+<!-- That is, -->
+<!-- $$ -->
+<!-- \pi_{y_iy_j}^{(ij)}(\btheta) = \Pr(Y_i = y_i, Y_j = y_j). -->
+<!-- $$ -->
+The pairwise log-likelihood takes the form
+<span class="math display">\[\begin{equation}
+\operatorname{\ell_P}({\boldsymbol\theta}) = \sum_{i&lt;j} \sum_{y_i}\sum_{y_j} \hat n_{y_iy_j}^{(ij)} \log \pi_{y_iy_j}^{(ij)}({\boldsymbol\theta}),
+\end{equation}\]</span>
+where <span class="math inline">\(\hat n_{y_iy_j}^{(ij)}\)</span> is the observed (weighted) frequency of sample units with <span class="math inline">\(Y_i=y_i\)</span> and <span class="math inline">\(Y_j=y_j\)</span>,
+<span class="math display">\[
+\hat n_{y_iy_j}^{(ij)} = \sum_h w_h [{\mathbf y}^{(h)}_i = y_i, {\mathbf y}^{(h)}_j = y_j].
+\]</span>
+Let us also define the corresponding observed proportions <span class="math inline">\(p_{y_iy_j}^{(ij)} = \hat n_{y_iy_j}^{(ij)}/n\)</span>.
+There are a total of <span class="math inline">\(\tilde R = 4 \times {p \choose 2}\)</span> summands, where the ‘4’ is representative of the total number of pairwise combinations of choices.</p>
+<p>The <em>pairwise maximum likelihood estimator</em> <span class="math inline">\(\hat{\boldsymbol\theta}_{\text{PL}}\)</span> satisfies <span class="math inline">\(\hat{\boldsymbol\theta}_{\text{PL}}= \mathop{\mathrm{argmax}}_{{\boldsymbol\theta}} \operatorname{\ell_P}({\boldsymbol\theta})\)</span>.
+Under certain regularity conditions,
+<span class="math display">\[\begin{equation}
+\sqrt N (\hat{\boldsymbol\theta}_{\text{PL}}- {\boldsymbol\theta}) \xrightarrow{D} {\mathop{\mathrm{N}}}_t\big({\mathbf 0}, {\mathcal H}({\boldsymbol\theta}){\mathcal J}({\boldsymbol\theta})^{-1}{\mathcal H}({\boldsymbol\theta})\big),
+\end{equation}\]</span>
+where</p>
+<ul>
+<li>
+<span class="math inline">\({\mathcal H}({\boldsymbol\theta})=-\mathop{\mathrm{E}}\nabla^2\operatorname{\ell_P}({\boldsymbol\theta})\)</span> is the <em>sensitivity matrix</em>; and</li>
+<li>
+<span class="math inline">\({\mathcal J}({\boldsymbol\theta})=\mathop{\mathrm{Var}}\big(\sqrt N \nabla\operatorname{\ell_P}({\boldsymbol\theta})\big)\)</span> is the <em>variability matrix</em>.</li>
+</ul>
+<p>We can also show that the pairwise maximum likelihood estimator satisfies <a href="#eq:ban">(2)</a>, where the matrix <span class="math inline">\({\mathbf B}\)</span> in this case would be <span class="math inline">\({\mathbf B}= {\mathcal H}^{-1}\tilde{\boldsymbol\Delta}^{-1}\tilde {\mathbf D}^{-1} {\mathbf G}\)</span>, where</p>
+<ul>
+<li>
+<span class="math inline">\(\tilde{\boldsymbol\Delta}\in \mathbb{R}^{\tilde R \times t}\)</span> consists of partial derivatives of the pairwise probabilities, i.e. <span class="math inline">\(\frac{\partial\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})}{\partial\theta_k}\)</span>;</li>
+<li>
+<span class="math inline">\(\tilde{\mathbf D}= \mathop{\mathrm{diag}}((\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta}))_{i&lt;j})\)</span>; and</li>
+<li>
+<span class="math inline">\({\mathbf G}\)</span> is some indicator matrix to transform the quantities from <span class="math inline">\(\tilde R\)</span> dimensions to <span class="math inline">\(R\)</span> dimensions. See other articles for details.</li>
+</ul>
+</div>
 </div>
 <div class="section level2">
-<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+<h2 id="goodness-of-fit-test-statistics">Goodness-of-fit test statistics<a class="anchor" aria-label="anchor" href="#goodness-of-fit-test-statistics"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent">
-<div id="ref-agresti2012categorical" class="csl-entry">
-Agresti, Alan. 2012. <em>Categorical Data Analysis</em>. Vol. 792. John Wiley &amp; Sons.
-</div>
-</div>
+<p>TBC</p>
+<!-- It is widely known [@agresti2012categorical] that -->
+<!-- \begin{equation} -->
+<!-- \sqrt N (\bp - \bpi) \xrightarrow{\text D} {\N}_R (\bzero, \bSigma), -->
+<!-- \end{equation} -->
+<!-- where $\bSigma = \bD - \bpi\bpi^\top$, with $\bD:= \diag(\bpi)$. -->
+<!-- ## References -->
 </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

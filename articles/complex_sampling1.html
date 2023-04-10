@@ -6,12 +6,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="lavaan.bingof">
-<title>Details about the complex sampling procedure • lavaan.bingof</title>
+<title>Complex sampling procedure • lavaan.bingof</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Details about the complex sampling procedure">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Complex sampling procedure">
 <meta property="og:description" content="lavaan.bingof">
 <!-- mathjax --><!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script> --><!-- dynamically load mathjax for compatibility with self-contained --><script>
@@ -72,7 +72,7 @@ for (let popover of popovers) {
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Technical details</h6>
     <a class="dropdown-item" href="../articles/intro.html">Introduction</a>
-    <a class="dropdown-item" href="../articles/complex_sampling1.html">Details about the complex sampling procedure</a>
+    <a class="dropdown-item" href="../articles/complex_sampling1.html">Complex sampling procedure</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Simulation study</h6>
     <a class="dropdown-item" href="../articles/sim_results.html">Description and results</a>
@@ -106,7 +106,7 @@ for (let popover of popovers) {
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Details about the complex sampling procedure</h1>
+      <img src="" class="logo" alt=""><h1>Complex sampling procedure</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/haziqj/lavaan.bingof/blob/HEAD/vignettes/articles/complex_sampling1.Rmd" class="external-link"><code>vignettes/articles/complex_sampling1.Rmd</code></a></small>
@@ -507,7 +507,7 @@ The true model parameter values <span class="math inline">\({\boldsymbol\theta}\
 <p>Let <span class="math inline">\({\mathbf p}\)</span> be the <span class="math inline">\(R \times 1\)</span> vector of sample proportions (of response patterns) corresponding to the vector of population proportions <span class="math inline">\({\boldsymbol\pi}\)</span>.
 Assuming iid observations,
 <span class="math display" id="eq:propclt">\[\begin{equation}
-\sqrt n ({\mathbf p}- {\boldsymbol\pi}) \xrightarrow{\text D}\mathop{\mathrm{N}}_{R}({\mathbf 0},{\boldsymbol\Sigma}),
+\sqrt n ({\mathbf p}- {\boldsymbol\pi}) \xrightarrow{\text D}{\mathop{\mathrm{N}}}_{R}({\mathbf 0},{\boldsymbol\Sigma}),
 \tag{1}
 \end{equation}\]</span>
 where <span class="math inline">\({\boldsymbol\Sigma}= \mathop{\mathrm{diag}}({\boldsymbol\pi}) - {\boldsymbol\pi}{\boldsymbol\pi}^\top\)</span>.
@@ -519,10 +519,10 @@ Under a simple random sampling procedure, the <span class="math inline">\({\bold
 For convenience, we may do a total normalisation of the weights so that <span class="math inline">\(\sum_h w_h=n\)</span>, the sample size.
 Under suitable conditions, the central limit theorem in <a href="#eq:propclt">(1)</a> still applies, although the covariance matrix <span class="math inline">\({\boldsymbol\Sigma}\)</span> need not now take a multinomial form.</p>
 <p>We now discuss how to estimate <span class="math inline">\({\boldsymbol\Sigma}\)</span> from a stratified multistage sample scheme where the strata are labelled <span class="math inline">\(a=1,\dots,N_S\)</span> and the PSUs are labelled <span class="math inline">\(b=1,\dots,n_a\)</span>, where <span class="math inline">\(n_a\)</span> is the number of PSUs selected in stratum <span class="math inline">\(a\)</span>.
-Let <span class="math inline">\({\mathcal S}{ab}\)</span> be the set of sample units contained within PSU <span class="math inline">\(b\)</span> within stratum <span class="math inline">\(a\)</span>.
+Let <span class="math inline">\({\mathcal S}_{ab}\)</span> be the set of sample units contained within PSU <span class="math inline">\(b\)</span> within stratum <span class="math inline">\(a\)</span>.
 Define
 <span class="math display">\[\begin{equation}
-{\mathbf u}_{ab} = \sum_{h \in {\mathcal S}{ab}} w_h ({\mathbf y}^{(h)} - \hat{\boldsymbol\pi}).
+{\mathbf u}_{ab} = \sum_{h \in {\mathcal S}_{ab}} w_h ({\mathbf y}^{(h)} - \hat{\boldsymbol\pi}).
 \end{equation}\]</span>
 One may think of these as the ‘deviations from the mean’ of units in PSU <span class="math inline">\(b\)</span> within stratum <span class="math inline">\(a\)</span>. Further define
 <span class="math display">\[\begin{equation}
@@ -535,15 +535,16 @@ Then, a standard estimator of <span class="math inline">\({\boldsymbol\Sigma}\)<
 \end{equation}\]</span></p>
 <p>For the three complex sampling procedures discussed earlier,</p>
 <ol style="list-style-type: decimal">
-<li><p>(Stratified sampling) There are three strata <span class="math inline">\(a=1,2,3\)</span> corresponding to the school types, and the PSUs are the individual students within schools in each stratum. An equal size is taken per stratum, so <span class="math inline">\(n_a=1000\)</span>, and thus the sample units <span class="math inline">\({\mathcal S}{ab}\)</span> lists out the students from various schools and classes within each stratum <span class="math inline">\(a\)</span> (there is no sum over <span class="math inline">\(b\)</span>).</p></li>
+<li><p>(Stratified sampling) There are three strata <span class="math inline">\(a=1,2,3\)</span> corresponding to the school types, and the PSUs are the individual students within schools in each stratum. An equal size is taken per stratum, so <span class="math inline">\(n_a=1000\)</span>, and thus the sample units <span class="math inline">\({\mathcal S}_{ab}\)</span> lists out the students from various schools and classes within each stratum <span class="math inline">\(a\)</span> (there is no sum over <span class="math inline">\(b\)</span>).</p></li>
 <li><p>(Two-stage cluster sampling) In this case, there is only 1 stratum, <span class="math inline">\(n_a=n\)</span> and <span class="math inline">\({\mathbf u}_a=0\)</span>.</p></li>
 </ol>
 <!-- $$ --><!-- V(\bar{y}) = \frac{N-n}{N} \left[\frac{1}{m}\sum_{h=1}^H s_h^2 - \frac{n-1}{n}\frac{1}{m^2}\sum_{h=1}^H s_h^2\right] + \frac{n-1}{n} \frac{1}{m}\sum_{h=1}^H \frac{\left(\bar{y}_h - \bar{y}\right)^2}{\omega_h^2}, --><!-- $$ --><ol start="3" style="list-style-type: decimal">
-<li>(Two-stage stratified cluster sampling) Same as 1, but the sample units <span class="math inline">\({\mathcal S}{ab}\)</span> lists out the students from school <span class="math inline">\(b\)</span> (from the selected class) within each stratum <span class="math inline">\(a\)</span>.</li>
+<li>(Two-stage stratified cluster sampling) Same as 1, but the sample units <span class="math inline">\({\mathcal S}_{ab}\)</span> lists out the students from school <span class="math inline">\(b\)</span> (from the selected class) within each stratum <span class="math inline">\(a\)</span>.</li>
 </ol>
 <div class="section level3 tabset tabset-fade">
 <h3 id="comparison-of-estimates">Comparison of estimates<a class="anchor" aria-label="anchor" href="#comparison-of-estimates"></a>
 </h3>
+<p>Note: The <span class="math inline">\({\boldsymbol\Sigma}\)</span> matrix appearing in the plots below have been standardised so the plots show correlation matrices instead. These are not the tetrachoric correlations, instead they are correlations assuming that the responses are numeric 0s and 1s.</p>
 <p><img src="complex_sampling1_files/figure-html/pop_Sigma-1.png" width="672"></p>
 
 
