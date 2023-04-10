@@ -170,6 +170,38 @@ A = \{ \mathbf Y^* \in \mathbb R^p \mid Y_1=y_1,\dots,Y_p=y_p \}.
 <div class="section level2">
 <h2 id="parameter-estimation">Parameter estimation<a class="anchor" aria-label="anchor" href="#parameter-estimation"></a>
 </h2>
+<p>Suppose that <span class="math inline">\(h=1,\dots,n\)</span> observations of <span class="math inline">\({\mathbf Y}={\mathbf y}^{(h)}\)</span> are obtained.
+For the purpose of generalising from independent samples to complex samples, suppose that each unit <span class="math inline">\(h\)</span> in the sample is assigned a (normalised) survey weight <span class="math inline">\(w_h\)</span> with <span class="math inline">\(\sum_h w_h = n\)</span>.
+Of course, if an independent simple random sampling scheme is implemented, then each <span class="math inline">\(w_h=1\)</span>.</p>
+<p>Let <span class="math inline">\(p_r = \hat n_r/n\)</span> be the <span class="math inline">\(r\)</span>th entry of the <span class="math inline">\(R\)</span>-vector of proportions <span class="math inline">\({\mathbf p}\)</span>, where
+<span class="math display">\[\begin{equation}
+\hat n_r = \sum_h w_h [{\mathbf y}^{(h)} = {\mathbf y}_r],
+\end{equation}\]</span>
+and <span class="math inline">\([\cdot]\)</span> denotes the Iverson bracket.
+In other words, <span class="math inline">\(\hat n_r\)</span> represents the (weighted) frequency counts of the observed response patterns such that <span class="math inline">\(\sum_{r=1}^R \hat n_r = n\)</span>.
+The vector <span class="math inline">\(\hat{\mathbf n}= (\hat n_1, \dots, \hat n_R)^\top\)</span> defines a <em>multivariate binomial distribution</em>, or more commonly called a multinomial distribution with parameter <span class="math inline">\(n\)</span>, <span class="math inline">\(R\)</span>, and <span class="math inline">\({\boldsymbol\pi}({\boldsymbol\theta})\)</span>.
+The probability mass function of <span class="math inline">\(\hat{\mathbf n}\)</span> is given by
+<span class="math display">\[\begin{equation}
+f_{\hat{\mathbf n}}(x_1,\dots,x_R) = N! \prod_{r=1}^R \frac{1}{x_r!} \big[\pi_{r}({\boldsymbol\theta})\big]^{x_r},
+\end{equation}\]</span>
+and the log-likelihood for <span class="math inline">\({\boldsymbol\theta}\)</span> given the observed frequencies <span class="math inline">\(\hat{\mathbf n}\)</span> is then
+<span class="math display">\[\begin{equation}
+\ell({\boldsymbol\theta}) = \log f_{\hat{\mathbf n}}(\hat n_1,\dots,\hat n_R) = \text{const.} + \sum_{r=1}^{R} \hat n_r \log \pi_{r}({\boldsymbol\theta}).
+\end{equation}\]</span></p>
+<p>It is widely known <span class="citation">(<a href="#ref-agresti2012categorical" role="doc-biblioref">Agresti 2012</a>)</span> that
+<span class="math display">\[\begin{equation}
+\sqrt N ({\mathbf p}- {\boldsymbol\pi}) \xrightarrow{\text D} \mathop{\mathrm{N}}_R ({\mathbf 0}, {\boldsymbol\Sigma}),
+\end{equation}\]</span>
+where <span class="math inline">\({\boldsymbol\Sigma}= {\mathbf D}- {\boldsymbol\pi}{\boldsymbol\pi}^\top\)</span>, with <span class="math inline">\({\mathbf D}:= \mathop{\mathrm{diag}}({\boldsymbol\pi})\)</span>.</p>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-agresti2012categorical" class="csl-entry">
+Agresti, Alan. 2012. <em>Categorical Data Analysis</em>. Vol. 792. John Wiley &amp; Sons.
+</div>
+</div>
 </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

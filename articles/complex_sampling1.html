@@ -75,6 +75,8 @@
 </nav><div class="container template-article">
 
 
+
+<script src="complex_sampling1_files/kePrint-0.0.1/kePrint.js"></script><link href="complex_sampling1_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Details about the complex sampling procedure</h1>
@@ -88,13 +90,18 @@
     
 <!-- Extra LaTeX commands -->
 <!-- Extra LaTeX commands -->
-<p>To simulate a complex sampling design, our strategy is to generate data for an entire population inspired by a sampling design in education.
-The population consists of 2,000 schools (Primary Sampling Units, PSU) of three types: “A” (400 units), “B” (1000 units), and “C” (600 units).
-The school type correlates with the average abilities of its students (explained further below) and therefore gives a way of stratifying the population.
-Each school is assigned a random number of students from the normal distribution <span class="math inline">\(\mathop{\mathrm{N}}(500, 125^2)\)</span> (the number then rounded down to a whole number).
-Students are then assigned randomly into classes of average sizes 15, 25 and 20 respectively for each school type A, B and C.
-The total population size is roughly <span class="math inline">\(N=1\)</span> million students.
-The population statistics is summarised in the table below.</p>
+<p>To simulate a complex sampling design, our strategy is to generate
+data for an entire population inspired by a sampling design in
+education. The population consists of 2,000 schools (Primary Sampling
+Units, PSU) of three types: “A” (400 units), “B” (1000 units), and “C”
+(600 units). The school type correlates with the average abilities of
+its students (explained further below) and therefore gives a way of
+stratifying the population. Each school is assigned a random number of
+students from the normal distribution <span class="math inline">\(\mathop{\mathrm{N}}(500, 125^2)\)</span> (the
+number then rounded down to a whole number). Students are then assigned
+randomly into classes of average sizes 15, 25 and 20 respectively for
+each school type A, B and C. The total population size is roughly <span class="math inline">\(N=1\)</span> million students. The population
+statistics is summarised in the table below.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Make population</span></span>
 <span><span class="va">pop</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_population.html">make_population</a></span><span class="op">(</span>model.no <span class="op">=</span> <span class="fl">1</span>, return_all <span class="op">=</span> <span class="cn">TRUE</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span></span></code></pre></div>
@@ -261,51 +268,66 @@ C
 </tr>
 </tbody>
 </table>
-<p>In the factor model, the latent variable <span class="math inline">\({\boldsymbol\eta}\)</span> represents the abilities of each individual student, and it is used as a stratifying variable in the following way.
-For each individual <span class="math inline">\(h=1,\dots,N\)</span>, let <span class="math inline">\({\boldsymbol\eta}_h\)</span> represent the vector of latent abilities generated from <span class="math inline">\(N_q({\mathbf 0}, {\boldsymbol\Phi})\)</span> as described above.
-Define <span class="math inline">\(z_h=\sum_{j=1}^q \eta_{jh}\)</span>, which is now a normal random variate centered at zero.
-If all the correlations in <span class="math inline">\({\boldsymbol\Phi}\)</span> are positive, then <span class="math inline">\(z_h\)</span> has variance at least <span class="math inline">\(q\)</span>.
-Students are then arranged in descending order of <span class="math inline">\(z_h\)</span>, and based on this arrangement assigned to the school type A, B or C respectively.
-If the observed variables <span class="math inline">\(y\)</span> are test items, this would suggest that school type A would consist of ‘high’ ability students, type B ‘medium’ ability student, and type C ‘low’ ability students.
-Note that the actualised item responses are further subjected to random errors <span class="math inline">\(\epsilon\)</span>.</p>
-<p>A probability based sampling procedure may be implemented in one of three ways described below.</p>
+<p>In the factor model, the latent variable <span class="math inline">\({\boldsymbol\eta}\)</span> represents the
+abilities of each individual student, and it is used as a stratifying
+variable in the following way. For each individual <span class="math inline">\(h=1,\dots,N\)</span>, let <span class="math inline">\({\boldsymbol\eta}_h\)</span> represent the vector
+of latent abilities generated from <span class="math inline">\(N_q({\mathbf 0}, {\boldsymbol\Phi})\)</span> as
+described above. Define <span class="math inline">\(z_h=\sum_{j=1}^q
+\eta_{jh}\)</span>, which is now a normal random variate centered at
+zero. If all the correlations in <span class="math inline">\({\boldsymbol\Phi}\)</span> are positive, then
+<span class="math inline">\(z_h\)</span> has variance at least <span class="math inline">\(q\)</span>. Students are then arranged in
+descending order of <span class="math inline">\(z_h\)</span>, and based
+on this arrangement assigned to the school type A, B or C respectively.
+If the observed variables <span class="math inline">\(y\)</span> are
+test items, this would suggest that school type A would consist of
+‘high’ ability students, type B ‘medium’ ability student, and type C
+‘low’ ability students. Note that the actualised item responses are
+further subjected to random errors <span class="math inline">\(\epsilon\)</span>.</p>
+<p>A probability based sampling procedure may be implemented in one of
+three ways described below.</p>
 <div class="section level3">
 <h3 id="stratified-sampling">Stratified sampling<a class="anchor" aria-label="anchor" href="#stratified-sampling"></a>
 </h3>
-<p>From each school type (strata), select 500 students using SRS.
-Let <span class="math inline">\(N_a\)</span> be the total number of students in stratum <span class="math inline">\(a\in\{1,2,3\}\)</span>.
-Then the probability of selection of a student in stratum <span class="math inline">\(a\)</span> is
-<span class="math inline">\(\Pr(\text{selection}) = \frac{500}{N_a}\)</span>.
-The total sample size is <span class="math inline">\(n= 3 \times 1000 = 3,000\)</span>.</p>
+<p>From each school type (strata), select 500 students using SRS. Let
+<span class="math inline">\(N_a\)</span> be the total number of students
+in stratum <span class="math inline">\(a\in\{1,2,3\}\)</span>. Then the
+probability of selection of a student in stratum <span class="math inline">\(a\)</span> is <span class="math inline">\(\Pr(\text{selection}) = \frac{500}{N_a}\)</span>.
+The total sample size is <span class="math inline">\(n= 3 \times 1000 =
+3,000\)</span>.</p>
 </div>
 <div class="section level3">
 <h3 id="two-stage-cluster-sampling">Two-stage cluster sampling<a class="anchor" aria-label="anchor" href="#two-stage-cluster-sampling"></a>
 </h3>
-<p>Select 150 PSU schools (clusters) using probabilities proportional to size (PPS).
-For each school, select 1 class by SRS, and all students in that class are added to the sample.
-The probability of selection of a student in PSU <span class="math inline">\(b=1,\dots,10000\)</span> is then
-<span class="math display">\[
-\Pr(\text{selection}) = \Pr(\text{weighted school selection}) \times \frac{1}{\# \text{ classes in school }b}.
-\]</span>
-The total sample size will vary from sample to sample, but on average will be <span class="math inline">\(n = 150 \times 20 = 3,000\)</span>.</p>
+<p>Select 150 PSU schools (clusters) using probabilities proportional to
+size (PPS). For each school, select 1 class by SRS, and all students in
+that class are added to the sample. The probability of selection of a
+student in PSU <span class="math inline">\(b=1,\dots,10000\)</span> is
+then <span class="math display">\[
+\Pr(\text{selection}) = \Pr(\text{weighted school selection}) \times
+\frac{1}{\# \text{ classes in school }b}.
+\]</span> The total sample size will vary from sample to sample, but on
+average will be <span class="math inline">\(n = 150 \times 20 =
+3,000\)</span>.</p>
 </div>
 <div class="section level3">
 <h3 id="two-stage-stratified-cluster-sampling">Two-stage stratified cluster sampling<a class="anchor" aria-label="anchor" href="#two-stage-stratified-cluster-sampling"></a>
 </h3>
-<p>For each school type (strata), select 50 schools using SRS.
-Then, within each school, select 1 class by SRS, and all students in that class are added to the sample.
-The probability of selection of a student in PSU <span class="math inline">\(b\)</span> from school type <span class="math inline">\(a\)</span> is
-<span class="math display">\[
-\Pr(\text{selection}) = \frac{50}{\# \text{ schools of type } a} \times \frac{1}{\# \text{ classes in school }b}.
-\]</span>
-Again, the expected sample size is roughly <span class="math inline">\(n=3,000\)</span>.</p>
+<p>For each school type (strata), select 50 schools using SRS. Then,
+within each school, select 1 class by SRS, and all students in that
+class are added to the sample. The probability of selection of a student
+in PSU <span class="math inline">\(b\)</span> from school type <span class="math inline">\(a\)</span> is <span class="math display">\[
+\Pr(\text{selection}) = \frac{50}{\# \text{ schools of type } a} \times
+\frac{1}{\# \text{ classes in school }b}.
+\]</span> Again, the expected sample size is roughly <span class="math inline">\(n=3,000\)</span>.</p>
 </div>
 <div class="section level2">
 <h2 id="generating-the-population-data">Generating the population data<a class="anchor" aria-label="anchor" href="#generating-the-population-data"></a>
 </h2>
-<p>For the purposes of checking the data generation process, we will use <em>Model 1</em> parameters to generate the response patterns.
-That is, we assume a 1 factor model with <span class="math inline">\(p=5\)</span> observed response items.
-The true model parameter values <span class="math inline">\({\boldsymbol\theta}\)</span> (loadings and thresholds) are as follows:</p>
+<p>For the purposes of checking the data generation process, we will use
+<em>Model 1</em> parameters to generate the response patterns. That is,
+we assume a 1 factor model with <span class="math inline">\(p=5\)</span>
+observed response items. The true model parameter values <span class="math inline">\({\boldsymbol\theta}\)</span> (loadings and
+thresholds) are as follows:</p>
 <pre><code><span><span class="co">#&gt; lambda1 lambda2 lambda3 lambda4 lambda5    tau1    tau2    tau3    tau4    tau5 </span></span>
 <span><span class="co">#&gt;    0.80    0.70    0.47    0.38    0.34   -1.43   -0.55   -0.13   -0.72   -1.13</span></span></code></pre>
 <div class="section level3">
@@ -355,47 +377,49 @@ The true model parameter values <span class="math inline">\({\boldsymbol\theta}\
 <div class="section level3">
 <h3 id="distribution-by-school-type-strata">Distribution by school type (strata)<a class="anchor" aria-label="anchor" href="#distribution-by-school-type-strata"></a>
 </h3>
-<p><img src="complex_sampling1_files/figure-html/pop_byregion_vars-1.png" width="672"></p>
+<p><img src="complex_sampling1_files/figure-html/pop_byregion_vars-1.png" width="700"></p>
 </div>
 <div class="section level3">
-<h3 id="distribution-within-schools-psu-clusters">Distribution within schools (PSU clusters)<a class="anchor" aria-label="anchor" href="#distribution-within-schools-psu-clusters"></a>
+<h3 class="tabset tabset-fade" id="distribution-within-schools-psu-clusters">Distribution within schools (PSU
+clusters)<a class="anchor" aria-label="anchor" href="#distribution-within-schools-psu-clusters"></a>
 </h3>
 <div class="section level4">
 <h4 id="y_1">
 <span class="math inline">\(y_1\)</span><a class="anchor" aria-label="anchor" href="#y_1"></a>
 </h4>
-<p><img src="complex_sampling1_files/figure-html/dist_psu1-1.png" width="672"></p>
+<p><img src="complex_sampling1_files/figure-html/dist_psu1-1.png" width="700"></p>
 </div>
 <div class="section level4">
 <h4 id="y_2">
 <span class="math inline">\(y_2\)</span><a class="anchor" aria-label="anchor" href="#y_2"></a>
 </h4>
-<p><img src="complex_sampling1_files/figure-html/dist_psu2-1.png" width="672"></p>
+<p><img src="complex_sampling1_files/figure-html/dist_psu2-1.png" width="700"></p>
 </div>
 <div class="section level4">
 <h4 id="y_3">
 <span class="math inline">\(y_3\)</span><a class="anchor" aria-label="anchor" href="#y_3"></a>
 </h4>
-<p><img src="complex_sampling1_files/figure-html/dist_psu3-1.png" width="672"></p>
+<p><img src="complex_sampling1_files/figure-html/dist_psu3-1.png" width="700"></p>
 </div>
 <div class="section level4">
 <h4 id="y_4">
 <span class="math inline">\(y_4\)</span><a class="anchor" aria-label="anchor" href="#y_4"></a>
 </h4>
-<p><img src="complex_sampling1_files/figure-html/dist_psu4-1.png" width="672"></p>
+<p><img src="complex_sampling1_files/figure-html/dist_psu4-1.png" width="700"></p>
 </div>
 <div class="section level4">
 <h4 id="y_5">
 <span class="math inline">\(y_5\)</span><a class="anchor" aria-label="anchor" href="#y_5"></a>
 </h4>
-<p><img src="complex_sampling1_files/figure-html/dist_psu5-1.png" width="672"></p>
+<p><img src="complex_sampling1_files/figure-html/dist_psu5-1.png" width="700"></p>
 </div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="performing-a-complex-sampling-procedure">Performing a complex sampling procedure<a class="anchor" aria-label="anchor" href="#performing-a-complex-sampling-procedure"></a>
 </h2>
-<p>There are three functions that perform the three complex sampling procedures described earlier.</p>
+<p>There are three functions that perform the three complex sampling
+procedures described earlier.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Stratified sampling</span></span>
 <span><span class="op">(</span><span class="va">samp1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_data_bin_srs.html">gen_data_bin_complex1</a></span><span class="op">(</span>population <span class="op">=</span> <span class="va">pop</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span><span class="op">)</span></span>
@@ -450,78 +474,104 @@ The true model parameter values <span class="math inline">\({\boldsymbol\theta}\
 <div class="section level3">
 <h3 id="comparison-of-uni-and-bivariate-moments">Comparison of uni and bivariate moments<a class="anchor" aria-label="anchor" href="#comparison-of-uni-and-bivariate-moments"></a>
 </h3>
-<p><img src="complex_sampling1_files/figure-html/comparison_sample_stats_plot-1.png" width="672"></p>
+<p><img src="complex_sampling1_files/figure-html/comparison_sample_stats_plot-1.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="check-bias-in-model-fit">Check bias in model fit<a class="anchor" aria-label="anchor" href="#check-bias-in-model-fit"></a>
 </h3>
 <p>To check the bias in model fit, do the following:</p>
 <ol style="list-style-type: decimal">
-<li><p>Generate data sets using <code>gen_data_bin_complex()</code> for the stratified, cluster, and stratified cluster methods.</p></li>
-<li><p>Fit the factor model using <a href="https://lavaan.ugent.be" class="external-link">lavaan</a> and compare the estimates with the true parameter values <code>true_vals</code>.</p></li>
+<li><p>Generate data sets using <code>gen_data_bin_complex()</code> for
+the stratified, cluster, and stratified cluster methods.</p></li>
+<li><p>Fit the factor model using <a href="https://lavaan.ugent.be" class="external-link">lavaan</a> and compare the
+estimates with the true parameter values
+<code>true_vals</code>.</p></li>
 <li><p>Repeat steps 1 &amp; 2 a total of 1,000 times.</p></li>
 </ol>
-<p><img src="complex_sampling1_files/figure-html/bias_plot-1.png" width="672"></p>
+<p><img src="complex_sampling1_files/figure-html/bias_plot-1.png" width="700"></p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="estimating-the-multinomial-covariance-matrix">Estimating the multinomial covariance matrix<a class="anchor" aria-label="anchor" href="#estimating-the-multinomial-covariance-matrix"></a>
 </h2>
-<p>Let <span class="math inline">\({\mathbf p}\)</span> be the <span class="math inline">\(R \times 1\)</span> vector of sample proportions (of response patterns) corresponding to the vector of population proportions <span class="math inline">\({\boldsymbol\pi}\)</span>.
-Assuming iid observations,
-<span class="math display" id="eq:propclt">\[\begin{equation}
-\sqrt n ({\mathbf p}- {\boldsymbol\pi}) \xrightarrow{\text D}\mathop{\mathrm{N}}_{R}({\mathbf 0},{\boldsymbol\Sigma}),
-\tag{1}
-\end{equation}\]</span>
-where <span class="math inline">\({\boldsymbol\Sigma}= \mathop{\mathrm{diag}}({\boldsymbol\pi}) - {\boldsymbol\pi}{\boldsymbol\pi}^\top\)</span>.
-Under a simple random sampling procedure, the <span class="math inline">\({\boldsymbol\Sigma}\)</span> may be estimated using <span class="math inline">\(\hat{\boldsymbol\Sigma}= \mathop{\mathrm{diag}}(\hat{\boldsymbol\pi}) - \hat{\boldsymbol\pi}\hat{\boldsymbol\pi}^\top\)</span>, where <span class="math inline">\(\hat{\boldsymbol\pi}\)</span> are the estimated value of the population proportions based on the null hypothesis being tested <span class="math inline">\(H_0: {\boldsymbol\pi}= {\boldsymbol\pi}({\boldsymbol\theta})\)</span>.</p>
-<p>Under a complex sampling procedure, the proportions appearing in <a href="#eq:propclt">(1)</a> should be replaced by the weighted version with elements
-<span class="math display">\[\begin{equation}
-{\mathbf p}_r = \frac{\sum_h w_h [{\mathbf y}^{(h)} = {\mathbf y}_r]}{\sum_h w_h}, \hspace{2em} r=1,\dots,R.
-\end{equation}\]</span>
-For convenience, we may do a total normalisation of the weights so that <span class="math inline">\(\sum_h w_h=n\)</span>, the sample size.
-Under suitable conditions, the central limit theorem in <a href="#eq:propclt">(1)</a> still applies, although the covariance matrix <span class="math inline">\({\boldsymbol\Sigma}\)</span> need not now take a multinomial form.</p>
-<p>We now discuss how to estimate <span class="math inline">\({\boldsymbol\Sigma}\)</span> from a stratified multistage sample scheme where the strata are labelled <span class="math inline">\(a=1,\dots,N_S\)</span> and the PSUs are labelled <span class="math inline">\(b=1,\dots,n_a\)</span>, where <span class="math inline">\(n_a\)</span> is the number of PSUs selected in stratum <span class="math inline">\(a\)</span>.
-Let <span class="math inline">\(S_{ab}\)</span> be the set of sample units contained within PSU <span class="math inline">\(b\)</span> within stratum <span class="math inline">\(a\)</span>.
-Define
-<span class="math display">\[\begin{equation}
-{\mathbf u}_{ab} = \sum_{h \in S_{ab}} w_h ({\mathbf y}^{(h)} - \hat{\boldsymbol\pi}).
-\end{equation}\]</span>
-One may think of these as the ‘deviations from the mean’ of units in PSU <span class="math inline">\(b\)</span> within stratum <span class="math inline">\(a\)</span>. Further define
-<span class="math display">\[\begin{equation}
+<p>Let <span class="math inline">\({\mathbf p}\)</span> be the <span class="math inline">\(R \times 1\)</span> vector of sample proportions
+(of response patterns) corresponding to the vector of population
+proportions <span class="math inline">\({\boldsymbol\pi}\)</span>.
+Assuming iid observations, <span class="math display">\[\begin{equation}
+\sqrt n ({\mathbf p}- {\boldsymbol\pi}) \xrightarrow{\text
+D}\mathop{\mathrm{N}}_{R}({\mathbf 0},{\boldsymbol\Sigma}),
+(\#eq:propclt)
+\end{equation}\]</span> where <span class="math inline">\({\boldsymbol\Sigma}=
+\mathop{\mathrm{diag}}({\boldsymbol\pi}) -
+{\boldsymbol\pi}{\boldsymbol\pi}^\top\)</span>. Under a simple random
+sampling procedure, the <span class="math inline">\({\boldsymbol\Sigma}\)</span> may be estimated
+using <span class="math inline">\(\hat{\boldsymbol\Sigma}=
+\mathop{\mathrm{diag}}(\hat{\boldsymbol\pi}) -
+\hat{\boldsymbol\pi}\hat{\boldsymbol\pi}^\top\)</span>, where <span class="math inline">\(\hat{\boldsymbol\pi}\)</span> are the estimated
+value of the population proportions based on the null hypothesis being
+tested <span class="math inline">\(H_0: {\boldsymbol\pi}=
+{\boldsymbol\pi}({\boldsymbol\theta})\)</span>.</p>
+<p>Under a complex sampling procedure, the proportions appearing in
+@ref(eq:propclt) should be replaced by the weighted version with
+elements <span class="math display">\[\begin{equation}
+{\mathbf p}_r = \frac{\sum_h w_h [{\mathbf y}^{(h)} = {\mathbf
+y}_r]}{\sum_h w_h}, \hspace{2em} r=1,\dots,R.
+\end{equation}\]</span> For convenience, we may do a total normalisation
+of the weights so that <span class="math inline">\(\sum_h
+w_h=n\)</span>, the sample size. Under suitable conditions, the central
+limit theorem in @ref(eq:propclt) still applies, although the covariance
+matrix <span class="math inline">\({\boldsymbol\Sigma}\)</span> need not
+now take a multinomial form.</p>
+<p>We now discuss how to estimate <span class="math inline">\({\boldsymbol\Sigma}\)</span> from a stratified
+multistage sample scheme where the strata are labelled <span class="math inline">\(a=1,\dots,N_S\)</span> and the PSUs are labelled
+<span class="math inline">\(b=1,\dots,n_a\)</span>, where <span class="math inline">\(n_a\)</span> is the number of PSUs selected in
+stratum <span class="math inline">\(a\)</span>. Let <span class="math inline">\(S_{ab}\)</span> be the set of sample units
+contained within PSU <span class="math inline">\(b\)</span> within
+stratum <span class="math inline">\(a\)</span>. Define <span class="math display">\[\begin{equation}
+{\mathbf u}_{ab} = \sum_{h \in S_{ab}} w_h ({\mathbf y}^{(h)} -
+\hat{\boldsymbol\pi}).
+\end{equation}\]</span> One may think of these as the ‘deviations from
+the mean’ of units in PSU <span class="math inline">\(b\)</span> within
+stratum <span class="math inline">\(a\)</span>. Further define <span class="math display">\[\begin{equation}
 \bar{\mathbf u}_a = \frac{1}{n_a} \sum_{b=1}^{n_a} {\mathbf u}_{ab},
-\end{equation}\]</span>
-the average of these deviations in stratum <span class="math inline">\(a\)</span>.
-Then, a standard estimator of <span class="math inline">\({\boldsymbol\Sigma}\)</span> is given by
-<span class="math display">\[\begin{equation}
-\hat{\boldsymbol\Sigma}= \frac{1}{n} \sum_a \frac{n_a}{n_a-1} \sum_b ({\mathbf u}_{ab} - \bar{\mathbf u}_a)({\mathbf u}_{ab} - \bar{\mathbf u}_a)^\top.
+\end{equation}\]</span> the average of these deviations in stratum <span class="math inline">\(a\)</span>. Then, a standard estimator of <span class="math inline">\({\boldsymbol\Sigma}\)</span> is given by <span class="math display">\[\begin{equation}
+\hat{\boldsymbol\Sigma}= \frac{1}{n} \sum_a \frac{n_a}{n_a-1} \sum_b
+({\mathbf u}_{ab} - \bar{\mathbf u}_a)({\mathbf u}_{ab} - \bar{\mathbf
+u}_a)^\top.
 \end{equation}\]</span></p>
 <p>For the three complex sampling procedures discussed earlier,</p>
 <ol style="list-style-type: decimal">
-<li><p>(Stratified sampling) There are three strata <span class="math inline">\(a=1,2,3\)</span> corresponding to the school types, and the PSUs are the individual students within schools in each stratum. An equal size is taken per stratum, so <span class="math inline">\(n_a=1000\)</span>, and thus the sample units <span class="math inline">\(S_{ab}\)</span> lists out the students from various schools and classes within each stratum <span class="math inline">\(a\)</span> (there is no sum over <span class="math inline">\(b\)</span>).</p></li>
-<li><p>(Two-stage cluster sampling) In this case, there is only 1 stratum, <span class="math inline">\(n_a=n\)</span> and <span class="math inline">\({\mathbf u}_a=0\)</span>.</p></li>
+<li><p>(Stratified sampling) There are three strata <span class="math inline">\(a=1,2,3\)</span> corresponding to the school
+types, and the PSUs are the individual students within schools in each
+stratum. An equal size is taken per stratum, so <span class="math inline">\(n_a=1000\)</span>, and thus the sample units <span class="math inline">\(S_{ab}\)</span> lists out the students from
+various schools and classes within each stratum <span class="math inline">\(a\)</span> (there is no sum over <span class="math inline">\(b\)</span>).</p></li>
+<li><p>(Two-stage cluster sampling) In this case, there is only 1
+stratum, <span class="math inline">\(n_a=n\)</span> and <span class="math inline">\({\mathbf u}_a=0\)</span>.</p></li>
 </ol>
 <!-- $$ --><!-- V(\bar{y}) = \frac{N-n}{N} \left[\frac{1}{m}\sum_{h=1}^H s_h^2 - \frac{n-1}{n}\frac{1}{m^2}\sum_{h=1}^H s_h^2\right] + \frac{n-1}{n} \frac{1}{m}\sum_{h=1}^H \frac{\left(\bar{y}_h - \bar{y}\right)^2}{\omega_h^2}, --><!-- $$ --><ol start="3" style="list-style-type: decimal">
-<li>(Two-stage stratified cluster sampling) Same as 1, but the sample units <span class="math inline">\(S_{ab}\)</span> lists out the students from school <span class="math inline">\(b\)</span> (from the selected class) within each stratum <span class="math inline">\(a\)</span>.</li>
+<li>(Two-stage stratified cluster sampling) Same as 1, but the sample
+units <span class="math inline">\(S_{ab}\)</span> lists out the students
+from school <span class="math inline">\(b\)</span> (from the selected
+class) within each stratum <span class="math inline">\(a\)</span>.</li>
 </ol>
 <div class="section level3">
-<h3 id="comparison-of-estimates">Comparison of estimates<a class="anchor" aria-label="anchor" href="#comparison-of-estimates"></a>
+<h3 class="tabset tabset-fade" id="comparison-of-estimates">Comparison of estimates<a class="anchor" aria-label="anchor" href="#comparison-of-estimates"></a>
 </h3>
-<p><img src="complex_sampling1_files/figure-html/pop_Sigma-1.png" width="672"></p>
+<p><img src="complex_sampling1_files/figure-html/pop_Sigma-1.png" width="700"></p>
 <div class="section level4">
 <h4 id="stratified-sample">Stratified sample<a class="anchor" aria-label="anchor" href="#stratified-sample"></a>
 </h4>
-<p><img src="complex_sampling1_files/figure-html/strat_Sigma-1.png" width="672"></p>
+<p><img src="complex_sampling1_files/figure-html/strat_Sigma-1.png" width="700"></p>
 </div>
 <div class="section level4">
 <h4 id="cluster-sample">Cluster sample<a class="anchor" aria-label="anchor" href="#cluster-sample"></a>
 </h4>
-<p><img src="complex_sampling1_files/figure-html/clust_Sigma-1.png" width="672"></p>
+<p><img src="complex_sampling1_files/figure-html/clust_Sigma-1.png" width="700"></p>
 </div>
 <div class="section level4">
 <h4 id="stratified-cluster-sample">Stratified cluster sample<a class="anchor" aria-label="anchor" href="#stratified-cluster-sample"></a>
 </h4>
-<p><img src="complex_sampling1_files/figure-html/strcl_Sigma-1.png" width="672"></p>
+<p><img src="complex_sampling1_files/figure-html/strcl_Sigma-1.png" width="700"></p>
 </div>
 </div>
 </div>
