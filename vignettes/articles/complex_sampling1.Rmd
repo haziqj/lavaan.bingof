@@ -1,13 +1,13 @@
 ---
 title: "Details about the complex sampling procedure"
-# output:
-#   bookdown::html_document2:
-#     # toc: yes
-#     # toc_depth: 2
-#     number_sections: FALSE
-# link-citations: yes
-# pkgdown:
-#   as_is: true
+output:
+  bookdown::html_document2:
+    # toc: yes
+    # toc_depth: 2
+    number_sections: FALSE
+link-citations: yes
+pkgdown:
+  as_is: true
 ---
 
 ```{r, include = FALSE}
@@ -216,9 +216,12 @@ pop %>%
 ```
 
 
+
 ## Distribution within schools (PSU clusters) {.tabset .tabset-fade}
 
+
 ### $y_1$
+
 
 ```{r dist_psu1, cache = TRUE, fig.height = 8}
 # Check variation due to clusters (should be invariant BETWEEN clusters)
@@ -234,11 +237,13 @@ pop %>%
   # scale_y_continuous(breaks = c(0, 0.5, 1)) +
   theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
         legend.position = "top") +
-  labs(x = "Schools", y = "Population proportion", fill = "Response to item y3") +
+  labs(x = "Schools", y = "Population proportion", fill = "Response to item y1") +
   scale_fill_viridis_d(option = "turbo", begin = 0.1, end = 0.9)
 ```
 
+
 ### $y_2$
+
 
 ```{r dist_psu2, cache = TRUE, fig.height = 8}
 # Check variation due to clusters (should be invariant BETWEEN clusters)
@@ -254,11 +259,13 @@ pop %>%
   # scale_y_continuous(breaks = c(0, 0.5, 1)) +
   theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
         legend.position = "top") +
-  labs(x = "Schools", y = "Population proportion", fill = "Response to item y3") +
+  labs(x = "Schools", y = "Population proportion", fill = "Response to item y2") +
   scale_fill_viridis_d(option = "turbo", begin = 0.1, end = 0.9)
 ```
 
+
 ### $y_3$
+
 
 ```{r dist_psu3, cache = TRUE, fig.height = 8}
 # Check variation due to clusters (should be invariant BETWEEN clusters)
@@ -278,7 +285,9 @@ pop %>%
   scale_fill_viridis_d(option = "turbo", begin = 0.1, end = 0.9)
 ```
 
+
 ### $y_4$
+
 
 ```{r dist_psu4, cache = TRUE, fig.height = 8}
 # Check variation due to clusters (should be invariant BETWEEN clusters)
@@ -294,11 +303,13 @@ pop %>%
   # scale_y_continuous(breaks = c(0, 0.5, 1)) +
   theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
         legend.position = "top") +
-  labs(x = "Schools", y = "Population proportion", fill = "Response to item y3") +
+  labs(x = "Schools", y = "Population proportion", fill = "Response to item y4") +
   scale_fill_viridis_d(option = "turbo", begin = 0.1, end = 0.9)
 ```
 
+
 ### $y_5$
+
 
 ```{r dist_psu5, cache = TRUE, fig.height = 8}
 # Check variation due to clusters (should be invariant BETWEEN clusters)
@@ -314,9 +325,11 @@ pop %>%
   # scale_y_continuous(breaks = c(0, 0.5, 1)) +
   theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
         legend.position = "top") +
-  labs(x = "Schools", y = "Population proportion", fill = "Response to item y3") +
+  labs(x = "Schools", y = "Population proportion", fill = "Response to item y5") +
   scale_fill_viridis_d(option = "turbo", begin = 0.1, end = 0.9)
 ```
+
+## {-}
 
 # Performing a complex sampling procedure 
 
@@ -523,3 +536,5 @@ ggcorrplot(Sigma3, type = "lower", outline.col = "white",
            colors = c("#455BCDFF", "white", "#C42503FF")) +
   labs(title = expression("Stratified cluster sampling covariance"~Sigma~"estimate"))
 ```
+
+## {-}
