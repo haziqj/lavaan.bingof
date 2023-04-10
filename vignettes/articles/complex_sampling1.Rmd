@@ -122,7 +122,7 @@ The probability of selection of a student in PSU $b=1,\dots,2000$ is then
 $$
 \Pr(\text{selection}) = \Pr(\text{weighted school selection}) \times \frac{1}{\# \text{ classes in school }b}.
 $$
-The total sample size will vary from sample to sample, but on average will be $n = 140 \times 21.5 = 3010$, where $\frac{15 \times 400 + 25 \times 1000 + 20 \times 600} = 21.5$ is the average class size per school.
+The total sample size will vary from sample to sample, but on average will be $n = 140 \times 21.5 = 3010$, where $\frac{15 \times 400 + 25 \times 1000 + 20 \times 600}{3} = 21.5$ is the average class size per school.
 
 ### Two-stage stratified cluster sampling
 
