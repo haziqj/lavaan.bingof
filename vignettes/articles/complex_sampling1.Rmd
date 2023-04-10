@@ -1,13 +1,13 @@
 ---
 title: "Details about the complex sampling procedure"
-output:
-  bookdown::html_document2:
-    # toc: yes
-    # toc_depth: 2
-    number_sections: FALSE
-link-citations: yes
-pkgdown:
-  as_is: true
+# output:
+#   bookdown::html_document2:
+#     # toc: yes
+#     # toc_depth: 2
+#     number_sections: FALSE
+# link-citations: yes
+# pkgdown:
+#   as_is: true
 ---
 
 ```{r, include = FALSE}

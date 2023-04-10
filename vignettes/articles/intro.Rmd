@@ -6,6 +6,7 @@ output:
     toc_depth: 2
     number_sections: FALSE
 link-citations: yes
+bibliography: refs.bib
 pkgdown:
   as_is: true
 ---
@@ -114,3 +115,58 @@ $$
 
 
 # Parameter estimation
+
+Suppose that $h=1,\dots,n$ observations of $\bY=\by^{(h)}$ are obtained.
+For the purpose of generalising from independent samples to complex samples, suppose that each unit $h$ in the sample is assigned a (normalised) survey weight $w_h$ with $\sum_h w_h = n$.
+Of course, if an independent simple random sampling scheme is implemented, then each $w_h=1$.
+
+Let $p_r = \hat n_r/n$ be the $r$th entry of the $R$-vector of proportions $\bp$, where
+\begin{equation}
+\hat n_r = \sum_h w_h [\by^{(h)} = \by_r],
+\end{equation}
+and $[\cdot]$ denotes the Iverson bracket.
+In other words, $\hat n_r$ represents the (weighted) frequency counts of the observed response patterns such that $\sum_{r=1}^R \hat n_r = n$.
+The vector $\hat\bn = (\hat n_1, \dots, \hat n_R)^\top$ defines a *multivariate binomial distribution*, or more commonly called a multinomial distribution with parameter $n$, $R$, and $\bpi(\btheta)$.
+The probability mass function of $\hat\bn$ is given by
+\begin{equation}
+f_{\hat\bn}(x_1,\dots,x_R) = N! \prod_{r=1}^R \frac{1}{x_r!} \big[\pimod{r}\big]^{x_r},
+\end{equation}
+and the log-likelihood for $\btheta$ given the observed frequencies $\hat\bn$ is then
+\begin{equation}
+\ell(\btheta) = \log f_{\hat\bn}(\hat n_1,\dots,\hat n_R) = \text{const.} + \sum_{r=1}^{R} \hat n_r \log \pimod{r}.
+\end{equation}
+
+
+
+
+
+
+
+
+
+
+
+It is widely known [@agresti2012categorical] that
+\begin{equation}
+\sqrt N (\bp - \bpi) \xrightarrow{\text D} \N_R (\bzero, \bSigma),
+\end{equation}
+where $\bSigma = \bD - \bpi\bpi^\top$, with $\bD:= \diag(\bpi)$.
+
+
+
+
+
+# References
+
+
+
+
+
+
+
+
+
+
+
+
+
