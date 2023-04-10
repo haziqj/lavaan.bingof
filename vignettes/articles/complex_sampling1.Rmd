@@ -1,6 +1,10 @@
 ---
 title: "Details about the complex sampling procedure"
-output: bookdown::html_document2
+output:
+  bookdown::html_document2:
+    toc: yes
+    toc_depth: 2
+    number_sections: FALSE
 link-citations: yes
 pkgdown:
   as_is: true
@@ -424,7 +428,7 @@ res %>%
                          direction = -1)
 ```
 
-# Estimating the multinomial covariance matrix $\bSigma$
+# Estimating the multinomial covariance matrix
 
 Let $\bp$ be the $R \times 1$ vector of sample proportions (of response patterns) corresponding to the vector of population proportions $\bpi$.
 Assuming iid observations,
@@ -470,7 +474,7 @@ For the three complex sampling procedures discussed earlier,
 
 3. (Two-stage stratified cluster sampling) Same as 1, but the sample units $S_{ab}$ lists out the students from school $b$ (from the selected class)  within each stratum $a$.
 
-## Comparison of $\bSigma$ {.tabset .tabset-fade}
+## Comparison of estimates {.tabset .tabset-fade}
 
 ```{r pop_Sigma}
 Sigma <- cor(pop %>% select(y1:y5))
