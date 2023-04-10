@@ -23,15 +23,6 @@ Yay[^footnote]
 plot(1:10)
 ```
 
-## External files
-
-```{r}
-x <- readLines("test.txt")
-x
-```
-
-![](bacon.jpg)
-
 ## Details tag
 
 <details>
