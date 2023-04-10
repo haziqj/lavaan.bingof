@@ -1,10 +1,9 @@
-# source("06-sim_functions.R")
 library(tidyverse)
 theme_set(theme_bw())
 
 # Load saved simulations -------------------------------------------------------
 rm(list = ls())
-sim_saved <- paste0("Rsave.nosync/", dir("Rsave.nosync/"))
+sim_saved <- paste0("analysis/Rsave/", dir("analysis/Rsave/"))
 for (i in sim_saved) load(i)
 rm(list = c("sim_saved", "i"))
 all_res <- mget(ls())
@@ -355,4 +354,4 @@ p_complex_f <- complex_plot(complex_power_res, alpha = 1, dashed_line = FALSE,
 
 save(complex_type1_res, complex_power_res, p_complex_a, p_complex_b,
      p_complex_c, p_complex_d, p_complex_e, p_complex_f,
-     file = "simres_complex.RData")
+     file = "analysis/simres_complex.RData")
