@@ -304,22 +304,22 @@ Note that the actualised item responses are further subjected to random errors <
 <div class="section level3">
 <h3 id="stratified-sampling">Stratified sampling<a class="anchor" aria-label="anchor" href="#stratified-sampling"></a>
 </h3>
-<p>From each school type (strata), select 500 students using SRS.
+<p>From each school type (strata), select 1000 students (PSU) using SRS.
 Let <span class="math inline">\(N_a\)</span> be the total number of students in stratum <span class="math inline">\(a\in\{1,2,3\}\)</span>.
 Then the probability of selection of a student in stratum <span class="math inline">\(a\)</span> is
-<span class="math inline">\(\Pr(\text{selection}) = \frac{500}{N_a}\)</span>.
-The total sample size is <span class="math inline">\(n= 3 \times 1000 = 3,000\)</span>.</p>
+<span class="math inline">\(\Pr(\text{selection}) = \frac{1000}{N_a}\)</span>.
+The total sample size is <span class="math inline">\(n= 3 \times 1000 = 3000\)</span>.</p>
 </div>
 <div class="section level3">
 <h3 id="two-stage-cluster-sampling">Two-stage cluster sampling<a class="anchor" aria-label="anchor" href="#two-stage-cluster-sampling"></a>
 </h3>
-<p>Select 150 PSU schools (clusters) using probabilities proportional to size (PPS).
-For each school, select 1 class by SRS, and all students in that class are added to the sample.
-The probability of selection of a student in PSU <span class="math inline">\(b=1,\dots,10000\)</span> is then
+<p>Select 140 schools (PSU; clusters) using probabilities proportional to size (PPS).
+For each school, select one class by SRS, and all students in that class are added to the sample.
+The probability of selection of a student in PSU <span class="math inline">\(b=1,\dots,2000\)</span> is then
 <span class="math display">\[
 \Pr(\text{selection}) = \Pr(\text{weighted school selection}) \times \frac{1}{\# \text{ classes in school }b}.
 \]</span>
-The total sample size will vary from sample to sample, but on average will be <span class="math inline">\(n = 150 \times 20 = 3,000\)</span>.</p>
+The total sample size will vary from sample to sample, but on average will be <span class="math inline">\(n = 140 \times 21.5 = 3010\)</span>, where <span class="math inline">\(\frac{15 \times 400 + 25 \times 1000 + 20 \times 600} = 21.5\)</span> is the average class size per school.</p>
 </div>
 <div class="section level3">
 <h3 id="two-stage-stratified-cluster-sampling">Two-stage stratified cluster sampling<a class="anchor" aria-label="anchor" href="#two-stage-stratified-cluster-sampling"></a>
@@ -330,7 +330,7 @@ The probability of selection of a student in PSU <span class="math inline">\(b\)
 <span class="math display">\[
 \Pr(\text{selection}) = \frac{50}{\# \text{ schools of type } a} \times \frac{1}{\# \text{ classes in school }b}.
 \]</span>
-Again, the expected sample size is roughly <span class="math inline">\(n=3,000\)</span>.</p>
+Here, the expected sample size is <span class="math inline">\(n=50 \times (15 + 25 + 20) = 3000\)</span>.</p>
 </div>
 </div>
 <div class="section level2">
@@ -453,20 +453,20 @@ The true model parameter values <span class="math inline">\({\boldsymbol\theta}\
 <span></span>
 <span><span class="co"># Two-stage cluster sampling</span></span>
 <span><span class="op">(</span><span class="va">samp2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_data_bin_srs.html">gen_data_bin_complex2</a></span><span class="op">(</span>population <span class="op">=</span> <span class="va">pop</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3,303 × 9</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3,080 × 9</span></span></span>
 <span><span class="co">#&gt;    type  school class    wt y1    y2    y3    y4    y5   </span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> A          8 s      1.41 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> A          8 s      1.41 1     1     0     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> A          8 s      1.41 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> A          8 s      1.41 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> A          8 s      1.41 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> A          8 s      1.41 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> A          8 s      1.41 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> A          8 s      1.41 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> A          8 s      1.41 1     1     0     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> A          8 s      1.41 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3,293 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> A          8 l      1.41 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> A          8 l      1.41 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> A          8 l      1.41 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> A          8 l      1.41 1     1     0     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> A          8 l      1.41 1     1     1     0     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> A          8 l      1.41 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> A          8 l      1.41 1     1     1     0     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> A          8 l      1.41 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> A          8 l      1.41 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> A          8 l      1.41 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3,070 more rows</span></span></span>
 <span></span>
 <span><span class="co"># Two-stage stratified cluster sampling</span></span>
 <span><span class="op">(</span><span class="va">samp3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_data_bin_srs.html">gen_data_bin_complex3</a></span><span class="op">(</span>population <span class="op">=</span> <span class="va">pop</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span><span class="op">)</span></span>
