@@ -1,5 +1,5 @@
 ---
-title: "Details about the complex sampling procedure"
+title: "Complex sampling procedure"
 output:
   bookdown::html_document2:
     # toc: yes
@@ -187,11 +187,15 @@ true_vals[-(1:5)]
 
 ```{r pop_corr, fig.height = 5, fig.width = 5, fig.show="hold", out.width="50%"}
 corr <- cor(pop_cts %>% select(ystar1:ystar5))
+rownames(corr) <- colnames(corr) <- paste0("y", 1:5)
 ggcorrplot(corr, type = "lower", outline.col = "white",
            ggtheme = ggplot2::theme_bw, lab = TRUE,
            colors = c("#455BCDFF", "white", "#C42503FF")) +
   labs(title = "Tetrachoric correlations")
-ggcorrplot(lavaan.bingof:::get_Sigmay(1), type = "lower", outline.col = "white",
+
+Sigmay <- lavaan.bingof:::get_Sigmay(1)
+rownames(Sigmay) <- colnames(Sigmay) <- paste0("y", 1:5)
+ggcorrplot(Sigmay, type = "lower", outline.col = "white",
            ggtheme = ggplot2::theme_bw, lab = TRUE,
            colors = c("#455BCDFF", "white", "#C42503FF")) +
   labs(title = expression("Model implied correlation"~Sigma[y]))
@@ -447,7 +451,7 @@ res %>%
 Let $\bp$ be the $R \times 1$ vector of sample proportions (of response patterns) corresponding to the vector of population proportions $\bpi$.
 Assuming iid observations,
 \begin{equation}
-\sqrt n (\bp - \bpi) \xrightarrow{\text D}\N_{R}(\bzero,\bSigma),
+\sqrt n (\bp - \bpi) \xrightarrow{\text D}{\N}_{R}(\bzero,\bSigma),
 (\#eq:propclt)
 \end{equation}
 where $\bSigma = \diag(\bpi) - \bpi\bpi^\top$.
@@ -461,10 +465,10 @@ For convenience, we may do a total normalisation of the weights so that $\sum_h 
 Under suitable conditions, the central limit theorem in \@ref(eq:propclt) still applies, although the covariance matrix $\bSigma$ need not now take a multinomial form.
 
 We now discuss how to estimate $\bSigma$ from a stratified multistage sample scheme where the strata are labelled $a=1,\dots,N_S$ and the PSUs are labelled $b=1,\dots,n_a$, where $n_a$ is the number of PSUs selected in stratum $a$.
-Let $\cS{ab}$ be the set of sample units contained within PSU $b$ within stratum $a$.
+Let $\cS_{ab}$ be the set of sample units contained within PSU $b$ within stratum $a$.
 Define
 \begin{equation}
-\bu_{ab} = \sum_{h \in \cS{ab}} w_h (\by^{(h)} - \hat\bpi).
+\bu_{ab} = \sum_{h \in \cS_{ab}} w_h (\by^{(h)} - \hat\bpi).
 \end{equation}
 One may think of these as the 'deviations from the mean' of units in PSU $b$ within stratum $a$. Further define
 \begin{equation}
@@ -478,7 +482,7 @@ Then, a standard estimator of $\bSigma$ is given by
 
 For the three complex sampling procedures discussed earlier,
 
-1. (Stratified sampling) There are three strata $a=1,2,3$ corresponding to the school types, and the PSUs are the individual students within schools in each stratum. An equal size is taken per stratum, so $n_a=1000$, and thus the sample units $\cS{ab}$ lists out the students from various schools and classes within each stratum $a$ (there is no sum over $b$).
+1. (Stratified sampling) There are three strata $a=1,2,3$ corresponding to the school types, and the PSUs are the individual students within schools in each stratum. An equal size is taken per stratum, so $n_a=1000$, and thus the sample units $\cS_{ab}$ lists out the students from various schools and classes within each stratum $a$ (there is no sum over $b$).
 
 2. (Two-stage cluster sampling) In this case, there is only 1 stratum, $n_a=n$ and $\bu_a=0$.
 
@@ -486,16 +490,18 @@ For the three complex sampling procedures discussed earlier,
 <!-- V(\bar{y}) = \frac{N-n}{N} \left[\frac{1}{m}\sum_{h=1}^H s_h^2 - \frac{n-1}{n}\frac{1}{m^2}\sum_{h=1}^H s_h^2\right] + \frac{n-1}{n} \frac{1}{m}\sum_{h=1}^H \frac{\left(\bar{y}_h - \bar{y}\right)^2}{\omega_h^2}, -->
 <!-- $$ -->
 
-3. (Two-stage stratified cluster sampling) Same as 1, but the sample units $\cS{ab}$ lists out the students from school $b$ (from the selected class)  within each stratum $a$.
+3. (Two-stage stratified cluster sampling) Same as 1, but the sample units $\cS_{ab}$ lists out the students from school $b$ (from the selected class)  within each stratum $a$.
 
 ### Comparison of estimates {.tabset .tabset-fade}
+
+Note: The $\bSigma$ matrix appearing in the plots below have been standardised so the plots show correlation matrices instead. These are not the tetrachoric correlations, instead they are correlations assuming that the responses are numeric 0s and 1s.
 
 ```{r pop_Sigma}
 Sigma <- cor(pop %>% select(y1:y5))
 ggcorrplot(Sigma, type = "lower", outline.col = "white",
            ggtheme = ggplot2::theme_bw, lab = TRUE,
            colors = c("#455BCDFF", "white", "#C42503FF")) +
-  labs(title = expression("Population covariance"~Sigma))
+  labs(title = expression("Population"~Sigma))
 ```
 
 ```{r, include = FALSE}
@@ -509,31 +515,34 @@ svy3 <- svydesign(ids = ~ school + class, strata = ~ type, weights = ~ wt,
 
 ```{r strat_Sigma}
 Sigma1 <- lavaan.bingof:::create_Sigma_univariate_matrix_complex(fit21, svy1)
+rownames(Sigma1) <- colnames(Sigmay) <- paste0("y", 1:5)
 Sigma1 <- diag(1 / sqrt(diag(Sigma1))) %*% Sigma1 %*% diag(1 / sqrt(diag(Sigma1)))
 ggcorrplot(Sigma1, type = "lower", outline.col = "white",
            ggtheme = ggplot2::theme_bw, lab = TRUE,
            colors = c("#455BCDFF", "white", "#C42503FF")) +
-  labs(title = expression("Stratified sampling covariance"~Sigma~"estimate"))
+  labs(title = expression("Stratified sampling"~Sigma~"estimate"))
 ```
 
 #### Cluster sample
 
 ```{r clust_Sigma}
 Sigma2 <- lavaan.bingof:::create_Sigma_univariate_matrix_complex(fit22, svy2)
+rownames(Sigma2) <- colnames(Sigmay) <- paste0("y", 1:5)
 Sigma2 <- diag(1 / sqrt(diag(Sigma2))) %*% Sigma2 %*% diag(1 / sqrt(diag(Sigma2)))
 ggcorrplot(Sigma2, type = "lower", outline.col = "white",
            ggtheme = ggplot2::theme_bw, lab = TRUE,
            colors = c("#455BCDFF", "white", "#C42503FF")) +
-  labs(title = expression("Cluster sampling covariance"~Sigma~"estimate"))
+  labs(title = expression("Cluster sampling"~Sigma~"estimate"))
 ```
 
 #### Stratified cluster sample
 
 ```{r strcl_Sigma}
 Sigma3 <- lavaan.bingof:::create_Sigma_univariate_matrix_complex(fit23, svy3)
+rownames(Sigma3) <- colnames(Sigmay) <- paste0("y", 1:5)
 Sigma3 <- diag(1 / sqrt(diag(Sigma3))) %*% Sigma3 %*% diag(1 / sqrt(diag(Sigma3)))
 ggcorrplot(Sigma3, type = "lower", outline.col = "white",
            ggtheme = ggplot2::theme_bw, lab = TRUE,
            colors = c("#455BCDFF", "white", "#C42503FF")) +
-  labs(title = expression("Stratified cluster sampling covariance"~Sigma~"estimate"))
+  labs(title = expression("Stratified cluster sampling"~Sigma~"estimate"))
 ```

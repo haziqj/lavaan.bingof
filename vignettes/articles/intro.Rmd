@@ -27,6 +27,10 @@ cat(readr::read_file("maths_shortcuts.tex"))
 <!-- Extra LaTeX commands -->
 \newcommand{\pimod}[1]{\pi_{#1}(\btheta)}
 \newcommand{\Sigmaystar}{\bSigma_{\by^*}}
+\newcommand{\pl}{\operatorname{\ell_P}}
+\newcommand{\mlepl}{\hat\btheta_{\text{PL}}}
+\newcommand{\mle}{\hat\btheta_{\text{ML}}}
+\newcommand{\pimodpl}{\pi_{y_iy_j}^{(ij)}(\btheta)}
 <!-- Extra LaTeX commands -->
 
 Let $\bY = (Y_1, \dots, Y_p)^\top \in \{0,1\}^p$ be a vector of Bernoulli random variables. 
@@ -49,7 +53,7 @@ When we consider a parametric model with parameter vector $\btheta\in\bbR^t$, we
 \end{equation}
 for the vector of joint probabilities, with $\sum_{r=1}^R \pimod{r} =1$.
 
-# Model-based probabilities
+## Model-based probabilities
 
 The model of interest is a factor model, commonly used in social statistics.
 Using an underlying variable (UV) approach, the observed binary responses $y_i$ are manifestations of some latent, continuous variables $Y_i^*$, $i=1,\dots,p$.
@@ -114,7 +118,7 @@ A = \{ \mathbf Y^* \in \mathbb R^p \mid Y_1=y_1,\dots,Y_p=y_p \}.
 $$
 
 
-# Parameter estimation
+## Parameter estimation
 
 Suppose that $h=1,\dots,n$ observations of $\bY=\by^{(h)}$ are obtained.
 For the purpose of generalising from independent samples to complex samples, suppose that each unit $h$ in the sample is assigned a (normalised) survey weight $w_h$ with $\sum_h w_h = n$.
@@ -131,32 +135,82 @@ The probability mass function of $\hat\bn$ is given by
 \begin{equation}
 f_{\hat\bn}(x_1,\dots,x_R) = N! \prod_{r=1}^R \frac{1}{x_r!} \big[\pimod{r}\big]^{x_r},
 \end{equation}
-and the log-likelihood for $\btheta$ given the observed frequencies $\hat\bn$ is then
+and the log-likelihood for $\btheta$ given the observed frequencies $\hat\bn$ (ignoring constants) is then
 \begin{equation}
-\ell(\btheta) = \log f_{\hat\bn}(\hat n_1,\dots,\hat n_R) = \text{const.} + \sum_{r=1}^{R} \hat n_r \log \pimod{r}.
+\ell(\btheta) = \log f_{\hat\bn}(\hat n_1,\dots,\hat n_R) = \sum_{r=1}^{R} \hat n_r \log \pimod{r}.
 \end{equation}
 
-
-
-
-
-
-
-
-
-
-
-It is widely known [@agresti2012categorical] that
-\begin{equation}
-\sqrt N (\bp - \bpi) \xrightarrow{\text D} {\N}_R (\bzero, \bSigma),
+The maximum likelihood estimator $\mle$ satisfy $\mle = \argmax_{\btheta} \ell(\btheta)$.
+Maximum likelihood theory tells us that, under certain regularity conditions, as $n\to\infty$,
+\begin{equation}\label{eq:limitdisttheta}
+\sqrt n (\hat\btheta - \btheta) \xrightarrow{\text D} \N\big(0, \cI_1(\btheta)\big),
 \end{equation}
-where $\bSigma = \bD - \bpi\bpi^\top$, with $\bD:= \diag(\bpi)$.
+where $\cI_1(\btheta) \in \bbR^{t\times t}$ is the *unit Fisher information matrix*.
+It can be further shown that $\cI_1(\btheta) = \bDelta^\top \bD^{-1} \bDelta$, where
+
+- $\bDelta_{r,k} = \frac{\partial\pi_r(\btheta)}{\partial\theta_k}$, $r=1,\dots,R$, $k=1,\dots,t$; and
+- $\bD = \diag(\bpi(\btheta))$.
+
+Furthermore, the maximum likelihood estimators are a class of *best asymptotically normal* (BAN) estimators $\hat\btheta$ of $\btheta$ that satisfy
+\begin{equation}
+\sqrt n (\hat\btheta - \btheta) = \sqrt n \, \bB \big(\bp - \bpi(\btheta)\big) + o(1)
+(\#eq:ban)
+\end{equation}
+for some $t\times R$ matrix $\bB$.
+In the specific case of maximum likelihood estimators, we can derive $\bB$ to be $\bB = \cI^{-1} \bDelta^\top \bD^{-1}$.
+
+### Pairwise likelihood estimation
+
+In order to define the pairwise likelihood, let $\pi_{y_iy_j}^{(ij)}(\btheta)$ be the probability under the model that $Y_i=y_i \in \{0,1\}$ and $Y_j=y_j\in\{0,1\}$ for a pair of variables $Y_i$ and $Y_j$, $i,j=1,\dots,p$ and $i<j$.
+<!-- That is, -->
+<!-- $$ -->
+<!-- \pi_{y_iy_j}^{(ij)}(\btheta) = \Pr(Y_i = y_i, Y_j = y_j). -->
+<!-- $$ -->
+The pairwise log-likelihood takes the form
+\begin{equation}
+\pl(\btheta) = \sum_{i<j} \sum_{y_i}\sum_{y_j} \hat n_{y_iy_j}^{(ij)} \log \pi_{y_iy_j}^{(ij)}(\btheta),
+\end{equation}
+where $\hat n_{y_iy_j}^{(ij)}$ is the observed (weighted) frequency of sample units with $Y_i=y_i$ and $Y_j=y_j$,
+$$
+\hat n_{y_iy_j}^{(ij)} = \sum_h w_h [\by^{(h)}_i = y_i, \by^{(h)}_j = y_j].
+$$
+Let us also define the corresponding observed proportions $p_{y_iy_j}^{(ij)} = \hat n_{y_iy_j}^{(ij)}/n$.
+There are a total of $\tilde R = 4 \times {p \choose 2}$ summands, where the '4' is representative of the total number of pairwise combinations of choices.
+
+The *pairwise maximum likelihood estimator* $\mlepl$ satisfies $\mlepl = \argmax_{\btheta} \pl(\btheta)$.
+Under certain regularity conditions,
+\begin{equation}
+\sqrt N (\mlepl - \btheta) \xrightarrow{D} {\N}_t\big(\bzero, \cH(\btheta)\cJ(\btheta)^{-1}\cH(\btheta)\big),
+\end{equation}
+where
+  
+  - $\cH(\btheta)=-\E\nabla^2\pl(\btheta)$ is the *sensitivity matrix*; and
+  - $\cJ(\btheta)=\Var\big(\sqrt N \nabla\pl(\btheta)\big)$ is the *variability matrix*.
+  
+We can also show that the pairwise maximum likelihood estimator satisfies \@ref(eq:ban), where the matrix $\bB$ in this case would be $\bB = \cH^{-1}\tilde\bDelta^{-1}\tilde \bD^{-1} \bG$, where 
+
+- $\tilde\bDelta \in \bbR^{\tilde R \times t}$ consists of partial derivatives of the pairwise probabilities, i.e. $\frac{\partial\pimodpl}{\partial\theta_k}$;
+- $\tilde\bD = \diag((\pimodpl)_{i<j})$; and 
+- $\bG$ is some indicator matrix to transform the quantities from $\tilde R$ dimensions to $R$ dimensions. See other articles for details.
+
+## Goodness-of-fit test statistics
+
+TBC
+
+
+
+
+<!-- It is widely known [@agresti2012categorical] that -->
+<!-- \begin{equation} -->
+<!-- \sqrt N (\bp - \bpi) \xrightarrow{\text D} {\N}_R (\bzero, \bSigma), -->
+<!-- \end{equation} -->
+<!-- where $\bSigma = \bD - \bpi\bpi^\top$, with $\bD:= \diag(\bpi)$. -->
 
 
 
 
 
-# References
+<!-- ## References -->
 
 
 

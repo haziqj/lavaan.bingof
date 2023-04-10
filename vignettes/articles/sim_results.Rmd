@@ -49,45 +49,94 @@ The simulations took roughly 20 hours to complete.
 It is noted that model fit was problematic when sample size $n$ is small, and `{lavaan}` was either not able to converge or not able to invert the sensitivity matrix (or both). 
 These simulations were then removed from the results.
 
-# Plots
+## SRS Type I errors {.tabset}
 
-## SRS Type I errors
+### 10% significance
 
-```{r srs_type1, fig.width = 8, fig.height = 5.5}
+```{r srs_type1a, fig.width = 8, fig.height = 5.5}
 p_srs_a +   #theme(legend.position = c(0.85, 0.15)) +
   guides(fill = guide_legend(ncol = 2), shape = guide_legend(ncol = 2))
+```
+
+### 5% significance {.active}
+
+```{r srs_type1b, fig.width = 8, fig.height = 5.5}
 p_srs_b +  # theme(legend.position = c(0.85, 0.15)) +
   guides(fill = guide_legend(ncol = 2), shape = guide_legend(ncol = 2))
+```
+
+### 1% significance
+
+```{r srs_type1c, fig.width = 8, fig.height = 5.5}
 p_srs_c +   #theme(legend.position = c(0.85, 0.15)) +
   guides(fill = guide_legend(ncol = 2), shape = guide_legend(ncol = 2))
 ```
 
-## SRS Power plots
 
-```{r srs_power, fig.width = 8, fig.height = 5.5}
+## SRS Power plots  {.tabset}
+
+### 10% significance
+
+```{r srs_powerd, fig.width = 8, fig.height = 5.5}
 p_srs_d +  # theme(legend.position = c(0.85, 0.15)) +
   guides(fill = guide_legend(ncol = 2), shape = guide_legend(ncol = 2))
+```
+
+### 5% significance {.active}
+
+```{r srs_powere, fig.width = 8, fig.height = 5.5}
 p_srs_e +  # theme(legend.position = c(0.85, 0.15)) +
   guides(fill = guide_legend(ncol = 2), shape = guide_legend(ncol = 2))
+```
+
+### 1% significance
+
+```{r srs_powerf, fig.width = 8, fig.height = 5.5}
 p_srs_f + #  theme(legend.position = c(0.85, 0.15)) +
   guides(fill = guide_legend(ncol = 2), shape = guide_legend(ncol = 2))
 ```
 
-## Complex sampling Type I errors
+## Complex sampling Type I errors {.tabset}
 
-```{r complex_type1, fig.width = 8, fig.height = 5.5}
+### 10% significance
+
+```{r complex_type1a, fig.width = 8, fig.height = 5.5}
 p_complex_a #+   theme(legend.position = c(0.85, 0.15))
+```
+
+### 5% significance {.active}
+
+```{r complex_type1b, fig.width = 8, fig.height = 5.5}
 p_complex_b #+   theme(legend.position = c(0.85, 0.15))
+```
+
+### 1% significance
+
+```{r complex_type1c, fig.width = 8, fig.height = 5.5}
 p_complex_c #+   theme(legend.position = c(0.85, 0.15))
 ```
 
-## Complex sampling Power plots
+## Complex sampling Power plots {.tabset}
 
-```{r complex_power, fig.width = 8, fig.height = 5.5}
+### 10% significance
+
+```{r complex_powerd, fig.width = 8, fig.height = 5.5}
 p_complex_d +   #theme(legend.position = c(0.85, 0.15)) +
   guides(fill = guide_legend(ncol = 2), alpha = guide_legend(ncol = 4))
+```
+
+### 5% significance {.active}
+
+```{r complex_powere, fig.width = 8, fig.height = 5.5}
 p_complex_e +   #theme(legend.position = c(0.85, 0.15)) +
   guides(fill = guide_legend(ncol = 2), alpha = guide_legend(ncol = 4))
+```
+
+### 1% significance
+
+```{r complex_powerf, fig.width = 8, fig.height = 5.5}
 p_complex_f +   #theme(legend.position = c(0.85, 0.15)) +
   guides(fill = guide_legend(ncol = 2), alpha = guide_legend(ncol = 4))
 ```
+
+
