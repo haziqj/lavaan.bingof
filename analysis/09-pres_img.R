@@ -1,9 +1,5 @@
-source("01-utilities.R")
-source("02-data_gen_srs.R")
-source("04-test_statistics.R")
-theme_set(theme_minimal())
-
 # Sankey plots -----------------------------------------------------------------
+library(tidyverse)
 library(ggsankey)
 theme_set(theme_sankey())
 
@@ -103,7 +99,7 @@ p <-
   theme(legend.position = "none") +
   labs(x = NULL, y = NULL); p
 
-
+ggsave("mult_bern_data.png", p, width = 8.5, height = 5)
 
 
 
