@@ -269,9 +269,8 @@ Students are then arranged in descending order of <span class="math inline">\(z_
 If the observed variables <span class="math inline">\(y\)</span> are test items, this would suggest that school type A would consist of ‘high’ ability students, type B ‘medium’ ability student, and type C ‘low’ ability students.
 Note that the actualised item responses are further subjected to random errors <span class="math inline">\(\epsilon\)</span>.</p>
 <p>A probability based sampling procedure may be implemented in one of three ways described below.</p>
-<div class="section level3" number="0.1">
-<h3 id="stratified-sampling">
-<span class="header-section-number">0.1</span> Stratified sampling<a class="anchor" aria-label="anchor" href="#stratified-sampling"></a>
+<div class="section level3">
+<h3 id="stratified-sampling">Stratified sampling<a class="anchor" aria-label="anchor" href="#stratified-sampling"></a>
 </h3>
 <p>From each school type (strata), select 500 students using SRS.
 Let <span class="math inline">\(N_a\)</span> be the total number of students in stratum <span class="math inline">\(a\in\{1,2,3\}\)</span>.
@@ -279,9 +278,8 @@ Then the probability of selection of a student in stratum <span class="math inli
 <span class="math inline">\(\Pr(\text{selection}) = \frac{500}{N_a}\)</span>.
 The total sample size is <span class="math inline">\(n= 3 \times 1000 = 3,000\)</span>.</p>
 </div>
-<div class="section level3" number="0.2">
-<h3 id="two-stage-cluster-sampling">
-<span class="header-section-number">0.2</span> Two-stage cluster sampling<a class="anchor" aria-label="anchor" href="#two-stage-cluster-sampling"></a>
+<div class="section level3">
+<h3 id="two-stage-cluster-sampling">Two-stage cluster sampling<a class="anchor" aria-label="anchor" href="#two-stage-cluster-sampling"></a>
 </h3>
 <p>Select 150 PSU schools (clusters) using probabilities proportional to size (PPS).
 For each school, select 1 class by SRS, and all students in that class are added to the sample.
@@ -291,9 +289,8 @@ The probability of selection of a student in PSU <span class="math inline">\(b=1
 \]</span>
 The total sample size will vary from sample to sample, but on average will be <span class="math inline">\(n = 150 \times 20 = 3,000\)</span>.</p>
 </div>
-<div class="section level3" number="0.3">
-<h3 id="two-stage-stratified-cluster-sampling">
-<span class="header-section-number">0.3</span> Two-stage stratified cluster sampling<a class="anchor" aria-label="anchor" href="#two-stage-stratified-cluster-sampling"></a>
+<div class="section level3">
+<h3 id="two-stage-stratified-cluster-sampling">Two-stage stratified cluster sampling<a class="anchor" aria-label="anchor" href="#two-stage-stratified-cluster-sampling"></a>
 </h3>
 <p>For each school type (strata), select 50 schools using SRS.
 Then, within each school, select 1 class by SRS, and all students in that class are added to the sample.
@@ -303,18 +300,16 @@ The probability of selection of a student in PSU <span class="math inline">\(b\)
 \]</span>
 Again, the expected sample size is roughly <span class="math inline">\(n=3,000\)</span>.</p>
 </div>
-<div class="section level2" number="1">
-<h2 id="generating-the-population-data">
-<span class="header-section-number">1</span> Generating the population data<a class="anchor" aria-label="anchor" href="#generating-the-population-data"></a>
+<div class="section level2">
+<h2 id="generating-the-population-data">Generating the population data<a class="anchor" aria-label="anchor" href="#generating-the-population-data"></a>
 </h2>
 <p>For the purposes of checking the data generation process, we will use <em>Model 1</em> parameters to generate the response patterns.
 That is, we assume a 1 factor model with <span class="math inline">\(p=5\)</span> observed response items.
 The true model parameter values <span class="math inline">\({\boldsymbol\theta}\)</span> (loadings and thresholds) are as follows:</p>
 <pre><code><span><span class="co">#&gt; lambda1 lambda2 lambda3 lambda4 lambda5    tau1    tau2    tau3    tau4    tau5 </span></span>
 <span><span class="co">#&gt;    0.80    0.70    0.47    0.38    0.34   -1.43   -0.55   -0.13   -0.72   -1.13</span></span></code></pre>
-<div class="section level3" number="1.1">
-<h3 id="comparison-of-population-and-model-implied-moments">
-<span class="header-section-number">1.1</span> Comparison of population and model-implied moments<a class="anchor" aria-label="anchor" href="#comparison-of-population-and-model-implied-moments"></a>
+<div class="section level3">
+<h3 id="comparison-of-population-and-model-implied-moments">Comparison of population and model-implied moments<a class="anchor" aria-label="anchor" href="#comparison-of-population-and-model-implied-moments"></a>
 </h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Univariate moments (model-implied)</span></span>
@@ -332,9 +327,8 @@ The true model parameter values <span class="math inline">\({\boldsymbol\theta}\
 <span><span class="co">#&gt;    y1    y2    y3    y4    y5 </span></span>
 <span><span class="co">#&gt; -0.03 -0.08 -0.10 -0.10 -0.02</span></span></code></pre></div>
 </div>
-<div class="section level3" number="1.2">
-<h3 id="model-fit">
-<span class="header-section-number">1.2</span> Model fit<a class="anchor" aria-label="anchor" href="#model-fit"></a>
+<div class="section level3">
+<h3 id="model-fit">Model fit<a class="anchor" aria-label="anchor" href="#model-fit"></a>
 </h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Comparison of lambda values</span></span>
@@ -353,57 +347,53 @@ The true model parameter values <span class="math inline">\({\boldsymbol\theta}\
 <span><span class="co">#&gt;  tau1  tau2  tau3  tau4  tau5 </span></span>
 <span><span class="co">#&gt; -1.43 -0.55 -0.13 -0.72 -1.13</span></span></code></pre></div>
 </div>
-<div class="section level3" number="1.3">
-<h3 id="population-and-model-correlations">
-<span class="header-section-number">1.3</span> Population and model correlations<a class="anchor" aria-label="anchor" href="#population-and-model-correlations"></a>
+<div class="section level3">
+<h3 id="population-and-model-correlations">Population and model correlations<a class="anchor" aria-label="anchor" href="#population-and-model-correlations"></a>
 </h3>
 <p><img src="complex_sampling1_files/figure-html/pop_corr-1.png" width="50%"><img src="complex_sampling1_files/figure-html/pop_corr-2.png" width="50%"></p>
 </div>
-<div class="section level3" number="1.4">
-<h3 id="distribution-by-school-type-strata">
-<span class="header-section-number">1.4</span> Distribution by school type (strata)<a class="anchor" aria-label="anchor" href="#distribution-by-school-type-strata"></a>
+<div class="section level3">
+<h3 id="distribution-by-school-type-strata">Distribution by school type (strata)<a class="anchor" aria-label="anchor" href="#distribution-by-school-type-strata"></a>
 </h3>
 <p><img src="complex_sampling1_files/figure-html/pop_byregion_vars-1.png" width="672"></p>
 </div>
-<div class="section level3" number="1.5">
-<h3 id="distribution-within-schools-psu-clusters">
-<span class="header-section-number">1.5</span> Distribution within schools (PSU clusters)<a class="anchor" aria-label="anchor" href="#distribution-within-schools-psu-clusters"></a>
+<div class="section level3">
+<h3 id="distribution-within-schools-psu-clusters">Distribution within schools (PSU clusters)<a class="anchor" aria-label="anchor" href="#distribution-within-schools-psu-clusters"></a>
 </h3>
-<div class="section level4" number="1.5.1">
+<div class="section level4">
 <h4 id="y_1">
-<span class="header-section-number">1.5.1</span> <span class="math inline">\(y_1\)</span><a class="anchor" aria-label="anchor" href="#y_1"></a>
+<span class="math inline">\(y_1\)</span><a class="anchor" aria-label="anchor" href="#y_1"></a>
 </h4>
 <p><img src="complex_sampling1_files/figure-html/dist_psu1-1.png" width="672"></p>
 </div>
-<div class="section level4" number="1.5.2">
+<div class="section level4">
 <h4 id="y_2">
-<span class="header-section-number">1.5.2</span> <span class="math inline">\(y_2\)</span><a class="anchor" aria-label="anchor" href="#y_2"></a>
+<span class="math inline">\(y_2\)</span><a class="anchor" aria-label="anchor" href="#y_2"></a>
 </h4>
 <p><img src="complex_sampling1_files/figure-html/dist_psu2-1.png" width="672"></p>
 </div>
-<div class="section level4" number="1.5.3">
+<div class="section level4">
 <h4 id="y_3">
-<span class="header-section-number">1.5.3</span> <span class="math inline">\(y_3\)</span><a class="anchor" aria-label="anchor" href="#y_3"></a>
+<span class="math inline">\(y_3\)</span><a class="anchor" aria-label="anchor" href="#y_3"></a>
 </h4>
 <p><img src="complex_sampling1_files/figure-html/dist_psu3-1.png" width="672"></p>
 </div>
-<div class="section level4" number="1.5.4">
+<div class="section level4">
 <h4 id="y_4">
-<span class="header-section-number">1.5.4</span> <span class="math inline">\(y_4\)</span><a class="anchor" aria-label="anchor" href="#y_4"></a>
+<span class="math inline">\(y_4\)</span><a class="anchor" aria-label="anchor" href="#y_4"></a>
 </h4>
 <p><img src="complex_sampling1_files/figure-html/dist_psu4-1.png" width="672"></p>
 </div>
-<div class="section level4" number="1.5.5">
+<div class="section level4">
 <h4 id="y_5">
-<span class="header-section-number">1.5.5</span> <span class="math inline">\(y_5\)</span><a class="anchor" aria-label="anchor" href="#y_5"></a>
+<span class="math inline">\(y_5\)</span><a class="anchor" aria-label="anchor" href="#y_5"></a>
 </h4>
 <p><img src="complex_sampling1_files/figure-html/dist_psu5-1.png" width="672"></p>
 </div>
 </div>
 </div>
-<div class="section level2" number="2">
-<h2 id="performing-a-complex-sampling-procedure">
-<span class="header-section-number">2</span> Performing a complex sampling procedure<a class="anchor" aria-label="anchor" href="#performing-a-complex-sampling-procedure"></a>
+<div class="section level2">
+<h2 id="performing-a-complex-sampling-procedure">Performing a complex sampling procedure<a class="anchor" aria-label="anchor" href="#performing-a-complex-sampling-procedure"></a>
 </h2>
 <p>There are three functions that perform the three complex sampling procedures described earlier.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -457,15 +447,13 @@ The true model parameter values <span class="math inline">\({\boldsymbol\theta}\
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> A          7 ae    0.887 1     1     0     1     1    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> A          7 ae    0.887 1     1     1     1     1    </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,997 more rows</span></span></span></code></pre></div>
-<div class="section level3" number="2.1">
-<h3 id="comparison-of-uni-and-bivariate-moments">
-<span class="header-section-number">2.1</span> Comparison of uni and bivariate moments<a class="anchor" aria-label="anchor" href="#comparison-of-uni-and-bivariate-moments"></a>
+<div class="section level3">
+<h3 id="comparison-of-uni-and-bivariate-moments">Comparison of uni and bivariate moments<a class="anchor" aria-label="anchor" href="#comparison-of-uni-and-bivariate-moments"></a>
 </h3>
 <p><img src="complex_sampling1_files/figure-html/comparison_sample_stats_plot-1.png" width="672"></p>
 </div>
-<div class="section level3" number="2.2">
-<h3 id="check-bias-in-model-fit">
-<span class="header-section-number">2.2</span> Check bias in model fit<a class="anchor" aria-label="anchor" href="#check-bias-in-model-fit"></a>
+<div class="section level3">
+<h3 id="check-bias-in-model-fit">Check bias in model fit<a class="anchor" aria-label="anchor" href="#check-bias-in-model-fit"></a>
 </h3>
 <p>To check the bias in model fit, do the following:</p>
 <ol style="list-style-type: decimal">
@@ -476,24 +464,23 @@ The true model parameter values <span class="math inline">\({\boldsymbol\theta}\
 <p><img src="complex_sampling1_files/figure-html/bias_plot-1.png" width="672"></p>
 </div>
 </div>
-<div class="section level2" number="3">
-<h2 id="estimating-the-multinomial-covariance-matrix-boldsymbolsigma">
-<span class="header-section-number">3</span> Estimating the multinomial covariance matrix <span class="math inline">\({\boldsymbol\Sigma}\)</span><a class="anchor" aria-label="anchor" href="#estimating-the-multinomial-covariance-matrix-boldsymbolsigma"></a>
+<div class="section level2">
+<h2 id="estimating-the-multinomial-covariance-matrix">Estimating the multinomial covariance matrix<a class="anchor" aria-label="anchor" href="#estimating-the-multinomial-covariance-matrix"></a>
 </h2>
 <p>Let <span class="math inline">\({\mathbf p}\)</span> be the <span class="math inline">\(R \times 1\)</span> vector of sample proportions (of response patterns) corresponding to the vector of population proportions <span class="math inline">\({\boldsymbol\pi}\)</span>.
 Assuming iid observations,
 <span class="math display" id="eq:propclt">\[\begin{equation}
 \sqrt n ({\mathbf p}- {\boldsymbol\pi}) \xrightarrow{\text D}\mathop{\mathrm{N}}_{R}({\mathbf 0},{\boldsymbol\Sigma}),
-\tag{3.1}
+\tag{1}
 \end{equation}\]</span>
 where <span class="math inline">\({\boldsymbol\Sigma}= \mathop{\mathrm{diag}}({\boldsymbol\pi}) - {\boldsymbol\pi}{\boldsymbol\pi}^\top\)</span>.
 Under a simple random sampling procedure, the <span class="math inline">\({\boldsymbol\Sigma}\)</span> may be estimated using <span class="math inline">\(\hat{\boldsymbol\Sigma}= \mathop{\mathrm{diag}}(\hat{\boldsymbol\pi}) - \hat{\boldsymbol\pi}\hat{\boldsymbol\pi}^\top\)</span>, where <span class="math inline">\(\hat{\boldsymbol\pi}\)</span> are the estimated value of the population proportions based on the null hypothesis being tested <span class="math inline">\(H_0: {\boldsymbol\pi}= {\boldsymbol\pi}({\boldsymbol\theta})\)</span>.</p>
-<p>Under a complex sampling procedure, the proportions appearing in <a href="#eq:propclt">(3.1)</a> should be replaced by the weighted version with elements
+<p>Under a complex sampling procedure, the proportions appearing in <a href="#eq:propclt">(1)</a> should be replaced by the weighted version with elements
 <span class="math display">\[\begin{equation}
 {\mathbf p}_r = \frac{\sum_h w_h [{\mathbf y}^{(h)} = {\mathbf y}_r]}{\sum_h w_h}, \hspace{2em} r=1,\dots,R.
 \end{equation}\]</span>
 For convenience, we may do a total normalisation of the weights so that <span class="math inline">\(\sum_h w_h=n\)</span>, the sample size.
-Under suitable conditions, the central limit theorem in <a href="#eq:propclt">(3.1)</a> still applies, although the covariance matrix <span class="math inline">\({\boldsymbol\Sigma}\)</span> need not now take a multinomial form.</p>
+Under suitable conditions, the central limit theorem in <a href="#eq:propclt">(1)</a> still applies, although the covariance matrix <span class="math inline">\({\boldsymbol\Sigma}\)</span> need not now take a multinomial form.</p>
 <p>We now discuss how to estimate <span class="math inline">\({\boldsymbol\Sigma}\)</span> from a stratified multistage sample scheme where the strata are labelled <span class="math inline">\(a=1,\dots,N_S\)</span> and the PSUs are labelled <span class="math inline">\(b=1,\dots,n_a\)</span>, where <span class="math inline">\(n_a\)</span> is the number of PSUs selected in stratum <span class="math inline">\(a\)</span>.
 Let <span class="math inline">\(S_{ab}\)</span> be the set of sample units contained within PSU <span class="math inline">\(b\)</span> within stratum <span class="math inline">\(a\)</span>.
 Define
@@ -517,26 +504,22 @@ Then, a standard estimator of <span class="math inline">\({\boldsymbol\Sigma}\)<
 <!-- $$ --><!-- V(\bar{y}) = \frac{N-n}{N} \left[\frac{1}{m}\sum_{h=1}^H s_h^2 - \frac{n-1}{n}\frac{1}{m^2}\sum_{h=1}^H s_h^2\right] + \frac{n-1}{n} \frac{1}{m}\sum_{h=1}^H \frac{\left(\bar{y}_h - \bar{y}\right)^2}{\omega_h^2}, --><!-- $$ --><ol start="3" style="list-style-type: decimal">
 <li>(Two-stage stratified cluster sampling) Same as 1, but the sample units <span class="math inline">\(S_{ab}\)</span> lists out the students from school <span class="math inline">\(b\)</span> (from the selected class) within each stratum <span class="math inline">\(a\)</span>.</li>
 </ol>
-<div class="section level3" number="3.1">
-<h3 id="comparison-of-boldsymbolsigma">
-<span class="header-section-number">3.1</span> Comparison of <span class="math inline">\({\boldsymbol\Sigma}\)</span><a class="anchor" aria-label="anchor" href="#comparison-of-boldsymbolsigma"></a>
+<div class="section level3">
+<h3 id="comparison-of-estimates">Comparison of estimates<a class="anchor" aria-label="anchor" href="#comparison-of-estimates"></a>
 </h3>
 <p><img src="complex_sampling1_files/figure-html/pop_Sigma-1.png" width="672"></p>
-<div class="section level4" number="3.1.1">
-<h4 id="stratified-sample">
-<span class="header-section-number">3.1.1</span> Stratified sample<a class="anchor" aria-label="anchor" href="#stratified-sample"></a>
+<div class="section level4">
+<h4 id="stratified-sample">Stratified sample<a class="anchor" aria-label="anchor" href="#stratified-sample"></a>
 </h4>
 <p><img src="complex_sampling1_files/figure-html/strat_Sigma-1.png" width="672"></p>
 </div>
-<div class="section level4" number="3.1.2">
-<h4 id="cluster-sample">
-<span class="header-section-number">3.1.2</span> Cluster sample<a class="anchor" aria-label="anchor" href="#cluster-sample"></a>
+<div class="section level4">
+<h4 id="cluster-sample">Cluster sample<a class="anchor" aria-label="anchor" href="#cluster-sample"></a>
 </h4>
 <p><img src="complex_sampling1_files/figure-html/clust_Sigma-1.png" width="672"></p>
 </div>
-<div class="section level4" number="3.1.3">
-<h4 id="stratified-cluster-sample">
-<span class="header-section-number">3.1.3</span> Stratified cluster sample<a class="anchor" aria-label="anchor" href="#stratified-cluster-sample"></a>
+<div class="section level4">
+<h4 id="stratified-cluster-sample">Stratified cluster sample<a class="anchor" aria-label="anchor" href="#stratified-cluster-sample"></a>
 </h4>
 <p><img src="complex_sampling1_files/figure-html/strcl_Sigma-1.png" width="672"></p>
 </div>
