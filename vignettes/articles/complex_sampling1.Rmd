@@ -95,9 +95,9 @@ pop %>%
 ```
 
 In the factor model, the latent variable $\bfeta$ represents the abilities of each individual student, and it is used as a stratifying variable in the following way.
-For each individual $h=1,\dots,N$, let $\bfeta_h$ represent the vector of latent abilities generated from $N_q(\bzero, \bPhi)$ as described above.
+For each individual $h=1,\dots,N$, let $\bfeta_h$ represent the vector of latent abilities generated from $N_q(\bzero, \bPsi)$ as described in a previous article.
 Define $z_h=\sum_{j=1}^q \eta_{jh}$, which is now a normal random variate centered at zero. 
-If all the correlations in $\bPhi$ are positive, then $z_h$ has variance at least $q$.
+If all the correlations in $\bPsi$ are positive, then $z_h$ has variance at least $q$.
 Students are then arranged in descending order of $z_h$, and based on this arrangement assigned to the school type A, B or C respectively.
 If the observed variables $y$ are test items, this would suggest that school type A would consist of 'high' ability students, type B 'medium' ability student, and type C 'low' ability students.
 Note that the actualised item responses are further subjected to random errors $\epsilon$.
