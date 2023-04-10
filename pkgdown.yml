@@ -7,7 +7,8 @@ articles:
   outro: outro.html
   sim_results: sim_results.html
   sim_tables: sim_tables.pdf
-last_built: 2023-04-10T04:33Z
+  test: test.html
+last_built: 2023-04-10T04:46Z
 urls:
   reference: https://haziqj.ml/lavaan.bingof/reference
   article: https://haziqj.ml/lavaan.bingof/articles
