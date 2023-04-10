@@ -34,7 +34,7 @@ library(lavaan.bingof)  # load package
 
 Note: This package depends on the modified `{lavaan}` package version
 0.6-14.9001, which can be installed from the GitHub repository at
-“[`haziqj/lavaan`](https://github.com/haziqj/lavaan)”.
+[`haziqj/lavaan`](https://github.com/haziqj/lavaan).
 
 ## Usage
 
@@ -133,10 +133,11 @@ Wald_test(fit1, svy_design = svy)
 ### Simulation wrapper
 
 ``` r
-# To conduct a simulation study based on a 5 factor model (25 repetitions only
+# To conduct a simulation study based on a 5 factor model (32 repetitions only
 # for illustration). Data generated according to a stratified complex sample.
 (pc <- parallel::detectCores())   # how many cores do we have?
 #> [1] 32
+
 res <- ligof_sims(model.no = 1, nsim = pc, samp = "strat", simtype = "type1",
                   no.cores = pc)
 #>|======================================================================| 100%
@@ -145,6 +146,7 @@ res <- ligof_sims(model.no = 1, nsim = pc, samp = "strat", simtype = "type1",
 <!-- #>|======================================================================| 100% -->
 
 ``` r
+# Summarise the average rejection rate
 res %>%
   bind_rows() %>%
   group_by(name) %>%
