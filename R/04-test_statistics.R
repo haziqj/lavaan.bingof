@@ -634,10 +634,60 @@ create_Sigma2_matrix_complex <- function(.lavobject, .svy_design) {
   Reduce("+", Sigma) / N
 }
 
- ## ---- Test preliminaries ----------------------------------------------------
+create_Sigma_univariate_matrix_complex <- function(.lavobject, .svy_design) {
+  list2env(extract_lavaan_info(.lavobject), environment())
+  list2env(get_uni_bi_moments(.lavobject), environment())
 
+  # Get strata information
+  strata  <- .svy_design$strata[, 1, drop = FALSE]
+  colnames(strata) <- "strata"
+  a <- unique(strata[, 1])
 
+  # Get cluster information
+  cluster <- .svy_design$cluster
+  colnames(cluster)[1] <- "cluster"
 
+  dat <-
+    dat %>%
+    bind_cols(strata, cluster)
+
+  # Create the data set of univariate and bivariate responses (1/0)
+  tmp <- dat %>%
+    select(starts_with("y")) %>%
+    mutate(across(starts_with("y"), function(x) as.numeric(x == 2)))
+
+  tmp <- bind_cols(dat %>% select(-starts_with("y")), tmp)
+
+  the_pi <- pidot1
+  Sigma <- list()
+  for (i in a) {
+    # Filter the strata a
+    current_dat <- tmp %>%
+      filter(strata == i)
+
+    # Obtain the responses in this strata (i.e. according to S_ab)
+    y <- current_dat %>%
+      select(starts_with("y")) %>%
+      mutate(across(starts_with("y"), function(x) as.numeric(x == 1))) %>%
+      as.matrix()
+
+    uab <- {sweep(y, 2, the_pi, "-") * current_dat$wt} %>%
+      as_tibble() %>%
+      bind_cols(current_dat %>% select(-starts_with("y")), .) %>%
+      group_by(cluster) %>%
+      summarise(across(starts_with("y"), sum), .groups = "drop") %>%
+      select(starts_with("y")) %>%
+      as.matrix()
+    na <- nrow(uab)
+
+    ubar <- apply(uab, 2, mean)
+
+    Sigma[[i]] <- crossprod(sweep(uab, 2, ubar, "-")) * na / (na - 1)
+  }
+  Reduce("+", Sigma) / N
+}
+
+## ---- Test preliminaries ----------------------------------------------------
 calc_test_stuff <- function(lavobject, svy_design = NULL, .H_inv,
                             .Delta_mat_list, .Sigma2, .pi_tilde) {
   # These are all the stuff needed to compute the test statistic W
