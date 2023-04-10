@@ -17,19 +17,19 @@
 #' make_population(1)
 #' }
 #'
-make_population <- function(model.no = 1, seed = 123, H1 = FALSE,
+make_population <- function(model_no = 1, seed = 123, H1 = FALSE,
                             return_all = FALSE) {
 
   set.seed(seed)
 
   # Set up the loadings and covariance matrices --------------------------------
-  Lambda      <- loading_mat(model.no)
+  Lambda      <- loading_mat(model_no)
   neta        <- ncol(Lambda)
   nitems      <- nrow(Lambda)
-  Psi         <- cov_lv_mat(model.no)
+  Psi         <- cov_lv_mat(model_no)
   Theta       <- matrix(0, nrow = nitems, ncol = nitems)
   diag(Theta) <- 1 - diag(Lambda %*% Psi %*% t(Lambda))
-  tau         <- get_tau(model.no)
+  tau         <- get_tau(model_no)
 
   # Prepare population data ----------------------------------------------------
   letters <- c(letters, sapply(letters, function(x) paste0(x, letters)))
@@ -56,8 +56,9 @@ make_population <- function(model.no = 1, seed = 123, H1 = FALSE,
 
   if (isTRUE(H1)) {
     # Add an extra factor to misspecify the model fit (for power simulations)
-    ystar <- ystar +
-      t((Lambda[, 1, drop = FALSE] + rnorm(nitems, sd = 0.1)) %*% rnorm(N))
+    extra_Lambda <- Lambda[, 1, drop = FALSE] + rnorm(nitems, sd = 0.1)
+    if (model_no <= 3) { extra_Lambda[seq(2, nitems, by = 2), 1] <- 0 }
+    ystar <- ystar + t(extra_Lambda %*% rnorm(n))
     ystar <- scale(ystar)
   }
 
@@ -127,8 +128,8 @@ make_population <- function(model.no = 1, seed = 123, H1 = FALSE,
 #' }
 #'
 #'
-gen_data_bin_srs <- function(population = make_population(1), n = 3000,
-                             seed = NULL) {
+gen_data_bin_srs <- function(population = make_population(1, seed = NULL),
+                             n = 3000, seed = NULL) {
   set.seed(seed)
   slice_sample(population, n = n) %>%
     mutate(across(starts_with("y"), ordered))
@@ -136,8 +137,8 @@ gen_data_bin_srs <- function(population = make_population(1), n = 3000,
 
 #' @rdname gen_data_bin_srs
 #' @export
-gen_data_bin_complex1 <- function(population = make_population(1), npsu = 1000,
-                                  seed = NULL) {
+gen_data_bin_complex1 <- function(population = make_population(1, seed = NULL),
+                                  npsu = 1000, seed = NULL) {
   # 1-stage stratified sampling
   set.seed(seed)
 
@@ -172,8 +173,8 @@ gen_data_bin_complex1 <- function(population = make_population(1), npsu = 1000,
 
 #' @rdname gen_data_bin_srs
 #' @export
-gen_data_bin_complex2 <- function(population = make_population(1), npsu = 150,
-                                  seed = NULL) {
+gen_data_bin_complex2 <- function(population = make_population(1, seed = NULL),
+                                  npsu = 150, seed = NULL) {
   # 2-stage cluster sampling
   set.seed(seed)
 
@@ -217,8 +218,8 @@ gen_data_bin_complex2 <- function(population = make_population(1), npsu = 150,
 
 #' @rdname gen_data_bin_srs
 #' @export
-gen_data_bin_complex3 <- function(population = make_population(1), npsu = 50,
-                                  seed = NULL) {
+gen_data_bin_complex3 <- function(population = make_population(1, seed = NULL),
+                                  npsu = 50, seed = NULL) {
   # 2-stage stratified cluster sampling
   set.seed(seed)
 

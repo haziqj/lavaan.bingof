@@ -11,14 +11,14 @@ dbinorm <- utils::getFromNamespace("dbinorm", "lavaan")
 lav_tables_pairwise_model_pi <- utils::getFromNamespace("lav_tables_pairwise_model_pi", "lavaan")
 
 # No visible binding notes
-globalVariables(c(".", "Delta2", "N", "Omega2", "S", "Sigma2", "TH", "Var_ystar",
-                  "W", "avg_class_size", "dat", "e2_hat", "lavcache", "lavdata",
-                  "lavmodel", "lavoptions", "lavpartable", "lavsamplestats",
-                  "mu_ystar", "nschools", "nstudents", "p", "pdot1",
-                  "pdot2", "pi2_hat", "pidot1", "pidot2", "pr_class_selected",
-                  "pr_school_selected", "prob", "rn", "rn2", "school",
-                  "students_in_school_type", "th.idx", "type", "var1", "var2",
-                  "wt", "z"))
+globalVariables(c(".", "Delta2", "N", "Omega2", "S", "Sigma2", "TH", "W",
+                  "Var_ystar", "avg_class_size", "dat", "e2_hat", "lavcache",
+                  "lavdata", "lavmodel", "lavoptions", "lavpartable",
+                  "lavsamplestats", "mu_ystar", "nschools", "nstudents", "p",
+                  "pdot1", "pdot2", "pi2_hat", "pidot1", "pidot2",
+                  "pr_class_selected", "pr_school_selected", "prob", "rn",
+                  "rn2", "school", "students_in_school_type", "th.idx", "type",
+                  "var1", "var2", "wt", "z"))
 
 ## ---- Utilities --------------------------------------------------------------
 extract_lavaan_info <- function(lavobject) {
@@ -94,7 +94,7 @@ get_sensitivity_inv_mat <- function(.lavobject, matrix_type = c("Sensitivity",
 
   tt <- sum(lavpartable$free != 0)
   if (is.null(mat)) mat <- diag(tt)
-  return(mat)
+  mat
 }
 
 # ORDER OF THE PROBABILITIES IS IMPORTANT. SHOULD JUST USE LAVAAN's ORDERING?
@@ -129,7 +129,7 @@ create_resp_pattern <- function(p = 3) {
   #   unite("r", everything(), sep = "") %>%
   #   unlist()
 
-  return(tab)
+  tab
 }
 
 #' Create transformation matrices
@@ -188,7 +188,7 @@ create_G_mat <- function(p = 3) {
   attr(G, "patterns") <- attr(dat, "patterns")
   attr(G, "pairwise") <- id
 
-  return(t(G))
+  t(G)
 }
 
 #' @rdname transformation-matrices
@@ -209,8 +209,7 @@ create_T2_mat <- function(p = 3) {
 
   M <- rbind(M1, M2)
   rownames(M) <- NULL
-
-  return(M)
+  M
 }
 
 #' @rdname transformation-matrices
@@ -255,7 +254,7 @@ Beta_mat_design <- function(nvar) {
   cdtn11 <- idx_cat_var1 == 1 & idx_cat_var2 == 1
   B_mat[cdtn00, ] <- -1 * (B_mat[cdtn10, ] + B_mat[cdtn01, ] + B_mat[cdtn11, ])
 
-  return(B_mat)
+  B_mat
 }
 
 ## ---- Delta matrices ---------------------------------------------------------
@@ -425,19 +424,17 @@ derModelUnivBivProbToTheta <- function(nvar, TH, th.idx, Sigmahat, lavcache,
   derUnivProb1wrtTheta <- derTauToTheta * derUnivProb1wrtTau
 
   # Return output --------------------------------------------------------------
-  return(
-    list(derBivProbwrtTheta   = der.pi.xixj.ab.to.theta_F,
-         derBivProb11wrtTheta = der.pi.xixj.22.to.theta_F,
-         derUnivProb1wrtTheta = derUnivProb1wrtTheta,
-         Delta = Delta,
-         idx_pairs_ext ,
-         cdtn          ,
-         idx_pairs_S  ,
-         idxVar1_S  ,
-         idxVar2_S   ,
-         idxCat_var1  ,
-         idxCat_var2   )
-  )
+  list(derBivProbwrtTheta   = der.pi.xixj.ab.to.theta_F,
+       derBivProb11wrtTheta = der.pi.xixj.22.to.theta_F,
+       derUnivProb1wrtTheta = derUnivProb1wrtTheta,
+       Delta = Delta,
+       idx_pairs_ext,
+       cdtn,
+       idx_pairs_S,
+       idxVar1_S,
+       idxVar2_S,
+       idxCat_var1,
+       idxCat_var2)
 }
 
 get_Delta_mats <- function(.lavobject) {
@@ -448,11 +445,11 @@ get_Delta_mats <- function(.lavobject) {
     lavcache = lavcache[[1]], lavmodel = lavmodel
   )
 
-  return(list(
+  list(
     Delta2    = rbind(derivatives$derUnivProb1wrtTheta,
                       derivatives$derBivProb11wrtTheta),
     Delta_til = derivatives$derBivProbwrtTheta
-  ))
+  )
 }
 
 #' @rdname get_true_values
@@ -462,11 +459,11 @@ get_Delta_mats <- function(.lavobject) {
 #' @export
 #' @examples
 #' get_theoretical_uni_bi_moments(1)
-get_theoretical_uni_bi_moments <- function(model.no, collapse = FALSE) {
-  Var_ystar <- get_Sigmay(model.no)
+get_theoretical_uni_bi_moments <- function(model_no, collapse = FALSE) {
+  Var_ystar <- get_Sigmay(model_no)
   mu_ystar <- rep(0, nrow(Var_ystar))
-  TH <- get_tau(model.no)
-  p <- nrow(get_Lambda(model.no))
+  TH <- get_tau(model_no)
+  p <- nrow(get_Lambda(model_no))
 
   # Univariate -----------------------------------------------------------------
   pidot1 <- rep(NA, p)
@@ -487,9 +484,9 @@ get_theoretical_uni_bi_moments <- function(model.no, collapse = FALSE) {
   }
 
   if (isTRUE(collapse)) {
-    return(c(pidot1, pidot2))
+    c(pidot1, pidot2)
   } else {
-    return(list(pidot1 = pidot1, pidot2 = pidot2))
+    list(pidot1 = pidot1, pidot2 = pidot2)
   }
 }
 
@@ -535,7 +532,7 @@ get_uni_bi_moments <- function(.lavobject) {
                                 varcov = Var_ystar[c(i, j), c(i, j)])
   }
 
-  return(list(
+  list(
     # Univariate moments
     pdot1  = pdot1,   # sample
     pidot1 = pidot1,  # model
@@ -543,7 +540,7 @@ get_uni_bi_moments <- function(.lavobject) {
     # Bivariate moments
     pdot2 = pdot2,    # sample
     pidot2 = pidot2   # model
-  ))
+  )
 }
 
 ## ---- Sigma multinomial matrices ---------------------------------------------
@@ -788,7 +785,7 @@ test_begin <- function(.lavobject, .approx_Omega2, .svy_design = NULL) {
   }
   the_test_stuff$Omega2 <- Covmat
 
-  return(the_test_stuff)
+  the_test_stuff
 }
 
 moment_match <- function(W, Xi, Omega2, df = NULL, order) {
@@ -814,8 +811,8 @@ moment_match <- function(W, Xi, Omega2, df = NULL, order) {
     b <- mu1 / c
     a <- 0
   }
-  out <- data.frame(W = (W - a) / b, df = c)
-  return(out)
+
+  data.frame(W = (W - a) / b, df = c)
 }
 
 #' Limited information goodness-of-fit test statistics
@@ -1000,5 +997,5 @@ all_tests <- function(object, svy_design = NULL, sim = NULL) {
       suppressWarnings()
   }
 
-  return(res)
+  res
 }

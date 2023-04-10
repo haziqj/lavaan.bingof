@@ -2,10 +2,10 @@
 % Please edit documentation in R/02-data_gen_srs.R
 \name{gen_data_bin}
 \alias{gen_data_bin}
-\title{Generate independent data samples according to \code{model.no}}
+\title{Generate independent data samples according to \code{model_no}}
 \usage{
 gen_data_bin(
-  model.no = 1,
+  model_no = 1,
   n = 1000,
   seed = NULL,
   H1 = FALSE,
@@ -13,7 +13,7 @@ gen_data_bin(
 )
 }
 \arguments{
-\item{model.no}{(integer) Choose from 1--5. See details.}
+\item{model_no}{(integer) Choose from 1--5. See pkgdown articles for details.}
 
 \item{n}{(numeric > 0) Sample size.}
 
@@ -29,7 +29,7 @@ well?}
 A \code{\link[=tibble]{tibble()}} containing ordinal binary values (0/1) for the items.
 }
 \description{
-Generate independent data samples according to \code{model.no}
+Generate independent data samples according to \code{model_no}
 }
 \examples{
 gen_data_bin(1)

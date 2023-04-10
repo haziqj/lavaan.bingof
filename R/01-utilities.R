@@ -1,54 +1,43 @@
-# This script contains the utility functions for data generation, including
-# lavaan textual models, getting the true parameter values, etc.
-
-## ---- Libraries --------------------------------------------------------------
-# library(tidyverse)
-# remotes::install_github("haziqj/lavaan")  # modified lavaan to do PL weights
-# library(lavaan)
-# library(mnormt)
-# library(doSNOW)
-# library(foreach)
-
 #' Function to return the textual model for lavaan fit, depending on which
 #' simulation scenario we are investigating.
 #'
-#' @param model.no (integer) Choose from 1--5. See details.
+#' @param model_no (integer) Choose from 1--5. See pkgdown articles for details.
 #'
 #' @return Character vector of factor model to input to [lavaan::lavaan()].
 #' @export
 #'
 #' @examples
 #' txt_mod(1)
-txt_mod <- function(model.no= 1L) {
+txt_mod <- function(model_no = 1L) {
 
-  if (model.no == 1) mod <- "eta1 =~ NA*y1 + y2 + y3 + y4 + y5"
-  if (model.no == 2) mod <- "eta1 =~ NA*y1 + y2 + y3 + y4 + y5 + y6 + y7 + y8"
-  if (model.no == 3) mod <- "eta1 =~ NA*y1 +  y2 +  y3 +  y4 +  y5 +
+  if (model_no == 1) mod <- "eta1 =~ NA*y1 + y2 + y3 + y4 + y5"
+  if (model_no == 2) mod <- "eta1 =~ NA*y1 + y2 + y3 + y4 + y5 + y6 + y7 + y8"
+  if (model_no == 3) mod <- "eta1 =~ NA*y1 +  y2 +  y3 +  y4 +  y5 +
                                         y6 +  y7 +  y8 +  y9 + y10 +
                                        y11 + y12 + y13 + y14 + y15"
-  if (model.no == 4) mod <- "eta1 =~ NA*y1 + y2 + y3 + y4 + y5
+  if (model_no == 4) mod <- "eta1 =~ NA*y1 + y2 + y3 + y4 + y5
                              eta2 =~ NA*y6 + y7 + y8 + y9 + y10"
-  if (model.no == 5) mod <- "eta1 =~  NA*y1 +  y2 +  y3 +  y4 +  y5
+  if (model_no == 5) mod <- "eta1 =~  NA*y1 +  y2 +  y3 +  y4 +  y5
                              eta2 =~  NA*y6 +  y7 +  y8 +  y9 + y10
                              eta3 =~ NA*y11 + y12 + y13 + y14 + y15"
 
-  return(mod)
+  mod
 }
 
 ## ---- Loading matrix ---------------------------------------------------------
-loading_mat <- function(model.no) {
+loading_mat <- function(model_no) {
   lam_entries <- c(0.80, 0.70, 0.47, 0.38, 0.34)
   lam_index <- rep(seq_along(lam_entries), 3)
 
-  if (model.no == 1) { nitems <- 5;  neta <- 1 }
-  if (model.no == 2) { nitems <- 8;  neta <- 1 }
-  if (model.no == 3) { nitems <- 15; neta <- 1 }
-  if (model.no == 4) { nitems <- 10; neta <- 2 }
-  if (model.no == 5) { nitems <- 15; neta <- 3 }
+  if (model_no == 1) { nitems <- 5;  neta <- 1 }
+  if (model_no == 2) { nitems <- 8;  neta <- 1 }
+  if (model_no == 3) { nitems <- 15; neta <- 1 }
+  if (model_no == 4) { nitems <- 10; neta <- 2 }
+  if (model_no == 5) { nitems <- 15; neta <- 3 }
 
   res <- matrix(0, nrow = nitems, ncol = neta)
 
-  if (model.no %in% 1:3) {
+  if (model_no %in% 1:3) {
     res[, 1] <- lam_entries[lam_index[seq_len(nitems)]]
   } else {
     for (k in seq_len(neta)) {
@@ -56,20 +45,20 @@ loading_mat <- function(model.no) {
     }
   }
 
-  return(res)
+  res
 }
 
 get_Lambda <- loading_mat  # alternative name
 
 ## ---- Cov LV matrix ----------------------------------------------------------
-cov_lv_mat <- function(model.no) {
-  if (model.no %in% 1:3) {
+cov_lv_mat <- function(model_no) {
+  if (model_no %in% 1:3) {
     return(1)
   }
-  if (model.no == 4) {
+  if (model_no == 4) {
     return(matrix(c(1, 0.3, 0.3, 1), nrow = 2, ncol = 2))
   }
-  if (model.no == 5) {
+  if (model_no == 5) {
     return(matrix(c(  1, 0.2, 0.3,
                     0.2,   1, 0.4,
                     0.3, 0.4, 1), nrow = 3, ncol = 3))
@@ -79,16 +68,16 @@ cov_lv_mat <- function(model.no) {
 get_Psi <- cov_lv_mat
 
 ## ---- Get thresholds----------------------------------------------------------
-get_tau <- function(model.no = 1) {
-  nitems <- nrow(loading_mat(model.no))
+get_tau <- function(model_no = 1) {
+  nitems <- nrow(loading_mat(model_no))
   tau <- rep(c(-1.43, -0.55, -0.13, -0.72, -1.13), 3)
   tau[seq_len(nitems)]
 }
 
 ## ---- Get corr matrix --------------------------------------------------------
-get_Sigmay <- function(model.no) {
-  Lambda      <- loading_mat(model.no)
-  Phi         <- cov_lv_mat(model.no)
+get_Sigmay <- function(model_no) {
+  Lambda      <- loading_mat(model_no)
+  Phi         <- cov_lv_mat(model_no)
   neta        <- ncol(Lambda)
   nitems      <- nrow(Lambda)
   Theta       <- matrix(0, nrow = nitems, ncol = nitems)
@@ -101,7 +90,7 @@ get_Sigmay <- function(model.no) {
 #'
 #' @description
 #'
-#' - `get_true_values()` returns the true values of the freely estimated theta values in this order: \eqn{\lambda} (loadings), \eqn{\rho} (factor correlations), \eqn{\tau} (thresholds)
+#' - `get_true_values()` returns the true values of the freely estimated theta values in this order: \eqn{\lambda} (loadings), \eqn{\rho} (factor correlations), \eqn{\tau} (thresholds).
 #'
 #' - `get_theoretical_uni_bi_moments()` returns the univariate (`pidot1`) and bivariate (`pidot2`) theoretical probabilities of successes.
 #'
@@ -115,11 +104,10 @@ get_Sigmay <- function(model.no) {
 #'
 #' @examples
 #' get_true_values(1)
-get_true_values <- function(model.no) {
-
+get_true_values <- function(model_no) {
 
   # Loadings -------------------------------------------------------------------
-  Lambda <- get_Lambda(model.no)
+  Lambda <- get_Lambda(model_no)
   p <- nrow(Lambda)
   q <- ncol(Lambda)
   lambda <- c(Lambda)
@@ -137,7 +125,7 @@ get_true_values <- function(model.no) {
   names(lambda) <- paste0("lambda", seq_along(lambda))
 
   # Factor correlations --------------------------------------------------------
-  Psi <- get_Psi(model.no)
+  Psi <- get_Psi(model_no)
   rho <- c(Psi[upper.tri(Psi)])
   q <- nrow(Psi)
   if (!is.null(q)) {
@@ -147,7 +135,7 @@ get_true_values <- function(model.no) {
   }
 
   # Threholds ------------------------------------------------------------------
-  tau <- get_tau(model.no)
+  tau <- get_tau(model_no)
   names(tau) <- paste0("tau", seq_along(tau))
 
   c(lambda, rho, tau)

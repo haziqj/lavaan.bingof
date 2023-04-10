@@ -4,10 +4,10 @@
 \alias{make_population}
 \title{Simulate the school population data set}
 \usage{
-make_population(model.no = 1, seed = 123, H1 = FALSE, return_all = FALSE)
+make_population(model_no = 1, seed = 123, H1 = FALSE, return_all = FALSE)
 }
 \arguments{
-\item{model.no}{(integer) Choose from 1--5. See details.}
+\item{model_no}{(integer) Choose from 1--5. See pkgdown articles for details.}
 
 \item{seed}{(numeric) The random seed.}
 

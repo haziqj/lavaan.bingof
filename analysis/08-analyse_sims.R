@@ -71,46 +71,46 @@ srs_type1 <- bind_rows(
 # Power simulations
 srs_power <- bind_rows(
   # n = 100
-  bind_cols(srs1_n100_power, n = 100, sim = "1F 5V"),
-  bind_cols(srs2_n100_power, n = 100, sim = "1F 8V"),
-  bind_cols(srs3_n100_power, n = 100, sim = "1F 15V"),
-  bind_cols(srs4_n100_power, n = 100, sim = "2F 10V"),
-  bind_cols(srs5_n100_power, n = 100, sim = "3F 15V"),
+  # bind_cols(srs1_n100_power, n = 100, sim = "1F 5V"),
+  # bind_cols(srs2_n100_power, n = 100, sim = "1F 8V"),
+  # bind_cols(srs3_n100_power, n = 100, sim = "1F 15V"),
+  # bind_cols(srs4_n100_power, n = 100, sim = "2F 10V"),
+  # bind_cols(srs5_n100_power, n = 100, sim = "3F 15V"),
 
   # n = 250
-  bind_cols(srs1_n250_power, n = 250, sim = "1F 5V"),
-  bind_cols(srs2_n250_power, n = 250, sim = "1F 8V"),
-  bind_cols(srs3_n250_power, n = 250, sim = "1F 15V"),
-  bind_cols(srs4_n250_power, n = 250, sim = "2F 10V"),
-  bind_cols(srs5_n250_power, n = 250, sim = "3F 15V"),
+  # bind_cols(srs1_n250_power, n = 250, sim = "1F 5V"),
+  # bind_cols(srs2_n250_power, n = 250, sim = "1F 8V"),
+  # bind_cols(srs3_n250_power, n = 250, sim = "1F 15V"),
+  # bind_cols(srs4_n250_power, n = 250, sim = "2F 10V"),
+  # bind_cols(srs5_n250_power, n = 250, sim = "3F 15V"),
 
   # n = 500
   bind_cols(srs1_n500_power, n = 500, sim = "1F 5V"),
-  bind_cols(srs2_n500_power, n = 500, sim = "1F 8V"),
-  bind_cols(srs3_n500_power, n = 500, sim = "1F 15V"),
-  bind_cols(srs4_n500_power, n = 500, sim = "2F 10V"),
-  bind_cols(srs5_n500_power, n = 500, sim = "3F 15V"),
+  # bind_cols(srs2_n500_power, n = 500, sim = "1F 8V"),
+  # bind_cols(srs3_n500_power, n = 500, sim = "1F 15V"),
+  # bind_cols(srs4_n500_power, n = 500, sim = "2F 10V"),
+  # bind_cols(srs5_n500_power, n = 500, sim = "3F 15V"),
 
   # n = 1000
   bind_cols(srs1_n1000_power, n = 1000, sim = "1F 5V"),
-  bind_cols(srs2_n1000_power, n = 1000, sim = "1F 8V"),
-  bind_cols(srs3_n1000_power, n = 1000, sim = "1F 15V"),
-  bind_cols(srs4_n1000_power, n = 1000, sim = "2F 10V"),
-  bind_cols(srs5_n1000_power, n = 1000, sim = "3F 15V"),
+  # bind_cols(srs2_n1000_power, n = 1000, sim = "1F 8V"),
+  # bind_cols(srs3_n1000_power, n = 1000, sim = "1F 15V"),
+  # bind_cols(srs4_n1000_power, n = 1000, sim = "2F 10V"),
+  # bind_cols(srs5_n1000_power, n = 1000, sim = "3F 15V"),
 
   # n = 2000
   bind_cols(srs1_n2000_power, n = 2000, sim = "1F 5V"),
-  bind_cols(srs2_n2000_power, n = 2000, sim = "1F 8V"),
-  bind_cols(srs3_n2000_power, n = 2000, sim = "1F 15V"),
-  bind_cols(srs4_n2000_power, n = 2000, sim = "2F 10V"),
-  bind_cols(srs5_n2000_power, n = 2000, sim = "3F 15V"),
+  # bind_cols(srs2_n2000_power, n = 2000, sim = "1F 8V"),
+  # bind_cols(srs3_n2000_power, n = 2000, sim = "1F 15V"),
+  # bind_cols(srs4_n2000_power, n = 2000, sim = "2F 10V"),
+  # bind_cols(srs5_n2000_power, n = 2000, sim = "3F 15V"),
 
   # n = 3000
   bind_cols(srs1_n3000_power, n = 3000, sim = "1F 5V"),
-  bind_cols(srs2_n3000_power, n = 3000, sim = "1F 8V"),
-  bind_cols(srs3_n3000_power, n = 3000, sim = "1F 15V"),
-  bind_cols(srs4_n3000_power, n = 3000, sim = "2F 10V"),
-  bind_cols(srs5_n3000_power, n = 3000, sim = "3F 15V")
+  # bind_cols(srs2_n3000_power, n = 3000, sim = "1F 8V"),
+  # bind_cols(srs3_n3000_power, n = 3000, sim = "1F 15V"),
+  # bind_cols(srs4_n3000_power, n = 3000, sim = "2F 10V"),
+  # bind_cols(srs5_n3000_power, n = 3000, sim = "3F 15V")
 ) %>%
   mutate(sim = factor(sim, levels = unique(sim)),
          name = factor(name, levels = rev(unique(name))),
@@ -133,7 +133,7 @@ srs_plot <- function(x = srs_type1_res, alpha = 10, dashed_line = TRUE,
     # geom_ribbon(aes(ymin = rej_rate10 - 1.96 * se10,
     #                 ymax = rej_rate10 + 1.96 * se10)) +
     facet_wrap(. ~ sim, ncol = 3) +
-    scale_x_continuous(breaks = unique(srs_type1$n)) +
+    scale_x_continuous(breaks = unique(srs_power$n)) +
     scale_shape_manual(values = c(16, 17, 15, 3, 7, 8, 11)) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1),
           legend.position = c(0.85, 0.24)) +

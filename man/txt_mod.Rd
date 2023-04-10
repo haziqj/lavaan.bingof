@@ -5,10 +5,10 @@
 \title{Function to return the textual model for lavaan fit, depending on which
 simulation scenario we are investigating.}
 \usage{
-txt_mod(model.no = 1L)
+txt_mod(model_no = 1L)
 }
 \arguments{
-\item{model.no}{(integer) Choose from 1--5. See details.}
+\item{model_no}{(integer) Choose from 1--5. See pkgdown articles for details.}
 }
 \value{
 Character vector of factor model to input to \code{\link[lavaan:lavaan]{lavaan::lavaan()}}.

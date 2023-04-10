@@ -5,9 +5,9 @@
 \title{Wrapper function for Type 1 and Power simulations}
 \usage{
 ligof_sims(
-  model.no = 1,
+  model_no = 1,
   nsim = 1000,
-  samp_size = 100,
+  samp_size = 1000,
   samp = c("srs", "strat", "clust", "strcl"),
   simtype = c("type1", "power"),
   starting_seed = 4423,
@@ -15,16 +15,19 @@ ligof_sims(
 )
 }
 \arguments{
-\item{model.no}{(integer) Choose from 1--5. See details.}
+\item{model_no}{(integer) Choose from 1--5. See pkgdown articles for details.}
 
-\item{nsim}{(integer) The number of simulations to conduct}
+\item{nsim}{(integer) The number of simulations to conduct.}
 
-\item{samp_size}{(integer) The sample size for SRS simulations}
+\item{samp_size}{(integer) The exact sample size for SRS simulations or
+stratified sampling; otherwise the \emph{average} sample size for the other
+complex sampling methods.}
 
 \item{samp}{(character) Choose the sampling method for the simulated data.
 One of \code{srs}, \code{strat}, \code{clust} or \code{strcl}.}
 
-\item{simtype}{(character) Whether this is a \code{type1} simulation or \code{power} simulation.}
+\item{simtype}{(character) Whether this is a \code{type1} simulation or \code{power}
+simulation.}
 
 \item{starting_seed}{(integer) The starting random seed.}
 

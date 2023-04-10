@@ -3,11 +3,14 @@ globalVariables(c("i"))
 #' Wrapper function for Type 1 and Power simulations
 #'
 #' @inheritParams txt_mod
-#' @param nsim (integer) The number of simulations to conduct
-#' @param samp_size (integer) The sample size for SRS simulations
+#' @param nsim (integer) The number of simulations to conduct.
+#' @param samp_size (integer) The exact sample size for SRS simulations or
+#'   stratified sampling; otherwise the *average* sample size for the other
+#'   complex sampling methods.
 #' @param samp (character) Choose the sampling method for the simulated data.
 #'   One of `srs`, `strat`, `clust` or `strcl`.
-#' @param simtype (character) Whether this is a `type1` simulation or `power` simulation.
+#' @param simtype (character) Whether this is a `type1` simulation or `power`
+#'   simulation.
 #' @param starting_seed (integer) The starting random seed.
 #' @param no.cores (integer) The number of cores to use for parallelisation.
 #'
@@ -32,13 +35,13 @@ globalVariables(c("i"))
 #'   }
 #' }
 #' }
-ligof_sims <- function(model.no = 1, nsim = 1000, samp_size = 100,
+ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
                        samp = c("srs", "strat", "clust", "strcl"),
                        simtype = c("type1", "power"), starting_seed = 4423,
                        no.cores = parallel::detectCores() - 2) {
 
   # Model setup
-  mod <- txt_mod(model.no)
+  mod <- txt_mod(model_no)
   simtype <- match.arg(simtype, c("type1", "power"))
   if (simtype == "type1") H1 <- FALSE
   if (simtype == "power") H1 <- TRUE
@@ -46,20 +49,25 @@ ligof_sims <- function(model.no = 1, nsim = 1000, samp_size = 100,
   the_wt <- NULL
   if (samp != "srs") {
     the_wt <- "wt"
-    pop <- make_population(model.no, seed = starting_seed, H1 = H1)
+    pop <- make_population(model_no, seed = starting_seed, H1 = H1)
   }
+  if (samp == "strat") npsu <- round(samp_size / 3, 0)
+  if (samp == "clust") npsu <- round(samp_size / 20, 0)
+  if (samp == "strcl") npsu <- round(samp_size / (15 + 20 + 25), 0)
 
   # Random seeds for replication
   set.seed(starting_seed)
-  the_seeds <- model.no * matrix(
+  the_seeds <- model_no * matrix(
     sample(seq_len(100 + nsim ^ 2), size = nsim * 4), ncol = 4
   )
 
-  #
+  # Initialise parallel stuff
   pb <- txtProgressBar(min = 0, max = nsim, style = 3)
   progress <- function(i) setTxtProgressBar(pb, i)
   cl <- makeCluster(no.cores)
   registerDoSNOW(cl)
+
+  start_time <- Sys.time()
 
   res <- foreach(
     i = 1:nsim, #.combine = bind_rows,
@@ -71,13 +79,14 @@ ligof_sims <- function(model.no = 1, nsim = 1000, samp_size = 100,
     if (samp == "srs") {
       # Simple random sampling -------------------------------------------------
       seed_used <- the_seeds[i, 1]
-      dat <- gen_data_bin(model.no, n = samp_size, seed = seed_used, H1 = H1)
+      dat <- gen_data_bin(model_no, n = samp_size, seed = seed_used, H1 = H1)
       svy <- NULL
     } else {
       if (samp == "strat") {
         # Stratified sampling --------------------------------------------------
         seed_used <- the_seeds[i, 2]
-        dat <- gen_data_bin_complex1(population = pop, seed = seed_used)
+        dat <- gen_data_bin_complex1(population = pop, seed = seed_used,
+                                     npsu = samp_size)
         svy <- svydesign(ids = ~ 1, strata = ~ type, weights = ~ wt, data = dat)
       }
       if (samp == "clust") {
@@ -100,8 +109,43 @@ ligof_sims <- function(model.no = 1, nsim = 1000, samp_size = 100,
     bind_cols(all_tests(fit, svy, sim = i), seed = seed_used)
   }
 
+  end_time <- Sys.time()
   close(pb)
   stopCluster(cl)
 
+  # Prepare output
+  class(res) <- "ligof_sims"
+  attr(res, "duration") <- difftime(end_time, start_time)
+  attr(res, "sim_settings") <- list(
+    model_no = model_no,
+    nsim = nsim,
+    samp_size = samp_size,
+    samp = samp,
+    simtype = simtype,
+    starting_seed = starting_seed,
+    no.cores = no.cores
+  )
   res
+}
+
+#' Print and summary methods for simulations
+#'
+#' @name ligof_sims.methods
+#'
+#' @param x,object The output from [ligof_sims()].
+#' @param ... Not used.
+#'
+#' @return To be described.
+NULL
+
+#' @rdname ligof_sims.methods
+#' @export
+print.ligof_sims <- function(x, ...) {
+   print(attr(x, "duration"))
+}
+
+#' @rdname ligof_sims.methods
+#' @export
+summary.ligof_sims <- function(object, ...) {
+  cat("Under construction...")
 }

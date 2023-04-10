@@ -5,12 +5,12 @@
 \alias{get_theoretical_uni_bi_moments}
 \title{Returns theoretical true values}
 \usage{
-get_true_values(model.no)
+get_true_values(model_no)
 
-get_theoretical_uni_bi_moments(model.no, collapse = FALSE)
+get_theoretical_uni_bi_moments(model_no, collapse = FALSE)
 }
 \arguments{
-\item{model.no}{(integer) Choose from 1--5. See details.}
+\item{model_no}{(integer) Choose from 1--5. See pkgdown articles for details.}
 
 \item{collapse}{(logical) Should a vector be returned instead of a list
 separating the univariate and bivariate quantities?}
@@ -20,7 +20,7 @@ A vector of true parameter values used for the simulations.
 }
 \description{
 \itemize{
-\item \code{get_true_values()} returns the true values of the freely estimated theta values in this order: \eqn{\lambda} (loadings), \eqn{\rho} (factor correlations), \eqn{\tau} (thresholds)
+\item \code{get_true_values()} returns the true values of the freely estimated theta values in this order: \eqn{\lambda} (loadings), \eqn{\rho} (factor correlations), \eqn{\tau} (thresholds).
 \item \code{get_theoretical_uni_bi_moments()} returns the univariate (\code{pidot1}) and bivariate (\code{pidot2}) theoretical probabilities of successes.
 }
 }

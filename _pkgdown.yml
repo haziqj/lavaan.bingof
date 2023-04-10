@@ -38,6 +38,7 @@ reference:
 - title: Simulation study
   contents:
   - ligof_sims
+  - ligof_sims.methods
 
 - title: Utility functions
   contents:
