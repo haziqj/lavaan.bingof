@@ -1,6 +1,10 @@
 ---
 title: "Introduction"
-output: bookdown::html_document2
+output:
+  bookdown::html_document2:
+    toc: yes
+    toc_depth: 2
+    number_sections: FALSE
 link-citations: yes
 pkgdown:
   as_is: true
@@ -29,13 +33,13 @@ The probability of success for each Bernoulli component $Y_i$ is denoted $\dot\p
 Consider a response pattern $\by = (y_1,\dots,y_p)^\top$, where each $y_i\in\{0,1\}$.
 The probability of observing such a response pattern is given by the joint distribution
 \begin{align*}
-\pi_{\by}
+\pi
 &= \Pr(\bY = \by)  = \Pr(Y_1=y_1,\dots,Y_p=y_p).
 \end{align*}
-Note that there are a total of $R=2^p$ possible joint probabilities corresponding to all possible two-way response patterns $\by$.
-When we consider a parametric model with parameter vector $\btheta\in\bbR^q$, we write $\pi_{\by}(\theta)$ to indicate each joint probability, and 
+Note that there are a total of $R=2^p$ possible joint probabilities $\pi_r$ corresponding to all possible two-way response patterns $\by_r$.
+When we consider a parametric model with parameter vector $\btheta\in\bbR^t$, we write $\pi_r(\btheta)$ to indicate each joint probability, and 
 \begin{equation}
-\bpi(\theta) = \begin{pmatrix}
+\bpi(\btheta) = \begin{pmatrix}
 \pimod{1} \\
 \vdots \\
 \pimod{R}  \\
@@ -46,49 +50,67 @@ for the vector of joint probabilities, with $\sum_{r=1}^R \pimod{r} =1$.
 
 # Model-based probabilities
 
-
-We generate a multivariate dichotomous variable $\by = (y_1,\dots,y_p)^\top \in \{0,1\}^p$ following a factor analysis model according to an underlying random variable framework.
-Suppose there exists some latent, continuous variable $y_i^*$, $i=1,\dots,p$, such that
-\begin{equation}\label{eq:factorreg}
-y_i = \begin{cases}
-1  & y_i^* > \tau_i \\
-0  & y_i^* \leq \tau_i.
+The model of interest is a factor model, commonly used in social statistics.
+Using an underlying variable (UV) approach, the observed binary responses $y_i$ are manifestations of some latent, continuous variables $Y_i^*$, $i=1,\dots,p$.
+The connection is made as follows:
+$$
+Y_i = \begin{cases}
+1 & Y_i^* > \tau_i \\
+0 & Y_i^* \leq \tau_i,
 \end{cases}
-\end{equation}
-The factor model assumes that
-\begin{equation}
-\myoverbrace{
-\begin{pmatrix}
-y_1^* \\
-\vdots \\
-y_p^*
-\end{pmatrix}}{\by^*}
-=
-\myoverbrace{
-\begin{pmatrix}
-\lambda_{11} &\cdots & \lambda_{1q} \\
-\vdots & \ddots & \vdots \\
-\lambda_{p1} &\cdots & \lambda_{pq} \\
-\end{pmatrix}}{\bLambda}
-\,
-\myoverbrace{
-\begin{pmatrix}
-\eta_1 \\
-\vdots \\
-\eta_q
-\end{pmatrix}}{\bfeta}
-+
-\myoverbrace{
-\begin{pmatrix}
-\epsilon_1 \\
-\vdots \\
-\epsilon_p
-\end{pmatrix}}{\bepsilon}
-\end{equation}
-with $\bfeta \sim \N_q(\bzero,\bPsi)$ where $\bPsi$ is a correlation matrix, and $\bepsilon\sim \N_p(\bzero,\bTheta_\epsilon)$ where $\bTheta_\epsilon = \bI - \diag(\bLambda\bPsi\bLambda^\top)$.
-These two assumptions combine to imply that $\by^* \sim \N_p(\bzero, \Sigmaystar)$, where
-\begin{equation}
-\Sigmaystar = \bLambda\bPhi\bLambda^\top + \bTheta_\epsilon.
-\end{equation}
-Note that marginally the underlying variables are standard normal but that they are correlated across items.
+$$
+where $\tau_i$ is the threshold associated with the variable $Y_i^*$.
+For convenience, $Y_i^*$ is taken to be standard normal random variables^[For parameter identifiability, the location and scale of the normal distribution have to be fixed if the thresholds are to be estimated.].
+The factor model takes the form
+$$
+\mathbf Y^* = \mathbf \Lambda\boldsymbol \eta + \boldsymbol \epsilon,
+$$
+where each component is explained below:
 
+- $\mathbf Y^* = (Y_1^*,\dots,Y_p^*)^\top \in \mathbf R^p$ are the underlying variables;
+
+- $\boldsymbol\Lambda \in \mathbf R^{p \times q}$ is the matrix of loadings;
+
+- $\boldsymbol \eta = (\eta_1,\dots,\eta_q)^\top \in \mathbf R^q$ is the vector of latent factors;
+
+- $\boldsymbol \epsilon \in \mathbf R^p$ are the error terms associated with the items (aka unique variables).
+
+We also make some distributional assumptions, namely
+
+1. $\boldsymbol\eta \sim \operatorname{N}_q(\mathbf 0, \boldsymbol\Psi)$, where $\Psi$ is a correlation matrix, i.e. for $k,l\in\{1,\dots,q\}$,
+$$
+\Psi_{kl} = \begin{cases}
+1 & \text{if }  k = l \\
+\rho(\eta_k, \eta_l) & \text{if } k \neq l.
+\end{cases}
+$$
+
+2. $\boldsymbol \epsilon \sim \operatorname{N}_p(\mathbf 0, \boldsymbol\Theta_\epsilon)$, with $\boldsymbol\Theta_\epsilon = \mathbf I - \operatorname{diag}(\boldsymbol\Lambda \boldsymbol\Psi \boldsymbol\Lambda^\top)$.
+
+These two assumptions, together with $\operatorname{Cov}(\boldsymbol\eta, \boldsymbol\epsilon) = 0$, implies that $\mathbf Y^*\sim\operatorname{N}_p(\mathbf 0,\Sigmaystar)$, where
+\begin{align}
+\Sigmaystar
+= \operatorname{Var}(\mathbf Y^*) 
+&= \boldsymbol\Lambda\boldsymbol\Phi\boldsymbol\Lambda^\top + \boldsymbol\Theta_\epsilon \\
+&= \mathbf I + (\boldsymbol\Lambda\boldsymbol\Phi\boldsymbol\Lambda^\top - \operatorname{diag}\big(\boldsymbol\Lambda \boldsymbol\Phi \boldsymbol\Lambda^\top)\big).
+\end{align}
+<!-- Evidently, -->
+<!-- $$ -->
+<!-- \operatorname{Cor}(y_i^*, y_{i'}^*) = \sum_{k,l=1}^q \lambda_{ik}\lambda_{i'l} (1 + \rho(z_k,z_l)). -->
+<!-- $$ -->
+The parameter vector for this factor model is denoted $\boldsymbol\theta^\top = (\boldsymbol\lambda, \boldsymbol\phi, \boldsymbol\tau)$, where it contains the vectors of the free non-redundant parameters in $\boldsymbol\Lambda$ and $\boldsymbol \Psi$ respectively, as well as the vector of all free thresholds.
+
+Under this factor model, the probability of response pattern $\mathbf y_r$ is
+\begin{align}
+\pi_r(\mathbf\theta) 
+&= \Pr(\mathbf Y = \mathbf y_r \mid \boldsymbol\theta) \\
+&= \idotsint_A f_p(\mathbf y^* \mid \mathbf 0, \boldsymbol\Sigma_{\mathbf y^*} ) \, \text{d}\mathbf y^*
+\end{align}
+where $f_p(\cdot \mid \boldsymbol\mu,\boldsymbol\Sigma)$ is the density function of the $p$-dimensional normal distribution with mean $\boldsymbol\mu$ and variance $\boldsymbol\Sigma$.
+This integral is evaluated on the set
+$$
+A = \{ \mathbf Y^* \in \mathbb R^p \mid Y_1=y_1,\dots,Y_p=y_p \}.
+$$
+
+
+# Parameter estimation
