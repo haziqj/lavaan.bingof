@@ -538,3 +538,19 @@ ggcorrplot(Sigma3, type = "lower", outline.col = "white",
 ```
 
 ## {-}
+
+# New header
+
+### Fading tabset {.tabset .tabset-fade}
+
+#### English
+
+Hello!
+
+#### French
+
+Bonjour!
+
+#### German
+
+Guten tag.
