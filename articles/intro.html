@@ -93,70 +93,87 @@ The probability of success for each Bernoulli component <span class="math inline
 Consider a response pattern <span class="math inline">\({\mathbf y}= (y_1,\dots,y_p)^\top\)</span>, where each <span class="math inline">\(y_i\in\{0,1\}\)</span>.
 The probability of observing such a response pattern is given by the joint distribution
 <span class="math display">\[\begin{align*}
-\pi_{{\mathbf y}}
+\pi
 &amp;= \Pr({\mathbf Y}= {\mathbf y})  = \Pr(Y_1=y_1,\dots,Y_p=y_p).
 \end{align*}\]</span>
-Note that there are a total of <span class="math inline">\(R=2^p\)</span> possible joint probabilities corresponding to all possible two-way response patterns <span class="math inline">\({\mathbf y}\)</span>.
-When we consider a parametric model with parameter vector <span class="math inline">\({\boldsymbol\theta}\in\mathbb{R}^q\)</span>, we write <span class="math inline">\(\pi_{{\mathbf y}}(\theta)\)</span> to indicate each joint probability, and
+Note that there are a total of <span class="math inline">\(R=2^p\)</span> possible joint probabilities <span class="math inline">\(\pi_r\)</span> corresponding to all possible two-way response patterns <span class="math inline">\({\mathbf y}_r\)</span>.
+When we consider a parametric model with parameter vector <span class="math inline">\({\boldsymbol\theta}\in\mathbb{R}^t\)</span>, we write <span class="math inline">\(\pi_r({\boldsymbol\theta})\)</span> to indicate each joint probability, and
 <span class="math display" id="eq:jointprob">\[\begin{equation}
-{\boldsymbol\pi}(\theta) = \begin{pmatrix}
+{\boldsymbol\pi}({\boldsymbol\theta}) = \begin{pmatrix}
 \pi_{1}({\boldsymbol\theta}) \\
 \vdots \\
 \pi_{R}({\boldsymbol\theta})  \\
 \end{pmatrix} \in [0,1]^R
-\tag{0.1}
+\tag{1}
 \end{equation}\]</span>
 for the vector of joint probabilities, with <span class="math inline">\(\sum_{r=1}^R \pi_{r}({\boldsymbol\theta}) =1\)</span>.</p>
-<div class="section level2" number="1">
-<h2 id="model-based-probabilities">
-<span class="header-section-number">1</span> Model-based probabilities<a class="anchor" aria-label="anchor" href="#model-based-probabilities"></a>
+<div class="section level2">
+<h2 id="model-based-probabilities">Model-based probabilities<a class="anchor" aria-label="anchor" href="#model-based-probabilities"></a>
 </h2>
-<p>We generate a multivariate dichotomous variable <span class="math inline">\({\mathbf y}= (y_1,\dots,y_p)^\top \in \{0,1\}^p\)</span> following a factor analysis model according to an underlying random variable framework.
-Suppose there exists some latent, continuous variable <span class="math inline">\(y_i^*\)</span>, <span class="math inline">\(i=1,\dots,p\)</span>, such that
-<span class="math display">\[\begin{equation}\label{eq:factorreg}
-y_i = \begin{cases}
-1  &amp; y_i^* &gt; \tau_i \\
-0  &amp; y_i^* \leq \tau_i.
+<p>The model of interest is a factor model, commonly used in social statistics.
+Using an underlying variable (UV) approach, the observed binary responses <span class="math inline">\(y_i\)</span> are manifestations of some latent, continuous variables <span class="math inline">\(Y_i^*\)</span>, <span class="math inline">\(i=1,\dots,p\)</span>.
+The connection is made as follows:
+<span class="math display">\[
+Y_i = \begin{cases}
+1 &amp; Y_i^* &gt; \tau_i \\
+0 &amp; Y_i^* \leq \tau_i,
 \end{cases}
-\end{equation}\]</span>
-The factor model assumes that
-<span class="math display">\[\begin{equation}
-\myoverbrace{
-\begin{pmatrix}
-y_1^* \\
-\vdots \\
-y_p^*
-\end{pmatrix}}{{\mathbf y}^*}
-=
-\myoverbrace{
-\begin{pmatrix}
-\lambda_{11} &amp;\cdots &amp; \lambda_{1q} \\
-\vdots &amp; \ddots &amp; \vdots \\
-\lambda_{p1} &amp;\cdots &amp; \lambda_{pq} \\
-\end{pmatrix}}{{\boldsymbol\Lambda}}
-\,
-\myoverbrace{
-\begin{pmatrix}
-\eta_1 \\
-\vdots \\
-\eta_q
-\end{pmatrix}}{{\boldsymbol\eta}}
-+
-\myoverbrace{
-\begin{pmatrix}
-\epsilon_1 \\
-\vdots \\
-\epsilon_p
-\end{pmatrix}}{{\boldsymbol\epsilon}}
-\end{equation}\]</span>
-with <span class="math inline">\({\boldsymbol\eta}\sim \mathop{\mathrm{N}}_q({\mathbf 0},{\boldsymbol\Psi})\)</span> where <span class="math inline">\({\boldsymbol\Psi}\)</span> is a correlation matrix, and <span class="math inline">\({\boldsymbol\epsilon}\sim \mathop{\mathrm{N}}_p({\mathbf 0},{\boldsymbol\Theta}_\epsilon)\)</span> where <span class="math inline">\({\boldsymbol\Theta}_\epsilon = {\mathbf I}- \mathop{\mathrm{diag}}({\boldsymbol\Lambda}{\boldsymbol\Psi}{\boldsymbol\Lambda}^\top)\)</span>.
-These two assumptions combine to imply that <span class="math inline">\({\mathbf y}^* \sim \mathop{\mathrm{N}}_p({\mathbf 0}, {\boldsymbol\Sigma}_{{\mathbf y}^*})\)</span>, where
-<span class="math display">\[\begin{equation}
-{\boldsymbol\Sigma}_{{\mathbf y}^*}= {\boldsymbol\Lambda}{\boldsymbol\Phi}{\boldsymbol\Lambda}^\top + {\boldsymbol\Theta}_\epsilon.
-\end{equation}\]</span>
-Note that marginally the underlying variables are standard normal but that they are correlated across items.</p>
+\]</span>
+where <span class="math inline">\(\tau_i\)</span> is the threshold associated with the variable <span class="math inline">\(Y_i^*\)</span>.
+For convenience, <span class="math inline">\(Y_i^*\)</span> is taken to be standard normal random variables<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;For parameter identifiability, the location and scale of the normal distribution have to be fixed if the thresholds are to be estimated.&lt;/p&gt;"><sup>1</sup></a>.
+The factor model takes the form
+<span class="math display">\[
+\mathbf Y^* = \mathbf \Lambda\boldsymbol \eta + \boldsymbol \epsilon,
+\]</span>
+where each component is explained below:</p>
+<ul>
+<li><p><span class="math inline">\(\mathbf Y^* = (Y_1^*,\dots,Y_p^*)^\top \in \mathbf R^p\)</span> are the underlying variables;</p></li>
+<li><p><span class="math inline">\(\boldsymbol\Lambda \in \mathbf R^{p \times q}\)</span> is the matrix of loadings;</p></li>
+<li><p><span class="math inline">\(\boldsymbol \eta = (\eta_1,\dots,\eta_q)^\top \in \mathbf R^q\)</span> is the vector of latent factors;</p></li>
+<li><p><span class="math inline">\(\boldsymbol \epsilon \in \mathbf R^p\)</span> are the error terms associated with the items (aka unique variables).</p></li>
+</ul>
+<p>We also make some distributional assumptions, namely</p>
+<ol style="list-style-type: decimal">
+<li><p><span class="math inline">\(\boldsymbol\eta \sim \operatorname{N}_q(\mathbf 0, \boldsymbol\Psi)\)</span>, where <span class="math inline">\(\Psi\)</span> is a correlation matrix, i.e. for <span class="math inline">\(k,l\in\{1,\dots,q\}\)</span>,
+<span class="math display">\[
+\Psi_{kl} = \begin{cases}
+1 &amp; \text{if }  k = l \\
+\rho(\eta_k, \eta_l) &amp; \text{if } k \neq l.
+\end{cases}
+\]</span></p></li>
+<li><p><span class="math inline">\(\boldsymbol \epsilon \sim \operatorname{N}_p(\mathbf 0, \boldsymbol\Theta_\epsilon)\)</span>, with <span class="math inline">\(\boldsymbol\Theta_\epsilon = \mathbf I - \operatorname{diag}(\boldsymbol\Lambda \boldsymbol\Psi \boldsymbol\Lambda^\top)\)</span>.</p></li>
+</ol>
+<p>These two assumptions, together with <span class="math inline">\(\operatorname{Cov}(\boldsymbol\eta, \boldsymbol\epsilon) = 0\)</span>, implies that <span class="math inline">\(\mathbf Y^*\sim\operatorname{N}_p(\mathbf 0,{\boldsymbol\Sigma}_{{\mathbf y}^*})\)</span>, where
+<span class="math display">\[\begin{align}
+{\boldsymbol\Sigma}_{{\mathbf y}^*}
+= \operatorname{Var}(\mathbf Y^*)
+&amp;= \boldsymbol\Lambda\boldsymbol\Phi\boldsymbol\Lambda^\top + \boldsymbol\Theta_\epsilon \\
+&amp;= \mathbf I + (\boldsymbol\Lambda\boldsymbol\Phi\boldsymbol\Lambda^\top - \operatorname{diag}\big(\boldsymbol\Lambda \boldsymbol\Phi \boldsymbol\Lambda^\top)\big).
+\end{align}\]</span>
+<!-- Evidently, -->
+<!-- $$ -->
+<!-- \operatorname{Cor}(y_i^*, y_{i'}^*) = \sum_{k,l=1}^q \lambda_{ik}\lambda_{i'l} (1 + \rho(z_k,z_l)). -->
+<!-- $$ -->
+The parameter vector for this factor model is denoted <span class="math inline">\(\boldsymbol\theta^\top = (\boldsymbol\lambda, \boldsymbol\phi, \boldsymbol\tau)\)</span>, where it contains the vectors of the free non-redundant parameters in <span class="math inline">\(\boldsymbol\Lambda\)</span> and <span class="math inline">\(\boldsymbol \Psi\)</span> respectively, as well as the vector of all free thresholds.</p>
+<p>Under this factor model, the probability of response pattern <span class="math inline">\(\mathbf y_r\)</span> is
+<span class="math display">\[\begin{align}
+\pi_r(\mathbf\theta)
+&amp;= \Pr(\mathbf Y = \mathbf y_r \mid \boldsymbol\theta) \\
+&amp;= \idotsint_A f_p(\mathbf y^* \mid \mathbf 0, \boldsymbol\Sigma_{\mathbf y^*} ) \, \text{d}\mathbf y^*
+\end{align}\]</span>
+where <span class="math inline">\(f_p(\cdot \mid \boldsymbol\mu,\boldsymbol\Sigma)\)</span> is the density function of the <span class="math inline">\(p\)</span>-dimensional normal distribution with mean <span class="math inline">\(\boldsymbol\mu\)</span> and variance <span class="math inline">\(\boldsymbol\Sigma\)</span>.
+This integral is evaluated on the set
+<span class="math display">\[
+A = \{ \mathbf Y^* \in \mathbb R^p \mid Y_1=y_1,\dots,Y_p=y_p \}.
+\]</span></p>
 </div>
-  </main>
+<div class="section level2">
+<h2 id="parameter-estimation">Parameter estimation<a class="anchor" aria-label="anchor" href="#parameter-estimation"></a>
+</h2>
+</div>
+
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
