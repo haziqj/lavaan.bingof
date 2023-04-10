@@ -1,5 +1,37 @@
 globalVariables(c("i"))
 
+#' Wrapper function for Type 1 and Power simulations
+#'
+#' @inheritParams txt_mod
+#' @param nsim (integer) The number of simulations to conduct
+#' @param samp_size (integer) The sample size for SRS simulations
+#' @param samp (character) Choose the sampling method for the simulated data.
+#'   One of `srs`, `strat`, `clust` or `strcl`.
+#' @param simtype (character) Whether this is a `type1` simulation or `power` simulation.
+#' @param starting_seed (integer) The starting random seed.
+#' @param no.cores (integer) The number of cores to use for parallelisation.
+#'
+#' @return A list of [tibble()]s with the output from [all_tests()].
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' # To run the SRS Type 1 simulations
+#' analysis_path <- dirname(rstudioapi::getSourceEditorContext()$path)
+#' sim_type <- "type1"
+#' for (the_samp_size in c(100, 250, 500, 1000, 2000, 3000)) {
+#'   for (mod_no in 1:5) {
+#'     sim_name <- paste0("srs", mod_no, "_n", the_samp_size, "_", sim_type)
+#'     cat("[", as.character(Sys.time()), "]", "Now running simulation",
+#'         sim_name, "\n")
+#'     sim <- ligof_sims(mod_no, samp_size = the_samp_size,
+#'                       samp = "srs", simtype = sim_type)
+#'     list2env(setNames(list(sim), sim_name), envir = .GlobalEnv) %>% invisible
+#'     save(list = sim_name, file = paste0(analysis_path, "/Rsave/",
+#'                                         sim_name, ".RData"))
+#'   }
+#' }
+#' }
 ligof_sims <- function(model.no = 1, nsim = 1000, samp_size = 100,
                        samp = c("srs", "strat", "clust", "strcl"),
                        simtype = c("type1", "power"), starting_seed = 4423,
