@@ -137,6 +137,19 @@ When we consider a parametric model with parameter vector <span class="math inli
 \end{equation}\]</span>
 for the vector of joint probabilities, with <span class="math inline">\(\sum_{r=1}^R \pi_{r}({\boldsymbol\theta}) =1\)</span>.</p>
 <div class="section level2">
+<h2 id="motivation">Motivation<a class="anchor" aria-label="anchor" href="#motivation"></a>
+</h2>
+<ul>
+<li><p>Model-based probabilities e.g. factor models.</p></li>
+<li><p>How can we ensure that the model is a good fit to the data? Usual (Pearson) chi-square test or the likelihood ratio <span class="math inline">\(G\)</span> test.</p></li>
+<li><p>Problem is, it breaks down when number of items is large, because the number of categories grows exponentially. A lot of these categories will end up being empty, and the above tests depends on a local CLT convergence in each category, which is not achieved. This is the problem of sparsity. Illustrate with a plot of observed vs expected reponse pattern probabilities.</p></li>
+<li><p>Solution: Consider lower order marginals instead: Consider how well the model fits the univariate and bivariate marginal positive probabilities. These are called limited information tests.</p></li>
+<li><p>When <span class="math inline">\(p\)</span> is large, then possibly ML methods also struggle computationally. We explore LIGOF tests under a composite likelihood estimation, which provides a computational advantage. Furthermore, the LIGOF tests can be built organically from the quantities used in the PL estimation framework.</p></li>
+<li><p>Contributions: theory of the test statistics derivation, incl. its distribution. We ran type I and power simulations on various sample sizes. We also extend the results from independent sampling to complex sampling designs, where the estimates and test statistics are weight-adjusted.</p></li>
+<li><p>Conclusions…</p></li>
+</ul>
+</div>
+<div class="section level2">
 <h2 id="model-based-probabilities">Model-based probabilities<a class="anchor" aria-label="anchor" href="#model-based-probabilities"></a>
 </h2>
 <p>The model of interest is a factor model, commonly used in social statistics.
@@ -221,23 +234,23 @@ and the log-likelihood for <span class="math inline">\({\boldsymbol\theta}\)</sp
 <p>The maximum likelihood estimator <span class="math inline">\(\hat{\boldsymbol\theta}_{\text{ML}}\)</span> satisfies <span class="math inline">\(\hat{\boldsymbol\theta}_{\text{ML}}= \mathop{\mathrm{argmax}}_{{\boldsymbol\theta}} \ell({\boldsymbol\theta})\)</span>.
 Maximum likelihood theory tells us that, under certain regularity conditions, as <span class="math inline">\(n\to\infty\)</span>,
 <span class="math display">\[\begin{equation}\label{eq:limitdisttheta}
-\sqrt n (\hat{\boldsymbol\theta}- {\boldsymbol\theta}) \xrightarrow{\text D} \mathop{\mathrm{N}}\big(0, {\mathcal I}_1({\boldsymbol\theta})\big),
+\sqrt n (\hat{\boldsymbol\theta}- {\boldsymbol\theta}) \xrightarrow{\text D} {\mathop{\mathrm{N}}}_m\big({\mathbf 0}, {\mathcal I}_1({\boldsymbol\theta})^{-1}\big),
 \end{equation}\]</span>
-where <span class="math inline">\({\mathcal I}_1({\boldsymbol\theta}) \in \mathbb{R}^{m\times m}\)</span> is the <em>unit Fisher information matrix</em>.
+where <span class="math inline">\(\mathbb{R}^{m\times m} \ni {\mathcal I}_1({\boldsymbol\theta}) = -\mathop{\mathrm{E}}\nabla^2 \ell({\boldsymbol\theta})\)</span> is the <em>(unit) expected Fisher information matrix</em>.
 It can be further shown that <span class="math inline">\({\mathcal I}_1({\boldsymbol\theta}) = {\boldsymbol\Delta}^\top {\mathbf D}^{-1} {\boldsymbol\Delta}\)</span>, where</p>
 <ul>
 <li>
-<span class="math inline">\({\boldsymbol\Delta}_{r,k} = \frac{\partial\pi_r({\boldsymbol\theta})}{\partial\theta_k}\)</span>, <span class="math inline">\(r=1,\dots,R\)</span>, <span class="math inline">\(k=1,\dots,t\)</span>; and</li>
+<span class="math inline">\({\boldsymbol\Delta}_{r,k} = \frac{\partial\pi_r({\boldsymbol\theta})}{\partial\theta_k}\)</span>, <span class="math inline">\(r=1,\dots,R\)</span>, <span class="math inline">\(k=1,\dots,m\)</span>; and</li>
 <li>
 <span class="math inline">\({\mathbf D}= \mathop{\mathrm{diag}}({\boldsymbol\pi}({\boldsymbol\theta}))\)</span>.</li>
 </ul>
-<p>Furthermore, the maximum likelihood estimators are a class of <em>best asymptotically normal</em> (BAN) estimators <span class="math inline">\(\hat{\boldsymbol\theta}\)</span> of <span class="math inline">\({\boldsymbol\theta}\)</span> that satisfy
+<p>The maximum likelihood estimators are a class of <em>best asymptotically normal</em> (BAN) estimators <span class="math inline">\(\hat{\boldsymbol\theta}\)</span> of <span class="math inline">\({\boldsymbol\theta}\)</span> that satisfy
 <span class="math display" id="eq:ban">\[\begin{equation}
 \sqrt n (\hat{\boldsymbol\theta}- {\boldsymbol\theta}) = \sqrt n \, {\mathbf B}\big({\mathbf p}- {\boldsymbol\pi}({\boldsymbol\theta})\big) + o(1)
 \tag{2}
 \end{equation}\]</span>
 for some <span class="math inline">\(m\times R\)</span> matrix <span class="math inline">\({\mathbf B}\)</span>.
-In the specific case of maximum likelihood estimators, we can derive <span class="math inline">\({\mathbf B}\)</span> to be <span class="math inline">\({\mathbf B}= {\mathcal I}^{-1} {\boldsymbol\Delta}^\top {\mathbf D}^{-1}\)</span>.
+In the specific case of maximum likelihood estimation, we can derive <span class="math inline">\({\mathbf B}\)</span> to be <span class="math inline">\({\mathbf B}= {\mathcal I}^{-1} {\boldsymbol\Delta}^\top {\mathbf D}^{-1}\)</span>.
 This is proven in the corresponding article (see XXX for more details).</p>
 <div class="section level3">
 <h3 id="pairwise-likelihood-estimation">Pairwise likelihood estimation<a class="anchor" aria-label="anchor" href="#pairwise-likelihood-estimation"></a>
@@ -261,7 +274,7 @@ There are a total of <span class="math inline">\(\tilde R = 4 \times {p \choose 
 <p>The <em>pairwise maximum likelihood estimator</em> <span class="math inline">\(\hat{\boldsymbol\theta}_{\text{PL}}\)</span> satisfies <span class="math inline">\(\hat{\boldsymbol\theta}_{\text{PL}}= \mathop{\mathrm{argmax}}_{{\boldsymbol\theta}} \operatorname{\ell_P}({\boldsymbol\theta})\)</span>.
 Under certain regularity conditions,
 <span class="math display">\[\begin{equation}
-\sqrt N (\hat{\boldsymbol\theta}_{\text{PL}}- {\boldsymbol\theta}) \xrightarrow{D} {\mathop{\mathrm{N}}}_t\big({\mathbf 0}, {\mathcal H}({\boldsymbol\theta}){\mathcal J}({\boldsymbol\theta})^{-1}{\mathcal H}({\boldsymbol\theta})\big),
+\sqrt N (\hat{\boldsymbol\theta}_{\text{PL}}- {\boldsymbol\theta}) \xrightarrow{D} {\mathop{\mathrm{N}}}_m\big({\mathbf 0}, {\mathcal H}({\boldsymbol\theta}){\mathcal J}({\boldsymbol\theta})^{-1}{\mathcal H}({\boldsymbol\theta})\big),
 \end{equation}\]</span>
 where</p>
 <ul>
@@ -270,7 +283,7 @@ where</p>
 <li>
 <span class="math inline">\({\mathcal J}({\boldsymbol\theta})=\mathop{\mathrm{Var}}\big(\sqrt N \nabla\operatorname{\ell_P}({\boldsymbol\theta})\big)\)</span> is the <em>variability matrix</em>.</li>
 </ul>
-<p>We can also show that the pairwise maximum likelihood estimator satisfies <a href="#eq:ban">(2)</a>, where the matrix <span class="math inline">\({\mathbf B}\)</span> in this case would be <span class="math inline">\({\mathbf B}= {\mathcal H}^{-1}\tilde{\boldsymbol\Delta}^{-1}\tilde {\mathbf D}^{-1} {\mathbf G}\)</span>, where</p>
+<p>We can also show that the pairwise maximum likelihood estimator satisfies <a href="#eq:ban">(2)</a>, where the matrix <span class="math inline">\({\mathbf B}\)</span> in this case would be <span class="math inline">\({\mathbf B}= {\mathcal H}^{-1}\tilde{\boldsymbol\Delta}^{-1}\tilde {\mathbf D}^{-1} {\mathbf G}\)</span>, with</p>
 <ul>
 <li>
 <span class="math inline">\(\tilde{\boldsymbol\Delta}\in \mathbb{R}^{\tilde R \times m}\)</span> consists of partial derivatives of the pairwise probabilities, i.e. <span class="math inline">\(\frac{\partial\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})}{\partial\theta_k}\)</span>;</li>
@@ -461,7 +474,7 @@ For this purpose, we use the sample versions of the relevant quantities, mostly 
 </ul>
 <p>Finally, theory informs us that all of these test statistics are distributed according to a chi square distribution.
 However, for some of these tests, the degrees of freedom has to be estimated and may not be known a priori.
-There are two methods that we consider: 1) A Rao-Scott type adjustment <span class="citation">(<a href="#ref-rao1979chi" role="doc-biblioref">J. Rao and Scott 1979</a>; <a href="#ref-rao1981analysis" role="doc-biblioref">J. N. Rao and Scott 1981</a>; <a href="#ref-rao1984chi" role="doc-biblioref">J. N. Rao and Scott 1984</a>)</span>; and 2) a moment matching procedure <span class="citation">(<a href="#ref-bartholomew2002goodness" role="doc-biblioref">Bartholomew and Leung 2002</a>)</span>.
+There are two methods that we consider: 1) A Rao-Scott type adjustment <span class="citation">(<a href="#ref-rao1979chi" role="doc-biblioref">Rao and Scott 1979</a>; <a href="#ref-rao1981analysis" role="doc-biblioref">Rao and Scott 1981</a>; <a href="#ref-rao1984chi" role="doc-biblioref">Rao and Scott 1984</a>)</span>; and 2) a moment matching procedure <span class="citation">(<a href="#ref-bartholomew2002goodness" role="doc-biblioref">Bartholomew and Leung 2002</a>)</span>.
 While in theory each test may be subjected to either a Rao-Scott type adjustment or a moment matching procedure, we only consider the Rao-Scott adjustment for the Pearson test.</p>
 </div>
 </div>
@@ -482,13 +495,13 @@ Fuller, Wayne A. 2009. <em>Introduction to Statistical Time Series</em>. John Wi
 Maydeu-Olivares, Albert, and Harry Joe. 2005. <span>“Limited-and Full-Information Estimation and Goodness-of-Fit Testing in 2 n Contingency Tables: A Unified Framework.”</span> <em>Journal of the American Statistical Association</em> 100 (471): 1009–20.
 </div>
 <div id="ref-rao1979chi" class="csl-entry">
-Rao, JNK, and AJ Scott. 1979. <span>“Chi-Squared Tests for Analysis of Categorical Data from Complex Surveys.”</span> In <em>Proceedings of the American Statistical Association, Section on Survey Research Methods</em>, 58–66.
+Rao, Jon N K, and AJ Scott. 1979. <span>“Chi-Squared Tests for Analysis of Categorical Data from Complex Surveys.”</span> In <em>Proceedings of the American Statistical Association, Section on Survey Research Methods</em>, 58–66.
 </div>
 <div id="ref-rao1981analysis" class="csl-entry">
-Rao, Jon NK, and Alastair J Scott. 1981. <span>“The Analysis of Categorical Data from Complex Sample Surveys: Chi-Squared Tests for Goodness of Fit and Independence in Two-Way Tables.”</span> <em>Journal of the American Statistical Association</em> 76 (374): 221–30.
+Rao, Jon N K, and Alastair J Scott. 1981. <span>“The Analysis of Categorical Data from Complex Sample Surveys: Chi-Squared Tests for Goodness of Fit and Independence in Two-Way Tables.”</span> <em>Journal of the American Statistical Association</em> 76 (374): 221–30.
 </div>
 <div id="ref-rao1984chi" class="csl-entry">
-Rao, Jon NK, and Alistair J Scott. 1984. <span>“On Chi-Squared Tests for Multiway Contingency Tables with Cell Proportions Estimated from Survey Data.”</span> <em>The Annals of Statistics</em>, 46–60.
+Rao, Jon N K, and Alistair J Scott. 1984. <span>“On Chi-Squared Tests for Multiway Contingency Tables with Cell Proportions Estimated from Survey Data.”</span> <em>The Annals of Statistics</em>, 46–60.
 </div>
 </div>
 </div>
