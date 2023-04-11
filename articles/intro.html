@@ -126,7 +126,7 @@ The probability of observing such a response pattern is given by the joint distr
 &amp;= \Pr({\mathbf Y}= {\mathbf y})  = \Pr(Y_1=y_1,\dots,Y_p=y_p).
 \end{align*}\]</span>
 Note that there are a total of <span class="math inline">\(R=2^p\)</span> possible joint probabilities <span class="math inline">\(\pi_r\)</span> corresponding to all possible two-way response patterns <span class="math inline">\({\mathbf y}_r\)</span>.
-When we consider a parametric model with parameter vector <span class="math inline">\({\boldsymbol\theta}\in\mathbb{R}^t\)</span>, we write <span class="math inline">\(\pi_r({\boldsymbol\theta})\)</span> to indicate each joint probability, and
+When we consider a parametric model with parameter vector <span class="math inline">\({\boldsymbol\theta}\in\mathbb{R}^m\)</span>, we write <span class="math inline">\(\pi_r({\boldsymbol\theta})\)</span> to indicate each joint probability, and
 <span class="math display" id="eq:jointprob">\[\begin{equation}
 {\boldsymbol\pi}({\boldsymbol\theta}) = \begin{pmatrix}
 \pi_{1}({\boldsymbol\theta}) \\
@@ -163,9 +163,9 @@ where each component is explained below:</p>
 </ul>
 <p>We also make some distributional assumptions, namely</p>
 <ol style="list-style-type: decimal">
-<li><p><span class="math inline">\(\boldsymbol\eta \sim \operatorname{N}_q(\mathbf 0, \boldsymbol\Psi)\)</span>, where <span class="math inline">\(\Psi\)</span> is a correlation matrix, i.e. for <span class="math inline">\(k,l\in\{1,\dots,q\}\)</span>,
+<li><p><span class="math inline">\(\boldsymbol\eta \sim \operatorname{N}_q(\mathbf 0, \boldsymbol\Psi)\)</span>, where <span class="math inline">\({\boldsymbol\Psi}\)</span> is a correlation matrix, i.e. for <span class="math inline">\(k,l\in\{1,\dots,q\}\)</span>,
 <span class="math display">\[
-\Psi_{kl} = \begin{cases}
+{\boldsymbol\Psi}_{kl} = \begin{cases}
 1 &amp; \text{if }  k = l \\
 \rho(\eta_k, \eta_l) &amp; \text{if } k \neq l.
 \end{cases}
@@ -183,14 +183,14 @@ where each component is explained below:</p>
 <!-- $$ -->
 <!-- \operatorname{Cor}(y_i^*, y_{i'}^*) = \sum_{k,l=1}^q \lambda_{ik}\lambda_{i'l} (1 + \rho(z_k,z_l)). -->
 <!-- $$ -->
-The parameter vector for this factor model is denoted <span class="math inline">\(\boldsymbol\theta^\top = (\boldsymbol\lambda, \boldsymbol\phi, \boldsymbol\tau)\)</span>, where it contains the vectors of the free non-redundant parameters in <span class="math inline">\(\boldsymbol\Lambda\)</span> and <span class="math inline">\(\boldsymbol \Psi\)</span> respectively, as well as the vector of all free thresholds.</p>
+The parameter vector for this factor model is denoted <span class="math inline">\(\boldsymbol\theta^\top = (\boldsymbol\lambda, \boldsymbol\psi, \boldsymbol\tau) \in\mathbb{R}^m\)</span>, where it contains the vectors of the free non-redundant parameters in <span class="math inline">\(\boldsymbol\Lambda\)</span> and <span class="math inline">\(\boldsymbol \Psi\)</span> respectively, as well as the vector of all free thresholds.</p>
 <p>Under this factor model, the probability of response pattern <span class="math inline">\(\mathbf y_r\)</span> is
 <span class="math display">\[\begin{align}
-\pi_r(\mathbf\theta)
+\pi_{r}({\boldsymbol\theta})
 &amp;= \Pr(\mathbf Y = \mathbf y_r \mid \boldsymbol\theta) \\
-&amp;= \idotsint_A f_p(\mathbf y^* \mid \mathbf 0, \boldsymbol\Sigma_{\mathbf y^*} ) \, \text{d}\mathbf y^*
+&amp;= \idotsint_A \phi_p(\mathbf y^* \mid \mathbf 0, \boldsymbol\Sigma_{\mathbf y^*} ) \, \text{d}\mathbf y^*
 \end{align}\]</span>
-where <span class="math inline">\(f_p(\cdot \mid \boldsymbol\mu,\boldsymbol\Sigma)\)</span> is the density function of the <span class="math inline">\(p\)</span>-dimensional normal distribution with mean <span class="math inline">\(\boldsymbol\mu\)</span> and variance <span class="math inline">\(\boldsymbol\Sigma\)</span>.
+where <span class="math inline">\(\phi_p(\cdot \mid \boldsymbol\mu,\boldsymbol\Sigma)\)</span> is the density function of the <span class="math inline">\(p\)</span>-dimensional normal distribution with mean <span class="math inline">\(\boldsymbol\mu\)</span> and variance <span class="math inline">\(\boldsymbol\Sigma\)</span>.
 This integral is evaluated on the set
 <span class="math display">\[
 A = \{ \mathbf Y^* \in \mathbb R^p \mid Y_1=y_1,\dots,Y_p=y_p \}.
@@ -202,13 +202,14 @@ A = \{ \mathbf Y^* \in \mathbb R^p \mid Y_1=y_1,\dots,Y_p=y_p \}.
 <p>Suppose that <span class="math inline">\(h=1,\dots,n\)</span> observations of <span class="math inline">\({\mathbf Y}={\mathbf y}^{(h)}\)</span> are obtained.
 For the purpose of generalising from independent samples to complex samples, suppose that each unit <span class="math inline">\(h\)</span> in the sample is assigned a (normalised) survey weight <span class="math inline">\(w_h\)</span> with <span class="math inline">\(\sum_h w_h = n\)</span>.
 Of course, if an independent simple random sampling scheme is implemented, then each <span class="math inline">\(w_h=1\)</span>.</p>
-<p>Let <span class="math inline">\(p_r = \hat n_r/n\)</span> be the <span class="math inline">\(r\)</span>th entry of the <span class="math inline">\(R\)</span>-vector of proportions <span class="math inline">\({\mathbf p}\)</span>, where
+<p>The sample proportions for each category <span class="math inline">\(r\)</span> is written <span class="math inline">\(p_r = \hat n_r/n\)</span>, where
+<!-- Let $p_r = \hat n_r/n$ be the $r$th entry of the $R$-vector of proportions $\bp$, where -->
 <span class="math display">\[\begin{equation}
 \hat n_r = \sum_h w_h [{\mathbf y}^{(h)} = {\mathbf y}_r],
 \end{equation}\]</span>
 and <span class="math inline">\([\cdot]\)</span> denotes the Iverson bracket.
 In other words, <span class="math inline">\(\hat n_r\)</span> represents the (weighted) frequency counts of the observed response patterns such that <span class="math inline">\(\sum_{r=1}^R \hat n_r = n\)</span>.
-The vector <span class="math inline">\(\hat{\mathbf n}= (\hat n_1, \dots, \hat n_R)^\top\)</span> defines a <em>multivariate binomial distribution</em>, or more commonly called a multinomial distribution with parameter <span class="math inline">\(n\)</span>, <span class="math inline">\(R\)</span>, and <span class="math inline">\({\boldsymbol\pi}({\boldsymbol\theta})\)</span>.
+The vector <span class="math inline">\(\hat{\mathbf n}= (\hat n_1, \dots, \hat n_R)^\top\)</span> then defines a <em>multivariate binomial distribution</em>, or more commonly called a multinomial distribution with parameters <span class="math inline">\(n\)</span>, <span class="math inline">\(R\)</span>, and <span class="math inline">\({\boldsymbol\pi}({\boldsymbol\theta})\)</span>.
 The probability mass function of <span class="math inline">\(\hat{\mathbf n}\)</span> is given by
 <span class="math display">\[\begin{equation}
 f_{\hat{\mathbf n}}(x_1,\dots,x_R) = N! \prod_{r=1}^R \frac{1}{x_r!} \big[\pi_{r}({\boldsymbol\theta})\big]^{x_r},
@@ -217,12 +218,12 @@ and the log-likelihood for <span class="math inline">\({\boldsymbol\theta}\)</sp
 <span class="math display">\[\begin{equation}
 \ell({\boldsymbol\theta}) = \log f_{\hat{\mathbf n}}(\hat n_1,\dots,\hat n_R) = \sum_{r=1}^{R} \hat n_r \log \pi_{r}({\boldsymbol\theta}).
 \end{equation}\]</span></p>
-<p>The maximum likelihood estimator <span class="math inline">\(\hat{\boldsymbol\theta}_{\text{ML}}\)</span> satisfy <span class="math inline">\(\hat{\boldsymbol\theta}_{\text{ML}}= \mathop{\mathrm{argmax}}_{{\boldsymbol\theta}} \ell({\boldsymbol\theta})\)</span>.
+<p>The maximum likelihood estimator <span class="math inline">\(\hat{\boldsymbol\theta}_{\text{ML}}\)</span> satisfies <span class="math inline">\(\hat{\boldsymbol\theta}_{\text{ML}}= \mathop{\mathrm{argmax}}_{{\boldsymbol\theta}} \ell({\boldsymbol\theta})\)</span>.
 Maximum likelihood theory tells us that, under certain regularity conditions, as <span class="math inline">\(n\to\infty\)</span>,
 <span class="math display">\[\begin{equation}\label{eq:limitdisttheta}
 \sqrt n (\hat{\boldsymbol\theta}- {\boldsymbol\theta}) \xrightarrow{\text D} \mathop{\mathrm{N}}\big(0, {\mathcal I}_1({\boldsymbol\theta})\big),
 \end{equation}\]</span>
-where <span class="math inline">\({\mathcal I}_1({\boldsymbol\theta}) \in \mathbb{R}^{t\times t}\)</span> is the <em>unit Fisher information matrix</em>.
+where <span class="math inline">\({\mathcal I}_1({\boldsymbol\theta}) \in \mathbb{R}^{m\times m}\)</span> is the <em>unit Fisher information matrix</em>.
 It can be further shown that <span class="math inline">\({\mathcal I}_1({\boldsymbol\theta}) = {\boldsymbol\Delta}^\top {\mathbf D}^{-1} {\boldsymbol\Delta}\)</span>, where</p>
 <ul>
 <li>
@@ -235,12 +236,14 @@ It can be further shown that <span class="math inline">\({\mathcal I}_1({\boldsy
 \sqrt n (\hat{\boldsymbol\theta}- {\boldsymbol\theta}) = \sqrt n \, {\mathbf B}\big({\mathbf p}- {\boldsymbol\pi}({\boldsymbol\theta})\big) + o(1)
 \tag{2}
 \end{equation}\]</span>
-for some <span class="math inline">\(t\times R\)</span> matrix <span class="math inline">\({\mathbf B}\)</span>.
-In the specific case of maximum likelihood estimators, we can derive <span class="math inline">\({\mathbf B}\)</span> to be <span class="math inline">\({\mathbf B}= {\mathcal I}^{-1} {\boldsymbol\Delta}^\top {\mathbf D}^{-1}\)</span>.</p>
+for some <span class="math inline">\(m\times R\)</span> matrix <span class="math inline">\({\mathbf B}\)</span>.
+In the specific case of maximum likelihood estimators, we can derive <span class="math inline">\({\mathbf B}\)</span> to be <span class="math inline">\({\mathbf B}= {\mathcal I}^{-1} {\boldsymbol\Delta}^\top {\mathbf D}^{-1}\)</span>.
+This is proven in the corresponding article (see XXX for more details).</p>
 <div class="section level3">
 <h3 id="pairwise-likelihood-estimation">Pairwise likelihood estimation<a class="anchor" aria-label="anchor" href="#pairwise-likelihood-estimation"></a>
 </h3>
-<p>In order to define the pairwise likelihood, let <span class="math inline">\(\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})\)</span> be the probability under the model that <span class="math inline">\(Y_i=y_i \in \{0,1\}\)</span> and <span class="math inline">\(Y_j=y_j\in\{0,1\}\)</span> for a pair of variables <span class="math inline">\(Y_i\)</span> and <span class="math inline">\(Y_j\)</span>, <span class="math inline">\(i,j=1,\dots,p\)</span> and <span class="math inline">\(i&lt;j\)</span>.
+<p>The main interest for this project is to construct test statistics using composite likelihood methods, specifically the pairwise likelihood method.
+In order to define the pairwise likelihood, let <span class="math inline">\(\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})\)</span> be the probability under the model that <span class="math inline">\(Y_i=y_i \in \{0,1\}\)</span> and <span class="math inline">\(Y_j=y_j\in\{0,1\}\)</span> for a pair of variables <span class="math inline">\(Y_i\)</span> and <span class="math inline">\(Y_j\)</span>, <span class="math inline">\(i,j=1,\dots,p\)</span> and <span class="math inline">\(i&lt;j\)</span>.
 <!-- That is, -->
 <!-- $$ -->
 <!-- \pi_{y_iy_j}^{(ij)}(\btheta) = \Pr(Y_i = y_i, Y_j = y_j). -->
@@ -253,8 +256,8 @@ where <span class="math inline">\(\hat n_{y_iy_j}^{(ij)}\)</span> is the observe
 <span class="math display">\[
 \hat n_{y_iy_j}^{(ij)} = \sum_h w_h [{\mathbf y}^{(h)}_i = y_i, {\mathbf y}^{(h)}_j = y_j].
 \]</span>
-Let us also define the corresponding observed proportions <span class="math inline">\(p_{y_iy_j}^{(ij)} = \hat n_{y_iy_j}^{(ij)}/n\)</span>.
-There are a total of <span class="math inline">\(\tilde R = 4 \times {p \choose 2}\)</span> summands, where the ‘4’ is representative of the total number of pairwise combinations of choices.</p>
+Let us also define the corresponding observed pairwise proportions <span class="math inline">\(p_{y_iy_j}^{(ij)} = \hat n_{y_iy_j}^{(ij)}/n\)</span>.
+There are a total of <span class="math inline">\(\tilde R = 4 \times {p \choose 2}\)</span> summands, where the ‘4’ is representative of the total number of pairwise combinations of binary choices ‘00’, ‘10’, ‘01’, and ‘11’.</p>
 <p>The <em>pairwise maximum likelihood estimator</em> <span class="math inline">\(\hat{\boldsymbol\theta}_{\text{PL}}\)</span> satisfies <span class="math inline">\(\hat{\boldsymbol\theta}_{\text{PL}}= \mathop{\mathrm{argmax}}_{{\boldsymbol\theta}} \operatorname{\ell_P}({\boldsymbol\theta})\)</span>.
 Under certain regularity conditions,
 <span class="math display">\[\begin{equation}
@@ -274,7 +277,7 @@ where</p>
 <li>
 <span class="math inline">\(\tilde{\mathbf D}= \mathop{\mathrm{diag}}((\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta}))_{i&lt;j})\)</span>; and</li>
 <li>
-<span class="math inline">\({\mathbf G}\)</span> is some indicator matrix to transform the quantities from <span class="math inline">\(\tilde R\)</span> dimensions to <span class="math inline">\(R\)</span> dimensions. See other articles for details.</li>
+<span class="math inline">\({\mathbf G}\)</span> is some indicator matrix to transform the quantities from <span class="math inline">\(\tilde R\)</span> dimensions to <span class="math inline">\(R\)</span> dimensions. See other articles for further details.</li>
 </ul>
 </div>
 </div>
