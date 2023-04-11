@@ -53,6 +53,22 @@ When we consider a parametric model with parameter vector $\btheta\in\bbR^m$, we
 \end{equation}
 for the vector of joint probabilities, with $\sum_{r=1}^R \pimod{r} =1$.
 
+## Motivation
+
+- Model-based probabilities e.g. factor models.
+
+- How can we ensure that the model is a good fit to the data? Usual (Pearson) chi-square test or the likelihood ratio $G$ test. 
+
+- Problem is, it breaks down when number of items is large, because the number of categories grows exponentially. A lot of these categories will end up being empty, and the above tests depends on a local CLT convergence in each category, which is not achieved. This is the problem of sparsity. Illustrate with a plot of observed vs expected reponse pattern probabilities.
+
+- Solution: Consider lower order marginals instead: Consider how well the model fits the univariate and bivariate marginal positive probabilities. These are called limited information tests. 
+
+- When $p$ is large, then possibly ML methods also struggle computationally. We explore LIGOF tests under a composite likelihood estimation, which provides a computational advantage. Furthermore, the LIGOF tests can be built organically from the quantities used in the PL estimation framework.
+
+- Contributions: theory of the test statistics derivation, incl. its distribution. We ran type I and power simulations on various sample sizes. We also extend the results from independent sampling to complex sampling designs, where the estimates and test statistics are weight-adjusted.
+
+- Conclusions...
+
 ## Model-based probabilities
 
 The model of interest is a factor model, commonly used in social statistics.
@@ -144,21 +160,21 @@ and the log-likelihood for $\btheta$ given the observed frequencies $\hat\bn$ (i
 The maximum likelihood estimator $\mle$ satisfies $\mle = \argmax_{\btheta} \ell(\btheta)$.
 Maximum likelihood theory tells us that, under certain regularity conditions, as $n\to\infty$,
 \begin{equation}\label{eq:limitdisttheta}
-\sqrt n (\hat\btheta - \btheta) \xrightarrow{\text D} \N\big(0, \cI_1(\btheta)\big),
+\sqrt n (\hat\btheta - \btheta) \xrightarrow{\text D} {\N}_m\big(\bzero, \cI_1(\btheta)^{-1}\big),
 \end{equation}
-where $\cI_1(\btheta) \in \bbR^{m\times m}$ is the *unit Fisher information matrix*.
+where $\bbR^{m\times m} \ni \cI_1(\btheta) = -\E \nabla^2 \ell(\btheta)$ is the *(unit) expected Fisher information matrix*.
 It can be further shown that $\cI_1(\btheta) = \bDelta^\top \bD^{-1} \bDelta$, where
 
-- $\bDelta_{r,k} = \frac{\partial\pi_r(\btheta)}{\partial\theta_k}$, $r=1,\dots,R$, $k=1,\dots,t$; and
+- $\bDelta_{r,k} = \frac{\partial\pi_r(\btheta)}{\partial\theta_k}$, $r=1,\dots,R$, $k=1,\dots,m$; and
 - $\bD = \diag(\bpi(\btheta))$.
 
-Furthermore, the maximum likelihood estimators are a class of *best asymptotically normal* (BAN) estimators $\hat\btheta$ of $\btheta$ that satisfy
+The maximum likelihood estimators are a class of *best asymptotically normal* (BAN) estimators $\hat\btheta$ of $\btheta$ that satisfy
 \begin{equation}
 \sqrt n (\hat\btheta - \btheta) = \sqrt n \, \bB \big(\bp - \bpi(\btheta)\big) + o(1)
 (\#eq:ban)
 \end{equation}
 for some $m\times R$ matrix $\bB$.
-In the specific case of maximum likelihood estimators, we can derive $\bB$ to be $\bB = \cI^{-1} \bDelta^\top \bD^{-1}$.
+In the specific case of maximum likelihood estimation, we can derive $\bB$ to be $\bB = \cI^{-1} \bDelta^\top \bD^{-1}$.
 This is proven in the corresponding article (see XXX for more details).
 
 ### Pairwise likelihood estimation
@@ -183,14 +199,14 @@ There are a total of $\tilde R = 4 \times {p \choose 2}$ summands, where the '4'
 The *pairwise maximum likelihood estimator* $\mlepl$ satisfies $\mlepl = \argmax_{\btheta} \pl(\btheta)$.
 Under certain regularity conditions,
 \begin{equation}
-\sqrt N (\mlepl - \btheta) \xrightarrow{D} {\N}_t\big(\bzero, \cH(\btheta)\cJ(\btheta)^{-1}\cH(\btheta)\big),
+\sqrt N (\mlepl - \btheta) \xrightarrow{D} {\N}_m\big(\bzero, \cH(\btheta)\cJ(\btheta)^{-1}\cH(\btheta)\big),
 \end{equation}
 where
   
   - $\cH(\btheta)=-\E\nabla^2\pl(\btheta)$ is the *sensitivity matrix*; and
   - $\cJ(\btheta)=\Var\big(\sqrt N \nabla\pl(\btheta)\big)$ is the *variability matrix*.
   
-We can also show that the pairwise maximum likelihood estimator satisfies \@ref(eq:ban), where the matrix $\bB$ in this case would be $\bB = \cH^{-1}\tilde\bDelta^{-1}\tilde \bD^{-1} \bG$, where 
+We can also show that the pairwise maximum likelihood estimator satisfies \@ref(eq:ban), where the matrix $\bB$ in this case would be $\bB = \cH^{-1}\tilde\bDelta^{-1}\tilde \bD^{-1} \bG$, with 
 
 - $\tilde\bDelta \in \bbR^{\tilde R \times m}$ consists of partial derivatives of the pairwise probabilities, i.e. $\frac{\partial\pimodpl}{\partial\theta_k}$;
 - $\tilde\bD = \diag((\pimodpl)_{i<j})$; and 
