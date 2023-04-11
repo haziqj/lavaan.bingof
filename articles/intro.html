@@ -273,7 +273,7 @@ where</p>
 <p>We can also show that the pairwise maximum likelihood estimator satisfies <a href="#eq:ban">(2)</a>, where the matrix <span class="math inline">\({\mathbf B}\)</span> in this case would be <span class="math inline">\({\mathbf B}= {\mathcal H}^{-1}\tilde{\boldsymbol\Delta}^{-1}\tilde {\mathbf D}^{-1} {\mathbf G}\)</span>, where</p>
 <ul>
 <li>
-<span class="math inline">\(\tilde{\boldsymbol\Delta}\in \mathbb{R}^{\tilde R \times t}\)</span> consists of partial derivatives of the pairwise probabilities, i.e. <span class="math inline">\(\frac{\partial\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})}{\partial\theta_k}\)</span>;</li>
+<span class="math inline">\(\tilde{\boldsymbol\Delta}\in \mathbb{R}^{\tilde R \times m}\)</span> consists of partial derivatives of the pairwise probabilities, i.e. <span class="math inline">\(\frac{\partial\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})}{\partial\theta_k}\)</span>;</li>
 <li>
 <span class="math inline">\(\tilde{\mathbf D}= \mathop{\mathrm{diag}}((\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta}))_{i&lt;j})\)</span>; and</li>
 <li>
@@ -284,13 +284,213 @@ where</p>
 <div class="section level2">
 <h2 id="goodness-of-fit-test-statistics">Goodness-of-fit test statistics<a class="anchor" aria-label="anchor" href="#goodness-of-fit-test-statistics"></a>
 </h2>
-<p>TBC</p>
-<!-- It is widely known [@agresti2012categorical] that -->
-<!-- \begin{equation} -->
-<!-- \sqrt N (\bp - \bpi) \xrightarrow{\text D} {\N}_R (\bzero, \bSigma), -->
-<!-- \end{equation} -->
-<!-- where $\bSigma = \bD - \bpi\bpi^\top$, with $\bD:= \diag(\bpi)$. -->
-<!-- ## References -->
+<p>Collect all the sample proportions <span class="math inline">\(p_r = \hat n_r/n\)</span>, <span class="math inline">\(r=1,\dots,R\)</span> to form an <span class="math inline">\(R\)</span>-vector of proportions <span class="math inline">\({\mathbf p}\)</span>.
+For independent samples, it is widely known <span class="citation">(<a href="#ref-agresti2012categorical" role="doc-biblioref">Agresti 2012</a>)</span> that
+<span class="math display" id="eq:propclt">\[\begin{equation}
+\sqrt N ({\mathbf p}- {\boldsymbol\pi}) \xrightarrow{\text D} {\mathop{\mathrm{N}}}_R ({\mathbf 0}, {\boldsymbol\Sigma}),
+\tag{3}
+\end{equation}\]</span>
+where <span class="math inline">\({\boldsymbol\Sigma}= {\mathbf D}- {\boldsymbol\pi}{\boldsymbol\pi}^\top\)</span>, with <span class="math inline">\({\mathbf D}:= \mathop{\mathrm{diag}}({\boldsymbol\pi})\)</span>.
+Considering a parametric model, the proportion vector in <a href="#eq:propclt">(3)</a> reads <span class="math inline">\({\boldsymbol\pi}= {\boldsymbol\pi}({\boldsymbol\theta})\)</span>.
+An analogous result for the complex sampling design case exists as well <span class="citation">(<a href="#ref-fuller2009introduction" role="doc-biblioref">Fuller 2009</a>)</span>; however the covariance matrix <span class="math inline">\({\boldsymbol\Sigma}\)</span> need not take a multinomial form, and the true proportions <span class="math inline">\({\boldsymbol\pi}\)</span> may either be a finite population or a superpopulation quantity.</p>
+<p>Suppose we denote by <span class="math inline">\({\boldsymbol\pi}(\hat{\boldsymbol\theta})\)</span> the <em>estimated</em> proportions under a parametric model.
+For estimators <span class="math inline">\(\hat{\boldsymbol\theta}\)</span> satisfying <a href="#eq:ban">(2)</a>, <span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2005limited" role="doc-biblioref">2005</a>)</span> show that the distribution of the residuals <span class="math inline">\(\hat{\mathbf e}= {\mathbf p}- {\boldsymbol\pi}(\hat{\boldsymbol\theta})\)</span> is asymptotically normal:
+<span class="math display">\[\begin{equation}
+\sqrt n \hat{\mathbf e}= \sqrt n \big( {\mathbf p}- {\boldsymbol\pi}(\hat{\boldsymbol\theta}) \big) \xrightarrow{\text D} {\mathop{\mathrm{N}}}_R ({\mathbf 0}, {\boldsymbol\Omega})
+\end{equation}\]</span>
+where
+<span class="math display">\[\begin{align}
+{\boldsymbol\Omega}
+&amp;= ({\mathbf I}- {\boldsymbol\Delta}{\mathbf B}){\boldsymbol\Sigma}({\mathbf I}- {\boldsymbol\Delta}{\mathbf B})^\top \\
+&amp;= {\boldsymbol\Sigma}- {\boldsymbol\Sigma}{\mathbf B}^\top{\boldsymbol\Delta}^\top - {\boldsymbol\Delta}{\mathbf B}{\boldsymbol\Sigma}+ {\boldsymbol\Delta}{\mathbf B}{\boldsymbol\Sigma}{\mathbf B}^\top {\boldsymbol\Delta}^\top,
+\end{align}\]</span>
+with <span class="math inline">\({\mathbf B}\)</span> being the transformation matrix and <span class="math inline">\({\boldsymbol\Delta}\)</span> the matrix of partial derivatives of <span class="math inline">\({\boldsymbol\pi}({\boldsymbol\theta})\)</span> (both described previously).
+<span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2005limited" role="doc-biblioref">2005</a>)</span> remarks that for maximum likelihood estimators, the residual covariance matrix simplifies to <span class="math inline">\({\boldsymbol\Omega}= {\boldsymbol\Sigma}- {\boldsymbol\Delta}{\mathcal I}^{-1}_1{\boldsymbol\Delta}^\top\)</span>.
+We do not think such a simplification exists for the pairwise likelihood case (see article xxx for further details).</p>
+<div class="section level3">
+<h3 id="lower-order-residuals">Lower-order residuals<a class="anchor" aria-label="anchor" href="#lower-order-residuals"></a>
+</h3>
+<p>The interest here is in obtaining the lower-order marginals from the full <span class="math inline">\(R\)</span>-dimensional probability vector <span class="math inline">\({\boldsymbol\pi}\)</span>.
+Namely, we would like to get</p>
+<ol style="list-style-type: decimal">
+<li><p>Univariate moments of the form <span class="math inline">\(\dot\pi_i = \Pr(Y_i=1)\)</span> (of which there are <span class="math inline">\(p\)</span>)
+<span class="math display">\[
+\dot{\boldsymbol\pi}_1^\top = (\dot\pi_1,\dots,\dot\pi_p) \in[0,1]^p
+\]</span></p></li>
+<li><p>Bivariate moments of the form <span class="math inline">\(\dot\pi_{ij}=\Pr(Y_i=1,Y_j=1)\)</span> (of which there are <span class="math inline">\({p \choose 2}\)</span>)
+<span class="math display">\[
+\dot{\boldsymbol\pi}_2^\top = \Big(\dot\pi_{ij} \Big)_{\substack{i,j=1\\i&lt;j}}^n \in [0,1]^{p(p-1)/2}
+\]</span></p></li>
+</ol>
+<p>The bivariate moments in particular will be especially relevant when considering a pairwise likelihood estimation of the parametric model.
+Denote <span class="math inline">\({\boldsymbol\pi}_2 = \begin{pmatrix}\dot{{\boldsymbol\pi}}_1\\ \dot{{\boldsymbol\pi}}_2 \end{pmatrix}\)</span> as the <span class="math inline">\(S:=p(p+1)/2\)</span> vector of univariate and bivariate moments.
+Correspondinly, let <span class="math inline">\({\mathbf p}_2\)</span> be the <span class="math inline">\(S\)</span>-vector of univariate and bivariate sample moments.
+It is possible to obtain <span class="math inline">\({\boldsymbol\pi}_2\)</span> (as well as <span class="math inline">\({\mathbf p}_2\)</span>) via a transformation of the full vector of probabilities <span class="math inline">\({\boldsymbol\pi}\)</span> (c.f. <span class="math inline">\({\mathbf p}\)</span>):
+<span class="math display">\[\begin{equation}
+{\boldsymbol\pi}_2 = {\mathbf T}_2 {\boldsymbol\pi}.
+\end{equation}\]</span>
+Here, <span class="math inline">\({\mathbf T}_2\)</span> is an indicator matrix of dimension <span class="math inline">\(S \times R\)</span>.
+See the articles for further details.</p>
+<p>Consider now the lower order residuals of up to order 2 under a parametric model, defined by
+<span class="math display">\[\begin{equation}
+\hat{\mathbf e}_2 = {\mathbf p}_2 - {\boldsymbol\pi}_2(\hat{\boldsymbol\theta}) = {\mathbf T}_2 \big({\mathbf p}- {\boldsymbol\pi}(\hat{\boldsymbol\theta}) \big) = {\mathbf T}_2\hat{\mathbf e}.
+\end{equation}\]</span>
+It should be straightforward to see, using the previous results, that as <span class="math inline">\(n\to\infty\)</span> we get
+<span class="math display">\[\begin{equation}\label{eq:residuals2}
+\sqrt n \hat{\mathbf e}_2 = \sqrt N \big({\mathbf p}_2 - {\boldsymbol\pi}_2(\hat{\boldsymbol\theta})\big) \xrightarrow{\text D} \mathop{\mathrm{N}}({\mathbf 0}, {\boldsymbol\Omega}_2),
+\end{equation}\]</span>
+where
+<span class="math display">\[\begin{align}
+{\boldsymbol\Omega}_2
+= {\mathbf T}_2{\boldsymbol\Omega}{\mathbf T}_2^\top
+&amp;= {\mathbf T}_2 ({\mathbf I}- {\boldsymbol\Delta}{\mathbf B}){\boldsymbol\Sigma}({\mathbf I}- {\boldsymbol\Delta}{\mathbf B})^\top  {\mathbf T}_2^\top  \\
+&amp;= {\boldsymbol\Sigma}_2 - {\mathbf T}_2{\boldsymbol\Sigma}{\mathbf B}^\top{\boldsymbol\Delta}_2^\top - {\boldsymbol\Delta}_2 {\mathbf B}{\boldsymbol\Sigma}{\mathbf T}_2^\top + {\boldsymbol\Delta}_2 {\mathbf B}{\boldsymbol\Sigma}{\mathbf B}^\top {\boldsymbol\Delta}_2^\top,
+\end{align}\]</span>
+with <span class="math inline">\({\boldsymbol\Sigma}_2 = {\mathbf T}_2{\boldsymbol\Sigma}{\mathbf T}_2^\top\)</span> and <span class="math inline">\({\boldsymbol\Delta}_2={\mathbf T}_2{\boldsymbol\Delta}\)</span> being the
+the transformed version of the respective matrices.
+For the specific case of maximum likelihood estimation, this simplifies to <span class="math inline">\({\boldsymbol\Omega}_2 = {\boldsymbol\Sigma}_2 - {\boldsymbol\Delta}_2 {\mathcal I}_1^{-1} {\boldsymbol\Delta}_2^\top\)</span>.
+For pairwise likelihood estimation, we show that
+<span class="math display" id="eq:ourOmega2">\[
+{\boldsymbol\Omega}_2 = ({\mathbf I}- {\boldsymbol\Delta}_2{\mathbf B}_2){\boldsymbol\Sigma}_2({\mathbf I}- {\boldsymbol\Delta}_2{\mathbf B}_2)^\top, \tag{4}
+\]</span>
+where the transformation matrix in full is given by <span class="math inline">\({\mathbf B}_2 = {\mathcal H}^{-1}\tilde{\boldsymbol\Delta}^\top\tilde{\mathbf D}^{-1}{\mathbf G}{\mathbf T}_2\)</span>.
+For posterity, the <span class="math inline">\({\mathbf B}({\boldsymbol\theta})\)</span> matrix in our manuscript is actually <span class="math inline">\({\mathbf B}({\boldsymbol\theta}) = \tilde{\boldsymbol\Delta}^\top\tilde{\mathbf D}^{-1} B\)</span>, where the indicator matrix <span class="math inline">\(B\)</span> is <span class="math inline">\(B = {\mathbf G}{\mathbf T}_2\)</span> in the notation of the present article.</p>
+<p>As a remark, while elegant in theory, forming the matrix <span class="math inline">\({\boldsymbol\Omega}_2\)</span> via the linear transformation <span class="math inline">\({\mathbf T}_2\)</span> is impractical when <span class="math inline">\(p\)</span> is large for two reasons.
+One, it involves multiplying an <span class="math inline">\(S \times R\)</span> matrix with an <span class="math inline">\(R \times R\)</span> matrix, and so this computation is of order <span class="math inline">\(O(SR^2) = O(p(p+1)2^{2p-1})\)</span>.
+Two, storage requirements of the <span class="math inline">\(R\times R\)</span> matrix (e.g. <span class="math inline">\({\boldsymbol\Sigma}\)</span>) may possibly be large and/or involve small numbers, so precision might be a concern.</p>
+<p>The advantage of our equation in <a href="#eq:ourOmega2">(4)</a> is that <span class="math inline">\({\boldsymbol\Omega}_2\)</span> can be formed using the byproduct of the pairwise estimation procedure, i.e. using the matrices <span class="math inline">\({\mathcal H}\)</span> and <span class="math inline">\(\tilde{\boldsymbol\Delta}\)</span>, as well as the (estimated) pairwise probabilities <span class="math inline">\(\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})\)</span>.
+What remains is the proper estimation of <span class="math inline">\({\boldsymbol\Sigma}_2\)</span>, and this depends on the sampling design performed.
+The <a href="complex_sampling1.html">Complex sampling procedure</a> article touches upon this briefly, with further details available in the manuscript.</p>
+</div>
+<div class="section level3">
+<h3 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
+</h3>
+<p>In general, all (limited information) goodness-of-fit test statistics take the form
+<span class="math display">\[
+W = n \hat{\mathbf e}_2^\top \hat{\boldsymbol\Xi}{\mathbf e}_2,
+\]</span>
+where <span class="math inline">\(\hat{\boldsymbol\Xi}\xrightarrow{\text P} {\boldsymbol\Xi}\)</span> is some <span class="math inline">\(S\times S\)</span> weight matrix.
+We summarise the various weight matrices that we use in this R package:</p>
+<table class="table">
+<colgroup>
+<col width="3%">
+<col width="13%">
+<col width="21%">
+<col width="7%">
+<col width="21%">
+<col width="35%">
+</colgroup>
+<thead><tr class="header">
+<th></th>
+<th>Name</th>
+<th>Weight (<span class="math inline">\({\boldsymbol\Xi}\)</span>)</th>
+<th>D.f.</th>
+<th>R function</th>
+<th>Remarks</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Wald</td>
+<td><span class="math inline">\({\boldsymbol\Omega}_2^+\)</span></td>
+<td><span class="math inline">\(S-m\)</span></td>
+<td><code><a href="../reference/ligof-test-stats.html">Wald_test()</a></code></td>
+<td>
+<span class="math inline">\({\boldsymbol\Omega}_2\)</span> may be rank deficient</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Wald V2</td>
+<td><span class="math inline">\(\mathop{\mathrm{diag}}({\boldsymbol\Omega}_2^+)\)</span></td>
+<td>est.</td>
+<td><code><a href="../reference/ligof-test-stats.html">Wald_test_v2()</a></code></td>
+<td>
+<span class="math inline">\({\boldsymbol\Omega}_2\)</span> need not be inverted</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Wald V3</td>
+<td><span class="math inline">\({\boldsymbol\Xi}{\boldsymbol\Omega}_2{\boldsymbol\Xi}\)</span></td>
+<td><span class="math inline">\(S-m\)</span></td>
+<td><code><a href="../reference/ligof-test-stats.html">Wald_test_v3()</a></code></td>
+<td>
+<span class="math inline">\({\boldsymbol\Omega}_2\)</span> need not be estimated</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Pearson</td>
+<td><span class="math inline">\({\mathbf D}^{-1}\)</span></td>
+<td>est.</td>
+<td><code><a href="../reference/ligof-test-stats.html">Pearson_test_v1()</a></code></td>
+<td>Rao-Scott adjustment</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Pearson V2</td>
+<td><span class="math inline">\({\mathbf D}^{-1}\)</span></td>
+<td>est.</td>
+<td><code><a href="../reference/ligof-test-stats.html">Pearson_test_v2()</a></code></td>
+<td>Moment matching</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>RSS</td>
+<td><span class="math inline">\({\mathbf I}\)</span></td>
+<td>est.</td>
+<td><code><a href="../reference/ligof-test-stats.html">RSS_test()</a></code></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>Multinomial</td>
+<td><span class="math inline">\({\boldsymbol\Sigma}_2^{-1}\)</span></td>
+<td>est.</td>
+<td><code><a href="../reference/ligof-test-stats.html">Multn_test()</a></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>It should be noted that all of the above tests, with the exception of the Wald V3 test, requires estimation of the <span class="math inline">\({\boldsymbol\Omega}_2\)</span> matrices.
+For this purpose, we use the sample versions of the relevant quantities, mostly evaluating <span class="math inline">\(\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})\)</span> at the estimates <span class="math inline">\({\boldsymbol\theta}=\hat{\boldsymbol\theta}_{\text{PL}}\)</span>, i.e.</p>
+<ul>
+<li>
+<span class="math inline">\({\mathbf H}= - \nabla^2\operatorname{\ell_P}({\boldsymbol\theta}) \Big|_{{\boldsymbol\theta}=\hat{\boldsymbol\theta}_{\text{PL}}}\)</span> as estimating <span class="math inline">\({\mathcal H}\)</span>;</li>
+<li>
+<span class="math inline">\(\hat{\tilde{\boldsymbol\Delta}_{sk}} = \frac{\partial\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})}{\partial\theta_k} \Big|_{{\boldsymbol\theta}=\hat{\boldsymbol\theta}_{\text{PL}}}\)</span>; and</li>
+<li>an appropriate estimator of <span class="math inline">\({\boldsymbol\Sigma}_2\)</span>.</li>
+</ul>
+<p>Finally, theory informs us that all of these test statistics are distributed according to a chi square distribution.
+However, for some of these tests, the degrees of freedom has to be estimated and may not be known a priori.
+There are two methods that we consider: 1) A Rao-Scott type adjustment <span class="citation">(<a href="#ref-rao1979chi" role="doc-biblioref">J. Rao and Scott 1979</a>; <a href="#ref-rao1981analysis" role="doc-biblioref">J. N. Rao and Scott 1981</a>; <a href="#ref-rao1984chi" role="doc-biblioref">J. N. Rao and Scott 1984</a>)</span>; and 2) a moment matching procedure <span class="citation">(<a href="#ref-bartholomew2002goodness" role="doc-biblioref">Bartholomew and Leung 2002</a>)</span>.
+While in theory each test may be subjected to either a Rao-Scott type adjustment or a moment matching procedure, we only consider the Rao-Scott adjustment for the Pearson test.</p>
+</div>
+</div>
+<div class="section level2 unnumbered">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-agresti2012categorical" class="csl-entry">
+Agresti, Alan. 2012. <em>Categorical Data Analysis</em>. Vol. 792. John Wiley &amp; Sons.
+</div>
+<div id="ref-bartholomew2002goodness" class="csl-entry">
+Bartholomew, David J, and Shing On Leung. 2002. <span>“A Goodness of Fit Test for Sparse 2p Contingency Tables.”</span> <em>British Journal of Mathematical and Statistical Psychology</em> 55 (1): 1–15.
+</div>
+<div id="ref-fuller2009introduction" class="csl-entry">
+Fuller, Wayne A. 2009. <em>Introduction to Statistical Time Series</em>. John Wiley &amp; Sons.
+</div>
+<div id="ref-maydeu2005limited" class="csl-entry">
+Maydeu-Olivares, Albert, and Harry Joe. 2005. <span>“Limited-and Full-Information Estimation and Goodness-of-Fit Testing in 2 n Contingency Tables: A Unified Framework.”</span> <em>Journal of the American Statistical Association</em> 100 (471): 1009–20.
+</div>
+<div id="ref-rao1979chi" class="csl-entry">
+Rao, JNK, and AJ Scott. 1979. <span>“Chi-Squared Tests for Analysis of Categorical Data from Complex Surveys.”</span> In <em>Proceedings of the American Statistical Association, Section on Survey Research Methods</em>, 58–66.
+</div>
+<div id="ref-rao1981analysis" class="csl-entry">
+Rao, Jon NK, and Alastair J Scott. 1981. <span>“The Analysis of Categorical Data from Complex Sample Surveys: Chi-Squared Tests for Goodness of Fit and Independence in Two-Way Tables.”</span> <em>Journal of the American Statistical Association</em> 76 (374): 221–30.
+</div>
+<div id="ref-rao1984chi" class="csl-entry">
+Rao, Jon NK, and Alistair J Scott. 1984. <span>“On Chi-Squared Tests for Multiway Contingency Tables with Cell Proportions Estimated from Survey Data.”</span> <em>The Annals of Statistics</em>, 46–60.
+</div>
+</div>
 </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
