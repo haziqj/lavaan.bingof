@@ -42,7 +42,7 @@ The probability of observing such a response pattern is given by the joint distr
 &= \Pr(\bY = \by)  = \Pr(Y_1=y_1,\dots,Y_p=y_p).
 \end{align*}
 Note that there are a total of $R=2^p$ possible joint probabilities $\pi_r$ corresponding to all possible two-way response patterns $\by_r$.
-When we consider a parametric model with parameter vector $\btheta\in\bbR^t$, we write $\pi_r(\btheta)$ to indicate each joint probability, and 
+When we consider a parametric model with parameter vector $\btheta\in\bbR^m$, we write $\pi_r(\btheta)$ to indicate each joint probability, and 
 \begin{equation}
 \bpi(\btheta) = \begin{pmatrix}
 \pimod{1} \\
@@ -82,9 +82,9 @@ where each component is explained below:
 
 We also make some distributional assumptions, namely
 
-1. $\boldsymbol\eta \sim \operatorname{N}_q(\mathbf 0, \boldsymbol\Psi)$, where $\Psi$ is a correlation matrix, i.e. for $k,l\in\{1,\dots,q\}$,
+1. $\boldsymbol\eta \sim \operatorname{N}_q(\mathbf 0, \boldsymbol\Psi)$, where $\bPsi$ is a correlation matrix, i.e. for $k,l\in\{1,\dots,q\}$,
 $$
-\Psi_{kl} = \begin{cases}
+\bPsi_{kl} = \begin{cases}
 1 & \text{if }  k = l \\
 \rho(\eta_k, \eta_l) & \text{if } k \neq l.
 \end{cases}
@@ -103,15 +103,15 @@ These two assumptions, together with $\operatorname{Cov}(\boldsymbol\eta, \bolds
 <!-- $$ -->
 <!-- \operatorname{Cor}(y_i^*, y_{i'}^*) = \sum_{k,l=1}^q \lambda_{ik}\lambda_{i'l} (1 + \rho(z_k,z_l)). -->
 <!-- $$ -->
-The parameter vector for this factor model is denoted $\boldsymbol\theta^\top = (\boldsymbol\lambda, \boldsymbol\phi, \boldsymbol\tau)$, where it contains the vectors of the free non-redundant parameters in $\boldsymbol\Lambda$ and $\boldsymbol \Psi$ respectively, as well as the vector of all free thresholds.
+The parameter vector for this factor model is denoted $\boldsymbol\theta^\top = (\boldsymbol\lambda, \boldsymbol\psi, \boldsymbol\tau) \in\bbR^m$, where it contains the vectors of the free non-redundant parameters in $\boldsymbol\Lambda$ and $\boldsymbol \Psi$ respectively, as well as the vector of all free thresholds.
 
 Under this factor model, the probability of response pattern $\mathbf y_r$ is
 \begin{align}
-\pi_r(\mathbf\theta) 
+\pimod{r}
 &= \Pr(\mathbf Y = \mathbf y_r \mid \boldsymbol\theta) \\
-&= \idotsint_A f_p(\mathbf y^* \mid \mathbf 0, \boldsymbol\Sigma_{\mathbf y^*} ) \, \text{d}\mathbf y^*
+&= \idotsint_A \phi_p(\mathbf y^* \mid \mathbf 0, \boldsymbol\Sigma_{\mathbf y^*} ) \, \text{d}\mathbf y^*
 \end{align}
-where $f_p(\cdot \mid \boldsymbol\mu,\boldsymbol\Sigma)$ is the density function of the $p$-dimensional normal distribution with mean $\boldsymbol\mu$ and variance $\boldsymbol\Sigma$.
+where $\phi_p(\cdot \mid \boldsymbol\mu,\boldsymbol\Sigma)$ is the density function of the $p$-dimensional normal distribution with mean $\boldsymbol\mu$ and variance $\boldsymbol\Sigma$.
 This integral is evaluated on the set
 $$
 A = \{ \mathbf Y^* \in \mathbb R^p \mid Y_1=y_1,\dots,Y_p=y_p \}.
@@ -124,13 +124,14 @@ Suppose that $h=1,\dots,n$ observations of $\bY=\by^{(h)}$ are obtained.
 For the purpose of generalising from independent samples to complex samples, suppose that each unit $h$ in the sample is assigned a (normalised) survey weight $w_h$ with $\sum_h w_h = n$.
 Of course, if an independent simple random sampling scheme is implemented, then each $w_h=1$.
 
-Let $p_r = \hat n_r/n$ be the $r$th entry of the $R$-vector of proportions $\bp$, where
+The sample proportions for each category $r$ is written $p_r = \hat n_r/n$, where
+<!-- Let $p_r = \hat n_r/n$ be the $r$th entry of the $R$-vector of proportions $\bp$, where -->
 \begin{equation}
 \hat n_r = \sum_h w_h [\by^{(h)} = \by_r],
 \end{equation}
 and $[\cdot]$ denotes the Iverson bracket.
 In other words, $\hat n_r$ represents the (weighted) frequency counts of the observed response patterns such that $\sum_{r=1}^R \hat n_r = n$.
-The vector $\hat\bn = (\hat n_1, \dots, \hat n_R)^\top$ defines a *multivariate binomial distribution*, or more commonly called a multinomial distribution with parameter $n$, $R$, and $\bpi(\btheta)$.
+The vector $\hat\bn = (\hat n_1, \dots, \hat n_R)^\top$ then defines a *multivariate binomial distribution*, or more commonly called a multinomial distribution with parameters $n$, $R$, and $\bpi(\btheta)$.
 The probability mass function of $\hat\bn$ is given by
 \begin{equation}
 f_{\hat\bn}(x_1,\dots,x_R) = N! \prod_{r=1}^R \frac{1}{x_r!} \big[\pimod{r}\big]^{x_r},
@@ -140,12 +141,12 @@ and the log-likelihood for $\btheta$ given the observed frequencies $\hat\bn$ (i
 \ell(\btheta) = \log f_{\hat\bn}(\hat n_1,\dots,\hat n_R) = \sum_{r=1}^{R} \hat n_r \log \pimod{r}.
 \end{equation}
 
-The maximum likelihood estimator $\mle$ satisfy $\mle = \argmax_{\btheta} \ell(\btheta)$.
+The maximum likelihood estimator $\mle$ satisfies $\mle = \argmax_{\btheta} \ell(\btheta)$.
 Maximum likelihood theory tells us that, under certain regularity conditions, as $n\to\infty$,
 \begin{equation}\label{eq:limitdisttheta}
 \sqrt n (\hat\btheta - \btheta) \xrightarrow{\text D} \N\big(0, \cI_1(\btheta)\big),
 \end{equation}
-where $\cI_1(\btheta) \in \bbR^{t\times t}$ is the *unit Fisher information matrix*.
+where $\cI_1(\btheta) \in \bbR^{m\times m}$ is the *unit Fisher information matrix*.
 It can be further shown that $\cI_1(\btheta) = \bDelta^\top \bD^{-1} \bDelta$, where
 
 - $\bDelta_{r,k} = \frac{\partial\pi_r(\btheta)}{\partial\theta_k}$, $r=1,\dots,R$, $k=1,\dots,t$; and
@@ -156,11 +157,13 @@ Furthermore, the maximum likelihood estimators are a class of *best asymptotical
 \sqrt n (\hat\btheta - \btheta) = \sqrt n \, \bB \big(\bp - \bpi(\btheta)\big) + o(1)
 (\#eq:ban)
 \end{equation}
-for some $t\times R$ matrix $\bB$.
+for some $m\times R$ matrix $\bB$.
 In the specific case of maximum likelihood estimators, we can derive $\bB$ to be $\bB = \cI^{-1} \bDelta^\top \bD^{-1}$.
+This is proven in the corresponding article (see XXX for more details).
 
 ### Pairwise likelihood estimation
 
+The main interest for this project is to construct test statistics using composite likelihood methods, specifically the pairwise likelihood method.
 In order to define the pairwise likelihood, let $\pi_{y_iy_j}^{(ij)}(\btheta)$ be the probability under the model that $Y_i=y_i \in \{0,1\}$ and $Y_j=y_j\in\{0,1\}$ for a pair of variables $Y_i$ and $Y_j$, $i,j=1,\dots,p$ and $i<j$.
 <!-- That is, -->
 <!-- $$ -->
@@ -174,8 +177,8 @@ where $\hat n_{y_iy_j}^{(ij)}$ is the observed (weighted) frequency of sample un
 $$
 \hat n_{y_iy_j}^{(ij)} = \sum_h w_h [\by^{(h)}_i = y_i, \by^{(h)}_j = y_j].
 $$
-Let us also define the corresponding observed proportions $p_{y_iy_j}^{(ij)} = \hat n_{y_iy_j}^{(ij)}/n$.
-There are a total of $\tilde R = 4 \times {p \choose 2}$ summands, where the '4' is representative of the total number of pairwise combinations of choices.
+Let us also define the corresponding observed pairwise proportions $p_{y_iy_j}^{(ij)} = \hat n_{y_iy_j}^{(ij)}/n$.
+There are a total of $\tilde R = 4 \times {p \choose 2}$ summands, where the '4' is representative of the total number of pairwise combinations of binary choices '00', '10', '01', and '11'.
 
 The *pairwise maximum likelihood estimator* $\mlepl$ satisfies $\mlepl = \argmax_{\btheta} \pl(\btheta)$.
 Under certain regularity conditions,
@@ -191,7 +194,7 @@ We can also show that the pairwise maximum likelihood estimator satisfies \@ref(
 
 - $\tilde\bDelta \in \bbR^{\tilde R \times t}$ consists of partial derivatives of the pairwise probabilities, i.e. $\frac{\partial\pimodpl}{\partial\theta_k}$;
 - $\tilde\bD = \diag((\pimodpl)_{i<j})$; and 
-- $\bG$ is some indicator matrix to transform the quantities from $\tilde R$ dimensions to $R$ dimensions. See other articles for details.
+- $\bG$ is some indicator matrix to transform the quantities from $\tilde R$ dimensions to $R$ dimensions. See other articles for further details.
 
 ## Goodness-of-fit test statistics
 
