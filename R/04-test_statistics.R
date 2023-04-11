@@ -728,7 +728,7 @@ calc_test_stuff <- function(lavobject, svy_design = NULL, .H_inv,
   e2_hat <- p2_hat - pi2_hat
 
   # B matrix converting parameters to residuals
-  B_mat <- Beta_mat_design(p)
+  B_mat <- Beta_mat_design(p)  # Myrsini's B_mat is actually T2 %*% G
   # Bivariate pairs are usually ordered as follows: y1y2, y1y3, ..., y1yp,
   # y2y3, y2y4, ..., y2yp, ..., yp-1yp. In each pair, the permutation is 00,
   # 10, 01, 11. Thus, every four entry sums to 1.

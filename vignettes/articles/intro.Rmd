@@ -192,28 +192,127 @@ where
   
 We can also show that the pairwise maximum likelihood estimator satisfies \@ref(eq:ban), where the matrix $\bB$ in this case would be $\bB = \cH^{-1}\tilde\bDelta^{-1}\tilde \bD^{-1} \bG$, where 
 
-- $\tilde\bDelta \in \bbR^{\tilde R \times t}$ consists of partial derivatives of the pairwise probabilities, i.e. $\frac{\partial\pimodpl}{\partial\theta_k}$;
+- $\tilde\bDelta \in \bbR^{\tilde R \times m}$ consists of partial derivatives of the pairwise probabilities, i.e. $\frac{\partial\pimodpl}{\partial\theta_k}$;
 - $\tilde\bD = \diag((\pimodpl)_{i<j})$; and 
 - $\bG$ is some indicator matrix to transform the quantities from $\tilde R$ dimensions to $R$ dimensions. See other articles for further details.
 
 ## Goodness-of-fit test statistics
 
-TBC
+Collect all the sample proportions $p_r = \hat n_r/n$, $r=1,\dots,R$ to form an $R$-vector of proportions $\bp$.
+For independent samples, it is widely known [@agresti2012categorical] that
+\begin{equation}
+\sqrt N (\bp - \bpi) \xrightarrow{\text D} {\N}_R (\bzero, \bSigma),
+(\#eq:propclt)
+\end{equation}
+where $\bSigma = \bD - \bpi\bpi^\top$, with $\bD:= \diag(\bpi)$.
+Considering a parametric model, the proportion vector in \@ref(eq:propclt) reads $\bpi = \bpi(\btheta)$.
+An analogous result for the complex sampling design case exists as well [@fuller2009introduction]; however the covariance matrix $\bSigma$ need not take a multinomial form, and the true proportions $\bpi$ may either be a finite population or a superpopulation quantity.
 
+Suppose we denote by $\bpi(\hat\btheta)$ the *estimated* proportions under a parametric model.
+For estimators $\hat\btheta$ satisfying \@ref(eq:ban), @maydeu2005limited show that the distribution of the residuals $\hat\be = \bp - \bpi(\hat\btheta)$ is asymptotically normal:
+\begin{equation}
+\sqrt n \hat\be = \sqrt n \big( \bp - \bpi(\hat\btheta) \big) \xrightarrow{\text D} {\N}_R (\bzero, \bOmega)
+\end{equation}
+where 
+\begin{align}
+\bOmega 
+&= (\bI - \bDelta\bB)\bSigma(\bI - \bDelta\bB)^\top \\
+&= \bSigma - \bSigma\bB^\top\bDelta^\top - \bDelta \bB \bSigma + \bDelta \bB \bSigma \bB^\top \bDelta^\top,
+\end{align}
+with $\bB$ being the transformation matrix and $\bDelta$ the matrix of partial derivatives of $\bpi(\btheta)$ (both described previously). 
+@maydeu2005limited remarks that for maximum likelihood estimators, the residual covariance matrix simplifies to $\bOmega = \bSigma - \bDelta \cI^{-1}_1\bDelta^\top$. 
+We do not think such a simplification exists for the pairwise likelihood case (see article xxx for further details).
 
+### Lower-order residuals
 
+The interest here is in obtaining the lower-order marginals from the full $R$-dimensional probability vector $\bpi$.
+Namely, we would like to get
 
-<!-- It is widely known [@agresti2012categorical] that -->
-<!-- \begin{equation} -->
-<!-- \sqrt N (\bp - \bpi) \xrightarrow{\text D} {\N}_R (\bzero, \bSigma), -->
-<!-- \end{equation} -->
-<!-- where $\bSigma = \bD - \bpi\bpi^\top$, with $\bD:= \diag(\bpi)$. -->
+1. Univariate moments of the form $\dot\pi_i = \Pr(Y_i=1)$ (of which there are $p$)
+$$
+\dot\bpi_1^\top = (\dot\pi_1,\dots,\dot\pi_p) \in[0,1]^p
+$$
 
+2. Bivariate moments of the form $\dot\pi_{ij}=\Pr(Y_i=1,Y_j=1)$ (of which there are ${p \choose 2}$)
+$$
+\dot\bpi_2^\top = \Big(\dot\pi_{ij} \Big)_{\substack{i,j=1\\i<j}}^n \in [0,1]^{p(p-1)/2}
+$$
 
+The bivariate moments in particular will be especially relevant when considering a pairwise likelihood estimation of the parametric model.
+Denote $\bpi_2 = \begin{pmatrix}\dot{\bpi}_1\\ \dot{\bpi}_2  \end{pmatrix}$ as the $S:=p(p+1)/2$ vector of univariate and bivariate moments.
+Correspondinly, let $\bp_2$ be the $S$-vector of univariate and bivariate sample moments.
+It is possible to obtain $\bpi_2$ (as well as $\bp_2$) via a transformation of the full vector of probabilities $\bpi$ (c.f. $\bp$):
+\begin{equation}
+\bpi_2 = \bT_2 \bpi.
+\end{equation}
+Here, $\bT_2$ is an indicator matrix of dimension $S \times R$.
+See the articles for further details.
 
+Consider now the lower order residuals of up to order 2 under a parametric model, defined by 
+\begin{equation}
+\hat\be_2 = \bp_2 - \bpi_2(\hat\btheta) = \bT_2 \big(\bp - \bpi(\hat\btheta) \big) = \bT_2\hat\be.
+\end{equation}
+It should be straightforward to see, using the previous results, that as $n\to\infty$ we get
+\begin{equation}\label{eq:residuals2}
+\sqrt n \hat\be_2 = \sqrt N \big(\bp_2 - \bpi_2(\hat\btheta)\big) \xrightarrow{\text D} \N(\bzero, \bOmega_2),
+\end{equation}
+where 
+\begin{align}
+\bOmega_2 
+= \bT_2\bOmega\bT_2^\top 
+&= \bT_2 (\bI - \bDelta\bB)\bSigma(\bI - \bDelta\bB)^\top  \bT_2^\top  \\
+&= \bSigma_2 - \bT_2\bSigma\bB^\top\bDelta_2^\top - \bDelta_2 \bB \bSigma \bT_2^\top + \bDelta_2 \bB \bSigma \bB^\top \bDelta_2^\top,
+\end{align}
+with $\bSigma_2 = \bT_2\bSigma\bT_2^\top$ and $\bDelta_2=\bT_2\bDelta$ being the
+the transformed version of the respective matrices.
+For the specific case of maximum likelihood estimation, this simplifies to $\bOmega_2 = \bSigma_2 - \bDelta_2 \cI_1^{-1} \bDelta_2^\top$.
+For pairwise likelihood estimation, we show that 
+$$
+\bOmega_2 = (\bI - \bDelta_2\bB_2)\bSigma_2(\bI - \bDelta_2\bB_2)^\top, (\#eq:ourOmega2)
+$$
+where the transformation matrix in full is given by $\bB_2 = \cH^{-1}\tilde\bDelta^\top\tilde\bD^{-1}\bG\bT_2$.
+For posterity, the $\bB(\btheta)$ matrix in our manuscript is actually $\bB(\btheta) = \tilde\bDelta^\top\tilde\bD^{-1} B$, where the indicator matrix $B$ is $B = \bG\bT_2$ in the notation of the present article.
 
+As a remark, while elegant in theory, forming the matrix $\bOmega_2$ via the linear transformation $\bT_2$ is impractical when $p$ is large for two reasons.
+One, it involves multiplying an $S \times R$ matrix with an $R \times R$ matrix, and so this computation is of order $O(SR^2) = O(p(p+1)2^{2p-1})$.
+Two, storage requirements of the $R\times R$ matrix (e.g. $\bSigma$) may possibly be large and/or involve small numbers, so precision might be a concern.
 
-<!-- ## References -->
+The advantage of our equation in \@ref(eq:ourOmega2) is that $\bOmega_2$ can be formed using the byproduct of the pairwise estimation procedure, i.e. using the matrices $\cH$ and $\tilde\bDelta$, as well as the (estimated) pairwise probabilities $\pimodpl$.
+What remains is the proper estimation of $\bSigma_2$, and this depends on the sampling design performed.
+The [Complex sampling procedure](complex_sampling1.html) article touches upon this briefly, with further details available in the manuscript.
+
+### Summary
+
+In general, all (limited information) goodness-of-fit test statistics take the form
+$$
+W = n \hat\be_2^\top \hat\bXi \be_2,
+$$
+where $\hat\bXi \xrightarrow{\text P} \bXi$ is some $S\times S$ weight matrix.
+We summarise the various weight matrices that we use in this R package:
+
+|   | Name        | Weight ($\bXi$)     | D.f.  | R function          | Remarks                           |
+|---|-------------|---------------------|-------|---------------------|-----------------------------------|
+| 1 | Wald        | $\bOmega_2^+$       | $S-m$ | `Wald_test()`       | $\bOmega_2$ may be rank deficient |
+| 2 | Wald V2     | $\diag(\bOmega_2^+)$       | est.  | `Wald_test_v2()`    | $\bOmega_2$ need not be inverted  |
+| 3 | Wald V3     | $\bXi\bOmega_2\bXi$ | $S-m$ | `Wald_test_v3()`    | $\bOmega_2$ need not be estimated |
+| 4 | Pearson     | $\bD^{-1}$          | est.  | `Pearson_test_v1()` | Rao-Scott adjustment              |
+| 5 | Pearson V2  | $\bD^{-1}$          | est.  | `Pearson_test_v2()` | Moment matching                   |
+| 6 | RSS         | $\bI$               | est.  | `RSS_test()`        |                                   |
+| 7 | Multinomial | $\bSigma_2^{-1}$    | est.  | `Multn_test()`      |                                   |
+
+It should be noted that all of the above tests, with the exception of the Wald V3 test, requires estimation of the $\bOmega_2$ matrices.
+For this purpose, we use the sample versions of the relevant quantities, mostly evaluating $\pimodpl$ at the estimates $\btheta=\mlepl$, i.e.
+
+- $\bH = - \nabla^2\pl(\btheta) \Big|_{\btheta=\mlepl}$ as estimating $\cH$;
+- $\hat{\tilde\bDelta_{sk}} = \frac{\partial\pimodpl}{\partial\theta_k} \Big|_{\btheta=\mlepl}$; and
+- an appropriate estimator of $\bSigma_2$.
+
+Finally, theory informs us that all of these test statistics are distributed according to a chi square distribution.
+However, for some of these tests, the degrees of freedom has to be estimated and may not be known a priori.
+There are two methods that we consider: 1) A Rao-Scott type adjustment [@rao1979chi;@rao1981analysis;@rao1984chi]; and 2) a moment matching procedure [@bartholomew2002goodness].
+While in theory each test may be subjected to either a Rao-Scott type adjustment or a moment matching procedure, we only consider the Rao-Scott adjustment for the Pearson test.
+
+## References
 
 
 
