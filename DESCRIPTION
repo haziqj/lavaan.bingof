@@ -19,6 +19,10 @@ LazyData: true
 URL: https://github.com/haziqj/lavaan.bingof, https://haziqj.ml/lavaan.bingof/
 BugReports: https://github.com/haziqj/lavaan.bingof/issues
 Suggests: 
+    bookdown,
+    devtools,
+    ggcorrplot,
+    kableExtra,
     rmarkdown
 Imports: 
     doSNOW,
@@ -38,6 +42,9 @@ Imports:
     tibble,
     tidyr,
     utils
-Remotes: haziqj/lavaan
+Remotes: 
+    haziqj/lavaan
+    cjvanlissa/tidySEM
+    alishinski/lavaanPlot
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)

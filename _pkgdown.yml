@@ -51,6 +51,7 @@ articles:
   navbar: Technical details
   contents:
   - articles/intro
+  - articles/tech_details
   - articles/complex_sampling1
 - title: Simulation study
   navbar: Simulation study
