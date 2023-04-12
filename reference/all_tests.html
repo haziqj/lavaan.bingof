@@ -55,6 +55,7 @@ for (let popover of popovers) {
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Technical details</h6>
     <a class="dropdown-item" href="../articles/intro.html">Introduction</a>
+    <a class="dropdown-item" href="../articles/tech_details.html">Technical details</a>
     <a class="dropdown-item" href="../articles/complex_sampling1.html">Complex sampling procedure</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Simulation study</h6>
@@ -127,15 +128,15 @@ arose during model fit.)</p>
 <span class="r-in"><span>                   estimator <span class="op">=</span> <span class="st">"PML"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">all_tests</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 7 × 4</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       W    df name           pval</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>  4.47  5    Wald          0.484</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>  2.48  3.51 WaldV2,MM3    0.569</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>  4.46  5    WaldV3        0.485</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>  4.75  4.49 Pearson       0.378</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>  3.79  3.55 PearsonV2,MM3 0.368</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span>  4.31  4.15 RSS,MM3       0.386</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span>  4.39  5.01 Multn,MM3     0.495</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         W    df name           pval</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>  0.494   5    Wald          0.992</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>  0.010<span style="text-decoration: underline;">8</span>  3.55 WaldV2,MM3    1.00 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>  0.492   5    WaldV3        0.992</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>  0.314   4.15 Pearson       0.991</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> -<span style="color: #BB0000;">0.246</span>   3.03 PearsonV2,MM3 1    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> -<span style="color: #BB0000;">0.010</span><span style="color: #BB0000; text-decoration: underline;">3</span>  3.82 RSS,MM3       1    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span>  0.476   5.00 Multn,MM3     0.993</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
