@@ -143,17 +143,45 @@ When we consider a parametric model with parameter vector <span class="math inli
 \end{equation}\]</span>
 for the vector of joint probabilities, with <span class="math inline">\(\sum_{r=1}^R \pi_{r}({\boldsymbol\theta}) =1\)</span>.
 We are particularly interested in <em>factor models</em>, which rely on model-based probabilities to make inferences about underlying latent variables.</p>
-<p><img src="intro_files/figure-html/sem_graph-1.png" width="672"></p>
-<p>However, assessing the goodness of fit of these models to the data can be challenging.
+<p><img src="intro_files/figure-html/sem_path-1.png" width="672"></p>
+<div class="section level2 tabset">
+<h2 id="assessing-model-fit">Assessing model fit<a class="anchor" aria-label="anchor" href="#assessing-model-fit"></a>
+</h2>
+<p>Assessing the goodness of fit of these models to the data can be challenging.
 Traditional tests, such as the Pearson chi-square test or the likelihood ratio <span class="math inline">\(G\)</span> test, may break down when dealing with large number of items, as the number of categories grows exponentially, leading to sparse data.
 In particular, when conducting goodness-of-fit tests for binary factor models, low cell counts in the ensuing contingency table can result in unstable or unreliable test statistics<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;In the context of contingency tables, when cell counts are low, the observed frequencies in the cells may not follow a normal distribution, as they can be influenced by random variation and may not stabilize even as the sample size increases.&lt;/p&gt;"><sup>1</sup></a>, leading to inaccurate assessments of model fit.
-We illustrate this problem of sparsity with a plot of observed vs expected response pattern probabilities, highlighting the limitations of traditional tests.</p>
+We illustrate this problem of sparsity with a plot of observed vs expected response pattern probabilities, highlighting the limitations of traditional tests.
+The following plots are for a hypothetical situation in which <span class="math inline">\(p=10\)</span> binary items (sample size <span class="math inline">\(n=1000\)</span>) are analysed using a factor model.</p>
+
+
+<ul class="nav nav-tabs" id="assessing-model-fit" role="tablist">
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#full-information" id="full-information-tab" type="button" role="tab" aria-controls="full-information" aria-selected="true" class="active nav-link">Full information</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#limited-information" id="limited-information-tab" type="button" role="tab" aria-controls="limited-information" aria-selected="false" class="nav-link">Limited information</button></li>
+</ul>
+<div class="tab-content">
+<div class="active  tab-pane" id="full-information" role="tabpanel" aria-labelledby="full-information-tab">
+
+<p><img src="intro_files/figure-html/sem_sparsity1-1.png" width="672"></p>
+</div>
+<div class="tab-pane" id="limited-information" role="tabpanel" aria-labelledby="limited-information-tab">
+
+<p><img src="intro_files/figure-html/sem_sparsity2-1.png" width="672"></p>
+</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="limited-information-tests">Limited information tests<a class="anchor" aria-label="anchor" href="#limited-information-tests"></a>
+</h2>
 <p>To address this issue, we propose a solution based on <em>limited information tests</em>.
 Limited information goodness-of-fit (LIGOF) tests are so named because they utilize a subset of information from the data to assess the goodness-of-fit of a model.
 For our project, we focus on lower-order marginals such as univariate and bivariate marginal positive probabilities, rather than the full contingency table of observed response patterns.
 This subset of information, or limited information, is then used to assess how well the model fits the observed data.</p>
 <p>The term “limited information” reflects the fact that LIGOF tests do not rely on the full contingency table, which can become computationally challenging and statistically problematic when dealing with large numbers of categories or sparse data.
 By using a subset of information from the data that is less sensitive to low cell counts, LIGOF tests provide a computationally efficient and statistically robust approach for assessing the goodness-of-fit of a binary factor model.</p>
+</div>
+<div class="section level2">
+<h2 id="composite-likelihood-estimation">Composite likelihood estimation<a class="anchor" aria-label="anchor" href="#composite-likelihood-estimation"></a>
+</h2>
 <ul>
 <li><p>Model-based probabilities e.g. factor models.</p></li>
 <li><p>How can we ensure that the model is a good fit to the data? Usual (Pearson) chi-square test or the likelihood ratio <span class="math inline">\(G\)</span> test.</p></li>
@@ -163,7 +191,10 @@ By using a subset of information from the data that is less sensitive to low cel
 <li><p>Contributions: theory of the test statistics derivation, incl. its distribution. We ran type I and power simulations on various sample sizes. We also extend the results from independent sampling to complex sampling designs, where the estimates and test statistics are weight-adjusted.</p></li>
 <li><p>Conclusions…</p></li>
 </ul>
-  </main>
+</div>
+
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
