@@ -43,8 +43,8 @@ Imports:
     tidyr,
     utils
 Remotes: 
-    haziqj/lavaan
-    cjvanlissa/tidySEM
+    haziqj/lavaan,
+    cjvanlissa/tidySEM,
     alishinski/lavaanPlot
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
