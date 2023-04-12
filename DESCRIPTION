@@ -23,9 +23,8 @@ Suggests:
     devtools,
     ggcorrplot,
     kableExtra,
-    lavaanPlot,
     rmarkdown,
-    tidySEM
+    semPlot
 Imports: 
     doSNOW,
     dplyr,
@@ -44,9 +43,6 @@ Imports:
     tibble,
     tidyr,
     utils
-Remotes: 
-    haziqj/lavaan,
-    cjvanlissa/tidySEM,
-    alishinski/lavaanPlot
+Remotes: haziqj/lavaan
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)

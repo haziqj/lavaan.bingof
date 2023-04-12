@@ -2,8 +2,8 @@
 title: "Introduction"
 output:
   bookdown::html_document2:
-    toc: yes
-    toc_depth: 2
+    toc: no
+    toc_depth: -1
     number_sections: FALSE
 link-citations: yes
 bibliography: refs.bib
@@ -15,11 +15,14 @@ pkgdown:
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  echo = FALSE
+  echo = FALSE,
+  cache = TRUE
 )
 library(lavaan.bingof)
 library(lavaan)
-library(tidySEM)
+library(semPlot)
+library(tidyverse)
+theme_set(theme_bw())
 ```
 
 ```{r, echo = FALSE, results = "asis"}
@@ -64,19 +67,72 @@ When we consider a parametric model with parameter vector $\btheta\in\bbR^m$, we
 for the vector of joint probabilities, with $\sum_{r=1}^R \pimod{r} =1$.
 We are particularly interested in *factor models*, which rely on model-based probabilities to make inferences about underlying latent variables. 
 
-```{r sem_graph}
-mod <- txt_mod()
-dat <- gen_data_bin()
-fit <- sem(mod, dat, std.lv = TRUE)
-graph_sem(model = fit, )
+```{r sem_path}
+get_fit <- function(mn = 4) {
+  mod <- txt_mod(mn)
+  dat <- gen_data_bin(mn, seed = 197)
+  sem(mod, dat, std.lv = TRUE)
+}
+fit <- get_fit(4)
+
+# graph_sem(model = fit,) + scale_y_reverse()
+# lavaanPlot(fit, node_options = list(shape = "box", fontname = "Helvetica"), edge_options = list(color = "grey", fontname = "Helvetica"), coefs = TRUE, covs = TRUE)
+semPaths(fit, intercepts = FALSE, residuals = TRUE, whatLabels = "est",        
+         manifests = paste0("y", 10:1), 
+         latents = paste0("eta", 1:2),
+         node.width = 0.9, nCharNodes = 0, sizeMan = 8, sizeLat = 9, 
+         edge.label.cex = 0.8, ThreshAtSide = FALSE, thresholdSize = 1,
+         thresholdColor = "red3", rotation = 3)
 ```
 
+## Assessing model fit {.tabset}
 
-However, assessing the goodness of fit of these models to the data can be challenging. 
+Assessing the goodness of fit of these models to the data can be challenging. 
 Traditional tests, such as the Pearson chi-square test or the likelihood ratio $G$ test, may break down when dealing with large number of items, as the number of categories grows exponentially, leading to sparse data.
 In particular, when conducting goodness-of-fit tests for binary factor models, low cell counts in the ensuing contingency table can result in unstable or unreliable test statistics^[In the context of contingency tables, when cell counts are low, the observed frequencies in the cells may not follow a normal distribution, as they can be influenced by random variation and may not stabilize even as the sample size increases.], leading to inaccurate assessments of model fit. 
 We illustrate this problem of sparsity with a plot of observed vs expected response pattern probabilities, highlighting the limitations of traditional tests.
+The following plots are for a hypothetical situation in which $p=10$ binary items (sample size $n=1000$) are analysed using a factor model.
 
+### Full information
+
+```{r sem_sparsity1}
+# fit <- get_fit(4)
+lavTables(fit, dimension = 0) %>%
+  filter(X2 <= 100) %>%
+  suppressWarnings() %>%
+  ggplot(aes(obs.prop, est.prop, size = obs.freq, fill = X2)) +
+  geom_point(alpha = 0.75, shape = 21) +
+  geom_abline(slope = 1, intercept = 0) +
+  scale_x_log10() +
+  scale_y_log10() +
+  scale_fill_viridis_c(option = "C") +
+  labs(x = "Observed proportions", y = "Expected proportions", 
+       size = "Observed\nfrequency", fill = expression(chi^2~"statistic")) +
+  guides(size = guide_legend(order = 2),
+         shape = guide_legend(order = 1))
+```
+
+### Limited information
+
+```{r sem_sparsity2}
+bind_rows(
+  lavTables(fit, dimension = 1) %>% filter(rhs == 1) %>% mutate(type = 1),
+  lavTables(fit, dimension = 2) %>% filter(row == 2 & col == 2) %>% mutate(type = 2)
+) %>%
+  mutate(type = factor(type, labels = c("Univariate", "Bivariate"))) %>%
+  suppressWarnings() %>%
+  ggplot(aes(obs.prop, est.prop, size = obs.freq, fill = X2, shape = type)) +
+  geom_point(alpha = 0.6) +
+  geom_abline(slope = 1, intercept = 0) +
+  scale_shape_manual(values = c(23, 21)) +
+  scale_fill_viridis_c(option = "C", ) +
+  labs(x = "Observed proportions", y = "Expected proportions", shape = "Order",
+       size = "Observed\nfrequency", fill = expression(chi^2~"statistic")) +
+  guides(size = guide_legend(ncol = 2, order = 2),
+         shape = guide_legend(order = 1))
+```
+
+## Limited information tests
 
 To address this issue, we propose a solution based on *limited information tests*.
 Limited information goodness-of-fit (LIGOF) tests are so named because they utilize a subset of information from the data to assess the goodness-of-fit of a model. 
@@ -85,6 +141,8 @@ This subset of information, or limited information, is then used to assess how w
 
 The term "limited information" reflects the fact that LIGOF tests do not rely on the full contingency table, which can become computationally challenging and statistically problematic when dealing with large numbers of categories or sparse data. 
 By using a subset of information from the data that is less sensitive to low cell counts, LIGOF tests provide a computationally efficient and statistically robust approach for assessing the goodness-of-fit of a binary factor model. 
+
+## Composite likelihood estimation
 
 
 
