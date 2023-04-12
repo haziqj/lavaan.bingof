@@ -23,7 +23,9 @@ Suggests:
     devtools,
     ggcorrplot,
     kableExtra,
-    rmarkdown
+    lavaanPlot,
+    rmarkdown,
+    tidySEM
 Imports: 
     doSNOW,
     dplyr,
