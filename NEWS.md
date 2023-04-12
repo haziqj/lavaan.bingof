@@ -1,5 +1,9 @@
 # lavaan.bingof (development version)
 
+## Date
+
+- Wald and Wald V3 performs very poorly when the rank of weight matrix $\bXi$ is rank deficient. Noticed that this occurs often in complex sampling and $\bSigma_2$ matrix is not full rank. 
+
 ## 2023-04-08
 
 - Create R package `{lavaan.bingof}` for easier shipment of R codes to implement the goodness-of-fit tests.

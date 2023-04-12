@@ -46,7 +46,9 @@ make_population <- function(model_no = 1, seed = 123, H1 = FALSE,
                                size = nstudents, replace = TRUE))) %>%
     unnest_longer(class) %>%
     select(type, school, class) %>%
-    arrange(type, school, class)
+    arrange(type, school, class) %>%
+    mutate(school = paste0(type, school),
+           class = paste0(school, class))
   N <- nrow(pop)
 
   # Generate the data ----------------------------------------------------------
@@ -134,7 +136,7 @@ make_population <- function(model_no = 1, seed = 123, H1 = FALSE,
 gen_data_bin_srs <- function(population = make_population(1, seed = NULL),
                              npsu = 3000, seed = NULL) {
   set.seed(seed)
-  slice_sample(population, n = n) %>%
+  slice_sample(population, n = n, replace = FALSE) %>%
     mutate(across(starts_with("y"), ordered))
 }
 
@@ -160,7 +162,7 @@ gen_data_bin_complex1 <- function(population = make_population(1, seed = NULL),
   # Sampling of PSUs
   psu_sampled <- population %>%
     group_by(type) %>%
-    slice_sample(n = npsu) %>%
+    slice_sample(n = npsu, replace = FALSE) %>%
     ungroup()
 
   sampled <- psu_sampled %>%
@@ -204,7 +206,7 @@ gen_data_bin_complex2 <- function(population = make_population(1, seed = NULL),
     inner_join(population, psu_sampled, by = c("type", "school")) %>%
     distinct(type, school, class) %>%
     group_by(type, school) %>%
-    slice_sample(n = 1) %>%
+    slice_sample(n = 1, replace = FALSE) %>%
     ungroup()
 
   sampled <-
@@ -244,14 +246,14 @@ gen_data_bin_complex3 <- function(population = make_population(1, seed = NULL),
   psu_sampled <- population %>%
     distinct(type, school) %>%
     group_by(type) %>%
-    slice_sample(n = npsu)
+    slice_sample(n = npsu, replace = FALSE)
 
   # Sampling of classes within PSUs (using SRS)
   classes_sampled <-
     inner_join(population, psu_sampled, by = c("type", "school")) %>%
     distinct(type, school, class) %>%
     group_by(type, school) %>%
-    slice_sample(n = 1) %>%
+    slice_sample(n = 1, replace = FALSE) %>%
     ungroup()
 
   sampled <-
