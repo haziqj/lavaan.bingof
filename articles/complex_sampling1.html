@@ -354,12 +354,12 @@ The true model parameter values <span class="math inline">\({\boldsymbol\theta}\
 <span><span class="co"># Univariate moments (population statistics)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">prop1</span>, <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="co">#&gt;     y1     y2     y3     y4     y5 </span></span>
-<span><span class="co">#&gt; 0.9234 0.7083 0.5511 0.7635 0.8706</span></span>
+<span><span class="co">#&gt; 0.9240 0.7083 0.5515 0.7643 0.8709</span></span>
 <span></span>
 <span><span class="co"># Errors (percentage)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="op">(</span><span class="va">prop1</span> <span class="op">-</span> <span class="va">pi1</span><span class="op">)</span> <span class="op">/</span> <span class="va">pi1</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    y1    y2    y3    y4    y5 </span></span>
-<span><span class="co">#&gt; -0.03 -0.08 -0.10 -0.10 -0.02</span></span></code></pre></div>
+<span><span class="co">#&gt;  0.04 -0.07 -0.03  0.01  0.01</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="model-fit">Model fit<a class="anchor" aria-label="anchor" href="#model-fit"></a>
@@ -443,13 +443,13 @@ The true model parameter values <span class="math inline">\({\boldsymbol\theta}\
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> A     A1     A1ab  0.599 1     1     1     1     1    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> A     A1     A1y   0.599 1     1     1     1     1    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> A     A10    A10a  0.599 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> A     A10    A10b  0.599 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> A     A10    A10b  0.599 1     1     1     0     1    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> A     A10    A10i  0.599 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> A     A10    A10s  0.599 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> A     A101   A101g 0.599 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> A     A101   A101l 0.599 1     1     1     0     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> A     A101   A101q 0.599 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> A     A101   A101v 0.599 1     1     1     0     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> A     A10    A10s  0.599 1     1     1     1     0    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> A     A101   A101g 0.599 1     1     0     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> A     A101   A101l 0.599 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> A     A101   A101q 0.599 1     1     0     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> A     A101   A101v 0.599 1     1     1     1     1    </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,990 more rows</span></span></span>
 <span></span>
 <span><span class="co"># Two-stage cluster sampling</span></span>
@@ -458,15 +458,15 @@ The true model parameter values <span class="math inline">\({\boldsymbol\theta}\
 <span><span class="co">#&gt;    type  school class    wt y1    y2    y3    y4    y5   </span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> A     A100   A100l  1.48 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> A     A100   A100l  1.48 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> A     A100   A100l  1.48 1     1     0     1     1    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> A     A100   A100l  1.48 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> A     A100   A100l  1.48 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> A     A100   A100l  1.48 1     1     1     0     1    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> A     A100   A100l  1.48 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> A     A100   A100l  1.48 1     1     1     0     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> A     A100   A100l  1.48 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> A     A100   A100l  1.48 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> A     A100   A100l  1.48 1     0     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> A     A100   A100l  1.48 1     1     0     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> A     A100   A100l  1.48 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> A     A100   A100l  1.48 1     1     0     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> A     A100   A100l  1.48 1     1     1     1     0    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> A     A100   A100l  1.48 1     1     0     0     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> A     A100   A100l  1.48 1     1     1     1     1    </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3,145 more rows</span></span></span>
 <span></span>
 <span><span class="co"># Two-stage stratified cluster sampling</span></span>
@@ -474,16 +474,16 @@ The true model parameter values <span class="math inline">\({\boldsymbol\theta}\
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3,039 × 9</span></span></span>
 <span><span class="co">#&gt;    type  school class    wt y1    y2    y3    y4    y5   </span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> A     A109   A109b 0.740 1     1     0     1     0    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> A     A109   A109b 0.740 1     1     1     1     1    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> A     A109   A109b 0.740 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> A     A109   A109b 0.740 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> A     A109   A109b 0.740 1     1     1     1     0    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> A     A109   A109b 0.740 1     1     0     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> A     A109   A109b 0.740 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> A     A109   A109b 0.740 1     1     1     0     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> A     A109   A109b 0.740 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> A     A109   A109b 0.740 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> A     A109   A109b 0.740 1     1     1     0     1    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> A     A109   A109b 0.740 1     1     1     1     1    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> A     A109   A109b 0.740 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> A     A109   A109b 0.740 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> A     A109   A109b 0.740 1     1     1     0     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> A     A109   A109b 0.740 1     1     0     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> A     A109   A109b 0.740 1     1     1     1     1    </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3,029 more rows</span></span></span></code></pre></div>
 <div class="section level3">
 <h3 id="comparison-of-uni-and-bivariate-moments">Comparison of uni and bivariate moments<a class="anchor" aria-label="anchor" href="#comparison-of-uni-and-bivariate-moments"></a>
