@@ -602,7 +602,7 @@ create_Sigma2_matrix_complex <- function(.lavobject, .svy_design) {
   colnames(tmp2) <- the_names[-(1:p)]
   tmp <- bind_cols(dat %>% select(-starts_with("y")), tmp, tmp2)
 
-  the_pi <- c(pidot1, pidot2)
+  pi2 <- c(pidot1, pidot2)
   Sigma <- list()
   for (i in a) {
     # Filter the strata a
@@ -615,7 +615,7 @@ create_Sigma2_matrix_complex <- function(.lavobject, .svy_design) {
       mutate(across(starts_with("y"), function(x) as.numeric(x == 1))) %>%
       as.matrix()
 
-    uab <- {sweep(y, 2, the_pi, "-") * current_dat$wt} %>%
+    uab <- {sweep(y, 2, pi2, "-") * current_dat$wt} %>%
       as_tibble() %>%
       bind_cols(current_dat %>% select(-starts_with("y")), .) %>%
       group_by(cluster) %>%
@@ -652,10 +652,8 @@ create_Sigma_univariate_matrix_complex <- function(.lavobject, .svy_design) {
   tmp <- dat %>%
     select(starts_with("y")) %>%
     mutate(across(starts_with("y"), function(x) as.numeric(x == 2)))
-
   tmp <- bind_cols(dat %>% select(-starts_with("y")), tmp)
 
-  the_pi <- pidot1
   Sigma <- list()
   for (i in a) {
     # Filter the strata a
@@ -668,7 +666,7 @@ create_Sigma_univariate_matrix_complex <- function(.lavobject, .svy_design) {
       mutate(across(starts_with("y"), function(x) as.numeric(x == 1))) %>%
       as.matrix()
 
-    uab <- {sweep(y, 2, the_pi, "-") * current_dat$wt} %>%
+    uab <- {sweep(y, 2, pidot1, "-") * current_dat$wt} %>%
       as_tibble() %>%
       bind_cols(current_dat %>% select(-starts_with("y")), .) %>%
       group_by(cluster) %>%

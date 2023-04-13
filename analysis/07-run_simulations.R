@@ -1,9 +1,10 @@
 library(tidyverse)
 library(lavaan.bingof)
+library(survey)
 analysis_path <- dirname(rstudioapi::getSourceEditorContext()$path)
 
 # All simulations --------------------------------------------------------------
-for (sim_type in c("power")) {
+for (sim_type in c("type1", "power")) {
   for (samp_method in c("srs", "strat", "clust", "strcl")) {
     for (the_samp_size in c(500, 1000, 2000, 3000)) {
       for (mod_no in 1:5) {
