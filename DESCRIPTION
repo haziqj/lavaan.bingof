@@ -37,6 +37,7 @@ Imports:
     mcompanion,
     methods,
     mnormt,
+    mvnfast,
     parallel,
     stats,
     survey,

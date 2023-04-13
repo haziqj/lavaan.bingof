@@ -29,6 +29,7 @@
 #' @importFrom lavaan sem
 #' @importFrom magrittr %>%
 #' @importFrom methods is
+#' @importFrom mvnfast rmvn
 #' @importFrom parallel detectCores
 #' @importFrom parallel makeCluster
 #' @importFrom parallel stopCluster

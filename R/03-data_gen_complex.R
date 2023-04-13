@@ -52,8 +52,10 @@ make_population <- function(model_no = 1, seed = 123, H1 = FALSE,
   N <- nrow(pop)
 
   # Generate the data ----------------------------------------------------------
-  eta     <- mnormt::rmnorm(n = N, mean = rep(0, neta), varcov = Psi)
-  epsilon <- mnormt::rmnorm(n = N, mean = rep(0, nitems), varcov = Theta)
+  eta     <- mvnfast::rmvn(n = N, mu = rep(0, neta), sigma = Psi)
+  epsilon <- mvnfast::rmvn(n = N, mu = rep(0, nitems), sigma = Theta)
+  # eta     <- mnormt::rmnorm(n = N, mean = rep(0, neta), varcov = Psi)
+  # epsilon <- mnormt::rmnorm(n = N, mean = rep(0, nitems), varcov = Theta)
   ystar   <- tcrossprod(eta, Lambda) + epsilon
 
   if (isTRUE(H1)) {
