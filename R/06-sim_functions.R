@@ -57,9 +57,9 @@ ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
 
   # Random seeds for replication
   set.seed(starting_seed)
-  the_seeds <- model_no * matrix(
+  the_seeds <- 2 ^ (simtype == "power") * model_no * matrix(
     sample(seq_len(100 + nsim ^ 2), size = nsim * 4), ncol = 4
-  )
+  ) + samp_size
 
   # Initialise parallel stuff
   pb <- txtProgressBar(min = 0, max = nsim, style = 3)
