@@ -6,7 +6,9 @@ title: "Description and results"
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  echo = FALSE
+  echo = FALSE,
+  warning = FALSE,
+  out.width = "100%"
 )
 library(tidyverse)
 theme_set(theme_bw())
@@ -20,7 +22,6 @@ load("simres_complex.RData")
 # LaTeX shortcuts 
 cat(readr::read_file("maths_shortcuts.tex"))
 ``` 
-
 
 A simulation study was carried out to investigate the performance of the proposed limited information goodness-of-fit tests.
 The data was generated using an underlying variable framework.
@@ -53,23 +54,20 @@ These simulations were then removed from the results.
 
 ### 10% significance
 
-```{r srs_type1a, fig.width = 8, fig.height = 5.5}
-p_srs_a +   #theme(legend.position = c(0.85, 0.15)) +
-  guides(fill = guide_legend(ncol = 2), shape = guide_legend(ncol = 2))
+```{r srs_type1a, fig.width = 7, fig.height = 5}
+p_srs_a
 ```
 
 ### 5% significance {.active}
 
-```{r srs_type1b, fig.width = 8, fig.height = 5.5}
-p_srs_b +  # theme(legend.position = c(0.85, 0.15)) +
-  guides(fill = guide_legend(ncol = 2), shape = guide_legend(ncol = 2))
+```{r srs_type1b, fig.width = 7, fig.height = 5}
+p_srs_b
 ```
 
 ### 1% significance
 
-```{r srs_type1c, fig.width = 8, fig.height = 5.5}
-p_srs_c +   #theme(legend.position = c(0.85, 0.15)) +
-  guides(fill = guide_legend(ncol = 2), shape = guide_legend(ncol = 2))
+```{r srs_type1c, fig.width = 7, fig.height = 5}
+p_srs_c
 ```
 
 
@@ -77,66 +75,60 @@ p_srs_c +   #theme(legend.position = c(0.85, 0.15)) +
 
 ### 10% significance
 
-```{r srs_powerd, fig.width = 8, fig.height = 5.5}
-p_srs_d +  # theme(legend.position = c(0.85, 0.15)) +
-  guides(fill = guide_legend(ncol = 2), shape = guide_legend(ncol = 2))
+```{r srs_powerd, fig.width = 7, fig.height = 5}
+p_srs_d
 ```
 
 ### 5% significance {.active}
 
-```{r srs_powere, fig.width = 8, fig.height = 5.5}
-p_srs_e +  # theme(legend.position = c(0.85, 0.15)) +
-  guides(fill = guide_legend(ncol = 2), shape = guide_legend(ncol = 2))
+```{r srs_powere, fig.width = 7, fig.height = 5}
+p_srs_e
 ```
 
 ### 1% significance
 
-```{r srs_powerf, fig.width = 8, fig.height = 5.5}
-p_srs_f + #  theme(legend.position = c(0.85, 0.15)) +
-  guides(fill = guide_legend(ncol = 2), shape = guide_legend(ncol = 2))
+```{r srs_powerf, fig.width = 7, fig.height = 5}
+p_srs_f
 ```
 
 ## Complex sampling Type I errors {.tabset}
 
 ### 10% significance
 
-```{r complex_type1a, fig.width = 8, fig.height = 5.5}
-p_complex_a #+   theme(legend.position = c(0.85, 0.15))
+```{r complex_type1a, fig.width = 7, fig.height = 8}
+p_complex_a
 ```
 
 ### 5% significance {.active}
 
-```{r complex_type1b, fig.width = 8, fig.height = 5.5}
-p_complex_b #+   theme(legend.position = c(0.85, 0.15))
+```{r complex_type1b, fig.width = 7, fig.height = 8}
+p_complex_b
 ```
 
 ### 1% significance
 
-```{r complex_type1c, fig.width = 8, fig.height = 5.5}
-p_complex_c #+   theme(legend.position = c(0.85, 0.15))
+```{r complex_type1c, fig.width = 7, fig.height = 8}
+p_complex_c
 ```
 
 ## Complex sampling Power plots {.tabset}
 
 ### 10% significance
 
-```{r complex_powerd, fig.width = 8, fig.height = 5.5}
-p_complex_d +   #theme(legend.position = c(0.85, 0.15)) +
-  guides(fill = guide_legend(ncol = 2), alpha = guide_legend(ncol = 4))
+```{r complex_powerd, fig.width = 7, fig.height = 8}
+p_complex_d
 ```
 
 ### 5% significance {.active}
 
-```{r complex_powere, fig.width = 8, fig.height = 5.5}
-p_complex_e +   #theme(legend.position = c(0.85, 0.15)) +
-  guides(fill = guide_legend(ncol = 2), alpha = guide_legend(ncol = 4))
+```{r complex_powere, fig.width = 7, fig.height = 8}
+p_complex_e
 ```
 
 ### 1% significance
 
-```{r complex_powerf, fig.width = 8, fig.height = 5.5}
-p_complex_f +   #theme(legend.position = c(0.85, 0.15)) +
-  guides(fill = guide_legend(ncol = 2), alpha = guide_legend(ncol = 4))
+```{r complex_powerf, fig.width = 7, fig.height = 8}
+p_complex_f
 ```
 
 

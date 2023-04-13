@@ -490,7 +490,6 @@ get_theoretical_uni_bi_moments <- function(model_no, collapse = FALSE) {
   }
 }
 
-
 #' Get univariate and bivariate moments
 #'
 #' @description Returns univariate and bivariate moments (i.e. positive

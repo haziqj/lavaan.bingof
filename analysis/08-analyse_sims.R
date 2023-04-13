@@ -14,110 +14,45 @@ my_comb_fn <- function(x) {
     bind_rows()
 }
 all_res <- lapply(all_res, my_comb_fn)  # clean all results
-list2env(all_res, envir = .GlobalEnv)
 
-# SRS --------------------------------------------------------------------------
+grab_sims <- function(x = all_res, samp = "srs", type = "type1") {
+  mod_names <- c("1F 5V", "1F 8V", "1F 15V", "2F 10V", "3F 15V")
 
-# Type 1 simulations
-srs_type1 <- bind_rows(
-  # n = 100
-  bind_cols(srs1_n100_type1, n = 100, sim = "1F 5V"),
-  bind_cols(srs2_n100_type1, n = 100, sim = "1F 8V"),
-  bind_cols(srs3_n100_type1, n = 100, sim = "1F 15V"),
-  bind_cols(srs4_n100_type1, n = 100, sim = "2F 10V"),
-  bind_cols(srs5_n100_type1, n = 100, sim = "3F 15V"),
+  type_of_sampling <- grepl(samp, names(x))
+  type_of_analysis <- grepl(type, names(x))
+  res <- list(NULL)
 
-  # n = 250
-  bind_cols(srs1_n250_type1, n = 250, sim = "1F 5V"),
-  bind_cols(srs2_n250_type1, n = 250, sim = "1F 8V"),
-  bind_cols(srs3_n250_type1, n = 250, sim = "1F 15V"),
-  bind_cols(srs4_n250_type1, n = 250, sim = "2F 10V"),
-  bind_cols(srs5_n250_type1, n = 250, sim = "3F 15V"),
+  for (n in c(500, 1000, 2000, 3000)) {
+    type_of_n <- grepl(n, names(x))
+    ind <- which(type_of_sampling & type_of_analysis & type_of_n)
+    tmp <- NULL
+    for (i in seq_along(ind)) {
+      tmp <- bind_rows(tmp, bind_cols(x[[ind[i]]], n = n, sim = mod_names[i]))
+    }
+    res <- c(res, list(tmp))
+  }
 
-  # n = 500
-  bind_cols(srs1_n500_type1, n = 500, sim = "1F 5V"),
-  bind_cols(srs2_n500_type1, n = 500, sim = "1F 8V"),
-  bind_cols(srs3_n500_type1, n = 500, sim = "1F 15V"),
-  bind_cols(srs4_n500_type1, n = 500, sim = "2F 10V"),
-  bind_cols(srs5_n500_type1, n = 500, sim = "3F 15V"),
+  do.call("bind_rows", res) %>%
+    mutate(sim = factor(sim, levels = unique(sim)),
+           name = factor(name, levels = unique(name)),
+           alpha10 = pval < 0.1,
+           alpha5 = pval < 0.05,
+           alpha1 = pval < 0.01)
+}
 
-  # n = 1000
-  bind_cols(srs1_n1000_type1, n = 1000, sim = "1F 5V"),
-  bind_cols(srs2_n1000_type1, n = 1000, sim = "1F 8V"),
-  bind_cols(srs3_n1000_type1, n = 1000, sim = "1F 15V"),
-  bind_cols(srs4_n1000_type1, n = 1000, sim = "2F 10V"),
-  bind_cols(srs5_n1000_type1, n = 1000, sim = "3F 15V"),
+summarise_sims <- function(samp = "srs", type = "type1") {
+  grab_sims(samp = samp, type = type) %>%
+    group_by(name, sim, n) %>%
+    summarise(n_sims = n(),
+              n_converged = sum(converged),
+              n_rank_def = sum(Omega2_rank < S),
+              rej_rate10 = mean(alpha10[converged], na.rm = TRUE),
+              rej_rate5 = mean(alpha5[converged], na.rm = TRUE),
+              rej_rate1 = mean(alpha1[converged], na.rm = TRUE),
+              .groups = "drop")
+}
 
-  # n = 2000
-  bind_cols(srs1_n2000_type1, n = 2000, sim = "1F 5V"),
-  bind_cols(srs2_n2000_type1, n = 2000, sim = "1F 8V"),
-  bind_cols(srs3_n2000_type1, n = 2000, sim = "1F 15V"),
-  bind_cols(srs4_n2000_type1, n = 2000, sim = "2F 10V"),
-  bind_cols(srs5_n2000_type1, n = 2000, sim = "3F 15V"),
-
-  # n = 3000
-  bind_cols(srs1_n3000_type1, n = 3000, sim = "1F 5V"),
-  bind_cols(srs2_n3000_type1, n = 3000, sim = "1F 8V"),
-  bind_cols(srs3_n3000_type1, n = 3000, sim = "1F 15V"),
-  bind_cols(srs4_n3000_type1, n = 3000, sim = "2F 10V"),
-  bind_cols(srs5_n3000_type1, n = 3000, sim = "3F 15V")
-) %>%
-  mutate(sim = factor(sim, levels = unique(sim)),
-         name = factor(name, levels = rev(unique(name))),
-         alpha10 = pval < 0.1,
-         alpha5 = pval < 0.05,
-         alpha1 = pval < 0.01)
-
-# Power simulations
-srs_power <- bind_rows(
-  # n = 100
-  # bind_cols(srs1_n100_power, n = 100, sim = "1F 5V"),
-  # bind_cols(srs2_n100_power, n = 100, sim = "1F 8V"),
-  # bind_cols(srs3_n100_power, n = 100, sim = "1F 15V"),
-  # bind_cols(srs4_n100_power, n = 100, sim = "2F 10V"),
-  # bind_cols(srs5_n100_power, n = 100, sim = "3F 15V"),
-
-  # n = 250
-  # bind_cols(srs1_n250_power, n = 250, sim = "1F 5V"),
-  # bind_cols(srs2_n250_power, n = 250, sim = "1F 8V"),
-  # bind_cols(srs3_n250_power, n = 250, sim = "1F 15V"),
-  # bind_cols(srs4_n250_power, n = 250, sim = "2F 10V"),
-  # bind_cols(srs5_n250_power, n = 250, sim = "3F 15V"),
-
-  # n = 500
-  bind_cols(srs1_n500_power, n = 500, sim = "1F 5V"),
-  # bind_cols(srs2_n500_power, n = 500, sim = "1F 8V"),
-  # bind_cols(srs3_n500_power, n = 500, sim = "1F 15V"),
-  # bind_cols(srs4_n500_power, n = 500, sim = "2F 10V"),
-  # bind_cols(srs5_n500_power, n = 500, sim = "3F 15V"),
-
-  # n = 1000
-  bind_cols(srs1_n1000_power, n = 1000, sim = "1F 5V"),
-  # bind_cols(srs2_n1000_power, n = 1000, sim = "1F 8V"),
-  # bind_cols(srs3_n1000_power, n = 1000, sim = "1F 15V"),
-  # bind_cols(srs4_n1000_power, n = 1000, sim = "2F 10V"),
-  # bind_cols(srs5_n1000_power, n = 1000, sim = "3F 15V"),
-
-  # n = 2000
-  bind_cols(srs1_n2000_power, n = 2000, sim = "1F 5V"),
-  # bind_cols(srs2_n2000_power, n = 2000, sim = "1F 8V"),
-  # bind_cols(srs3_n2000_power, n = 2000, sim = "1F 15V"),
-  # bind_cols(srs4_n2000_power, n = 2000, sim = "2F 10V"),
-  # bind_cols(srs5_n2000_power, n = 2000, sim = "3F 15V"),
-
-  # n = 3000
-  bind_cols(srs1_n3000_power, n = 3000, sim = "1F 5V"),
-  # bind_cols(srs2_n3000_power, n = 3000, sim = "1F 8V"),
-  # bind_cols(srs3_n3000_power, n = 3000, sim = "1F 15V"),
-  # bind_cols(srs4_n3000_power, n = 3000, sim = "2F 10V"),
-  # bind_cols(srs5_n3000_power, n = 3000, sim = "3F 15V")
-) %>%
-  mutate(sim = factor(sim, levels = unique(sim)),
-         name = factor(name, levels = rev(unique(name))),
-         alpha10 = pval < 0.1,
-         alpha5 = pval < 0.05,
-         alpha1 = pval < 0.01)
-
+# Plot functions ---------------------------------------------------------------
 srs_plot <- function(x = srs_type1_res, alpha = 10, dashed_line = TRUE,
                      plot_title = "Type I errors") {
   var_name <- paste0("rej_rate", alpha)
@@ -130,53 +65,23 @@ srs_plot <- function(x = srs_type1_res, alpha = 10, dashed_line = TRUE,
   p +
     geom_point() +
     geom_line() +
-    # geom_ribbon(aes(ymin = rej_rate10 - 1.96 * se10,
-    #                 ymax = rej_rate10 + 1.96 * se10)) +
     facet_wrap(. ~ sim, ncol = 3) +
-    scale_x_continuous(breaks = unique(srs_power$n)) +
+    scale_x_continuous(breaks = unique(srs_power_res$n)) +
     scale_shape_manual(values = c(16, 17, 15, 3, 7, 8, 11)) +
+    scale_alpha("% rank def.", range = c(1, 0.3)) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1),
-          legend.position = c(0.85, 0.24)) +
+          legend.position = c(0.85, 0.2)) +
     labs(x = "Sample size (n)", y = "Rejection proportion", col = NULL,
          shape = NULL, title = as.expression(bquote(
            .(plot_title)~"("*alpha~"="~.(iprior::dec_plac(alpha/100, 2))*")"
          ))) +
-    scale_colour_viridis_d(option = "turbo")
+    guides(col = guide_legend(ncol = 1), shape = guide_legend(ncol = 1)) +
+    scale_colour_viridis_d(option = "turbo", direction = -1)
 }
 
 # SRS results ------------------------------------------------------------------
-
-# Type I error results
-srs_type1_res <-
-  srs_type1 %>%
-  group_by(name, sim, n) %>%
-  summarise(n_sims = n(),
-            n_converged = sum(converged),
-            max_rank = max(Omega2_rank),
-            n_rank_def = sum(Omega2_rank < max_rank),
-            rej_rate10 = mean(alpha10[converged], na.rm = TRUE),
-            # se10  = sd(alpha10, na.rm = TRUE) / n(),
-            rej_rate5 = mean(alpha5[converged], na.rm = TRUE),
-            # se5  = sd(alpha5, na.rm = TRUE) / n(),
-            rej_rate1 = mean(alpha1[converged], na.rm = TRUE),
-            # se1  = sd(alpha1, na.rm = TRUE) / n(),
-            .groups = "drop")
-
-# Power results
-srs_power_res <-
-  srs_power %>%
-  group_by(name, sim, n) %>%
-  summarise(n_sims = n(),
-            n_converged = sum(converged),
-            max_rank = max(Omega2_rank),
-            n_rank_def = sum(Omega2_rank < max_rank),
-            rej_rate10 = mean(alpha10[converged], na.rm = TRUE),
-            # se10  = sd(alpha10, na.rm = TRUE) / n(),
-            rej_rate5 = mean(alpha5[converged], na.rm = TRUE),
-            # se5  = sd(alpha5, na.rm = TRUE) / n(),
-            rej_rate1 = mean(alpha1[converged], na.rm = TRUE),
-            # se1  = sd(alpha1, na.rm = TRUE) / n(),
-            .groups = "drop")
+srs_type1_res <- summarise_sims("srs", "type1")
+srs_power_res <- summarise_sims("srs", "power")
 
 p_srs_a <- srs_plot(srs_type1_res, alpha = 10)
 p_srs_b <- srs_plot(srs_type1_res, alpha = 5)
@@ -189,158 +94,54 @@ p_srs_f <- srs_plot(srs_power_res, alpha = 1, dashed_line = FALSE,
                     plot_title = "Power")
 
 save(srs_type1_res, srs_power_res, p_srs_a, p_srs_b, p_srs_c, p_srs_d,
-     p_srs_e, p_srs_f, file = "simres_srs.RData")
+     p_srs_e, p_srs_f, file = "analysis/simres_srs.RData")
 
-# Complex sampling -------------------------------------------------------------
-strat_type1 <- bind_rows(
-  bind_cols(strat1_type1, sim = "1F 5V"),
-  bind_cols(strat2_type1, sim = "1F 8V"),
-  bind_cols(strat3_type1, sim = "1F 15V"),
-  bind_cols(strat4_type1, sim = "2F 10V"),
-  bind_cols(strat5_type1, sim = "3F 15V")
+# Complex sampling results -----------------------------------------------------
+complex_type1_res <- bind_rows(
+  bind_cols(summarise_sims("strat", "type1"), sampling = "Stratified"),
+  bind_cols(summarise_sims("clust", "type1"), sampling = "Cluster"),
+  bind_cols(summarise_sims("strcl", "type1"), sampling = "Strat-clust")
 ) %>%
-  mutate(sim = factor(sim, levels = unique(sim)),
-         name = factor(name, levels = rev(unique(name))),
-         alpha10 = pval < 0.1,
-         alpha5 = pval < 0.05,
-         alpha1 = pval < 0.01)
+  mutate(sampling = factor(sampling, levels = c("Stratified", "Cluster",
+                                                "Strat-clust")))
 
-strat_power <- bind_rows(
-  bind_cols(strat1_power, sim = "1F 5V"),
-  bind_cols(strat2_power, sim = "1F 8V"),
-  bind_cols(strat3_power, sim = "1F 15V"),
-  bind_cols(strat4_power, sim = "2F 10V"),
-  bind_cols(strat5_power, sim = "3F 15V")
+complex_power_res <- bind_rows(
+  bind_cols(summarise_sims("strat", "power"), sampling = "Stratified"),
+  bind_cols(summarise_sims("clust", "power"), sampling = "Cluster"),
+  bind_cols(summarise_sims("strcl", "power"), sampling = "Strat-clust")
 ) %>%
-  mutate(sim = factor(sim, levels = unique(sim)),
-         name = factor(name, levels = rev(unique(name))),
-         alpha10 = pval < 0.1,
-         alpha5 = pval < 0.05,
-         alpha1 = pval < 0.01)
-
-clust_type1 <- bind_rows(
-  bind_cols(clust1_type1, sim = "1F 5V"),
-  bind_cols(clust2_type1, sim = "1F 8V"),
-  bind_cols(clust3_type1, sim = "1F 15V"),
-  bind_cols(clust4_type1, sim = "2F 10V"),
-  bind_cols(clust5_type1, sim = "3F 15V")
-) %>%
-  mutate(sim = factor(sim, levels = unique(sim)),
-         name = factor(name, levels = rev(unique(name))),
-         alpha10 = pval < 0.1,
-         alpha5 = pval < 0.05,
-         alpha1 = pval < 0.01)
-
-clust_power <- bind_rows(
-  bind_cols(clust1_power, sim = "1F 5V"),
-  bind_cols(clust2_power, sim = "1F 8V"),
-  bind_cols(clust3_power, sim = "1F 15V"),
-  bind_cols(clust4_power, sim = "2F 10V"),
-  bind_cols(clust5_power, sim = "3F 15V")
-) %>%
-  mutate(sim = factor(sim, levels = unique(sim)),
-         name = factor(name, levels = rev(unique(name))),
-         alpha10 = pval < 0.1,
-         alpha5 = pval < 0.05,
-         alpha1 = pval < 0.01)
-
-strcl_type1 <- bind_rows(
-  bind_cols(strcl1_type1, sim = "1F 5V"),
-  bind_cols(strcl2_type1, sim = "1F 8V"),
-  bind_cols(strcl3_type1, sim = "1F 15V"),
-  bind_cols(strcl4_type1, sim = "2F 10V"),
-  bind_cols(strcl5_type1, sim = "3F 15V")
-) %>%
-  mutate(sim = factor(sim, levels = unique(sim)),
-         name = factor(name, levels = rev(unique(name))),
-         alpha10 = pval < 0.1,
-         alpha5 = pval < 0.05,
-         alpha1 = pval < 0.01)
-
-strcl_power <- bind_rows(
-  bind_cols(strcl1_power, sim = "1F 5V"),
-  bind_cols(strcl2_power, sim = "1F 8V"),
-  bind_cols(strcl3_power, sim = "1F 15V"),
-  bind_cols(strcl4_power, sim = "2F 10V"),
-  bind_cols(strcl5_power, sim = "3F 15V")
-) %>%
-  mutate(sim = factor(sim, levels = unique(sim)),
-         name = factor(name, levels = rev(unique(name))),
-         alpha10 = pval < 0.1,
-         alpha5 = pval < 0.05,
-         alpha1 = pval < 0.01)
-
-complex_type1 <- bind_rows(
-  bind_cols(strat_type1, sampling = "Stratified"),
-  bind_cols(clust_type1, sampling = "Cluster"),
-  bind_cols(strcl_type1, sampling = "Strat-clust")
-) %>%
-  mutate(sampling = factor(sampling, levels = c("Stratified", "Cluster", "Strat-clust")))
-
-complex_power <- bind_rows(
-  bind_cols(strat_power, sampling = "Stratified"),
-  bind_cols(clust_power, sampling = "Cluster"),
-  bind_cols(strcl_power, sampling = "Strat-clust")
-) %>%
-  mutate(sampling = factor(sampling, levels = c("Stratified", "Cluster", "Strat-clust")))
+  mutate(sampling = factor(sampling, levels = c("Stratified", "Cluster",
+                                                "Strat-clust")))
 
 complex_plot <- function(x = complex_type1_res, alpha = 10, dashed_line = TRUE,
                          plot_title = "Type I errors") {
   var_name <- paste0("rej_rate", alpha)
 
   p <-
-    ggplot(x, aes(sampling, .data[[var_name]], fill = name,
-                  alpha = n_rank_def / 10)) +
-    geom_bar(stat = "identity", position = "dodge")
+    x %>%
+    mutate(n = factor(n, labels = paste0("n =\n", unique(x$n)))) %>%
+    ggplot(aes(n, .data[[var_name]], fill = name, alpha = n_rank_def / 10)) +
+    geom_bar(stat = "identity", position = "dodge", width = 0.9)
 
   if (isTRUE(dashed_line)) {
     p <- p +
-      geom_hline(yintercept = alpha / 100, linetype = "dashed", col = "grey50")
-
+      geom_hline(aes(yintercept = alpha / 100, linetype = "Nominal\nrej. level"),
+                 col = "grey50") +
+      scale_linetype_manual(NULL, values = "dashed")
   }
   p +
     facet_wrap(. ~ sim, ncol = 3) +
-    scale_alpha("% rank def.", range = c(1, 0.3)) +
-    theme(legend.position = c(0.85, 0.24)) +
-    labs(x = "Complex sampling method", y = "Rejection proportion", fill = NULL,
+    scale_alpha("% rank\ndef.", range = c(1, 0.3)) +
+    theme(legend.position = "bottom") +
+    labs(x = "Sample size", y = "Rejection proportion", fill = NULL,
          shape = NULL, title = as.expression(bquote(
            .(plot_title)~"("*alpha~"="~.(iprior::dec_plac(alpha/100, 2))*")"
          ))) +
-    guides(fill = guide_legend(ncol = 2), alpha = guide_legend(ncol = 2)) +
-    scale_fill_viridis_d(option = "turbo")
+    guides(fill = guide_legend(ncol = 3, order = 1),
+           alpha = guide_legend(ncol = 2, order = 2)) +
+    scale_fill_viridis_d(option = "turbo", direction = -1) +
+    facet_grid(sim ~ sampling)
 }
-
-# Complex sampling results -----------------------------------------------------
-complex_type1_res <-
-  complex_type1 %>%
-  group_by(name, sim, sampling) %>%
-  summarise(n_sims = n(),
-            n_converged = sum(converged),
-            max_rank = max(Omega2_rank),
-            n_rank_def = sum(Omega2_rank < max_rank),
-            rej_rate10 = mean(alpha10[converged], na.rm = TRUE),
-            # se10  = sd(alpha10, na.rm = TRUE) / n(),
-            rej_rate5 = mean(alpha5[converged], na.rm = TRUE),
-            # se5  = sd(alpha5, na.rm = TRUE) / n(),
-            rej_rate1 = mean(alpha1[converged], na.rm = TRUE),
-            # se1  = sd(alpha1, na.rm = TRUE) / n(),
-            .groups = "drop")
-
-# Power results
-complex_power_res <-
-  complex_power %>%
-  group_by(name, sim, sampling) %>%
-  summarise(n_sims = n(),
-            n_converged = sum(converged),
-            max_rank = max(Omega2_rank),
-            n_rank_def = sum(Omega2_rank < max_rank),
-            rej_rate10 = mean(alpha10[converged], na.rm = TRUE),
-            # se10  = sd(alpha10, na.rm = TRUE) / n(),
-            rej_rate5 = mean(alpha5[converged], na.rm = TRUE),
-            # se5  = sd(alpha5, na.rm = TRUE) / n(),
-            rej_rate1 = mean(alpha1[converged], na.rm = TRUE),
-            # se1  = sd(alpha1, na.rm = TRUE) / n(),
-            .groups = "drop")
 
 p_complex_a <- complex_plot(complex_type1_res, alpha = 10)
 p_complex_b <- complex_plot(complex_type1_res, alpha = 5)
@@ -355,3 +156,8 @@ p_complex_f <- complex_plot(complex_power_res, alpha = 1, dashed_line = FALSE,
 save(complex_type1_res, complex_power_res, p_complex_a, p_complex_b,
      p_complex_c, p_complex_d, p_complex_e, p_complex_f,
      file = "analysis/simres_complex.RData")
+
+files_to_copy <- c("simres_srs.RData", "simres_complex.RData")
+file.copy(from = paste0("analysis/", files_to_copy),
+          to = paste0("vignettes/articles/", files_to_copy), overwrite = TRUE)
+rm(list = ls())
