@@ -94,9 +94,9 @@ for (let popover of popovers) {
 <h3 id="id_2023-development-version">2023-04-14<a class="anchor" aria-label="anchor" href="#id_2023-development-version"></a></h3>
 <ul><li>Fixed bug in <code>lavaan.bingof:::create_Sigma2_matrix_complex()</code> where it did not loop over strata.</li>
 <li>Fixed bug in <code>lavaan.bingof:::extract_lavaan_info()</code> would extract the <span class="math inline">2<sup><em>p</em></sup></span> proportion tables. No wonder the simulations ran slow… oops.</li>
-<li>Now using <code><a href="https://rdrr.io/pkg/MASS/man/ginv.html" class="external-link">MASS::ginv</a></code> for inverting <span class="math inline">$\bXi$</span> weights. Not sure if this is a good idea? This really only affects the Wald test and Multinomial test (apparently anyway).</li>
+<li>Now using <code><a href="https://rdrr.io/pkg/MASS/man/ginv.html" class="external-link">MASS::ginv</a></code> for inverting <span class="math inline"><strong>Ξ</strong></span> weights. Not sure if this is a good idea? This really only affects the Wald test and Multinomial test (apparently anyway).</li>
 <li>Re-ran all simulations</li>
-<li>Wald and Wald V3 performs very poorly when the rank of weight matrix <span class="math inline">$\bXi$</span> is rank deficient. Noticed that this occurs often in complex sampling and <span class="math inline">$\bSigma_2$</span> matrix is not full rank.</li>
+<li>Wald and Wald V3 performs very poorly when the rank of weight matrix <span class="math inline"><strong>Ξ</strong></span> is rank deficient. Noticed that this occurs often in complex sampling and <span class="math inline"><strong>Σ</strong><sub>2</sub></span> matrix is not full rank.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="id_2023-development-version-1">2023-04-08<a class="anchor" aria-label="anchor" href="#id_2023-development-version-1"></a></h3>
