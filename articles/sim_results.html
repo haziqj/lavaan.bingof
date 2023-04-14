@@ -127,9 +127,8 @@ values were</p>
 0.7, 0.47, 0.38, 0.34, \dots)\)</span>
 </li>
 <li>Factor correlations: <span class="math inline">\(\phi = 0.3\)</span>
-or <span class="math inline">\({\boldsymbol\phi}= (0.2, 0.3,
-0.4)\)</span>
-</li>
+(1 factor) or <span class="math inline">\({\boldsymbol\phi}= (0.2, 0.3,
+0.4)\)</span> (2 factors)</li>
 <li>Thresholds: <span class="math inline">\(\boldsymbol\tau = (-1.43,
 -0.55, -0.13, -0.82, -1.13,\dots)\)</span>
 </li>
@@ -151,10 +150,11 @@ independent to the latent factor <span class="math inline">\(\eta\)</span> was a
 that some noise (<span class="math inline">\(\mathop{\mathrm{N}}(0,0.1^2)\)</span>) was added.
 This means that the fitted model is misspecified because a missing
 factor was not accounted for.</p>
-<p>The simulations took roughly 20 hours to complete.</p>
-<p>It is noted that model fit was problematic when sample size <span class="math inline">\(n\)</span> is small, and <a href="https://lavaan.ugent.be" class="external-link">lavaan</a> was
-either not able to converge or not able to invert the sensitivity matrix
-(or both). These simulations were then removed from the results.</p>
+<p>The simulations took roughly 20 hours to complete. No convergence
+issue reported when the sample size is in the range <span class="math inline">\(500 \leq n \leq 3000\)</span> (previous versions
+of this simulation study saw <a href="https://lavaan.ugent.be" class="external-link">lavaan</a> having difficulty
+converging when <span class="math inline">\(n=100\)</span> or <span class="math inline">\(n=250\)</span>–these simulation results are not
+trustworthy so have been omitted).</p>
 <div class="section level2 tabset">
 <h2 class="tabset" id="srs-type-i-errors">SRS Type I errors<a class="anchor" aria-label="anchor" href="#srs-type-i-errors"></a>
 </h2>
@@ -169,15 +169,15 @@ either not able to converge or not able to invert the sensitivity matrix
 <div class="tab-content">
 <div class="tab-pane" id="significance" role="tabpanel" aria-labelledby="significance-tab">
 
-<p><img src="sim_results_files/figure-html/srs_type1a-1.png" width="768"></p>
+<p><img src="sim_results_files/figure-html/srs_type1a-1.png" width="100%"></p>
 </div>
 <div class="active tab-pane" id="significance-1" role="tabpanel" aria-labelledby="significance-1-tab">
 
-<p><img src="sim_results_files/figure-html/srs_type1b-1.png" width="768"></p>
+<p><img src="sim_results_files/figure-html/srs_type1b-1.png" width="100%"></p>
 </div>
 <div class="tab-pane" id="significance-2" role="tabpanel" aria-labelledby="significance-2-tab">
 
-<p><img src="sim_results_files/figure-html/srs_type1c-1.png" width="768"></p>
+<p><img src="sim_results_files/figure-html/srs_type1c-1.png" width="100%"></p>
 </div>
 </div>
 </div>
@@ -195,15 +195,15 @@ either not able to converge or not able to invert the sensitivity matrix
 <div class="tab-content">
 <div class="tab-pane" id="significance-3" role="tabpanel" aria-labelledby="significance-3-tab">
 
-<p><img src="sim_results_files/figure-html/srs_powerd-1.png" width="768"></p>
+<p><img src="sim_results_files/figure-html/srs_powerd-1.png" width="100%"></p>
 </div>
 <div class="active tab-pane" id="significance-4" role="tabpanel" aria-labelledby="significance-4-tab">
 
-<p><img src="sim_results_files/figure-html/srs_powere-1.png" width="768"></p>
+<p><img src="sim_results_files/figure-html/srs_powere-1.png" width="100%"></p>
 </div>
 <div class="tab-pane" id="significance-5" role="tabpanel" aria-labelledby="significance-5-tab">
 
-<p><img src="sim_results_files/figure-html/srs_powerf-1.png" width="768"></p>
+<p><img src="sim_results_files/figure-html/srs_powerf-1.png" width="100%"></p>
 </div>
 </div>
 </div>
@@ -221,15 +221,15 @@ either not able to converge or not able to invert the sensitivity matrix
 <div class="tab-content">
 <div class="tab-pane" id="significance-6" role="tabpanel" aria-labelledby="significance-6-tab">
 
-<p><img src="sim_results_files/figure-html/complex_type1a-1.png" width="768"></p>
+<p><img src="sim_results_files/figure-html/complex_type1a-1.png" width="100%"></p>
 </div>
 <div class="active tab-pane" id="significance-7" role="tabpanel" aria-labelledby="significance-7-tab">
 
-<p><img src="sim_results_files/figure-html/complex_type1b-1.png" width="768"></p>
+<p><img src="sim_results_files/figure-html/complex_type1b-1.png" width="100%"></p>
 </div>
 <div class="tab-pane" id="significance-8" role="tabpanel" aria-labelledby="significance-8-tab">
 
-<p><img src="sim_results_files/figure-html/complex_type1c-1.png" width="768"></p>
+<p><img src="sim_results_files/figure-html/complex_type1c-1.png" width="100%"></p>
 </div>
 </div>
 </div>
@@ -247,15 +247,15 @@ either not able to converge or not able to invert the sensitivity matrix
 <div class="tab-content">
 <div class="tab-pane" id="significance-9" role="tabpanel" aria-labelledby="significance-9-tab">
 
-<p><img src="sim_results_files/figure-html/complex_powerd-1.png" width="768"></p>
+<p><img src="sim_results_files/figure-html/complex_powerd-1.png" width="100%"></p>
 </div>
 <div class="active tab-pane" id="significance-10" role="tabpanel" aria-labelledby="significance-10-tab">
 
-<p><img src="sim_results_files/figure-html/complex_powere-1.png" width="768"></p>
+<p><img src="sim_results_files/figure-html/complex_powere-1.png" width="100%"></p>
 </div>
 <div class="tab-pane" id="significance-11" role="tabpanel" aria-labelledby="significance-11-tab">
 
-<p><img src="sim_results_files/figure-html/complex_powerf-1.png" width="768"></p>
+<p><img src="sim_results_files/figure-html/complex_powerf-1.png" width="100%"></p>
 </div>
 </div>
 </div>
