@@ -13,7 +13,9 @@ knitr::opts_chunk$set(
 library(tidyverse)
 theme_set(theme_bw())
 library(kableExtra)
+library(lavaan)
 library(lavaan.bingof)
+library(semPlot)
 load("simplots.RData")
 ```
 
@@ -46,6 +48,135 @@ This means that the fitted model is misspecified because a missing factor was no
 
 The simulations took roughly 20 hours to complete.
 No convergence issue reported when the sample size is in the range $500 \leq n \leq 3000$ (previous versions of this simulation study saw `{lavaan}` having difficulty converging when $n=100$ or $n=250$--these simulation results are not trustworthy so have been omitted).
+
+## Path diagrams {.tabset}
+
+### Model 1
+
+```{r sem_path_mod1}
+mod <- "
+eta1  =~ y1 + y2 + y3 + y4 + y5
+extra =~ y1  + y3 + y5
+"
+dat <- gen_data_bin(1, seed = 197)
+fit <- sem(mod, dat, std.lv = TRUE) %>% suppressWarnings()
+
+semPaths(fit, intercepts = FALSE, #residuals = TRUE, whatLabels = "est",  
+         groups = list(c("eta1", paste0("y", c(2, 4))), c("extra")),
+         manifests = paste0("y", 5:1),
+         latents = c("extra", "eta1"),
+         color = c("#28BBECFF", "#7A0403FF"),
+         node.width = 0.9, nCharNodes = 0, sizeMan = 8, sizeLat = 9, 
+         thresholds = FALSE, rotation = 3, exoCov = FALSE)
+# "#30123BFF" "#28BBECFF" "#A2FC3CFF" "#FB8022FF" "#7A0403FF"
+```
+
+### Model 2
+
+```{r sem_path_mod2}
+mod <- "
+eta1  =~ y1 + y2 + y3 + y4 + y5 + y6 + y7 + y8
+extra =~ y1  + y3 + y5 + y7
+# eta1 ~~ 0*extra
+# eta1 ~~ 1*eta1
+"
+dat <- gen_data_bin(2, seed = 197)
+fit <- sem(mod, dat, std.lv = TRUE) %>% suppressWarnings()
+
+semPaths(fit, intercepts = FALSE, #residuals = TRUE, whatLabels = "est",  
+         groups = list(c("eta1", paste0("y", c(2, 4, 6, 8))), c("extra")),
+         manifests = paste0("y", 8:1),
+         latents = c("extra", "eta1"),
+         color = c("#28BBECFF", "#7A0403FF"),
+         node.width = 0.9, nCharNodes = 0, sizeMan = 8, sizeLat = 9, 
+         thresholds = FALSE, rotation = 3, exoCov = FALSE)
+# "#30123BFF" "#28BBECFF" "#A2FC3CFF" "#FB8022FF" "#7A0403FF"
+```
+
+### Model 3
+
+```{r sem_path_mod3}
+mod <- "
+eta1  =~ y1 +  y2 +  y3 +  y4 +  y5 + 
+         y6 +  y7 +  y8 +  y9 + y10 +
+        y11 + y12 + y13 + y14 + y15
+extra =~ y1 + y3 +  y5 + 
+         y7 + y9 + y11 +
+        y13 + y15
+# eta1 ~~ 0*extra
+# eta1 ~~ 1*eta1
+"
+dat <- gen_data_bin(3, seed = 197)
+fit <- sem(mod, dat, std.lv = TRUE) %>% suppressWarnings()
+
+semPaths(fit, intercepts = FALSE, #residuals = TRUE, whatLabels = "est",  
+         groups = list(c("eta1", paste0("y", c(2, 4, 6, 8))), c("extra")),
+         manifests = paste0("y", 15:1),
+         latents = c("extra", "eta1"),
+         color = c("#28BBECFF", "#7A0403FF"),
+         node.width = 0.9, nCharNodes = 0, sizeMan = 5, sizeLat = 9, 
+         thresholds = FALSE, rotation = 3, exoCov = FALSE)
+# "#30123BFF" "#28BBECFF" "#A2FC3CFF" "#FB8022FF" "#7A0403FF"
+```
+
+### Model 4
+
+```{r sem_path_mod4}
+mod <- "
+eta1  =~ y1 +  y2 +  y3 +  y4 +  y5 
+eta2  =~ y6 +  y7 +  y8 +  y9 + y10 
+extra  =~ y1 +  y2 +  y3 +  y4 +  y5 + 
+         y6 +  y7 +  y8 +  y9 + y10
+eta1 ~~ 0*extra
+eta2 ~~ 0*extra
+# eta1 ~~ 0.3*eta2
+"
+dat <- gen_data_bin(4, seed = 197)
+fit <- sem(mod, dat, std.lv = TRUE) %>% suppressWarnings()
+
+semPaths(fit, intercepts = FALSE, what = "par", 
+         whatLabels = "hide", #residuals = TRUE, whatLabels = "est",  
+         groups = list(c("eta1", paste0("y", 1:5)), 
+                       c("eta2", paste0("y", 6:10)), 
+                       c("extra")),
+         manifests = paste0("y", 10:1),
+         latents = c("extra", "eta2", "eta1"),
+         color = c("#30123BFF", "#A2FC3CFF", "#7A0403FF"),
+         node.width = 0.9, nCharNodes = 0, sizeMan = 6, sizeLat = 9, 
+         thresholds = FALSE, rotation = 3, weighted = FALSE)
+```
+
+
+### Model 5
+
+
+```{r sem_path_mod5}
+mod <- "
+eta1  =~  y1 +  y2 +  y3 +  y4 +  y5 
+eta2  =~  y6 +  y7 +  y8 +  y9 + y10 
+eta3  =~ y11 + y12 + y13 + y14 + y15
+extra  =~ y1 +  y2 +  y3 +  y4 +  y5 + 
+          y6 +  y7 +  y8 +  y9 + y10 +
+         y11 + y12 + y13 + y14 + y15
+eta1 ~~ 0*extra
+eta2 ~~ 0*extra
+eta3 ~~ 0*extra
+"
+dat <- gen_data_bin(5, seed = 197)
+fit <- sem(mod, dat, std.lv = TRUE) %>% suppressWarnings()
+
+semPaths(fit, intercepts = FALSE, what = "par", 
+         whatLabels = "hide", #residuals = TRUE, whatLabels = "est",  
+         groups = list(c("eta1", paste0("y", 1:5)), 
+                       c("eta2", paste0("y", 6:10)), 
+                       c("eta3", paste0("y", 11:15)), 
+                       c("extra")),
+         manifests = paste0("y", 15:1),
+         latents = c("extra", "eta3", "eta2", "eta1"),
+         color = c("#30123BFF", "#1AE4B6FF", "#FABA39FF", "#7A0403FF"),
+         node.width = 0.9, nCharNodes = 0, sizeMan = 5, sizeLat = 9, 
+         thresholds = FALSE, rotation = 3, weighted = FALSE)
+```
 
 ## SRS Type I errors {.tabset}
 
