@@ -40,6 +40,7 @@
 #' @importFrom stats rnorm
 #' @importFrom survey svydesign
 #' @importFrom tibble as_tibble tibble
+#' @importFrom tibble is_tibble
 #' @importFrom tidyr unite
 #' @importFrom tidyr unnest_longer
 #' @importFrom utils combn

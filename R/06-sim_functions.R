@@ -150,6 +150,6 @@ print.ligof_sims <- function(x, ...) {
 #' @export
 summary.ligof_sims <- function(object, ...) {
   # cat("Under construction...")
-  lapply(object, function(y) if(is_tibble(y)) { y } else { NULL }) %>%
+  lapply(object, function(y) if(tibble::is_tibble(y)) { y } else { NULL }) %>%
     bind_rows()
 }

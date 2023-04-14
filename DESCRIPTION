@@ -16,6 +16,7 @@ Description: This is the accompanying R package for the paper "Goodness-of-fit t
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
+LazyDataCompression: xz
 URL: https://github.com/haziqj/lavaan.bingof, https://haziqj.ml/lavaan.bingof/
 BugReports: https://github.com/haziqj/lavaan.bingof/issues
 Suggests: 

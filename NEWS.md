@@ -1,7 +1,11 @@
 # lavaan.bingof (development version)
 
-## Date
+## 2023-04-14
 
+- Fixed bug in `lavaan.bingof:::create_Sigma2_matrix_complex()` where it did not loop over strata.
+- Fixed bug in `lavaan.bingof:::extract_lavaan_info()` would extract the $2^p$ proportion tables. No wonder the simulations ran slow... oops.
+- Now using `MASS::ginv` for inverting $\bXi$ weights. Not sure if this is a good idea? This really only affects the Wald test and Multinomial test (apparently anyway).
+- Re-ran all simulations 
 - Wald and Wald V3 performs very poorly when the rank of weight matrix $\bXi$ is rank deficient. Noticed that this occurs often in complex sampling and $\bSigma_2$ matrix is not full rank. 
 
 ## 2023-04-08
