@@ -12,7 +12,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 
 <!-- https://github.com/r-lib/pkgdown/issues/133 -->
 
-![](https://raw.githubusercontent.com/haziqj/lavaan.bingof/main/analysis/mult_bern_data.png)
+![](https://raw.githubusercontent.com/haziqj/lavaan.bingof/main/data-raw/mult_bern_data.png)
 
 This is the accompanying R package for the paper
 
