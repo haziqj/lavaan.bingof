@@ -28,7 +28,7 @@ The data was generated using an underlying variable framework.
 The true parameter values were
 
 - Loadings: $\boldsymbol\lambda = (0.8, 0.7, 0.47, 0.38, 0.34, \dots)$
-- Factor correlations: $\phi = 0.3$ or $\bphi = (0.2, 0.3, 0.4)$
+- Factor correlations: $\phi = 0.3$ (1 factor) or $\bphi = (0.2, 0.3, 0.4)$ (2 factors)
 - Thresholds: $\boldsymbol\tau = (-1.43, -0.55, -0.13, -0.82, -1.13,\dots)$
 
 Five scenarios were investigated:
@@ -46,9 +46,7 @@ The loadings of $x$ are similar to the true values except that some noise ($\N(0
 This means that the fitted model is misspecified because a missing factor was not accounted for.
 
 The simulations took roughly 20 hours to complete.
-
-It is noted that model fit was problematic when sample size $n$ is small, and `{lavaan}` was either not able to converge or not able to invert the sensitivity matrix (or both). 
-These simulations were then removed from the results.
+No convergence issue reported when the sample size is in the range $500 \leq n \leq 3000$ (previous versions of this simulation study saw `{lavaan}` having difficulty converging when $n=100$ or $n=250$--these simulation results are not trustworthy so have been omitted).
 
 ## SRS Type I errors {.tabset}
 

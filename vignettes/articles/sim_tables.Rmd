@@ -19,273 +19,83 @@ library(kableExtra)
 library(lavaan.bingof)
 load("simres_srs.RData")
 load("simres_complex.RData")
+nn <- c(500, 1000, 2000, 3000)
 ```
 
 
 ## Simple random sampling
 
-### Type I errors ($n=100$)
+```{r, results = "asis"}
+# Type I errors
+for(the_n in nn) {
+  cat(paste0("  \n### Type I errors ($n=",  the_n, "$)  \n"))
+  srs_type1_res %>% 
+    filter(n == the_n) %>%
+    arrange(n, sim, name) %>%
+    select(sim, name, everything(), -n) %>%
+    kbl(booktabs = TRUE, digits = 3) %>%
+    kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+    collapse_rows(1:2, row_group_label_position = "stack", 
+                  latex_hline = "major") %>%
+    print()
+  cat("  \n")
+}
 
-```{r}
-srs_type1_res %>% 
-  filter(n == 100) %>%
-  arrange(n, sim, name) %>%
-  select(sim, name, everything(), -n, -max_rank) %>%
-  kbl(booktabs = TRUE, digits = 3) %>%
-  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
-  collapse_rows(1:2, row_group_label_position = "stack", latex_hline = "major")
-  # collapse_rows(3:6, latex_hline = "major", valign = "top")
-```
-
-\newpage
-
-### Type I errors ($n=250$)
-
-```{r}
-srs_type1_res %>% 
-  filter(n == 250) %>%
-  arrange(n, sim, name) %>%
-  select(sim, name, everything(), -n, -max_rank) %>%
-  kbl(booktabs = TRUE, digits = 3) %>%
-  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
-  collapse_rows(1:2, row_group_label_position = "stack", latex_hline = "major")
-  # collapse_rows(3:6, latex_hline = "major", valign = "top")
-```
-\newpage
-
-### Type I errors ($n=500$)
-
-```{r}
-srs_type1_res %>% 
-  filter(n == 500) %>%
-  arrange(n, sim, name) %>%
-  select(sim, name, everything(), -n, -max_rank) %>%
-  kbl(booktabs = TRUE, digits = 3) %>%
-  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
-  collapse_rows(1:2, row_group_label_position = "stack", latex_hline = "major")
-  # collapse_rows(3:6, latex_hline = "major", valign = "top")
-```
-
-\newpage
-
-### Type I errors ($n=1000$)
-
-```{r}
-srs_type1_res %>% 
-  filter(n == 1000) %>%
-  arrange(n, sim, name) %>%
-  select(sim, name, everything(), -n, -max_rank) %>%
-  kbl(booktabs = TRUE, digits = 3) %>%
-  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
-  collapse_rows(1:2, row_group_label_position = "stack", latex_hline = "major")
-  # collapse_rows(3:6, latex_hline = "major", valign = "top")
-```
-\newpage
-
-### Type I errors ($n=2000$)
-
-```{r}
-srs_type1_res %>% 
-  filter(n == 2000) %>%
-  arrange(n, sim, name) %>%
-  select(sim, name, everything(), -n, -max_rank) %>%
-  kbl(booktabs = TRUE, digits = 3) %>%
-  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
-  collapse_rows(1:2, row_group_label_position = "stack", latex_hline = "major")
-  # collapse_rows(3:6, latex_hline = "major", valign = "top")
-```
-\newpage
-
-### Type I errors ($n=3000$)
-
-```{r}
-srs_type1_res %>% 
-  filter(n == 3000) %>%
-  arrange(n, sim, name) %>%
-  select(sim, name, everything(), -n, -max_rank) %>%
-  kbl(booktabs = TRUE, digits = 3) %>%
-  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
-  collapse_rows(1:2, row_group_label_position = "stack", latex_hline = "major")
-  # collapse_rows(3:6, latex_hline = "major", valign = "top")
+# Power 
+for(the_n in nn) {
+  cat(paste0("  \n### Power ($n=",  the_n, "$)  \n"))
+  srs_power_res %>% 
+    filter(n == the_n) %>%
+    arrange(n, sim, name) %>%
+    select(sim, name, everything(), -n) %>%
+    kbl(booktabs = TRUE, digits = 3) %>%
+    kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+    collapse_rows(1:2, row_group_label_position = "stack", 
+                  latex_hline = "major") %>%
+    print()
+  cat("  \n")
+}
 ```
 
 
-### Power ($n=100$)
+<!--Complex sampling results-->
 
-```{r}
-srs_power_res %>% 
-  filter(n == 100) %>%
-  arrange(n, sim, name) %>%
-  select(sim, name, everything(), -n, -max_rank) %>%
-  kbl(booktabs = TRUE, digits = 3) %>%
-  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
-  collapse_rows(1:2, row_group_label_position = "stack", latex_hline = "major")
-  # collapse_rows(3:6, latex_hline = "major", valign = "top")
-```
+```{r, results = "asis"}
+samps <- c("Stratified", "Cluster", "Strat-clust")
 
-\newpage
-
-### Power ($n=250$)
-
-```{r}
-srs_power_res %>% 
-  filter(n == 250) %>%
-  arrange(n, sim, name) %>%
-  select(sim, name, everything(), -n, -max_rank) %>%
-  kbl(booktabs = TRUE, digits = 3) %>%
-  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
-  collapse_rows(1:2, row_group_label_position = "stack", latex_hline = "major")
-  # collapse_rows(3:6, latex_hline = "major", valign = "top")
-```
-\newpage
-
-### Power ($n=500$)
-
-```{r}
-srs_power_res %>% 
-  filter(n == 500) %>%
-  arrange(n, sim, name) %>%
-  select(sim, name, everything(), -n, -max_rank) %>%
-  kbl(booktabs = TRUE, digits = 3) %>%
-  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
-  collapse_rows(1:2, row_group_label_position = "stack", latex_hline = "major")
-  # collapse_rows(3:6, latex_hline = "major", valign = "top")
-```
-
-\newpage
-
-### Power ($n=1000$)
-
-```{r}
-srs_power_res %>% 
-  filter(n == 1000) %>%
-  arrange(n, sim, name) %>%
-  select(sim, name, everything(), -n, -max_rank) %>%
-  kbl(booktabs = TRUE, digits = 3) %>%
-  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
-  collapse_rows(1:2, row_group_label_position = "stack", latex_hline = "major")
-  # collapse_rows(3:6, latex_hline = "major", valign = "top")
-```
-\newpage
-
-### Power ($n=2000$)
-
-```{r}
-srs_power_res %>% 
-  filter(n == 2000) %>%
-  arrange(n, sim, name) %>%
-  select(sim, name, everything(), -n, -max_rank) %>%
-  kbl(booktabs = TRUE, digits = 3) %>%
-  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
-  collapse_rows(1:2, row_group_label_position = "stack", latex_hline = "major")
-  # collapse_rows(3:6, latex_hline = "major", valign = "top")
-```
-\newpage
-
-### Power ($n=3000$)
-
-```{r}
-srs_power_res %>% 
-  filter(n == 3000) %>%
-  arrange(n, sim, name) %>%
-  select(sim, name, everything(), -n, -max_rank) %>%
-  kbl(booktabs = TRUE, digits = 3) %>%
-  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
-  collapse_rows(1:2, row_group_label_position = "stack", latex_hline = "major")
-  # collapse_rows(3:6, latex_hline = "major", valign = "top")
-```
-
-\newpage
-
-
-## Complex sampling
-
-
-### Type I errors (Stratified sampling)
-
-```{r}
-complex_type1_res %>% 
-  filter(sampling == "Stratified") %>%
-  arrange(sampling, sim, name) %>%
-  select(sim, name, everything(), -sampling, -max_rank) %>%
-  kbl(booktabs = TRUE, digits = 3) %>%
-  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
-  collapse_rows(1:2, row_group_label_position = "stack", latex_hline = "major")
-  # collapse_rows(3:6, latex_hline = "major", valign = "top")
-```
-
-\newpage
-
-### Type I errors (Cluster sampling)
-
-```{r}
-complex_type1_res %>% 
-  filter(sampling == "Cluster") %>%
-  arrange(sampling, sim, name) %>%
-  select(sim, name, everything(), -sampling, -max_rank) %>%
-  kbl(booktabs = TRUE, digits = 3) %>%
-  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
-  collapse_rows(1:2, row_group_label_position = "stack", latex_hline = "major")
-  # collapse_rows(3:6, latex_hline = "major", valign = "top")
-```
-\newpage
-
-### Type I errors (Stratified cluster sampling)
-
-```{r}
-complex_type1_res %>% 
-  filter(sampling == "Strat-clust") %>%
-  arrange(sampling, sim, name) %>%
-  select(sim, name, everything(), -sampling, -max_rank) %>%
-  kbl(booktabs = TRUE, digits = 3) %>%
-  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
-  collapse_rows(1:2, row_group_label_position = "stack", latex_hline = "major")
-  # collapse_rows(3:6, latex_hline = "major", valign = "top")
-```
-
-\newpage
-
-
-### Power (Stratified sampling)
-
-```{r}
-complex_power_res %>% 
-  filter(sampling == "Stratified") %>%
-  arrange(sampling, sim, name) %>%
-  select(sim, name, everything(), -sampling, -max_rank) %>%
-  kbl(booktabs = TRUE, digits = 3) %>%
-  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
-  collapse_rows(1:2, row_group_label_position = "stack", latex_hline = "major")
-  # collapse_rows(3:6, latex_hline = "major", valign = "top")
-```
-
-\newpage
-
-### Power (Cluster sampling)
-
-```{r}
-complex_power_res %>% 
-  filter(sampling == "Cluster") %>%
-  arrange(sampling, sim, name) %>%
-  select(sim, name, everything(), -sampling, -max_rank) %>%
-  kbl(booktabs = TRUE, digits = 3) %>%
-  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
-  collapse_rows(1:2, row_group_label_position = "stack", latex_hline = "major")
-  # collapse_rows(3:6, latex_hline = "major", valign = "top")
-```
-\newpage
-
-### Power (Stratified cluster sampling)
-
-```{r}
-complex_power_res %>% 
-  filter(sampling == "Strat-clust") %>%
-  arrange(sampling, sim, name) %>%
-  select(sim, name, everything(), -sampling, -max_rank) %>%
-  kbl(booktabs = TRUE, digits = 3) %>%
-  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
-  collapse_rows(1:2, row_group_label_position = "stack", latex_hline = "major")
-  # collapse_rows(3:6, latex_hline = "major", valign = "top")
+for (the_samp in samps) {
+  cat(paste0("  \n## ", the_samp, " sampling", "  \n"))
+  
+  # Type I errors
+  for(the_n in nn) {
+    cat(paste0("  \n### Type I errors ($n=",  the_n, "$)  \n"))
+    complex_type1_res %>% 
+      filter(n == the_n, sampling == "Stratified") %>%
+      arrange(n, sim, name) %>%
+      select(sim, name, everything(), -n, -sampling) %>%
+      kbl(booktabs = TRUE, digits = 3) %>%
+      kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+      collapse_rows(1:2, row_group_label_position = "stack", 
+                    latex_hline = "major") %>%
+      print()
+    cat("  \n")
+  }
+  
+  # Power 
+  for(the_n in nn) {
+    cat(paste0("  \n### Power ($n=",  the_n, "$)  \n"))
+    complex_power_res %>% 
+      filter(n == the_n, sampling == "Stratified") %>%
+      arrange(n, sim, name) %>%
+      select(sim, name, everything(), -n, -sampling) %>%
+      kbl(booktabs = TRUE, digits = 3) %>%
+      kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+      collapse_rows(1:2, row_group_label_position = "stack", 
+                    latex_hline = "major") %>%
+      print()
+    cat("  \n")
+  }
+}
 ```
 
 
