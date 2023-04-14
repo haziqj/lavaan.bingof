@@ -402,7 +402,7 @@ We summarise the various weight matrices that we use in this R package:</p>
 <tr class="even">
 <td>2</td>
 <td>Wald V2</td>
-<td><span class="math inline">\(\mathop{\mathrm{diag}}({\boldsymbol\Omega}_2^+)\)</span></td>
+<td><span class="math inline">\(\mathop{\mathrm{diag}}({\boldsymbol\Omega}_2^+)^{-1}\)</span></td>
 <td>est.</td>
 <td><code><a href="../reference/ligof-test-stats.html">Wald_test_v2()</a></code></td>
 <td>
@@ -420,7 +420,7 @@ We summarise the various weight matrices that we use in this R package:</p>
 <tr class="even">
 <td>4</td>
 <td>Pearson</td>
-<td><span class="math inline">\({\mathbf D}^{-1}\)</span></td>
+<td><span class="math inline">\(\mathop{\mathrm{diag}}({\boldsymbol\pi}_2)^{-1}\)</span></td>
 <td>est.</td>
 <td><code><a href="../reference/ligof-test-stats.html">Pearson_test_v1()</a></code></td>
 <td>Rao-Scott adjustment</td>
@@ -428,7 +428,7 @@ We summarise the various weight matrices that we use in this R package:</p>
 <tr class="odd">
 <td>5</td>
 <td>Pearson V2</td>
-<td><span class="math inline">\({\mathbf D}^{-1}\)</span></td>
+<td><span class="math inline">\(\mathop{\mathrm{diag}}({\boldsymbol\pi}_2)^{-1}\)</span></td>
 <td>est.</td>
 <td><code><a href="../reference/ligof-test-stats.html">Pearson_test_v2()</a></code></td>
 <td>Moment matching</td>
