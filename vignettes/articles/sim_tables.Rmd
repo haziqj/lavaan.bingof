@@ -17,8 +17,6 @@ library(tidyverse)
 theme_set(theme_bw())
 library(kableExtra)
 library(lavaan.bingof)
-load("simres_srs.RData")
-load("simres_complex.RData")
 nn <- c(500, 1000, 2000, 3000)
 ```
 
@@ -29,7 +27,7 @@ nn <- c(500, 1000, 2000, 3000)
 # Type I errors
 for(the_n in nn) {
   cat(paste0("  \n### Type I errors ($n=",  the_n, "$)  \n"))
-  srs_type1_res %>% 
+  res_srs_type1 %>% 
     filter(n == the_n) %>%
     arrange(n, sim, name) %>%
     select(sim, name, everything(), -n) %>%
@@ -44,7 +42,7 @@ for(the_n in nn) {
 # Power 
 for(the_n in nn) {
   cat(paste0("  \n### Power ($n=",  the_n, "$)  \n"))
-  srs_power_res %>% 
+  res_srs_power %>% 
     filter(n == the_n) %>%
     arrange(n, sim, name) %>%
     select(sim, name, everything(), -n) %>%
@@ -69,7 +67,7 @@ for (the_samp in samps) {
   # Type I errors
   for(the_n in nn) {
     cat(paste0("  \n### Type I errors ($n=",  the_n, "$)  \n"))
-    complex_type1_res %>% 
+    res_complex_type1 %>% 
       filter(n == the_n, sampling == "Stratified") %>%
       arrange(n, sim, name) %>%
       select(sim, name, everything(), -n, -sampling) %>%
@@ -84,7 +82,7 @@ for (the_samp in samps) {
   # Power 
   for(the_n in nn) {
     cat(paste0("  \n### Power ($n=",  the_n, "$)  \n"))
-    complex_power_res %>% 
+    res_complex_power %>% 
       filter(n == the_n, sampling == "Stratified") %>%
       arrange(n, sim, name) %>%
       select(sim, name, everything(), -n, -sampling) %>%

@@ -14,8 +14,7 @@ library(tidyverse)
 theme_set(theme_bw())
 library(kableExtra)
 library(lavaan.bingof)
-load("simres_srs.RData")
-load("simres_complex.RData")
+load("simplots.RData")
 ```
 
 ```{r, echo = FALSE, results = "asis"}
