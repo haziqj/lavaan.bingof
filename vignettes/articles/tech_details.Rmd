@@ -294,10 +294,10 @@ We summarise the various weight matrices that we use in this R package:
 |   | Name        | Weight ($\bXi$)     | D.f.  | R function          | Remarks                           |
 |---|-------------|---------------------|-------|---------------------|-----------------------------------|
 | 1 | Wald        | $\bOmega_2^+$       | $S-m$ | `Wald_test()`       | $\bOmega_2$ may be rank deficient |
-| 2 | Wald V2     | $\diag(\bOmega_2^+)$       | est.  | `Wald_test_v2()`    | $\bOmega_2$ need not be inverted  |
+| 2 | Wald V2     | $\diag(\bOmega_2^+)^{-1}$       | est.  | `Wald_test_v2()`    | $\bOmega_2$ need not be inverted  |
 | 3 | Wald V3     | $\bXi\bOmega_2\bXi$ | $S-m$ | `Wald_test_v3()`    | $\bOmega_2$ need not be estimated |
-| 4 | Pearson     | $\bD^{-1}$          | est.  | `Pearson_test_v1()` | Rao-Scott adjustment              |
-| 5 | Pearson V2  | $\bD^{-1}$          | est.  | `Pearson_test_v2()` | Moment matching                   |
+| 4 | Pearson     | $\diag(\bpi_2)^{-1}$          | est.  | `Pearson_test_v1()` | Rao-Scott adjustment              |
+| 5 | Pearson V2  | $\diag(\bpi_2)^{-1}$          | est.  | `Pearson_test_v2()` | Moment matching                   |
 | 6 | RSS         | $\bI$               | est.  | `RSS_test()`        |                                   |
 | 7 | Multinomial | $\bSigma_2^{-1}$    | est.  | `Multn_test()`      |                                   |
 
