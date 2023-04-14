@@ -68,7 +68,7 @@ for (the_samp in samps) {
   for(the_n in nn) {
     cat(paste0("  \n### Type I errors ($n=",  the_n, "$)  \n"))
     res_complex_type1 %>% 
-      filter(n == the_n, sampling == "Stratified") %>%
+      filter(n == the_n, sampling == samps) %>%
       arrange(n, sim, name) %>%
       select(sim, name, everything(), -n, -sampling) %>%
       kbl(booktabs = TRUE, digits = 3) %>%
@@ -83,7 +83,7 @@ for (the_samp in samps) {
   for(the_n in nn) {
     cat(paste0("  \n### Power ($n=",  the_n, "$)  \n"))
     res_complex_power %>% 
-      filter(n == the_n, sampling == "Stratified") %>%
+      filter(n == the_n, sampling == samps) %>%
       arrange(n, sim, name) %>%
       select(sim, name, everything(), -n, -sampling) %>%
       kbl(booktabs = TRUE, digits = 3) %>%
