@@ -1,5 +1,7 @@
 ---
-output: pdf_document
+output: 
+  pdf_document:
+    keep_tex: true
 toc: true
 title: "Tables of simulation results"
 pkgdown:
@@ -13,6 +15,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   echo = FALSE
 )
+options(knitr.kable.NA = "")
 library(tidyverse)
 theme_set(theme_bw())
 library(kableExtra)
@@ -60,21 +63,25 @@ for(the_n in nn) {
 
 ```{r, results = "asis"}
 samps <- c("Stratified", "Cluster", "Strat-clust")
-
+# samps <- "Stratified"
 for (the_samp in samps) {
   cat(paste0("  \n## ", the_samp, " sampling", "  \n"))
   
   # Type I errors
   for(the_n in nn) {
     cat(paste0("  \n### Type I errors ($n=",  the_n, "$)  \n"))
-    res_complex_type1 %>% 
-      filter(n == the_n, sampling == samps) %>%
+    dat <- 
+      res_complex_type1 %>% 
+      filter(n == the_n, sampling == the_samp) %>%
       arrange(n, sim, name) %>%
-      select(sim, name, everything(), -n, -sampling) %>%
-      kbl(booktabs = TRUE, digits = 3) %>%
+      select(sim, name, everything(), -n, -sampling)
+    dat %>%
+      select(-sim) %>%
+      kbl(booktabs = TRUE, digits = 3, format = "latex") %>%
       kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
-      collapse_rows(1:2, row_group_label_position = "stack", 
-                    latex_hline = "major") %>%
+      # collapse_rows(1:2, row_group_label_position = "stack", 
+      #               latex_hline = "major") %>%
+      pack_rows(index = table(dat$sim)) %>%
       print()
     cat("  \n")
   }
@@ -82,18 +89,21 @@ for (the_samp in samps) {
   # Power 
   for(the_n in nn) {
     cat(paste0("  \n### Power ($n=",  the_n, "$)  \n"))
-    res_complex_power %>% 
-      filter(n == the_n, sampling == samps) %>%
+    dat <- 
+      res_complex_power %>% 
+      filter(n == the_n, sampling == the_samp) %>%
       arrange(n, sim, name) %>%
-      select(sim, name, everything(), -n, -sampling) %>%
-      kbl(booktabs = TRUE, digits = 3) %>%
+      select(sim, name, everything(), -n, -sampling)
+    dat %>%
+      select(-sim) %>%
+      kbl(booktabs = TRUE, digits = 3, format = "latex") %>%
       kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
-      collapse_rows(1:2, row_group_label_position = "stack", 
-                    latex_hline = "major") %>%
+      # collapse_rows(1:2, row_group_label_position = "stack", 
+      #               latex_hline = "major") %>%
+      pack_rows(index = table(dat$sim)) %>%
       print()
     cat("  \n")
   }
+  
 }
 ```
-
-
