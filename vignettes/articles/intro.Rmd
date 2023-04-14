@@ -43,28 +43,8 @@ Binary categorical data, where outcomes are represented as binary indicators or 
 For example, in psychology, binary categorical data may arise from questionnaires or surveys assessing traits, behaviors, or psychological disorders. 
 Similarly, in social sciences, education, finance, and marketing, binary data can be used to represent attitudes, behaviors, preferences, or other categorical outcomes. 
 
-Let $\bY = (Y_1, \dots, Y_p)^\top \in \{0,1\}^p$ be a vector of Bernoulli random variables. 
-Consider a response pattern $\by = (y_1,\dots,y_p)^\top$, where each $y_i\in\{0,1\}$.
-The probability of observing such a response pattern is given by the joint distribution
-\begin{align*}
-\pi
-&= \Pr(\bY = \by)  = \Pr(Y_1=y_1,\dots,Y_p=y_p).
-(\#eq:jointprob1)
-\end{align*}
-Note that there are a total of $R=2^p$ possible joint probabilities $\pi_r$ corresponding to all possible two-way response patterns $\by_r$.
-
 Analyzing binary categorical data is essential for understanding the underlying structure, relationships, and patterns within the data.
 Statistical models are often employed as a tool for extracting meaningful information from such data.
-When we consider a parametric model with parameter vector $\btheta\in\bbR^m$, we write $\pi_r(\btheta)$ to indicate each joint probability, and 
-\begin{equation}
-\bpi(\btheta) = \begin{pmatrix}
-\pimod{1} \\
-\vdots \\
-\pimod{R}  \\
-\end{pmatrix} \in [0,1]^R
-(\#eq:jointprob2)
-\end{equation}
-for the vector of joint probabilities, with $\sum_{r=1}^R \pimod{r} =1$.
 We are particularly interested in *factor models*, which rely on model-based probabilities to make inferences about underlying latent variables. 
 
 ```{r sem_path}
@@ -88,10 +68,10 @@ semPaths(fit, intercepts = FALSE, residuals = TRUE, whatLabels = "est",
 ## Assessing model fit {.tabset}
 
 Assessing the goodness of fit of these models to the data can be challenging. 
-Traditional tests, such as the Pearson chi-square test or the likelihood ratio $G$ test, may break down when dealing with large number of items, as the number of categories grows exponentially, leading to sparse data.
+Traditional tests, such as the Pearson chi-square test or the likelihood ratio $G$ test, may break down when dealing with large number of items, as the number of categories (i.e. response patterns) grows exponentially, leading to *sparsity issues*.
 In particular, when conducting goodness-of-fit tests for binary factor models, low cell counts in the ensuing contingency table can result in unstable or unreliable test statistics^[In the context of contingency tables, when cell counts are low, the observed frequencies in the cells may not follow a normal distribution, as they can be influenced by random variation and may not stabilize even as the sample size increases.], leading to inaccurate assessments of model fit. 
 We illustrate this problem of sparsity with a plot of observed vs expected response pattern probabilities, highlighting the limitations of traditional tests.
-The following plots are for a hypothetical situation in which $p=10$ binary items (sample size $n=1000$) are analysed using a factor model.
+The following plots are for a hypothetical situation in which $p=10$ binary items (sample size $n=1000$) generated from a two-factor model are analysed using a factor model in `{lavaan}`.
 
 ### Full information
 
@@ -144,34 +124,16 @@ By using a subset of information from the data that is less sensitive to low cel
 
 ## Composite likelihood estimation
 
+When $p$ is large, then possibly ML methods also struggle computationally. We explore LIGOF tests under a composite likelihood estimation, which provides a computational advantage. 
+Furthermore, the LIGOF tests can be built organically from the quantities used in the PL estimation framework.
+We derive the theory of the LIGOF tests, which includes a derivation of the form of the test statistics as well as their distributions.
 
+## Complex sampling
 
+We also extend the results from independent sampling to complex sampling designs, where the estimates and test statistics are weight-adjusted.
+Weights are easily incorporated into the pairwise log-likelihood function, which is then optimised to obtain the weight-adjusted parameter values.
+The involved covariance matrix also needed to be weight-adjusted to ensure correct distributional behaviour of the test statistics.
 
+## Simulation study
 
-
-
-
-- Model-based probabilities e.g. factor models.
-
-- How can we ensure that the model is a good fit to the data? Usual (Pearson) chi-square test or the likelihood ratio $G$ test. 
-
-- Problem is, it breaks down when number of items is large, because the number of categories grows exponentially. A lot of these categories will end up being empty, and the above tests depends on a local CLT convergence in each category, which is not achieved. This is the problem of sparsity. Illustrate with a plot of observed vs expected reponse pattern probabilities.
-
-- Solution: Consider lower order marginals instead: Consider how well the model fits the univariate and bivariate marginal positive probabilities. These are called limited information tests. 
-
-- When $p$ is large, then possibly ML methods also struggle computationally. We explore LIGOF tests under a composite likelihood estimation, which provides a computational advantage. Furthermore, the LIGOF tests can be built organically from the quantities used in the PL estimation framework.
-
-- Contributions: theory of the test statistics derivation, incl. its distribution. We ran type I and power simulations on various sample sizes. We also extend the results from independent sampling to complex sampling designs, where the estimates and test statistics are weight-adjusted.
-
-- Conclusions...
-
-
-
-
-
-
-
-
-
-
-
+We conducted a simulation study to test the performance of the various LIGOF tests under a simple random and complex sampling scheme.

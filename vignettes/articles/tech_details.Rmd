@@ -33,6 +33,29 @@ cat(readr::read_file("maths_shortcuts.tex"))
 \newcommand{\pimodpl}{\pi_{y_iy_j}^{(ij)}(\btheta)}
 <!-- Extra LaTeX commands -->
 
+Let $\bY = (Y_1, \dots, Y_p)^\top \in \{0,1\}^p$ be a vector of Bernoulli random variables. 
+Consider a response pattern $\by = (y_1,\dots,y_p)^\top$, where each $y_i\in\{0,1\}$.
+The probability of observing such a response pattern is given by the joint distribution
+\begin{align*}
+\pi
+&= \Pr(\bY = \by)  = \Pr(Y_1=y_1,\dots,Y_p=y_p).
+(\#eq:jointprob1)
+\end{align*}
+Note that there are a total of $R=2^p$ possible joint probabilities $\pi_r$ corresponding to all possible two-way response patterns $\by_r$.
+
+When we consider a parametric model with parameter vector $\btheta\in\bbR^m$, we write $\pi_r(\btheta)$ to indicate each joint probability, and 
+\begin{equation}
+\bpi(\btheta) = \begin{pmatrix}
+\pimod{1} \\
+\vdots \\
+\pimod{R}  \\
+\end{pmatrix} \in [0,1]^R
+(\#eq:jointprob2)
+\end{equation}
+for the vector of joint probabilities, with $\sum_{r=1}^R \pimod{r} =1$.
+
+## Model-based probabilities
+
 The model of interest is a factor model, commonly used in social statistics.
 Using an underlying variable (UV) approach, the observed binary responses $y_i$ are manifestations of some latent, continuous variables $Y_i^*$, $i=1,\dots,p$.
 The connection is made as follows:

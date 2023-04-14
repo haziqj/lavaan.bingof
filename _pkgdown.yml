@@ -9,7 +9,7 @@ template:
 authors:
   Haziq Jamil:
     href: https://haziqj.ml/
-  Irini Moustaki: 
+  Irini Moustaki:
     href: http://stats.lse.ac.uk/moustaki/
   Myrsini Katsikatsou:
     href: https://uk.linkedin.com/in/dr-myrsini-katsikatsou-ab331949
@@ -39,6 +39,8 @@ reference:
   contents:
   - ligof_sims
   - ligof_sims.methods
+  - sim_results
+  - sim_results_all
 
 - title: Utility functions
   contents:
