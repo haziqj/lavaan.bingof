@@ -118,6 +118,28 @@ for (let popover of popovers) {
     
 <!-- Extra LaTeX commands -->
 <!-- Extra LaTeX commands -->
+<p>Let <span class="math inline">\({\mathbf Y}= (Y_1, \dots, Y_p)^\top \in \{0,1\}^p\)</span> be a vector of Bernoulli random variables.
+Consider a response pattern <span class="math inline">\({\mathbf y}= (y_1,\dots,y_p)^\top\)</span>, where each <span class="math inline">\(y_i\in\{0,1\}\)</span>.
+The probability of observing such a response pattern is given by the joint distribution
+<span class="math display" id="eq:jointprob1">\[\begin{align*}
+\pi
+&amp;= \Pr({\mathbf Y}= {\mathbf y})  = \Pr(Y_1=y_1,\dots,Y_p=y_p).
+\tag{1}
+\end{align*}\]</span>
+Note that there are a total of <span class="math inline">\(R=2^p\)</span> possible joint probabilities <span class="math inline">\(\pi_r\)</span> corresponding to all possible two-way response patterns <span class="math inline">\({\mathbf y}_r\)</span>.</p>
+<p>When we consider a parametric model with parameter vector <span class="math inline">\({\boldsymbol\theta}\in\mathbb{R}^m\)</span>, we write <span class="math inline">\(\pi_r({\boldsymbol\theta})\)</span> to indicate each joint probability, and
+<span class="math display" id="eq:jointprob2">\[\begin{equation}
+{\boldsymbol\pi}({\boldsymbol\theta}) = \begin{pmatrix}
+\pi_{1}({\boldsymbol\theta}) \\
+\vdots \\
+\pi_{R}({\boldsymbol\theta})  \\
+\end{pmatrix} \in [0,1]^R
+\tag{2}
+\end{equation}\]</span>
+for the vector of joint probabilities, with <span class="math inline">\(\sum_{r=1}^R \pi_{r}({\boldsymbol\theta}) =1\)</span>.</p>
+<div class="section level2">
+<h2 id="model-based-probabilities">Model-based probabilities<a class="anchor" aria-label="anchor" href="#model-based-probabilities"></a>
+</h2>
 <p>The model of interest is a factor model, commonly used in social statistics.
 Using an underlying variable (UV) approach, the observed binary responses <span class="math inline">\(y_i\)</span> are manifestations of some latent, continuous variables <span class="math inline">\(Y_i^*\)</span>, <span class="math inline">\(i=1,\dots,p\)</span>.
 The connection is made as follows:
@@ -174,6 +196,7 @@ This integral is evaluated on the set
 <span class="math display">\[
 A = \{ \mathbf Y^* \in \mathbb R^p \mid Y_1=y_1,\dots,Y_p=y_p \}.
 \]</span></p>
+</div>
 <div class="section level2">
 <h2 id="parameter-estimation">Parameter estimation<a class="anchor" aria-label="anchor" href="#parameter-estimation"></a>
 </h2>
@@ -212,7 +235,7 @@ It can be further shown that <span class="math inline">\({\mathcal I}_1({\boldsy
 <p>The maximum likelihood estimators are a class of <em>best asymptotically normal</em> (BAN) estimators <span class="math inline">\(\hat{\boldsymbol\theta}\)</span> of <span class="math inline">\({\boldsymbol\theta}\)</span> that satisfy
 <span class="math display" id="eq:ban">\[\begin{equation}
 \sqrt n (\hat{\boldsymbol\theta}- {\boldsymbol\theta}) = \sqrt n \, {\mathbf B}\big({\mathbf p}- {\boldsymbol\pi}({\boldsymbol\theta})\big) + o(1)
-\tag{1}
+\tag{3}
 \end{equation}\]</span>
 for some <span class="math inline">\(m\times R\)</span> matrix <span class="math inline">\({\mathbf B}\)</span>.
 In the specific case of maximum likelihood estimation, we can derive <span class="math inline">\({\mathbf B}\)</span> to be <span class="math inline">\({\mathbf B}= {\mathcal I}^{-1} {\boldsymbol\Delta}^\top {\mathbf D}^{-1}\)</span>.
@@ -248,7 +271,7 @@ where</p>
 <li>
 <span class="math inline">\({\mathcal J}({\boldsymbol\theta})=\mathop{\mathrm{Var}}\big(\sqrt N \nabla\operatorname{\ell_P}({\boldsymbol\theta})\big)\)</span> is the <em>variability matrix</em>.</li>
 </ul>
-<p>We can also show that the pairwise maximum likelihood estimator satisfies <a href="#eq:ban">(1)</a>, where the matrix <span class="math inline">\({\mathbf B}\)</span> in this case would be <span class="math inline">\({\mathbf B}= {\mathcal H}^{-1}\tilde{\boldsymbol\Delta}^{-1}\tilde {\mathbf D}^{-1} {\mathbf G}\)</span>, with</p>
+<p>We can also show that the pairwise maximum likelihood estimator satisfies <a href="#eq:ban">(3)</a>, where the matrix <span class="math inline">\({\mathbf B}\)</span> in this case would be <span class="math inline">\({\mathbf B}= {\mathcal H}^{-1}\tilde{\boldsymbol\Delta}^{-1}\tilde {\mathbf D}^{-1} {\mathbf G}\)</span>, with</p>
 <ul>
 <li>
 <span class="math inline">\(\tilde{\boldsymbol\Delta}\in \mathbb{R}^{\tilde R \times m}\)</span> consists of partial derivatives of the pairwise probabilities, i.e. <span class="math inline">\(\frac{\partial\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})}{\partial\theta_k}\)</span>;</li>
@@ -266,13 +289,13 @@ where</p>
 For independent samples, it is widely known <span class="citation">(<a href="#ref-agresti2012categorical" role="doc-biblioref">Agresti 2012</a>)</span> that
 <span class="math display" id="eq:propclt">\[\begin{equation}
 \sqrt N ({\mathbf p}- {\boldsymbol\pi}) \xrightarrow{\text D} {\mathop{\mathrm{N}}}_R ({\mathbf 0}, {\boldsymbol\Sigma}),
-\tag{2}
+\tag{4}
 \end{equation}\]</span>
 where <span class="math inline">\({\boldsymbol\Sigma}= {\mathbf D}- {\boldsymbol\pi}{\boldsymbol\pi}^\top\)</span>, with <span class="math inline">\({\mathbf D}:= \mathop{\mathrm{diag}}({\boldsymbol\pi})\)</span>.
-Considering a parametric model, the proportion vector in <a href="#eq:propclt">(2)</a> reads <span class="math inline">\({\boldsymbol\pi}= {\boldsymbol\pi}({\boldsymbol\theta})\)</span>.
+Considering a parametric model, the proportion vector in <a href="#eq:propclt">(4)</a> reads <span class="math inline">\({\boldsymbol\pi}= {\boldsymbol\pi}({\boldsymbol\theta})\)</span>.
 An analogous result for the complex sampling design case exists as well <span class="citation">(<a href="#ref-fuller2009introduction" role="doc-biblioref">Fuller 2009</a>)</span>; however the covariance matrix <span class="math inline">\({\boldsymbol\Sigma}\)</span> need not take a multinomial form, and the true proportions <span class="math inline">\({\boldsymbol\pi}\)</span> may either be a finite population or a superpopulation quantity.</p>
 <p>Suppose we denote by <span class="math inline">\({\boldsymbol\pi}(\hat{\boldsymbol\theta})\)</span> the <em>estimated</em> proportions under a parametric model.
-For estimators <span class="math inline">\(\hat{\boldsymbol\theta}\)</span> satisfying <a href="#eq:ban">(1)</a>, <span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2005limited" role="doc-biblioref">2005</a>)</span> show that the distribution of the residuals <span class="math inline">\(\hat{\mathbf e}= {\mathbf p}- {\boldsymbol\pi}(\hat{\boldsymbol\theta})\)</span> is asymptotically normal:
+For estimators <span class="math inline">\(\hat{\boldsymbol\theta}\)</span> satisfying <a href="#eq:ban">(3)</a>, <span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2005limited" role="doc-biblioref">2005</a>)</span> show that the distribution of the residuals <span class="math inline">\(\hat{\mathbf e}= {\mathbf p}- {\boldsymbol\pi}(\hat{\boldsymbol\theta})\)</span> is asymptotically normal:
 <span class="math display">\[\begin{equation}
 \sqrt n \hat{\mathbf e}= \sqrt n \big( {\mathbf p}- {\boldsymbol\pi}(\hat{\boldsymbol\theta}) \big) \xrightarrow{\text D} {\mathop{\mathrm{N}}}_R ({\mathbf 0}, {\boldsymbol\Omega})
 \end{equation}\]</span>
@@ -329,14 +352,14 @@ the transformed version of the respective matrices.
 For the specific case of maximum likelihood estimation, this simplifies to <span class="math inline">\({\boldsymbol\Omega}_2 = {\boldsymbol\Sigma}_2 - {\boldsymbol\Delta}_2 {\mathcal I}_1^{-1} {\boldsymbol\Delta}_2^\top\)</span>.
 For pairwise likelihood estimation, we show that
 <span class="math display" id="eq:ourOmega2">\[
-{\boldsymbol\Omega}_2 = ({\mathbf I}- {\boldsymbol\Delta}_2{\mathbf B}_2){\boldsymbol\Sigma}_2({\mathbf I}- {\boldsymbol\Delta}_2{\mathbf B}_2)^\top, \tag{3}
+{\boldsymbol\Omega}_2 = ({\mathbf I}- {\boldsymbol\Delta}_2{\mathbf B}_2){\boldsymbol\Sigma}_2({\mathbf I}- {\boldsymbol\Delta}_2{\mathbf B}_2)^\top, \tag{5}
 \]</span>
 where the transformation matrix in full is given by <span class="math inline">\({\mathbf B}_2 = {\mathcal H}^{-1}\tilde{\boldsymbol\Delta}^\top\tilde{\mathbf D}^{-1}{\mathbf G}{\mathbf T}_2\)</span>.
 For posterity, the <span class="math inline">\({\mathbf B}({\boldsymbol\theta})\)</span> matrix in our manuscript is actually <span class="math inline">\({\mathbf B}({\boldsymbol\theta}) = \tilde{\boldsymbol\Delta}^\top\tilde{\mathbf D}^{-1} B\)</span>, where the indicator matrix <span class="math inline">\(B\)</span> is <span class="math inline">\(B = {\mathbf G}{\mathbf T}_2\)</span> in the notation of the present article.</p>
 <p>As a remark, while elegant in theory, forming the matrix <span class="math inline">\({\boldsymbol\Omega}_2\)</span> via the linear transformation <span class="math inline">\({\mathbf T}_2\)</span> is impractical when <span class="math inline">\(p\)</span> is large for two reasons.
 One, it involves multiplying an <span class="math inline">\(S \times R\)</span> matrix with an <span class="math inline">\(R \times R\)</span> matrix, and so this computation is of order <span class="math inline">\(O(SR^2) = O(p(p+1)2^{2p-1})\)</span>.
 Two, storage requirements of the <span class="math inline">\(R\times R\)</span> matrix (e.g. <span class="math inline">\({\boldsymbol\Sigma}\)</span>) may possibly be large and/or involve small numbers, so precision might be a concern.</p>
-<p>The advantage of our equation in <a href="#eq:ourOmega2">(3)</a> is that <span class="math inline">\({\boldsymbol\Omega}_2\)</span> can be formed using the byproduct of the pairwise estimation procedure, i.e. using the matrices <span class="math inline">\({\mathcal H}\)</span> and <span class="math inline">\(\tilde{\boldsymbol\Delta}\)</span>, as well as the (estimated) pairwise probabilities <span class="math inline">\(\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})\)</span>.
+<p>The advantage of our equation in <a href="#eq:ourOmega2">(5)</a> is that <span class="math inline">\({\boldsymbol\Omega}_2\)</span> can be formed using the byproduct of the pairwise estimation procedure, i.e. using the matrices <span class="math inline">\({\mathcal H}\)</span> and <span class="math inline">\(\tilde{\boldsymbol\Delta}\)</span>, as well as the (estimated) pairwise probabilities <span class="math inline">\(\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})\)</span>.
 What remains is the proper estimation of <span class="math inline">\({\boldsymbol\Sigma}_2\)</span>, and this depends on the sampling design performed.
 The <a href="complex_sampling1.html">Complex sampling procedure</a> article touches upon this briefly, with further details available in the manuscript.</p>
 </div>

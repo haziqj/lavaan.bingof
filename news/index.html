@@ -91,29 +91,33 @@ for (let popover of popovers) {
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="lavaanbingof-development-version">lavaan.bingof (development version)<a class="anchor" aria-label="anchor" href="#lavaanbingof-development-version"></a></h2>
 <div class="section level3">
-<h3 id="date-development-version">Date<a class="anchor" aria-label="anchor" href="#date-development-version"></a></h3>
-<ul><li>Wald and Wald V3 performs very poorly when the rank of weight matrix <span class="math inline">$\bXi$</span> is rank deficient. Noticed that this occurs often in complex sampling and <span class="math inline">$\bSigma_2$</span> matrix is not full rank.</li>
+<h3 id="id_2023-development-version">2023-04-14<a class="anchor" aria-label="anchor" href="#id_2023-development-version"></a></h3>
+<ul><li>Fixed bug in <code>lavaan.bingof:::create_Sigma2_matrix_complex()</code> where it did not loop over strata.</li>
+<li>Fixed bug in <code>lavaan.bingof:::extract_lavaan_info()</code> would extract the <span class="math inline">2<sup><em>p</em></sup></span> proportion tables. No wonder the simulations ran slow… oops.</li>
+<li>Now using <code><a href="https://rdrr.io/pkg/MASS/man/ginv.html" class="external-link">MASS::ginv</a></code> for inverting <span class="math inline">$\bXi$</span> weights. Not sure if this is a good idea? This really only affects the Wald test and Multinomial test (apparently anyway).</li>
+<li>Re-ran all simulations</li>
+<li>Wald and Wald V3 performs very poorly when the rank of weight matrix <span class="math inline">$\bXi$</span> is rank deficient. Noticed that this occurs often in complex sampling and <span class="math inline">$\bSigma_2$</span> matrix is not full rank.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="id_2023-development-version">2023-04-08<a class="anchor" aria-label="anchor" href="#id_2023-development-version"></a></h3>
+<h3 id="id_2023-development-version-1">2023-04-08<a class="anchor" aria-label="anchor" href="#id_2023-development-version-1"></a></h3>
 <ul><li>Create R package <a href="https://github.com/haziqj/lavaan.bingof" class="external-link">lavaan.bingof</a> for easier shipment of R codes to implement the goodness-of-fit tests.</li>
 <li>Migrate from <a href="https://github.com/rstudio/bookdown" class="external-link">bookdown</a> format presentation to <a href="https://pkgdown.r-lib.org" class="external-link">pkgdown</a> articles.</li>
 <li>Previous repo <a href="https://github.com/haziqj/gof-comp-lik/" class="external-link">haziqj/gof-comp-lik</a> and accompanying website will likely be shutdown.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="id_2023-development-version-1">2023-04-01<a class="anchor" aria-label="anchor" href="#id_2023-development-version-1"></a></h3>
+<h3 id="id_2023-development-version-2">2023-04-01<a class="anchor" aria-label="anchor" href="#id_2023-development-version-2"></a></h3>
 <ul><li>After further discussions, decide to stratify the population based on the latent variable <span class="math inline"><em>η</em></span>. See technical details for clarification.</li>
 <li>In turn, the only missing component was the proper estimation of the multinomial matrix <span class="math inline"><strong>Σ</strong></span> using sampling weights.</li>
 <li>Finally, the complex sampling simulation works!</li>
 </ul></div>
 <div class="section level3">
-<h3 id="id_2023-development-version-2">2023-03-22<a class="anchor" aria-label="anchor" href="#id_2023-development-version-2"></a></h3>
+<h3 id="id_2023-development-version-3">2023-03-22<a class="anchor" aria-label="anchor" href="#id_2023-development-version-3"></a></h3>
 <ul><li>Experimenting with a different complex sampling scheme, whereby the population is determined by multiple variable including stratum-level, cluster-level, and other individual characteristics (called shape, colour, and “mystery”).</li>
 <li>Inspired by the blog post “<a href="https://www.r-bloggers.com/2018/08/estimating-relative-risk-in-a-simulated-complex-survey-by-ellis2013nz/" class="external-link">Estimating relative risk in a simulated complex survey by </a><a href="https://github.com/ellis2013nz" class="external-link">@ellis2013nz</a>”.</li>
 <li>However, generating data this way makes the population highly misspecified, and so none of the test statistics work.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="id_2023-development-version-3">2023-02-26<a class="anchor" aria-label="anchor" href="#id_2023-development-version-3"></a></h3>
+<h3 id="id_2023-development-version-4">2023-02-26<a class="anchor" aria-label="anchor" href="#id_2023-development-version-4"></a></h3>
 <ul><li>Wrote the technical details section for the derivation of the test statistics using both maximum likelihood estimation and pairwise maximum likelihood estimation.</li>
 <li>Consequently all R code was rewritten for efficiency.</li>
 <li>Added the missing parts of the test statistics, including
@@ -122,13 +126,13 @@ for (let popover of popovers) {
 </ul></li>
 </ul></div>
 <div class="section level3">
-<h3 id="id_2023-development-version-4">2023-02-20<a class="anchor" aria-label="anchor" href="#id_2023-development-version-4"></a></h3>
+<h3 id="id_2023-development-version-5">2023-02-20<a class="anchor" aria-label="anchor" href="#id_2023-development-version-5"></a></h3>
 <ul><li>Decided on a very basic stratified sampling procedure, where the population consists of 50 strata with varying population size within each stratum. The number of PSU to be selected is 20 so total sample size is 1000.</li>
 <li>To create homogeneity within stratum, a stratum level random effect was generated.</li>
 <li>Although bias was reduced when sampling weights were used, the test statistics values still were suspect.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="id_2023-development-version-5">2023-01-25<a class="anchor" aria-label="anchor" href="#id_2023-development-version-5"></a></h3>
+<h3 id="id_2023-development-version-6">2023-01-25<a class="anchor" aria-label="anchor" href="#id_2023-development-version-6"></a></h3>
 <ul><li>After a long hiatus, revisit the sampling weights problem.</li>
 <li>Successfully modified the relevant parts in <a href="https://lavaan.ugent.be" class="external-link">lavaan</a> so that sampling weights can be used. The objective function (to be minimised) now takes the normalised weights instead of frequency counts.</li>
 <li>See github.com/haziqj/lavaan and install this fork of <a href="https://lavaan.ugent.be" class="external-link">lavaan</a>
