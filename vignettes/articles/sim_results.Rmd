@@ -146,9 +146,7 @@ semPaths(fit, intercepts = FALSE, what = "par",
          thresholds = FALSE, rotation = 3, weighted = FALSE)
 ```
 
-
 ### Model 5
-
 
 ```{r sem_path_mod5}
 mod <- "
@@ -258,5 +256,3 @@ p_complex_e
 ```{r complex_powerf, fig.width = 7, fig.height = 8}
 p_complex_f
 ```
-
-

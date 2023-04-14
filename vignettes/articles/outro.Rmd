@@ -16,4 +16,5 @@ load("my_session.RData")
 
 ```{r, echo = FALSE}
 print(my_session)
+# devtools::session_info()
 ``` 
