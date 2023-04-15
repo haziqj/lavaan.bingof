@@ -111,11 +111,69 @@ for (let popover of popovers) {
 
 <!-- https://github.com/r-lib/pkgdown/issues/133 -->
 <p><img src="https://raw.githubusercontent.com/haziqj/lavaan.bingof/main/data-raw/mult_bern_data.png"></p>
-<p>This is the accompanying R package for the paper</p>
+<p>This is the accompanying R package for the research paper</p>
 <blockquote>
-<p>Goodness-of-fit tests for composite likelihood estimation under simple random and complex survey sampling</p>
+<p>Jamil, H., Moustaki, I., &amp; Skinner, C. (2023). Goodness-of-fit tests for composite likelihood estimation under simple random and complex survey sampling. <em>Manuscript in preparation</em>.</p>
 </blockquote>
-<p>This package contains the functions to compute the test statistics and conduct simulation studies described in the above manuscript.</p>
+<p>This package contains the functions to compute the test statistics and conduct simulation studies described in the above manuscript. Currently, the package implements the following tests based on univariate and bivariate residuals of a binary factor analysis model:</p>
+<table class="table">
+<colgroup>
+<col width="4%">
+<col width="24%">
+<col width="20%">
+<col width="49%">
+</colgroup>
+<thead><tr class="header">
+<th></th>
+<th>Name</th>
+<th>R function</th>
+<th>Remarks</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Wald test</td>
+<td><code><a href="reference/ligof-test-stats.html">Wald_test()</a></code></td>
+<td>Described in Reiser (1996)</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Wald test (diagonal)</td>
+<td><code><a href="reference/ligof-test-stats.html">Wald_test_v2()</a></code></td>
+<td>A more efficient Wald test</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Wald test (orthogonal)</td>
+<td><code><a href="reference/ligof-test-stats.html">Wald_test_v3()</a></code></td>
+<td>Described in Maydeu-Olivares and Joe (2005,2006)</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Pearson test</td>
+<td><code><a href="reference/ligof-test-stats.html">Pearson_test_v1()</a></code></td>
+<td>Rao-Scott adjusments</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Pearson test</td>
+<td><code><a href="reference/ligof-test-stats.html">Pearson_test_v2()</a></code></td>
+<td>Moment matching approximation</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>Residual sum of squares</td>
+<td><code><a href="reference/ligof-test-stats.html">RSS_test()</a></code></td>
+<td>Moment matching approximation</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>Multinomial test</td>
+<td><code><a href="reference/ligof-test-stats.html">Multn_test()</a></code></td>
+<td>Moment matching approximation</td>
+</tr>
+</tbody>
+</table>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -239,7 +297,7 @@ for (let popover of popovers) {
 <span><span class="co">#&gt; Sampling design: Stratified sampling</span></span>
 <span><span class="co">#&gt; Sample size: 1000</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Simulations completed in 24 secs</span></span></code></pre></div>
+<span><span class="co">#&gt; Simulations completed in 23.3 secs</span></span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -296,6 +354,7 @@ for (let popover of popovers) {
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
 <li><a href="https://github.com/haziqj/lavaan.bingof/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/haziqj/lavaan.bingof/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://app.codecov.io/gh/haziqj/lavaan.bingof?branch=main" class="external-link"><img src="https://codecov.io/gh/haziqj/lavaan.bingof/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
 </ul>
 </div>
 
