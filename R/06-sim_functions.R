@@ -35,7 +35,7 @@ globalVariables(c("i"))
 #'   }
 #' }
 #' }
-ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
+ligof_sims <- function(model_no = 1, nsim = 10, samp_size = 1000,
                        samp = c("srs", "strat", "clust", "strcl"),
                        simtype = c("type1", "power"), starting_seed = 4423,
                        no.cores = parallel::detectCores() - 2) {
@@ -143,13 +143,79 @@ NULL
 #' @rdname ligof_sims.methods
 #' @export
 print.ligof_sims <- function(x, ...) {
-   print(attr(x, "duration"))
+  list2env(attr(x, "sim_settings"), environment())
+  time_taken <- attr(x, "duration")
+
+  cli::cli_h1("LIGOF simulations")
+  # lid <- cli::cli_ul()
+
+  cli::cli_text("")
+  cli::cli_text("{.strong Settings}")
+  cli::cli_dl(c("Number of replications" = "{.val {nsim}}"))
+  cli::cli_dl(c("Model" = "{.val {cleanup_model(model_no)}}"))
+  cli::cli_dl(c("Sampling design" = "{.val {cleanup_samp(samp)}}"))
+  cli::cli_dl(c("Sample size" = "{.val {samp_size}}"))
+  cli::cli_text("")
+  cli::cli_text("Simulations completed in {.field {cleanup_duration(time_taken)}}")
+  # cli::cli_end()
+
+  # cli::cli_end(lid)
+}
+
+cleanup_model <- function(x) {
+  paste0(
+    x, " (",
+    c("1F 5V", "1F 8V", "1F 15V", "2F 10V", "3F 15V")[x],
+    ")"
+  ) %>% noquote()
+}
+
+cleanup_samp <- function(x) {
+  if (x == "srs") res <- "Simple random sampling"
+  if (x == "strat") res <- "Stratified sampling"
+  if (x == "clust") res <- "Two-stage cluster sampling"
+  if (x == "strcl") res <- "Two-stage stratified cluster sampling"
+  noquote(res)
+}
+
+cleanup_duration <- function(x) {
+  paste(
+    round(as.numeric(x), 1),
+    attr(x, "units")
+  ) %>% noquote()
 }
 
 #' @rdname ligof_sims.methods
+#' @param alpha (numeric) The significance level of the test.
 #' @export
-summary.ligof_sims <- function(object, ...) {
-  # cat("Under construction...")
-  lapply(object, function(y) if(tibble::is_tibble(y)) { y } else { NULL }) %>%
-    bind_rows()
+summary.ligof_sims <- function(object, alpha = 0.05, ...) {
+  list2env(attr(object, "sim_settings"), environment())
+
+  tab <-
+    lapply(object, function(y) if(tibble::is_tibble(y)) { y } else { NULL }) %>%
+    bind_rows() %>%
+    mutate(alpha_ = pval < alpha,
+           name = factor(name, levels = unique(name))) %>%
+    group_by(name) %>%
+    summarise(n_sims = n(),
+              n_converged = sum(converged),
+              n_rank_def = sum(Omega2_rank < S),
+              rej_rate = mean(alpha_[converged], na.rm = TRUE),
+              mean_W = mean(W[converged], na.rm = TRUE),
+              mean_df = mean(df[converged], na.rm = TRUE),
+              .groups = "drop")
+
+  cli::cli_h1("LIGOF simulations summary")
+  cli::cli_text("")
+  cli::cli_text("Model {.val {cleanup_model(model_no)}} using {.val {tolower(cleanup_samp(samp))}} design (n = {.val {samp_size}})")
+  # cli::cli_li("Replications: {.val {nsim}}")
+  cli::cli_li("Converged: {.field {tab$n_converged[1]}} / {.val {nsim}}")
+  cli::cli_li("Rank deficient: {.field {tab$n_rank_def[1]}} / {.val {nsim}}")
+  cli::cli_li("Significance level: {.field {alpha}}")
+
+  tab %>%
+    select(`Test name` = name, `Rejection rate` = rej_rate,
+           `Mean W value` = mean_W, `Mean d.f.` = mean_df) %>%
+    kableExtra::kbl(format = "rst", digits = c(1, 3, 2, 2)) %>%
+    print()
 }

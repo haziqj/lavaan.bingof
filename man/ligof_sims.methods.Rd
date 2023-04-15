@@ -8,12 +8,14 @@
 \usage{
 \method{print}{ligof_sims}(x, ...)
 
-\method{summary}{ligof_sims}(object, ...)
+\method{summary}{ligof_sims}(object, alpha = 0.05, ...)
 }
 \arguments{
 \item{x, object}{The output from \code{\link[=ligof_sims]{ligof_sims()}}.}
 
 \item{...}{Not used.}
+
+\item{alpha}{(numeric) The significance level of the test.}
 }
 \value{
 To be described.

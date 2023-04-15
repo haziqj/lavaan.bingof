@@ -8,7 +8,10 @@ lav_model_vcov <- utils::getFromNamespace("lav_model_vcov", "lavaan")
 LongVecTH.Rho <- utils::getFromNamespace("LongVecTH.Rho", "lavaan")
 computeDelta <- utils::getFromNamespace("computeDelta", "lavaan")
 dbinorm <- utils::getFromNamespace("dbinorm", "lavaan")
+lav_tables_oneway <- utils::getFromNamespace("lav_tables_oneway", "lavaan")
 lav_tables_pairwise_model_pi <- utils::getFromNamespace("lav_tables_pairwise_model_pi", "lavaan")
+lav_tables_pairwise_freq_cell <- utils::getFromNamespace("lav_tables_pairwise_freq_cell", "lavaan")
+univariateExpProbVec <- utils::getFromNamespace("univariateExpProbVec", "lavaan")
 
 # No visible binding notes
 globalVariables(c(".", "Delta2", "N", "Omega2", "S", "Sigma2", "TH", "W",
@@ -18,7 +21,9 @@ globalVariables(c(".", "Delta2", "N", "Omega2", "S", "Sigma2", "TH", "W",
                   "pdot1", "pdot2", "pi2_hat", "pidot1", "pidot2",
                   "pr_class_selected", "pr_school_selected", "prob", "rn",
                   "rn2", "school", "students_in_school_type", "th.idx", "type",
-                  "var1", "var2", "wt", "z"))
+                  "var1", "var2", "wt", "z", "Omega2_rank", "Sigmahat",
+                  "alpha_", "converged", "fit", "mean_W", "mean_df", "name",
+                  "pval", "rej_rate"))
 
 ## ---- Utilities --------------------------------------------------------------
 extract_lavaan_info <- function(lavobject) {
