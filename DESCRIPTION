@@ -35,6 +35,7 @@ Imports:
     foreach,
     gtools,
     lavaan (== 0.6-14.9001),
+    lifecycle,
     magrittr,
     MASS,
     Matrix,

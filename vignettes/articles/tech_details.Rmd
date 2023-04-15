@@ -296,10 +296,10 @@ We summarise the various weight matrices that we use in this R package:
 |   | Name        | Weight ($\bW$)     | D.f.  | R function          | Remarks                           |
 |---|-------------|---------------------|-------|---------------------|-----------------------------------|
 | 1 | Wald        | $\bOmega_2^+$       | $S-m$ | `Wald_test()`       | $\bOmega_2$ may be rank deficient |
-| 2 | Wald V2     | $\diag(\bOmega_2^+)^{-1}$       | est.  | `Wald_test_v2()`    | $\bOmega_2$ need not be inverted  |
-| 3 | Wald V3     | $\bW\bOmega_2\bW$ | $S-m$ | `Wald_test_v3()`    | $\bOmega_2$ need not be estimated |
-| 4 | Pearson     | $\diag(\bpi_2)^{-1}$          | est.  | `Pearson_test_v1()` | Rao-Scott adjustment              |
-| 5 | Pearson V2  | $\diag(\bpi_2)^{-1}$          | est.  | `Pearson_test_v2()` | Moment matching                   |
+| 2 | Wald V2     | $\diag(\bOmega_2^+)^{-1}$       | est.  | `Wald_diag_test()`    | $\bOmega_2$ need not be inverted  |
+| 3 | Wald V3     | $\bW\bOmega_2\bW$ | $S-m$ | `Wald_orth_test()`    | $\bOmega_2$ need not be estimated |
+| 4 | Pearson     | $\diag(\bpi_2)^{-1}$          | est.  | `Pearson_RS_test()` | Rao-Scott adjustment              |
+| 5 | Pearson V2  | $\diag(\bpi_2)^{-1}$          | est.  | `Pearson_test()` | Moment matching                   |
 | 6 | RSS         | $\bI$               | est.  | `RSS_test()`        |                                   |
 | 7 | Multinomial | $\bSigma_2^{-1}$    | est.  | `Multn_test()`      |                                   |
 
@@ -310,8 +310,8 @@ For this purpose, we use the sample versions of the relevant quantities, mostly 
 - $\hat{\tilde\bDelta_{sk}} = \frac{\partial\pimodpl}{\partial\theta_k} \Big|_{\btheta=\mlepl}$; and
 - an appropriate estimator of $\bSigma_2$.
 
-Finally, theory informs us that all of these test statistics are distributed according to a chi square distribution.
-However, for some of these tests, the degrees of freedom has to be estimated and may not be known a priori.
+In general, all of these test statistics are chi square variates.
+However, for some of these tests, the degrees of freedom are not known a priori and have to be estimated.
 There are two methods that we consider: 1) A Rao-Scott type adjustment [@rao1979chi;@rao1981analysis;@rao1984chi]; and 2) a moment matching procedure [@bartholomew2002goodness].
 While in theory each test may be subjected to either a Rao-Scott type adjustment or a moment matching procedure, we only consider the Rao-Scott adjustment for the Pearson test.
 

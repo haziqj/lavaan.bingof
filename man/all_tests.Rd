@@ -9,7 +9,7 @@ all_tests(object, svy_design = NULL, sim = NULL)
 \arguments{
 \item{object}{A \code{\link[lavaan:lavaan]{lavaan::lavaan()}} fit object.}
 
-\item{svy_design}{A \code{\link[survey:svydesign]{survey::svydesign()}} object. Optional.}
+\item{svy_design}{(optional) A \code{\link[survey:svydesign]{survey::svydesign()}} object.}
 
 \item{sim}{(integer) Optional and used for large-scale simulations.}
 }

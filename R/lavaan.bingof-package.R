@@ -27,6 +27,7 @@
 #' @importFrom foreach %dopar%
 #' @importFrom foreach foreach
 #' @importFrom lavaan sem
+#' @importFrom lifecycle deprecated
 #' @importFrom magrittr %>%
 #' @importFrom methods is
 #' @importFrom mvnfast rmvn

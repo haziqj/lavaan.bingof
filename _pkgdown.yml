@@ -37,7 +37,7 @@ reference:
 
 - title: Simulation study
   contents:
-  - ligof_sims
+  - run_ligof_sims
   - ligof_sims.methods
   - sim_results
   - sim_results_all
@@ -54,7 +54,7 @@ articles:
   contents:
   - articles/intro
   - articles/tech_details
-  - articles/complex_sampling1
+  - articles/complex_sampling
 - title: Simulation study
   navbar: Simulation study
   # desc: >

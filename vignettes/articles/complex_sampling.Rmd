@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   echo = FALSE,
-  cache.path = "_cache.nosync/",
+  # cache.path = "_cache.nosync/",
   cache = TRUE
 )
 library(tidyverse)
@@ -342,13 +342,13 @@ There are three functions that perform the three complex sampling procedures des
 
 ```{r complex_sampling_procedure, echo = TRUE, cache = TRUE, size = "footnotesize"}
 # Stratified sampling
-(samp1 <- gen_data_bin_complex1(population = pop, seed = 123))
+(samp1 <- gen_data_bin_strat(population = pop, seed = 123))
 
 # Two-stage cluster sampling
-(samp2 <- gen_data_bin_complex2(population = pop, seed = 123))
+(samp2 <- gen_data_bin_clust(population = pop, seed = 123))
 
 # Two-stage stratified cluster sampling
-(samp3 <- gen_data_bin_complex3(population = pop, seed = 123))
+(samp3 <- gen_data_bin_strcl(population = pop, seed = 123))
 ```
 
 

@@ -3,7 +3,7 @@ library(tidyverse)
 library(ggsankey)
 theme_set(theme_sankey())
 
-dat <- gen_data_bin(model.no = 1, n = 1000, seed = 123) %>%
+dat <- gen_data_bin(model_no = 1, n = 1000, seed = 123) %>%
   mutate(across(starts_with("y"), function(x) as.numeric(x == 1)))
 
 # Create bivariate moments
@@ -58,8 +58,8 @@ plot_df <-
   make_long(data, pattern, bivariate, univariate) %>%
   mutate(#col = my_col_fn(node),
     x = factor(x, labels = c("Multivariate\nBernoulli Data",
-                             "Response\nPatterns", "Bivariate\nMarginals",
-                             "Univariate\nMarginals")))
+                             "Response\nPatterns", "Bivariate\nMoments",
+                             "Univariate\nMoments")))
 
 p_tmp <-
   ggplot(plot_df, aes(x = x, next_x = next_x, node = node,
@@ -100,70 +100,3 @@ p <-
   labs(x = NULL, y = NULL); p
 
 ggsave("mult_bern_data.png", p, width = 8.5, height = 5)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Some test statistics ---------------------------------------------------------
-B <- 2500
-pb <- txtProgressBar(min = 0, max = B, style = 3)
-progress <- function(i) setTxtProgressBar(pb, i)
-cl <- makeCluster(parallel::detectCores() - 2)
-registerDoSNOW(cl)
-
-res <- foreach(
-  i = 1:B, .combine = c,
-  .packages = c("tidyverse", "lavaan", "survey"),
-  # .export = ls(globalenv()),
-  .errorhandling = "remove",
-  .options.snow = list(progress = progress)
-) %dopar% {
-  dat <- gen_data_bin(model.no = 1, n = 1000)
-  mod <- txt_mod(1)
-  fit <- sem(mod, dat, std.lv = TRUE)
-  lavTables(fit, dimension = 0) %>%
-    pull(X2) %>%
-    sum %>%
-    suppressWarnings()
-}
-close(pb)
-stopCluster(cl)
-
-tibble(
-  chisq = res,
-  x = seq(min(res), max(res), length = B),
-  y = dchisq(x, 2 ^ 5 - 13)
-) %>%
-  ggplot() +
-  geom_histogram(aes(res, y = after_stat(density)), binwidth = 1, col = "white") +
-  geom_line(aes(x, y), col = "red3")
-
-lavTables(fit, dimension = 0) %>%
-  ggplot(aes(obs.prop, est.prop)) +
-  geom_point() +
-  geom_abline(slope = 1, intercept = 0) +
-  scale_x_log10() +
-  scale_y_log10()
-
-with(get_uni_bi_moments(fit), {
-  tibble(x = c(pdot1, pdot2),
-         y = c(pidot1, pidot2))
-}) %>%
-  ggplot(aes(x, y)) +
-  geom_point() +
-  geom_abline(slope = 1, intercept = 0) +
-  scale_x_log10() +
-  scale_y_log10()
-

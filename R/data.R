@@ -29,7 +29,7 @@ NULL
 #'
 #'  - `n_sim` is the number of replications.
 #'  - `n_converged` is the number of replications in which [lavaan::lavaan()] converged.
-#'  - `n_rank_def` is the number of replications where the rank of \eqn{Omega_2} matrix was found to be deficient.
+#'  - `n_rank_def` is the number of replications where the rank of \eqn{\Omega_2} matrix was found to be deficient.
 #'  - `rej_rate_x` is the proportions of replications where the null hypothesis was rejected at the `x`% level.
 #'
 "res_srs_type1"

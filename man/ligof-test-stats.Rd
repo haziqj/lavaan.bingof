@@ -3,23 +3,23 @@
 \name{ligof-test-stats}
 \alias{ligof-test-stats}
 \alias{Wald_test}
-\alias{Wald_test_v2}
-\alias{Wald_test_v3}
-\alias{Pearson_test_v1}
-\alias{Pearson_test_v2}
+\alias{Wald_diag_test}
+\alias{Wald_orth_test}
+\alias{Pearson_RS_test}
+\alias{Pearson_test}
 \alias{RSS_test}
 \alias{Multn_test}
-\title{Limited information goodness-of-fit test statistics}
+\title{Limited information goodness-of-fit tests}
 \usage{
 Wald_test(object, approx_Omega2 = FALSE, svy_design = NULL)
 
-Wald_test_v2(object, approx_Omega2 = FALSE, svy_design = NULL, .order = 3)
+Wald_diag_test(object, approx_Omega2 = FALSE, svy_design = NULL, .order = 3)
 
-Wald_test_v3(object, svy_design = NULL)
+Wald_orth_test(object, svy_design = NULL)
 
-Pearson_test_v1(object, approx_Omega2 = FALSE, svy_design = NULL, .order = 2)
+Pearson_RS_test(object, approx_Omega2 = FALSE, svy_design = NULL, .order = 2)
 
-Pearson_test_v2(object, approx_Omega2 = FALSE, svy_design = NULL, .order = "3")
+Pearson_test(object, approx_Omega2 = FALSE, svy_design = NULL, .order = "3")
 
 RSS_test(object, approx_Omega2 = FALSE, svy_design = NULL, .order = "3")
 
@@ -28,10 +28,10 @@ Multn_test(object, approx_Omega2 = FALSE, svy_design = NULL, .order = "3")
 \arguments{
 \item{object}{A \code{\link[lavaan:lavaan]{lavaan::lavaan()}} fit object.}
 
-\item{approx_Omega2}{(logical) \strong{EXPERIMENTAL} Should an approximate
+\item{approx_Omega2}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} (logical)  Should an approximate
 residual covariance matrix \eqn{\Omega_2} be used? Defaults to \code{FALSE}.}
 
-\item{svy_design}{A \code{\link[survey:svydesign]{survey::svydesign()}} object. Optional.}
+\item{svy_design}{(optional) A \code{\link[survey:svydesign]{survey::svydesign()}} object.}
 
 \item{.order}{(integer) Either the number of moments to match for the
 chi-square test statistic matching procedure (choose from 1--3), or the
@@ -42,21 +42,21 @@ A data frame containing the test statistics \eqn{X^2}, degrees of
 freedom, name of the test, and the \eqn{p}-value.
 }
 \description{
-Limited information goodness-of-fit test statistics
+Limited information goodness-of-fit tests
 }
 \section{Functions}{
 \itemize{
 \item \code{Wald_test()}: The Wald test statistic.
 
-\item \code{Wald_test_v2()}: The Wald test statistic using a simple diagonal
+\item \code{Wald_diag_test()}: The Wald test statistic using a simple diagonal
 \eqn{\Omega_2} matrix.
 
-\item \code{Wald_test_v3()}: The Wald test statistic bypassing the
+\item \code{Wald_orth_test()}: The Wald test statistic bypassing the
 \eqn{\Omega_2} matrix (uses orthogonal complements of \eqn{\Delta_2}).
 
-\item \code{Pearson_test_v1()}: The Pearson test with \eqn{p}-values calculated using a Rao-Scott type adjustment.
+\item \code{Pearson_RS_test()}: The Pearson test with \eqn{p}-values calculated using a Rao-Scott type adjustment.
 
-\item \code{Pearson_test_v2()}: The Pearson test with \eqn{p}-values calculated using a moment-matching procedure.
+\item \code{Pearson_test()}: The Pearson test with \eqn{p}-values calculated using a moment-matching procedure.
 
 \item \code{RSS_test()}: The residual sum of squares (RSS) test. Uses moment-matching for \eqn{p}-value calculations.
 

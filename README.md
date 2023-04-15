@@ -30,10 +30,10 @@ bivariate residuals of a binary factor analysis model:
 |     | Name                    | R function          | Remarks                                          |
 |-----|-------------------------|---------------------|--------------------------------------------------|
 | 1   | Wald test               | `Wald_test()`       | Described in Reiser (1996)                       |
-| 2   | Wald test (diagonal)    | `Wald_test_v2()`    | A more efficient Wald test                       |
-| 3   | Wald test (orthogonal)  | `Wald_test_v3()`    | Described in Maydeu-Olivares and Joe (2005,2006) |
-| 4   | Pearson test            | `Pearson_test_v1()` | Rao-Scott adjusments                             |
-| 5   | Pearson test            | `Pearson_test_v2()` | Moment matching approximation                    |
+| 2   | Wald test (diagonal)    | `Wald_diag_test()`  | A more efficient Wald test                       |
+| 3   | Wald test (orthogonal)  | `Wald_orth_test()`  | Described in Maydeu-Olivares and Joe (2005,2006) |
+| 4   | Pearson test            | `Pearson_RS_test()` | Rao-Scott adjusments                             |
+| 5   | Pearson test            | `Pearson_test()`    | Moment matching approximation                    |
 | 6   | Residual sum of squares | `RSS_test()`        | Moment matching approximation                    |
 | 7   | Multinomial test        | `Multn_test()`      | Moment matching approximation                    |
 
@@ -96,15 +96,15 @@ fit <- lavaan::sem(mod, dat, std.lv = TRUE, estimator = "PML")
 # Test statistics
 all_tests(fit)
 #> # A tibble: 7 × 6
-#>      X2    df name           pval W_rank     S
-#>   <dbl> <dbl> <chr>         <dbl>  <int> <int>
-#> 1  4.96  5    Wald          0.420     13    15
-#> 2  1.81  3.14 WaldV2,MM3    0.638     15    15
-#> 3  4.96  5    WaldV3        0.421      5    15
-#> 4  4.07  4.53 Pearson       0.474     15    15
-#> 5  3.30  3.72 PearsonV2,MM3 0.465     15    15
-#> 6  4.11  4.34 RSS,MM3       0.441     15    15
-#> 7  4.93  5.00 Multn,MM3     0.424     15    15
+#>      X2    df name          pval W_rank     S
+#>   <dbl> <dbl> <chr>        <dbl>  <int> <int>
+#> 1  4.96  5    Wald         0.420     13    15
+#> 2  1.81  3.14 WaldDiag,MM3 0.638     15    15
+#> 3  4.96  5    WaldOrth     0.421      5    15
+#> 4  4.07  4.53 PearsonRS    0.474     15    15
+#> 5  3.30  3.72 Pearson,MM3  0.465     15    15
+#> 6  4.11  4.34 RSS,MM3      0.441     15    15
+#> 7  4.93  5.00 Multn,MM3    0.424     15    15
 ```
 
 ### Test statistics under a complex sampling scheme
@@ -112,8 +112,8 @@ all_tests(fit)
 ``` r
 # Simulate a two-stage stratified cluster sampling with 50 PSUs sampled per
 # stratum, and 1 cluster sampled within each PSU.
-(dat <- gen_data_bin_complex3(population = make_population(1), npsu = 50, 
-                              seed = 9423))
+(dat <- gen_data_bin_strcl(population = make_population(1), npsu = 50, 
+                           seed = 9423))
 #> # A tibble: 3,040 × 9
 #>    type  school class    wt y1    y2    y3    y4    y5   
 #>    <chr> <chr>  <chr> <dbl> <ord> <ord> <ord> <ord> <ord>
@@ -153,8 +153,8 @@ Wald_test(fit1, svy_design = svy)
 (pc <- parallel::detectCores())   # how many cores do we have?
 #> [1] 32
 
-res <- ligof_sims(model_no = 1, nsim = pc, samp = "strat", simtype = "type1",
-                  ncores = pc - 2)
+res <- run_ligof_sims(model_no = 1, nsim = pc, ncores = pc - 2, samp = "strat",
+                      simtype = "type1")
 #>|======================================================================| 100%
 ```
 
@@ -171,7 +171,7 @@ res
 #> Sampling design: Stratified sampling
 #> Sample size: 1000
 #> 
-#> Simulations completed in 23.1 secs
+#> Simulations completed in 24.2 secs
 ```
 
 ``` r
@@ -185,15 +185,15 @@ summary(res)
 #> • Significance level: 0.05
 #> 
 #> 
-#> =============  ==============  =============  =========
-#> Test name      Rejection rate  Mean X2 value  Mean d.f.
-#> =============  ==============  =============  =========
-#> Wald                    0.062           5.11       5.00
-#> WaldV2,MM3              0.000           2.99       3.44
-#> WaldV3                  0.062           4.89       5.00
-#> Pearson                 0.062           3.75       4.15
-#> PearsonV2,MM3           0.031           2.67       3.04
-#> RSS,MM3                 0.031           3.30       3.62
-#> Multn,MM3               0.062           4.92       4.99
-#> =============  ==============  =============  =========
+#> ============  ==============  =============  =========
+#> Test name     Rejection rate  Mean X2 value  Mean d.f.
+#> ============  ==============  =============  =========
+#> Wald                   0.062           5.11       5.00
+#> WaldDiag,MM3           0.000           2.99       3.44
+#> WaldOrth               0.062           4.89       5.00
+#> PearsonRS              0.062           3.75       4.15
+#> Pearson,MM3            0.031           2.67       3.04
+#> RSS,MM3                0.031           3.30       3.62
+#> Multn,MM3              0.062           4.92       4.99
+#> ============  ==============  =============  =========
 ```

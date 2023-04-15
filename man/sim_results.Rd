@@ -13,7 +13,7 @@ A \code{\link[=tibble]{tibble()}} containing the summarised results of the simul
 \itemize{
 \item \code{n_sim} is the number of replications.
 \item \code{n_converged} is the number of replications in which \code{\link[lavaan:lavaan]{lavaan::lavaan()}} converged.
-\item \code{n_rank_def} is the number of replications where the rank of \eqn{Omega_2} matrix was found to be deficient.
+\item \code{n_rank_def} is the number of replications where the rank of \eqn{\Omega_2} matrix was found to be deficient.
 \item \code{rej_rate_x} is the proportions of replications where the null hypothesis was rejected at the \code{x}\% level.
 }
 }

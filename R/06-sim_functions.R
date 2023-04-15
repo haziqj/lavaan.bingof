@@ -19,23 +19,32 @@ globalVariables(c("i"))
 #'
 #' @examples
 #' \dontrun{
-#' # To run the SRS Type 1 simulations
+#'
+#' library(tidyverse)
+#' library(lavaan.bingof)
+#' library(survey)
 #' analysis_path <- dirname(rstudioapi::getSourceEditorContext()$path)
-#' sim_type <- "type1"
-#' for (the_samp_size in c(100, 250, 500, 1000, 2000, 3000)) {
-#'   for (mod_no in 1:5) {
-#'     sim_name <- paste0("srs", mod_no, "_n", the_samp_size, "_", sim_type)
-#'     cat("[", as.character(Sys.time()), "]", "Now running simulation",
-#'         sim_name, "\n")
-#'     sim <- ligof_sims(mod_no, samp_size = the_samp_size,
-#'                       samp = "srs", simtype = sim_type)
-#'     list2env(setNames(list(sim), sim_name), envir = .GlobalEnv) %>% invisible
-#'     save(list = sim_name, file = paste0(analysis_path, "/Rsave/",
-#'                                         sim_name, ".RData"))
+#'
+#' # Run all scenarios described in manuscript
+#' for (sim_type in c("type1", "power")) {
+#'   for (samp_method in c("srs", "strat", "clust", "strcl")) {
+#'     for (the_samp_size in c(500, 1000, 2000, 3000)) {
+#'       for (mod_no in 1:5) {
+#'         sim_name <- paste0(samp_method, mod_no, "_n", the_samp_size, "_",
+#'                            sim_type)
+#'         cat("[", as.character(Sys.time()), "]", "Now running simulation",
+#'             sim_name, "\n")
+#'         sim <- ligof_sims(mod_no, samp_size = the_samp_size, samp = samp_method,
+#'                           simtype = sim_type)
+#'         invisible(list2env(setNames(list(sim), sim_name), envir = .GlobalEnv))
+#'         save(list = sim_name, file = paste0(analysis_path, "/Rsave/",
+#'                                             sim_name, ".RData"))
+#'       }
+#'     }
 #'   }
 #' }
 #' }
-ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
+run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
                        samp = c("srs", "strat", "clust", "strcl"),
                        simtype = c("type1", "power"), starting_seed = 4423,
                        ncores = parallel::detectCores() - 2) {
@@ -137,7 +146,7 @@ ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
 #' @param x,object The output from [ligof_sims()].
 #' @param ... Not used.
 #'
-#' @return To be described.
+#' @return The [print()] method displays useful information about the simulation study (number of replications, time taken, model information, etc.). The output of [summary()] is a [tibble()] summarising the rejection rate for an `alpha` level test. For convenience, [summary()] displays the table in the command line interface.
 NULL
 
 #' @rdname ligof_sims.methods
@@ -147,7 +156,6 @@ print.ligof_sims <- function(x, ...) {
   time_taken <- attr(x, "duration")
 
   cli::cli_h1("LIGOF simulations")
-  # lid <- cli::cli_ul()
 
   cli::cli_text("")
   cli::cli_text("{.strong Settings}")
@@ -157,9 +165,6 @@ print.ligof_sims <- function(x, ...) {
   cli::cli_dl(c("Sample size" = "{.val {samp_size}}"))
   cli::cli_text("")
   cli::cli_text("Simulations completed in {.field {cleanup_duration(time_taken)}}")
-  # cli::cli_end()
-
-  # cli::cli_end(lid)
 }
 
 cleanup_model <- function(x) {
@@ -189,8 +194,6 @@ cleanup_duration <- function(x) {
 #' @param alpha (numeric) The significance level of the test.
 #' @export
 summary.ligof_sims <- function(object, alpha = 0.05, ...) {
-  list2env(attr(object, "sim_settings"), environment())
-
   tab <-
     lapply(object, function(y) if(tibble::is_tibble(y)) { y } else { NULL }) %>%
     bind_rows() %>%
@@ -205,13 +208,27 @@ summary.ligof_sims <- function(object, alpha = 0.05, ...) {
               mean_df = mean(df[converged], na.rm = TRUE),
               .groups = "drop")
 
+  res <- list(
+    tab = tab,
+    sim_settings = attr(object, "sim_settings"),
+    alpha = alpha
+  )
+  class(res) <- "ligof_sims_summary"
+  res
+}
+
+#' @export
+print.ligof_sims_summary <- function(x, ...) {
+  tab <- x$tab
+  list2env(x$sim_settings, environment())
+
   cli::cli_h1("LIGOF simulations summary")
   cli::cli_text("")
   cli::cli_text("Model {.val {cleanup_model(model_no)}} using {.val {tolower(cleanup_samp(samp))}} design (n = {.val {samp_size}})")
   # cli::cli_li("Replications: {.val {nsim}}")
   cli::cli_li("Converged: {.field {tab$n_converged[1]}} / {.val {nsim}}")
   cli::cli_li("Rank deficient: {.field {tab$n_rank_def[1]}} / {.val {nsim}}")
-  cli::cli_li("Significance level: {.field {alpha}}")
+  cli::cli_li("Significance level: {.field {x$alpha}}")
 
   tab %>%
     select(`Test name` = name, `Rejection rate` = rej_rate,

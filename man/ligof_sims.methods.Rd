@@ -18,7 +18,7 @@
 \item{alpha}{(numeric) The significance level of the test.}
 }
 \value{
-To be described.
+The \code{\link[=print]{print()}} method displays useful information about the simulation study (number of replications, time taken, model information, etc.). The output of \code{\link[=summary]{summary()}} is a \code{\link[=tibble]{tibble()}} summarising the rejection rate for an \code{alpha} level test. For convenience, \code{\link[=summary]{summary()}} displays the table in the command line interface.
 }
 \description{
 Print and summary methods for simulations

@@ -835,15 +835,15 @@ moment_match <- function(X2, W, Omega2, df = NULL, order) {
   data.frame(X2 = (X2 - a) / b, df = c)
 }
 
-#' Limited information goodness-of-fit test statistics
+#' Limited information goodness-of-fit tests
 #'
 #' @name ligof-test-stats
 #' @rdname ligof-test-stats
 #'
 #' @param object A [lavaan::lavaan()] fit object.
-#' @param approx_Omega2 (logical) **EXPERIMENTAL** Should an approximate
+#' @param approx_Omega2 `r lifecycle::badge('experimental')` (logical)  Should an approximate
 #'   residual covariance matrix \eqn{\Omega_2} be used? Defaults to `FALSE`.
-#' @param svy_design A [survey::svydesign()] object. Optional.
+#' @param svy_design (optional) A [survey::svydesign()] object.
 #' @param .order (integer) Either the number of moments to match for the
 #'   chi-square test statistic matching procedure (choose from 1--3), or the
 #'   Rao-Scott type adjustment order (choose from 1 or 2).
@@ -877,18 +877,15 @@ Wald_test_v2 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
   # X2 <- N * colSums(e2_hat * (W %*% e2_hat))
   X2 <- N * sum(e2_hat / diag(Omega2) * e2_hat)
   out <- moment_match(X2, W, Omega2, df = S - q, order = .order)
-  cbind(out, name = paste0("WaldV2,MM", .order)) %>%
+  cbind(out, name = paste0("WaldDiag,MM", .order)) %>%
     after_test(., W, S)
 }
 
 #' @describeIn ligof-test-stats The Wald test statistic using a simple diagonal
 #'   \eqn{\Omega_2} matrix.
 #' @export
-Wald_test
+Wald_diag_test <- Wald_test_v2
 
-#' @describeIn ligof-test-stats The Wald test statistic bypassing the
-#'   \eqn{\Omega_2} matrix (uses orthogonal complements of \eqn{\Delta_2}).
-#' @export
 Wald_test_v3 <- function(object, svy_design = NULL) {
   list2env(test_begin(object, .approx_Omega2 = FALSE, svy_design),
            environment())
@@ -898,9 +895,14 @@ Wald_test_v3 <- function(object, svy_design = NULL) {
     t(Delta2comp) %*% Sigma2 %*% Delta2comp
   ) %*% t(Delta2comp)
   X2 <- N * colSums(e2_hat * (W %*% e2_hat))
-  data.frame(X2 = X2, df = S - q, name = "WaldV3") %>%
+  data.frame(X2 = X2, df = S - q, name = "WaldOrth") %>%
     after_test(., W, S)
 }
+
+#' @describeIn ligof-test-stats The Wald test statistic bypassing the
+#'   \eqn{\Omega_2} matrix (uses orthogonal complements of \eqn{\Delta_2}).
+#' @export
+Wald_orth_test <- Wald_test_v3
 
 Pearson_test_v1 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
                             .order = 2) {
@@ -922,7 +924,7 @@ Pearson_test_v1 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
     df <- S / (1 + a_sq)
   }
 
-  data.frame(X2 = X2, df = df, name = "Pearson") %>%
+  data.frame(X2 = X2, df = df, name = "PearsonRS") %>%
     after_test(., W, S)
 }
 
@@ -937,7 +939,7 @@ Pearson_test_v2 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
   W <- diag(1 / pi2_hat)
   X2 <- N * colSums(e2_hat * (W %*% e2_hat))
   out <- moment_match(X2, W, Omega2, df = S - q, order = .order)
-  cbind(out, name = paste0("PearsonV2,MM", .order)) %>%
+  cbind(out, name = paste0("Pearson,MM", .order)) %>%
     after_test(., W, S)
 }
 
