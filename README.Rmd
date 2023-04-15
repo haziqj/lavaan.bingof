@@ -94,8 +94,8 @@ Wald_test(fit1, svy_design = svy)
 ### Simulation wrapper
 
 ```{r}
-# To conduct a simulation study based on a 5 factor model (32 repetitions only
-# for illustration). Data generated according to a stratified complex sample.
+# Conduct a simulation study based on a 5 factor model (32 repetitions only for
+# illustration). Data generated according to a stratified complex sample.
 (pc <- parallel::detectCores())   # how many cores do we have?
 
 res <- ligof_sims(model_no = 1, nsim = pc, samp = "strat", simtype = "type1",
@@ -105,8 +105,11 @@ res <- ligof_sims(model_no = 1, nsim = pc, samp = "strat", simtype = "type1",
 <!-- #>|======================================================================| 100% -->
 
 ```{r}
-# Summarise the average rejection rate
-do.call("bind_rows", res) %>%
-  group_by(name) %>%
-  summarise(rej_rate = mean(pval < 0.1))
+res
 ```
+
+```{r}
+summary(res)
+```
+
+

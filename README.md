@@ -135,8 +135,8 @@ Wald_test(fit1, svy_design = svy)
 ### Simulation wrapper
 
 ``` r
-# To conduct a simulation study based on a 5 factor model (32 repetitions only
-# for illustration). Data generated according to a stratified complex sample.
+# Conduct a simulation study based on a 5 factor model (32 repetitions only for
+# illustration). Data generated according to a stratified complex sample.
 (pc <- parallel::detectCores())   # how many cores do we have?
 #> [1] 32
 
@@ -148,18 +148,39 @@ res <- ligof_sims(model_no = 1, nsim = pc, samp = "strat", simtype = "type1",
 <!-- #>|======================================================================| 100% -->
 
 ``` r
-# Summarise the average rejection rate
-do.call("bind_rows", res) %>%
-  group_by(name) %>%
-  summarise(rej_rate = mean(pval < 0.1))
-#> # A tibble: 7 × 2
-#>   name          rej_rate
-#>   <chr>            <dbl>
-#> 1 Multn,MM3       0.125 
-#> 2 Pearson         0.125 
-#> 3 PearsonV2,MM3   0.125 
-#> 4 RSS,MM3         0.125 
-#> 5 Wald            0.125 
-#> 6 WaldV2,MM3      0.0625
-#> 7 WaldV3          0.125
+res
+#> 
+#> ── LIGOF simulations ───────────────────────────────────────────────────────────
+#> 
+#> Settings
+#> Number of replications: 32
+#> Model: 1 (1F 5V)
+#> Sampling design: Stratified sampling
+#> Sample size: 1000
+#> 
+#> Simulations completed in 24 secs
+```
+
+``` r
+summary(res)
+#> 
+#> ── LIGOF simulations summary ───────────────────────────────────────────────────
+#> 
+#> Model 1 (1F 5V) using stratified sampling design (n = 1000)
+#> • Converged: 32 / 32
+#> • Rank deficient: 0 / 32
+#> • Significance level: 0.05
+#> 
+#> 
+#> =============  ==============  ============  =========
+#> Test name      Rejection rate  Mean W value  Mean d.f.
+#> =============  ==============  ============  =========
+#> Wald                    0.062          5.11       5.00
+#> WaldV2,MM3              0.000          2.99       3.44
+#> WaldV3                  0.062          4.89       5.00
+#> Pearson                 0.062          3.75       4.15
+#> PearsonV2,MM3           0.031          2.67       3.04
+#> RSS,MM3                 0.031          3.30       3.62
+#> Multn,MM3               0.062          4.92       4.99
+#> =============  ==============  ============  =========
 ```
