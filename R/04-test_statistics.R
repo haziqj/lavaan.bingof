@@ -895,14 +895,14 @@ Wald_test_v3 <- function(object, svy_design = NULL) {
     t(Delta2comp) %*% Sigma2 %*% Delta2comp
   ) %*% t(Delta2comp)
   X2 <- N * colSums(e2_hat * (W %*% e2_hat))
-  data.frame(X2 = X2, df = S - q, name = "WaldOrth") %>%
+  data.frame(X2 = X2, df = S - q, name = "WaldVCF") %>%
     after_test(., W, S)
 }
 
 #' @describeIn ligof-test-stats The Wald test statistic bypassing the
 #'   \eqn{\Omega_2} matrix (uses orthogonal complements of \eqn{\Delta_2}).
 #' @export
-Wald_orth_test <- Wald_test_v3
+Wald_vcovf_test <- Wald_test_v3
 
 Pearson_test_v1 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
                             .order = 2) {
@@ -1000,13 +1000,13 @@ all_tests <- function(object, svy_design = NULL, sim = NULL) {
     Wald_test(test_stuff),
     # Wald_test_v2(test_stuff, .order = 1),
     # Wald_test_v2(test_stuff, .order = 2),
-    Wald_test_v2(test_stuff, .order = 3),
-    Wald_test_v3(test_stuff),
+    Wald_test_v2(test_stuff, .order = 3),  # diagonal
+    Wald_test_v3(test_stuff),  # VCOV free
     # Pearson_test_v1(test_stuff, .order = 1),
-    Pearson_test_v1(test_stuff, .order = 2),
+    Pearson_test_v1(test_stuff, .order = 2),  # RS adjustment
     # Pearson_test_v2(test_stuff, .order = 1),
     # Pearson_test_v2(test_stuff, .order = 2),
-    Pearson_test_v2(test_stuff, .order = 3),
+    Pearson_test_v2(test_stuff, .order = 3),  # MM adjustment
     # RSS_test(test_stuff, .order = 1),
     # RSS_test(test_stuff, .order = 2),
     RSS_test(test_stuff, .order = 3),

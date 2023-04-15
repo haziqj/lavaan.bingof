@@ -1,6 +1,7 @@
 library(tidyverse)
-library(lavaan.bingof)  # needs all_res data
 theme_set(theme_bw())
+library(lavaan.bingof)  # needs all_res data
+data(all_res, package = "lavaan.bingof")
 
 grab_sims <- function(x = all_res, samp = "srs", type = "type1") {
   mod_names <- c("1F 5V", "1F 8V", "1F 15V", "2F 10V", "3F 15V")

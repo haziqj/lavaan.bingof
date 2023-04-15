@@ -31,7 +31,7 @@ bivariate residuals of a binary factor analysis model:
 |-----|-------------------------|---------------------|--------------------------------------------------|
 | 1   | Wald test               | `Wald_test()`       | Described in Reiser (1996)                       |
 | 2   | Wald test (diagonal)    | `Wald_diag_test()`  | A more efficient Wald test                       |
-| 3   | Wald test (orthogonal)  | `Wald_orth_test()`  | Described in Maydeu-Olivares and Joe (2005,2006) |
+| 3   | Wald test (VCOV free)   | `Wald_vcovf_test()` | Described in Maydeu-Olivares and Joe (2005,2006) |
 | 4   | Pearson test            | `Pearson_RS_test()` | Rao-Scott adjusments                             |
 | 5   | Pearson test            | `Pearson_test()`    | Moment matching approximation                    |
 | 6   | Residual sum of squares | `RSS_test()`        | Moment matching approximation                    |
@@ -72,15 +72,15 @@ There are three main functionalities of this package:
 #> # A tibble: 1,000 × 5
 #>    y1    y2    y3    y4    y5   
 #>    <ord> <ord> <ord> <ord> <ord>
-#>  1 1     0     0     1     0    
+#>  1 1     0     0     1     1    
 #>  2 1     1     1     1     1    
-#>  3 1     1     0     1     1    
+#>  3 1     1     1     0     1    
 #>  4 1     1     0     1     1    
-#>  5 1     1     1     1     0    
+#>  5 1     1     0     1     1    
 #>  6 1     1     1     1     1    
-#>  7 1     1     0     1     1    
-#>  8 0     0     0     1     1    
-#>  9 1     1     0     1     1    
+#>  7 1     1     1     1     0    
+#>  8 1     1     1     1     1    
+#>  9 1     1     1     1     1    
 #> 10 1     0     0     1     1    
 #> # ℹ 990 more rows
 ```
@@ -98,13 +98,13 @@ all_tests(fit)
 #> # A tibble: 7 × 6
 #>      X2    df name          pval W_rank     S
 #>   <dbl> <dbl> <chr>        <dbl>  <int> <int>
-#> 1  4.96  5    Wald         0.420     13    15
-#> 2  1.81  3.14 WaldDiag,MM3 0.638     15    15
-#> 3  4.96  5    WaldOrth     0.421      5    15
-#> 4  4.07  4.53 PearsonRS    0.474     15    15
-#> 5  3.30  3.72 Pearson,MM3  0.465     15    15
-#> 6  4.11  4.34 RSS,MM3      0.441     15    15
-#> 7  4.93  5.00 Multn,MM3    0.424     15    15
+#> 1 2.81   5    Wald         0.730     14    15
+#> 2 0.862  3.31 WaldDiag,MM3 0.872     15    15
+#> 3 2.80   5    WaldVCF      0.730      5    15
+#> 4 2.46   4.41 PearsonRS    0.710     15    15
+#> 5 1.86   3.63 Pearson,MM3  0.709     15    15
+#> 6 2.30   4.18 RSS,MM3      0.707     15    15
+#> 7 2.79   5.00 Multn,MM3    0.732     15    15
 ```
 
 ### Test statistics under a complex sampling scheme
@@ -171,7 +171,7 @@ res
 #> Sampling design: Stratified sampling
 #> Sample size: 1000
 #> 
-#> Simulations completed in 24.2 secs
+#> Simulations completed in 23.2 secs
 ```
 
 ``` r
@@ -190,7 +190,7 @@ summary(res)
 #> ============  ==============  =============  =========
 #> Wald                   0.062           5.11       5.00
 #> WaldDiag,MM3           0.000           2.99       3.44
-#> WaldOrth               0.062           4.89       5.00
+#> WaldVCF                0.062           4.89       5.00
 #> PearsonRS              0.062           3.75       4.15
 #> Pearson,MM3            0.031           2.67       3.04
 #> RSS,MM3                0.031           3.30       3.62

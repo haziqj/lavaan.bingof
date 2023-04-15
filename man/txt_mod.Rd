@@ -2,8 +2,7 @@
 % Please edit documentation in R/01-utilities.R
 \name{txt_mod}
 \alias{txt_mod}
-\title{Function to return the textual model for lavaan fit, depending on which
-simulation scenario we are investigating.}
+\title{Function to return the textual model for lavaan fit}
 \usage{
 txt_mod(model_no = 1L)
 }
@@ -14,8 +13,7 @@ txt_mod(model_no = 1L)
 Character vector of factor model to input to \code{\link[lavaan:lavaan]{lavaan::lavaan()}}.
 }
 \description{
-Function to return the textual model for lavaan fit, depending on which
-simulation scenario we are investigating.
+Function to return the textual model for lavaan fit
 }
 \examples{
 txt_mod(1)

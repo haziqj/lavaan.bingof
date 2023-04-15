@@ -21,17 +21,19 @@ gen_data_bin <- function(model_no = 1, n = 1000, seed = NULL, H1 = FALSE,
 
   # Set up the loadings and covariance matrices --------------------------------
   Lambda      <- loading_mat(model_no)
-  neta        <- ncol(Lambda)
-  nitems      <- nrow(Lambda)
+  neta        <- ncol(Lambda)  # q
+  nitems      <- nrow(Lambda)  # p
   Psi         <- cov_lv_mat(model_no)
   Theta       <- matrix(0, nrow = nitems, ncol = nitems)
   diag(Theta) <- 1 - diag(Lambda %*% Psi %*% t(Lambda))
   tau         <- get_tau(model_no)
 
   # Generate the data ----------------------------------------------------------
-  eta   <- mnormt::rmnorm(n = n, mean = rep(0, neta), varcov = Psi)
-  delta <- mnormt::rmnorm(n = n, mean = rep(0, nitems), varcov = Theta)
-  ystar <- t(Lambda %*% t(eta)) + delta
+  eta     <- mvnfast::rmvn(n = n, mu = rep(0, neta), sigma = Psi)
+  epsilon <- mvnfast::rmvn(n = n, mu = rep(0, nitems), sigma = Theta)
+  # eta   <- mnormt::rmnorm(n = n, mean = rep(0, neta), varcov = Psi)
+  # delta <- mnormt::rmnorm(n = n, mean = rep(0, nitems), varcov = Theta)
+  ystar <- tcrossprod(eta, Lambda) + epsilon
 
   if (isTRUE(H1)) {
     # Add an extra factor to misspecify the model fit (for power simulations)

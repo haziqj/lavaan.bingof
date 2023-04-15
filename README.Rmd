@@ -37,7 +37,7 @@ Currently, the package implements the following tests based on univariate and bi
 |---|-------------------------|---------------------|--------------------------------------------------|
 | 1 | Wald test               | `Wald_test()`       | Described in Reiser (1996)                       |
 | 2 | Wald test (diagonal)    | `Wald_diag_test()`    | A more efficient Wald test                       |
-| 3 | Wald test (orthogonal)  | `Wald_orth_test()`    | Described in Maydeu-Olivares and Joe (2005,2006) |
+| 3 | Wald test (VCOV free)  | `Wald_vcovf_test()`    | Described in Maydeu-Olivares and Joe (2005,2006) |
 | 4 | Pearson test            | `Pearson_RS_test()` | Rao-Scott adjusments                             |
 | 5 | Pearson test            | `Pearson_test()` | Moment matching approximation                    |
 | 6 | Residual sum of squares | `RSS_test()`        | Moment matching approximation                    |

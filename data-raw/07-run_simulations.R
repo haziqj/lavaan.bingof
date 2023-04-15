@@ -4,7 +4,7 @@ library(survey)
 analysis_path <- dirname(rstudioapi::getSourceEditorContext()$path)
 
 # All simulations --------------------------------------------------------------
-for (sim_type in c("power")) {
+for (sim_type in c("type1", "power")) {
   for (samp_method in c("srs", "strat", "clust", "strcl")) {
     for (the_samp_size in c(500, 1000, 2000, 3000)) {
       for (mod_no in 1:5) {
@@ -33,11 +33,17 @@ sim_saved <-
 for (i in sim_saved) load(i)
 rm(list = c("sim_saved", "i", "analysis_path"))
 
+x <- clust1_n1000_power
+
 # Clean results
 all_res <- mget(ls()) %>%
   lapply(., FUN = \(x) {
     lapply(x, function(y) if(is_tibble(y)) { y } else { NULL }) %>%
-      bind_rows()
+      bind_rows() %>%
+      mutate(name = case_when(
+        name == "WaldOrth" ~ "WaldVCF",
+        TRUE ~ name
+      ))  # decided to change name without rerunning simulations
   })
 
 usethis::use_data(all_res, overwrite = TRUE, compress = "xz")

@@ -4,7 +4,7 @@
 \alias{ligof-test-stats}
 \alias{Wald_test}
 \alias{Wald_diag_test}
-\alias{Wald_orth_test}
+\alias{Wald_vcovf_test}
 \alias{Pearson_RS_test}
 \alias{Pearson_test}
 \alias{RSS_test}
@@ -15,7 +15,7 @@ Wald_test(object, approx_Omega2 = FALSE, svy_design = NULL)
 
 Wald_diag_test(object, approx_Omega2 = FALSE, svy_design = NULL, .order = 3)
 
-Wald_orth_test(object, svy_design = NULL)
+Wald_vcovf_test(object, svy_design = NULL)
 
 Pearson_RS_test(object, approx_Omega2 = FALSE, svy_design = NULL, .order = 2)
 
@@ -51,7 +51,7 @@ Limited information goodness-of-fit tests
 \item \code{Wald_diag_test()}: The Wald test statistic using a simple diagonal
 \eqn{\Omega_2} matrix.
 
-\item \code{Wald_orth_test()}: The Wald test statistic bypassing the
+\item \code{Wald_vcovf_test()}: The Wald test statistic bypassing the
 \eqn{\Omega_2} matrix (uses orthogonal complements of \eqn{\Delta_2}).
 
 \item \code{Pearson_RS_test()}: The Pearson test with \eqn{p}-values calculated using a Rao-Scott type adjustment.

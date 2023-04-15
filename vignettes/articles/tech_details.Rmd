@@ -296,8 +296,8 @@ We summarise the various weight matrices that we use in this R package:
 |   | Name        | Weight ($\bW$)     | D.f.  | R function          | Remarks                           |
 |---|-------------|---------------------|-------|---------------------|-----------------------------------|
 | 1 | Wald        | $\bOmega_2^+$       | $S-m$ | `Wald_test()`       | $\bOmega_2$ may be rank deficient |
-| 2 | Wald V2     | $\diag(\bOmega_2^+)^{-1}$       | est.  | `Wald_diag_test()`    | $\bOmega_2$ need not be inverted  |
-| 3 | Wald V3     | $\bW\bOmega_2\bW$ | $S-m$ | `Wald_orth_test()`    | $\bOmega_2$ need not be estimated |
+| 2 | Wald V2     | $\diag(\bOmega_2)^{-1}$       | est.  | `Wald_diag_test()`    | $\bOmega_2$ need not be inverted  |
+| 3 | Wald V3     | $\bW\bOmega_2\bW$ | $S-m$ | `Wald_vcovf_test()`    | $\bOmega_2$ need not be estimated |
 | 4 | Pearson     | $\diag(\bpi_2)^{-1}$          | est.  | `Pearson_RS_test()` | Rao-Scott adjustment              |
 | 5 | Pearson V2  | $\diag(\bpi_2)^{-1}$          | est.  | `Pearson_test()` | Moment matching                   |
 | 6 | RSS         | $\bI$               | est.  | `RSS_test()`        |                                   |

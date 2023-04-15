@@ -24,8 +24,8 @@ make_population <- function(model_no = 1, seed = 123, H1 = FALSE,
 
   # Set up the loadings and covariance matrices --------------------------------
   Lambda      <- loading_mat(model_no)
-  neta        <- ncol(Lambda)
-  nitems      <- nrow(Lambda)
+  neta        <- ncol(Lambda)  # q
+  nitems      <- nrow(Lambda)  # p
   Psi         <- cov_lv_mat(model_no)
   Theta       <- matrix(0, nrow = nitems, ncol = nitems)
   diag(Theta) <- 1 - diag(Lambda %*% Psi %*% t(Lambda))
