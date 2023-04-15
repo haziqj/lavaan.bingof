@@ -24,7 +24,6 @@ Suggests:
     covr,
     devtools,
     ggcorrplot,
-    kableExtra,
     rmarkdown,
     semPlot,
     testthat (>= 3.0.0)
@@ -34,6 +33,7 @@ Imports:
     dplyr,
     foreach,
     gtools,
+    kableExtra,
     lavaan (== 0.6-14.9001),
     lifecycle,
     magrittr,

@@ -26,6 +26,7 @@
 #' @importFrom dplyr ungroup
 #' @importFrom foreach %dopar%
 #' @importFrom foreach foreach
+#' @importFrom kableExtra kbl
 #' @importFrom lavaan sem
 #' @importFrom lifecycle deprecated
 #' @importFrom magrittr %>%
