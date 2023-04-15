@@ -38,7 +38,7 @@ chi-square test statistic matching procedure (choose from 1--3), or the
 Rao-Scott type adjustment order (choose from 1 or 2).}
 }
 \value{
-A data frame containing the test statistics \eqn{W}, degrees of
+A data frame containing the test statistics \eqn{X^2}, degrees of
 freedom, name of the test, and the \eqn{p}-value.
 }
 \description{

@@ -14,10 +14,10 @@ true_vals <- get_true_values(1)
 mod <- txt_mod(1)
 
 B <- 100  # no of simulations
-no.cores <- parallel::detectCores() - 2
+ncores <- parallel::detectCores() - 2
 pb <- txtProgressBar(min = 0, max = B, style = 3)
 progress <- function(i) setTxtProgressBar(pb, i)
-cl <- makeCluster(no.cores)
+cl <- makeCluster(ncores)
 registerDoSNOW(cl)
 
 res <- foreach(

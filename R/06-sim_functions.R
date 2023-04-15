@@ -12,7 +12,7 @@ globalVariables(c("i"))
 #' @param simtype (character) Whether this is a `type1` simulation or `power`
 #'   simulation.
 #' @param starting_seed (integer) The starting random seed.
-#' @param no.cores (integer) The number of cores to use for parallelisation.
+#' @param ncores (integer) The number of cores to use for parallelisation.
 #'
 #' @return A list of [tibble()]s with the output from [all_tests()].
 #' @export
@@ -38,7 +38,7 @@ globalVariables(c("i"))
 ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
                        samp = c("srs", "strat", "clust", "strcl"),
                        simtype = c("type1", "power"), starting_seed = 4423,
-                       no.cores = parallel::detectCores() - 2) {
+                       ncores = parallel::detectCores() - 2) {
 
   # Model setup
   mod <- txt_mod(model_no)
@@ -64,7 +64,7 @@ ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
   # Initialise parallel stuff
   pb <- txtProgressBar(min = 0, max = nsim, style = 3)
   progress <- function(i) setTxtProgressBar(pb, i)
-  cl <- makeCluster(no.cores)
+  cl <- makeCluster(ncores)
   registerDoSNOW(cl)
 
   start_time <- Sys.time()
@@ -125,7 +125,7 @@ ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
     samp = samp,
     simtype = simtype,
     starting_seed = starting_seed,
-    no.cores = no.cores
+    ncores = ncores
   )
   res
 }
@@ -201,7 +201,7 @@ summary.ligof_sims <- function(object, alpha = 0.05, ...) {
               n_converged = sum(converged),
               n_rank_def = sum(Omega2_rank < S),
               rej_rate = mean(alpha_[converged], na.rm = TRUE),
-              mean_W = mean(W[converged], na.rm = TRUE),
+              mean_X2 = mean(X2[converged], na.rm = TRUE),
               mean_df = mean(df[converged], na.rm = TRUE),
               .groups = "drop")
 
@@ -215,7 +215,7 @@ summary.ligof_sims <- function(object, alpha = 0.05, ...) {
 
   tab %>%
     select(`Test name` = name, `Rejection rate` = rej_rate,
-           `Mean W value` = mean_W, `Mean d.f.` = mean_df) %>%
+           `Mean X2 value` = mean_X2, `Mean d.f.` = mean_df) %>%
     kableExtra::kbl(format = "rst", digits = c(1, 3, 2, 2)) %>%
     print()
 }

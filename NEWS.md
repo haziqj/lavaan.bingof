@@ -1,5 +1,12 @@
 # lavaan.bingof (development version)
 
+## 2023-04-15
+
+- Added test suite for the package.
+- Change of notation!!!
+  - The test statistic (previously $W$) is now denoted $X^2$. This makes sense because they are all generally chi-square variates.
+  - The weight matrix in the quadratic form of the test statistic (previously $\boldsymbol \Xi$) is now denoted $W$, which stands for weight.
+
 ## 2023-04-14
 
 - Fixed bug in `lavaan.bingof:::create_Sigma2_matrix_complex()` where it did not loop over strata.

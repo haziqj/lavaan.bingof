@@ -7,6 +7,8 @@ output:
     number_sections: FALSE
 link-citations: yes
 bibliography: refs.bib
+nocite: |
+  @maydeu2008overview, @reiser1996analysis, @bartholomew2002goodness, @katsikatsou2012pairwise
 pkgdown:
   as_is: true
 ---
@@ -135,7 +137,7 @@ In other words, $\hat n_r$ represents the (weighted) frequency counts of the obs
 The vector $\hat\bn = (\hat n_1, \dots, \hat n_R)^\top$ then defines a *multivariate binomial distribution*, or more commonly called a multinomial distribution with parameters $n$, $R$, and $\bpi(\btheta)$.
 The probability mass function of $\hat\bn$ is given by
 \begin{equation}
-f_{\hat\bn}(x_1,\dots,x_R) = N! \prod_{r=1}^R \frac{1}{x_r!} \big[\pimod{r}\big]^{x_r},
+f_{\hat\bn}(x_1,\dots,x_R) = n! \prod_{r=1}^R \frac{1}{x_r!} \big[\pimod{r}\big]^{x_r},
 \end{equation}
 and the log-likelihood for $\btheta$ given the observed frequencies $\hat\bn$ (ignoring constants) is then
 \begin{equation}
@@ -280,22 +282,22 @@ Two, storage requirements of the $R\times R$ matrix (e.g. $\bSigma$) may possibl
 
 The advantage of our equation in \@ref(eq:ourOmega2) is that $\bOmega_2$ can be formed using the byproduct of the pairwise estimation procedure, i.e. using the matrices $\cH$ and $\tilde\bDelta$, as well as the (estimated) pairwise probabilities $\pimodpl$.
 What remains is the proper estimation of $\bSigma_2$, and this depends on the sampling design performed.
-The [Complex sampling procedure](complex_sampling1.html) article touches upon this briefly, with further details available in the manuscript.
+The [complex sampling procedure](complex_sampling1.html) article touches upon this briefly, with further details available in the manuscript.
 
 ### Summary
 
 In general, all (limited information) goodness-of-fit test statistics take the form
 $$
-W = n \hat\be_2^\top \hat\bXi \be_2,
+X^2 = n \hat\be_2^\top \hat\bW \be_2,
 $$
-where $\hat\bXi \xrightarrow{\text P} \bXi$ is some $S\times S$ weight matrix.
+where $\hat\bW \xrightarrow{\text P} \bW$ is some $S\times S$ weight matrix.
 We summarise the various weight matrices that we use in this R package:
 
-|   | Name        | Weight ($\bXi$)     | D.f.  | R function          | Remarks                           |
+|   | Name        | Weight ($\bW$)     | D.f.  | R function          | Remarks                           |
 |---|-------------|---------------------|-------|---------------------|-----------------------------------|
 | 1 | Wald        | $\bOmega_2^+$       | $S-m$ | `Wald_test()`       | $\bOmega_2$ may be rank deficient |
 | 2 | Wald V2     | $\diag(\bOmega_2^+)^{-1}$       | est.  | `Wald_test_v2()`    | $\bOmega_2$ need not be inverted  |
-| 3 | Wald V3     | $\bXi\bOmega_2\bXi$ | $S-m$ | `Wald_test_v3()`    | $\bOmega_2$ need not be estimated |
+| 3 | Wald V3     | $\bW\bOmega_2\bW$ | $S-m$ | `Wald_test_v3()`    | $\bOmega_2$ need not be estimated |
 | 4 | Pearson     | $\diag(\bpi_2)^{-1}$          | est.  | `Pearson_test_v1()` | Rao-Scott adjustment              |
 | 5 | Pearson V2  | $\diag(\bpi_2)^{-1}$          | est.  | `Pearson_test_v2()` | Moment matching                   |
 | 6 | RSS         | $\bI$               | est.  | `RSS_test()`        |                                   |

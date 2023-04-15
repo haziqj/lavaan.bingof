@@ -6,12 +6,10 @@
 <!-- badges: start -->
 
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![R-CMD-check](https://github.com/haziqj/lavaan.bingof/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/haziqj/lavaan.bingof/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/haziqj/lavaan.bingof/branch/main/graph/badge.svg)](https://app.codecov.io/gh/haziqj/lavaan.bingof?branch=main)
-[![Lifecycle:
-stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
 
 <!-- https://github.com/r-lib/pkgdown/issues/133 -->
@@ -98,15 +96,15 @@ fit <- lavaan::sem(mod, dat, std.lv = TRUE, estimator = "PML")
 # Test statistics
 all_tests(fit)
 #> # A tibble: 7 × 6
-#>       W    df name           pval Xi_rank     S
-#>   <dbl> <dbl> <chr>         <dbl>   <int> <int>
-#> 1  4.96  5    Wald          0.420      13    15
-#> 2  1.81  3.14 WaldV2,MM3    0.638      15    15
-#> 3  4.96  5    WaldV3        0.421       5    15
-#> 4  4.07  4.53 Pearson       0.474      15    15
-#> 5  3.30  3.72 PearsonV2,MM3 0.465      15    15
-#> 6  4.11  4.34 RSS,MM3       0.441      15    15
-#> 7  4.93  5.00 Multn,MM3     0.424      15    15
+#>      X2    df name           pval W_rank     S
+#>   <dbl> <dbl> <chr>         <dbl>  <int> <int>
+#> 1  4.96  5    Wald          0.420     13    15
+#> 2  1.81  3.14 WaldV2,MM3    0.638     15    15
+#> 3  4.96  5    WaldV3        0.421      5    15
+#> 4  4.07  4.53 Pearson       0.474     15    15
+#> 5  3.30  3.72 PearsonV2,MM3 0.465     15    15
+#> 6  4.11  4.34 RSS,MM3       0.441     15    15
+#> 7  4.93  5.00 Multn,MM3     0.424     15    15
 ```
 
 ### Test statistics under a complex sampling scheme
@@ -140,11 +138,11 @@ svy <- survey::svydesign(ids = ~ school + class, strata = ~ type,
 
 # Compare with and without sampling weights
 Wald_test(fit0)
-#>          W df name      pval Xi_rank  S
-#> 1 4.561825  5 Wald 0.4716543      13 15
+#>         X2 df name      pval W_rank  S
+#> 1 4.561825  5 Wald 0.4716543     13 15
 Wald_test(fit1, svy_design = svy)
-#>          W df name      pval Xi_rank  S
-#> 1 4.633965  5 Wald 0.4621618      13 15
+#>         X2 df name      pval W_rank  S
+#> 1 4.633965  5 Wald 0.4621618     13 15
 ```
 
 ### Simulation wrapper
@@ -156,7 +154,7 @@ Wald_test(fit1, svy_design = svy)
 #> [1] 32
 
 res <- ligof_sims(model_no = 1, nsim = pc, samp = "strat", simtype = "type1",
-                  no.cores = pc - 2)
+                  ncores = pc - 2)
 #>|======================================================================| 100%
 ```
 
@@ -173,7 +171,7 @@ res
 #> Sampling design: Stratified sampling
 #> Sample size: 1000
 #> 
-#> Simulations completed in 23.3 secs
+#> Simulations completed in 23.1 secs
 ```
 
 ``` r
@@ -187,15 +185,15 @@ summary(res)
 #> • Significance level: 0.05
 #> 
 #> 
-#> =============  ==============  ============  =========
-#> Test name      Rejection rate  Mean W value  Mean d.f.
-#> =============  ==============  ============  =========
-#> Wald                    0.062          5.11       5.00
-#> WaldV2,MM3              0.000          2.99       3.44
-#> WaldV3                  0.062          4.89       5.00
-#> Pearson                 0.062          3.75       4.15
-#> PearsonV2,MM3           0.031          2.67       3.04
-#> RSS,MM3                 0.031          3.30       3.62
-#> Multn,MM3               0.062          4.92       4.99
-#> =============  ==============  ============  =========
+#> =============  ==============  =============  =========
+#> Test name      Rejection rate  Mean X2 value  Mean d.f.
+#> =============  ==============  =============  =========
+#> Wald                    0.062           5.11       5.00
+#> WaldV2,MM3              0.000           2.99       3.44
+#> WaldV3                  0.062           4.89       5.00
+#> Pearson                 0.062           3.75       4.15
+#> PearsonV2,MM3           0.031           2.67       3.04
+#> RSS,MM3                 0.031           3.30       3.62
+#> Multn,MM3               0.062           4.92       4.99
+#> =============  ==============  =============  =========
 ```

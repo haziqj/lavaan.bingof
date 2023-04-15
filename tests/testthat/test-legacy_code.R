@@ -3,7 +3,7 @@ test_that("Wald test (SRS)", {
   res1 <- Wald_Pearson_test_function(fit)  # legacy code
   res2 <- Wald_test(fit)
 
-  expect_equal(res2$W, res1$Wald_test)
+  expect_equal(res2$X2, res1$Wald_test)
 })
 
 test_that("Wald test V2 (SRS)", {
@@ -11,7 +11,7 @@ test_that("Wald test V2 (SRS)", {
   res1 <- Wald_Pearson_test_function(fit)  # legacy code
   res2 <- Wald_test_v2(fit, .order = 0) %>% suppressWarnings()
 
-  expect_equal(res2$W, res1$Wald_test_v2)
+  expect_equal(res2$X2, res1$Wald_test_v2)
 })
 
 test_that("Pearson test [MM0] (SRS)", {
@@ -19,7 +19,7 @@ test_that("Pearson test [MM0] (SRS)", {
   res1 <- Wald_Pearson_test_function(fit)  # legacy code
   res2 <- Pearson_test_v2(fit, .order = 0) %>% suppressWarnings()
 
-  expect_equal(res2$W, c(res1$Pearson_test))
+  expect_equal(res2$X2, c(res1$Pearson_test))
 })
 
 test_that("Pearson V2 test [MM2] (SRS)", {
@@ -27,7 +27,7 @@ test_that("Pearson V2 test [MM2] (SRS)", {
   res1 <- Wald_Pearson_test_function(fit)  # legacy code
   res2 <- Pearson_test_v2(fit, .order = 2)
 
-  expect_equal(res2$W, c(res1$FSMadj_Pearson))
+  expect_equal(res2$X2, c(res1$FSMadj_Pearson))
   expect_equal(res2$df, c(res1$FSMadj_df_Pearson))
 })
 
@@ -38,7 +38,7 @@ test_that("Wald test (SRS) Model 1", {
   res1 <- Wald_Pearson_test_function(fit)  # legacy code
   res2 <- Wald_test(fit)
 
-  expect_equal(res2$W, res1$Wald_test)
+  expect_equal(res2$X2, res1$Wald_test)
 })
 
 test_that("Wald test (SRS) Model 2", {
@@ -46,7 +46,7 @@ test_that("Wald test (SRS) Model 2", {
   res1 <- Wald_Pearson_test_function(fit)  # legacy code
   res2 <- Wald_test(fit)
 
-  expect_equal(res2$W, res1$Wald_test)
+  expect_equal(res2$X2, res1$Wald_test)
 })
 
 # Remark: Tests for Models 3 and 5 will fail. It seems Myrsini's code to
@@ -64,7 +64,7 @@ test_that("Wald test (SRS) Model 2", {
 #   res1 <- Wald_Pearson_test_function(fit)  # legacy code
 #   res2 <- Wald_test(fit)
 #
-#   expect_equal(res2$W, res1$Wald_test)
+#   expect_equal(res2$X2, res1$Wald_test)
 # })
 
 test_that("Wald test (SRS) Model 4", {
@@ -72,7 +72,7 @@ test_that("Wald test (SRS) Model 4", {
   res1 <- Wald_Pearson_test_function(fit)  # legacy code
   res2 <- Wald_test(fit)
 
-  expect_equal(res2$W, res1$Wald_test)
+  expect_equal(res2$X2, res1$Wald_test)
 })
 
 # test_that("Wald test (SRS) Model 5", {
@@ -80,5 +80,5 @@ test_that("Wald test (SRS) Model 4", {
 #   res1 <- Wald_Pearson_test_function(fit)  # legacy code
 #   res2 <- Wald_test(fit)
 #
-#   expect_equal(res2$W, res1$Wald_test)
+#   expect_equal(res2$X2, res1$Wald_test)
 # })

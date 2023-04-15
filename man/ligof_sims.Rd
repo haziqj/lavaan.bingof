@@ -11,7 +11,7 @@ ligof_sims(
   samp = c("srs", "strat", "clust", "strcl"),
   simtype = c("type1", "power"),
   starting_seed = 4423,
-  no.cores = parallel::detectCores() - 2
+  ncores = parallel::detectCores() - 2
 )
 }
 \arguments{
@@ -31,7 +31,7 @@ simulation.}
 
 \item{starting_seed}{(integer) The starting random seed.}
 
-\item{no.cores}{(integer) The number of cores to use for parallelisation.}
+\item{ncores}{(integer) The number of cores to use for parallelisation.}
 }
 \value{
 A list of \code{\link[=tibble]{tibble()}}s with the output from \code{\link[=all_tests]{all_tests()}}.
