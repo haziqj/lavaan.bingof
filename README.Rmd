@@ -20,6 +20,7 @@ library(tidyverse)
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/haziqj/lavaan.bingof/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/haziqj/lavaan.bingof/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/haziqj/lavaan.bingof/branch/main/graph/badge.svg)](https://app.codecov.io/gh/haziqj/lavaan.bingof?branch=main)
 <!-- badges: end -->
 
 <!-- https://github.com/r-lib/pkgdown/issues/133 -->
@@ -63,7 +64,7 @@ There are three main functionalities of this package:
 
 ```{r}
 # Fit lavaan model using PML estimation
-(mod <- txt_mod(model.no = 1))
+(mod <- txt_mod(model_no = 1))
 fit <- lavaan::sem(mod, dat, std.lv = TRUE, estimator = "PML")
 
 # Test statistics
@@ -97,16 +98,15 @@ Wald_test(fit1, svy_design = svy)
 # for illustration). Data generated according to a stratified complex sample.
 (pc <- parallel::detectCores())   # how many cores do we have?
 
-res <- ligof_sims(model.no = 1, nsim = pc, samp = "strat", simtype = "type1",
-                  no.cores = pc)
+res <- ligof_sims(model_no = 1, nsim = pc, samp = "strat", simtype = "type1",
+                  no.cores = pc - 2)
 ```
 
 <!-- #>|======================================================================| 100% -->
 
 ```{r}
 # Summarise the average rejection rate
-res %>%
-  bind_rows() %>%
+do.call("bind_rows", res) %>%
   group_by(name) %>%
   summarise(rej_rate = mean(pval < 0.1))
 ```

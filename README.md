@@ -8,6 +8,8 @@
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/haziqj/lavaan.bingof/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/haziqj/lavaan.bingof/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/haziqj/lavaan.bingof/branch/main/graph/badge.svg)](https://app.codecov.io/gh/haziqj/lavaan.bingof?branch=main)
 <!-- badges: end -->
 
 <!-- https://github.com/r-lib/pkgdown/issues/133 -->
@@ -74,22 +76,22 @@ There are three main functionalities of this package:
 
 ``` r
 # Fit lavaan model using PML estimation
-(mod <- txt_mod(model.no = 1))
+(mod <- txt_mod(model_no = 1))
 #> [1] "eta1 =~ NA*y1 + y2 + y3 + y4 + y5"
 fit <- lavaan::sem(mod, dat, std.lv = TRUE, estimator = "PML")
 
 # Test statistics
 all_tests(fit)
-#> # A tibble: 7 × 4
-#>       W    df name           pval
-#>   <dbl> <dbl> <chr>         <dbl>
-#> 1  4.96  5    Wald          0.420
-#> 2  1.81  3.14 WaldV2,MM3    0.638
-#> 3  4.96  5    WaldV3        0.421
-#> 4  4.07  4.53 Pearson       0.474
-#> 5  3.30  3.72 PearsonV2,MM3 0.465
-#> 6  4.11  4.34 RSS,MM3       0.441
-#> 7  4.93  5.00 Multn,MM3     0.424
+#> # A tibble: 7 × 6
+#>       W    df name           pval Xi_rank     S
+#>   <dbl> <dbl> <chr>         <dbl>   <int> <int>
+#> 1  4.96  5    Wald          0.420      13    15
+#> 2  1.81  3.14 WaldV2,MM3    0.638      15    15
+#> 3  4.96  5    WaldV3        0.421       5    15
+#> 4  4.07  4.53 Pearson       0.474      15    15
+#> 5  3.30  3.72 PearsonV2,MM3 0.465      15    15
+#> 6  4.11  4.34 RSS,MM3       0.441      15    15
+#> 7  4.93  5.00 Multn,MM3     0.424      15    15
 ```
 
 ### Test statistics under a complex sampling scheme
@@ -99,20 +101,20 @@ all_tests(fit)
 # stratum, and 1 cluster sampled within each PSU.
 (dat <- gen_data_bin_complex3(population = make_population(1), npsu = 50, 
                               seed = 9423))
-#> # A tibble: 3,046 × 9
+#> # A tibble: 3,040 × 9
 #>    type  school class    wt y1    y2    y3    y4    y5   
-#>    <chr>  <int> <chr> <dbl> <ord> <ord> <ord> <ord> <ord>
-#>  1 A          4 ae    0.796 1     1     1     1     1    
-#>  2 A          4 ae    0.796 1     1     1     1     1    
-#>  3 A          4 ae    0.796 1     1     0     0     1    
-#>  4 A          4 ae    0.796 1     1     1     0     0    
-#>  5 A          4 ae    0.796 1     1     1     1     1    
-#>  6 A          4 ae    0.796 1     1     1     0     1    
-#>  7 A          4 ae    0.796 1     1     1     1     1    
-#>  8 A          4 ae    0.796 1     1     1     1     1    
-#>  9 A          4 ae    0.796 1     1     1     1     1    
-#> 10 A          4 ae    0.796 1     1     0     0     1    
-#> # ℹ 3,036 more rows
+#>    <chr> <chr>  <chr> <dbl> <ord> <ord> <ord> <ord> <ord>
+#>  1 A     A105   A105o 0.651 1     1     1     1     1    
+#>  2 A     A105   A105o 0.651 1     1     1     1     1    
+#>  3 A     A105   A105o 0.651 1     1     1     1     1    
+#>  4 A     A105   A105o 0.651 1     1     1     1     1    
+#>  5 A     A105   A105o 0.651 1     1     0     1     1    
+#>  6 A     A105   A105o 0.651 1     1     1     1     1    
+#>  7 A     A105   A105o 0.651 1     1     0     1     1    
+#>  8 A     A105   A105o 0.651 1     1     1     1     1    
+#>  9 A     A105   A105o 0.651 1     1     1     1     1    
+#> 10 A     A105   A105o 0.651 1     1     1     1     1    
+#> # ℹ 3,030 more rows
 
 # Fit lavaan model and create survey object
 fit0 <- lavaan::sem(mod, dat, std.lv = TRUE, estimator = "PML")  # ignore wt
@@ -123,11 +125,11 @@ svy <- survey::svydesign(ids = ~ school + class, strata = ~ type,
 
 # Compare with and without sampling weights
 Wald_test(fit0)
-#>          W df name      pval
-#> 1 5.444331  5 Wald 0.3640888
+#>          W df name      pval Xi_rank  S
+#> 1 4.561825  5 Wald 0.4716543      13 15
 Wald_test(fit1, svy_design = svy)
-#>          W df name     pval
-#> 1 6.194313  5 Wald 0.287768
+#>          W df name      pval Xi_rank  S
+#> 1 4.633965  5 Wald 0.4621618      13 15
 ```
 
 ### Simulation wrapper
@@ -138,8 +140,8 @@ Wald_test(fit1, svy_design = svy)
 (pc <- parallel::detectCores())   # how many cores do we have?
 #> [1] 32
 
-res <- ligof_sims(model.no = 1, nsim = pc, samp = "strat", simtype = "type1",
-                  no.cores = pc)
+res <- ligof_sims(model_no = 1, nsim = pc, samp = "strat", simtype = "type1",
+                  no.cores = pc - 2)
 #>|======================================================================| 100%
 ```
 
@@ -147,18 +149,17 @@ res <- ligof_sims(model.no = 1, nsim = pc, samp = "strat", simtype = "type1",
 
 ``` r
 # Summarise the average rejection rate
-res %>%
-  bind_rows() %>%
+do.call("bind_rows", res) %>%
   group_by(name) %>%
   summarise(rej_rate = mean(pval < 0.1))
 #> # A tibble: 7 × 2
 #>   name          rej_rate
 #>   <chr>            <dbl>
-#> 1 Multn,MM3       0.0625
-#> 2 Pearson         0.0312
-#> 3 PearsonV2,MM3   0.0312
-#> 4 RSS,MM3         0.0312
-#> 5 Wald            0.0625
-#> 6 WaldV2,MM3      0.0312
-#> 7 WaldV3          0.0625
+#> 1 Multn,MM3       0.125 
+#> 2 Pearson         0.125 
+#> 3 PearsonV2,MM3   0.125 
+#> 4 RSS,MM3         0.125 
+#> 5 Wald            0.125 
+#> 6 WaldV2,MM3      0.0625
+#> 7 WaldV3          0.125
 ```

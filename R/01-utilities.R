@@ -141,3 +141,50 @@ get_true_values <- function(model_no) {
   c(lambda, rho, tau)
 
 }
+
+fit_facmod_pml <- function(model_no, samp = c("srs", "strat", "clust", "strcl"),
+                           n = 1000, seed = NULL, H1 = FALSE) {
+  # Convenience function to fit one of our 5 models using lavaan's PML estimator
+  # (with weights if necessary) just by specifying the model number. Mostly used
+  # for testing so will suppress warning messages.
+  samp <- match.arg(samp, c("srs", "strat", "clust", "strcl"))
+  seed_used <- seed
+  the_wt <- NULL
+  if (samp == "srs") {
+    # Simple random sampling -------------------------------------------------
+    dat <- gen_data_bin(model_no = model_no, n = n, seed = seed_used, H1 = H1)
+    svy <- NULL
+  } else {
+    the_wt <- "wt"
+    pop <- make_population(model_no, seed = seed, H1 = H1)
+    if (samp == "strat") {
+      # Stratified sampling --------------------------------------------------
+      npsu <- round(n / 3, 0)
+      dat <- gen_data_bin_complex1(population = pop, npsu = npsu,
+                                   seed = seed_used)
+      svy <- svydesign(ids = ~ 1, strata = ~ type, weights = ~ wt, data = dat)
+    }
+    if (samp == "clust") {
+      # Cluster sampling -----------------------------------------------------
+      npsu <- round(n / 21.5, 0)
+      dat <- gen_data_bin_complex2(population = pop, npsu = npsu,
+                                   seed = seed_used)
+      svy <- svydesign(ids = ~ school + class, weights = ~ wt, data = dat)
+    }
+    if (samp == "strcl") {
+      # Stratified-cluster sampling ------------------------------------------
+      npsu <- round(n / (15 + 20 + 25), 0)
+      dat <- gen_data_bin_complex3(population = pop, npsu = npsu,
+                                   seed = seed_used)
+      svy <- svydesign(ids = ~ school + class, strata = ~ type,
+                       weights = ~ wt, data = dat, nest = TRUE)
+    }
+  }
+
+  suppressWarnings(
+    fit <- lavaan::sem(model = txt_mod(model_no), data = dat, estimator = "PML",
+                       std.lv = TRUE, sampling.weights = the_wt)
+  )
+
+  list(fit = fit, svy = svy)
+}

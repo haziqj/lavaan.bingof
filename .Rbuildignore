@@ -9,3 +9,4 @@
 ^pkgdown$
 ^analysis$
 ^data-raw$
+^codecov\.yml$

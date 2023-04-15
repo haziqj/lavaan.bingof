@@ -21,11 +21,13 @@ URL: https://github.com/haziqj/lavaan.bingof, https://haziqj.ml/lavaan.bingof/
 BugReports: https://github.com/haziqj/lavaan.bingof/issues
 Suggests: 
     bookdown,
+    covr,
     devtools,
     ggcorrplot,
     kableExtra,
     rmarkdown,
-    semPlot
+    semPlot,
+    testthat (>= 3.0.0)
 Imports: 
     doSNOW,
     dplyr,
@@ -50,3 +52,4 @@ RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Depends: 
     R (>= 2.10)
+Config/testthat/edition: 3

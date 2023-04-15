@@ -258,8 +258,8 @@ Beta_mat_design <- function(nvar) {
 }
 
 ## ---- Delta matrices ---------------------------------------------------------
-derModelUnivBivProbToTheta <- function(nvar, TH, th.idx, Sigmahat, lavcache,
-                                       lavmodel) {
+.derModelUnivBivProbToTheta <- function(nvar, TH, th.idx, Sigmahat, lavcache,
+                                        lavmodel) {
   # This function returns a list for the derivatives of the probabilities for
   # use in the Delta matrix. Written by Myrsini Katsikatsou.
 
@@ -440,7 +440,7 @@ derModelUnivBivProbToTheta <- function(nvar, TH, th.idx, Sigmahat, lavcache,
 get_Delta_mats <- function(.lavobject) {
   list2env(extract_lavaan_info(.lavobject), environment())
 
-  derivatives <- derModelUnivBivProbToTheta(
+  derivatives <- .derModelUnivBivProbToTheta(
     nvar = p, TH = TH, th.idx = th.idx, Sigmahat = Var_ystar,
     lavcache = lavcache[[1]], lavmodel = lavmodel
   )
@@ -557,6 +557,7 @@ create_Sigma2_matrix <- function(.lavobject) {
   idy <- as_tibble(idS) %>%
     mutate(var1 = id[i], var2 = id[j],
            y = mapply(c, var1, var2, SIMPLIFY = FALSE))
+
   for (s in seq_len(nrow(idS))) {
     i <- idy$i[s]
     j <- idy$j[s]
@@ -801,7 +802,7 @@ moment_match <- function(W, Xi, Omega2, df = NULL, order) {
   mu2 <- 2 * sum(diag(XiOmega2 %*% XiOmega2))
   mu3 <- 8 * sum(diag(XiOmega2 %*% XiOmega2 %*% XiOmega2))
 
-  order <- match.arg(as.character(order), c("1", "2", "3"))
+  order <- match.arg(as.character(order), c("0", "1", "2", "3"))
   if (order == "3") {
     b <- mu3  / (4 * mu2)
     c <- mu2 / (2 * b ^ 2)
@@ -817,6 +818,12 @@ moment_match <- function(W, Xi, Omega2, df = NULL, order) {
     c <- df
     b <- mu1 / c
     a <- 0
+  }
+  if (order == "0" & !is.null(df)) {
+    c <- df
+    b <- 1
+    a <- 0
+    cli::cli_warn("Test statistics should be moment matched. This option is provided for testing purposes only.")
   }
 
   data.frame(W = (W - a) / b, df = c)
