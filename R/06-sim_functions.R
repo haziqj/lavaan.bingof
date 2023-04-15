@@ -45,7 +45,7 @@ globalVariables(c("i"))
 #' }
 run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
                        samp = c("srs", "strat", "clust", "strcl"),
-                       simtype = c("type1", "power"), starting_seed = 4423,
+                       simtype = c("type1", "power"), starting_seed = 16423,
                        ncores = parallel::detectCores() - 2) {
 
   # Model setup
