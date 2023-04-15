@@ -121,6 +121,14 @@ simulation scenario we are investigating.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">txt_mod</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "eta1 =~ NA*y1 + y2 + y3 + y4 + y5"</span>
+<span class="r-in"><span><span class="fu">txt_mod</span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "eta1 =~ NA*y1 + y2 + y3 + y4 + y5 + y6 + y7 + y8"</span>
+<span class="r-in"><span><span class="fu">txt_mod</span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "eta1 =~ NA*y1 +  y2 +  y3 +  y4 +  y5 +\n                                        y6 +  y7 +  y8 +  y9 + y10 +\n                                       y11 + y12 + y13 + y14 + y15"</span>
+<span class="r-in"><span><span class="fu">txt_mod</span><span class="op">(</span><span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "eta1 =~ NA*y1 + y2 + y3 + y4 + y5\n                             eta2 =~ NA*y6 + y7 + y8 + y9 + y10"</span>
+<span class="r-in"><span><span class="fu">txt_mod</span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "eta1 =~  NA*y1 +  y2 +  y3 +  y4 +  y5\n                             eta2 =~  NA*y6 +  y7 +  y8 +  y9 + y10\n                             eta3 =~ NA*y11 + y12 + y13 + y14 + y15"</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
