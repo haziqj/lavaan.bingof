@@ -56,7 +56,7 @@ for (let popover of popovers) {
     <h6 class="dropdown-header" data-toc-skip>Technical details</h6>
     <a class="dropdown-item" href="../articles/intro.html">Introduction</a>
     <a class="dropdown-item" href="../articles/tech_details.html">Technical details</a>
-    <a class="dropdown-item" href="../articles/complex_sampling1.html">Complex sampling procedure</a>
+    <a class="dropdown-item" href="../articles/complex_sampling.html">Complex sampling procedure</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Simulation study</h6>
     <a class="dropdown-item" href="../articles/sim_results.html">Description and results</a>
@@ -100,7 +100,7 @@ for (let popover of popovers) {
 
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p>A list of length 160, each containing a large <code>tibble()</code> of raw results.</p>
+    <p>A list of length 160, each containing a large <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble()</a></code> of raw results.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -108,7 +108,7 @@ for (let popover of popovers) {
 <li><p>Sample size: 500, 1000, 2000, 3000</p></li>
 <li><p>Factor model: 5 models with various number of items and latent factors. See article details.</p></li>
 <li><p>Simulation type: Type I error analysis or Power analysis</p></li>
-</ul><p>Thus, in total there are \(4 \times 4 \times 5 \times 2 = 160\) unique simulation scenarios. The R object <code>all_res</code> is a list of length 160 with each entry containing a <code>tibble()</code> of raw results (test statistic value, degrees of freedom, name of test, p-value, convergence, matrix ranks, and random seed) for each scenario. Note that there are 7 tests in total that was investigated, and each scenario was replicated a total of 1000 times.</p>
+</ul><p>Thus, in total there are \(4 \times 4 \times 5 \times 2 = 160\) unique simulation scenarios. The R object <code>all_res</code> is a list of length 160 with each entry containing a <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble()</a></code> of raw results (test statistic value, degrees of freedom, name of test, p-value, convergence, matrix ranks, and random seed) for each scenario. Note that there are 7 tests in total that was investigated, and each scenario was replicated a total of 1000 times.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

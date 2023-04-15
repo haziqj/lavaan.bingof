@@ -56,7 +56,7 @@ for (let popover of popovers) {
     <h6 class="dropdown-header" data-toc-skip>Technical details</h6>
     <a class="dropdown-item" href="../articles/intro.html">Introduction</a>
     <a class="dropdown-item" href="../articles/tech_details.html">Technical details</a>
-    <a class="dropdown-item" href="../articles/complex_sampling1.html">Complex sampling procedure</a>
+    <a class="dropdown-item" href="../articles/complex_sampling.html">Complex sampling procedure</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Simulation study</h6>
     <a class="dropdown-item" href="../articles/sim_results.html">Description and results</a>
@@ -106,9 +106,9 @@ for (let popover of popovers) {
 
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p>A <code>tibble()</code> containing the summarised results of the simulation study segregated by test name (Wald, Wald V2, etc.), model (1F 5V, 1F 8V, etc.), and sample size.</p><ul><li><p><code>n_sim</code> is the number of replications.</p></li>
+    <p>A <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble()</a></code> containing the summarised results of the simulation study segregated by test name (Wald, Wald V2, etc.), model (1F 5V, 1F 8V, etc.), and sample size.</p><ul><li><p><code>n_sim</code> is the number of replications.</p></li>
 <li><p><code>n_converged</code> is the number of replications in which <code><a href="https://rdrr.io/pkg/lavaan/man/lavaan.html" class="external-link">lavaan::lavaan()</a></code> converged.</p></li>
-<li><p><code>n_rank_def</code> is the number of replications where the rank of \(Omega_2\) matrix was found to be deficient.</p></li>
+<li><p><code>n_rank_def</code> is the number of replications where the rank of \(\Omega_2\) matrix was found to be deficient.</p></li>
 <li><p><code>rej_rate_x</code> is the proportions of replications where the null hypothesis was rejected at the <code>x</code>% level.</p></li>
 </ul></div>
 

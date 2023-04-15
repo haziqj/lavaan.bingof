@@ -7,7 +7,7 @@
     <loc>https://haziqj.ml/lavaan.bingof/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://haziqj.ml/lavaan.bingof/articles/complex_sampling1.html</loc>
+    <loc>https://haziqj.ml/lavaan.bingof/articles/complex_sampling.html</loc>
   </url>
   <url>
     <loc>https://haziqj.ml/lavaan.bingof/articles/index.html</loc>
@@ -43,7 +43,7 @@
     <loc>https://haziqj.ml/lavaan.bingof/reference/gen_data_bin.html</loc>
   </url>
   <url>
-    <loc>https://haziqj.ml/lavaan.bingof/reference/gen_data_bin_srs.html</loc>
+    <loc>https://haziqj.ml/lavaan.bingof/reference/gen_data_bin_complex.html</loc>
   </url>
   <url>
     <loc>https://haziqj.ml/lavaan.bingof/reference/get_true_values.html</loc>
@@ -61,13 +61,13 @@
     <loc>https://haziqj.ml/lavaan.bingof/reference/ligof-test-stats.html</loc>
   </url>
   <url>
-    <loc>https://haziqj.ml/lavaan.bingof/reference/ligof_sims.html</loc>
-  </url>
-  <url>
     <loc>https://haziqj.ml/lavaan.bingof/reference/ligof_sims.methods.html</loc>
   </url>
   <url>
     <loc>https://haziqj.ml/lavaan.bingof/reference/make_population.html</loc>
+  </url>
+  <url>
+    <loc>https://haziqj.ml/lavaan.bingof/reference/run_ligof_sims.html</loc>
   </url>
   <url>
     <loc>https://haziqj.ml/lavaan.bingof/reference/sim_results.html</loc>

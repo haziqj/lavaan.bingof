@@ -73,7 +73,7 @@ for (let popover of popovers) {
     <h6 class="dropdown-header" data-toc-skip>Technical details</h6>
     <a class="dropdown-item" href="../articles/intro.html">Introduction</a>
     <a class="dropdown-item" href="../articles/tech_details.html">Technical details</a>
-    <a class="dropdown-item" href="../articles/complex_sampling1.html">Complex sampling procedure</a>
+    <a class="dropdown-item" href="../articles/complex_sampling.html">Complex sampling procedure</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Simulation study</h6>
     <a class="dropdown-item" href="../articles/sim_results.html">Description and results</a>
@@ -404,7 +404,7 @@ We summarise the various weight matrices that we use in this R package:</p>
 <td>Wald V2</td>
 <td><span class="math inline">\(\mathop{\mathrm{diag}}({\boldsymbol\Omega}_2^+)^{-1}\)</span></td>
 <td>est.</td>
-<td><code><a href="../reference/ligof-test-stats.html">Wald_test_v2()</a></code></td>
+<td><code><a href="../reference/ligof-test-stats.html">Wald_diag_test()</a></code></td>
 <td>
 <span class="math inline">\({\boldsymbol\Omega}_2\)</span> need not be inverted</td>
 </tr>
@@ -413,7 +413,7 @@ We summarise the various weight matrices that we use in this R package:</p>
 <td>Wald V3</td>
 <td><span class="math inline">\({\mathbf W}{\boldsymbol\Omega}_2{\mathbf W}\)</span></td>
 <td><span class="math inline">\(S-m\)</span></td>
-<td><code><a href="../reference/ligof-test-stats.html">Wald_test_v3()</a></code></td>
+<td><code><a href="../reference/ligof-test-stats.html">Wald_orth_test()</a></code></td>
 <td>
 <span class="math inline">\({\boldsymbol\Omega}_2\)</span> need not be estimated</td>
 </tr>
@@ -422,7 +422,7 @@ We summarise the various weight matrices that we use in this R package:</p>
 <td>Pearson</td>
 <td><span class="math inline">\(\mathop{\mathrm{diag}}({\boldsymbol\pi}_2)^{-1}\)</span></td>
 <td>est.</td>
-<td><code><a href="../reference/ligof-test-stats.html">Pearson_test_v1()</a></code></td>
+<td><code><a href="../reference/ligof-test-stats.html">Pearson_RS_test()</a></code></td>
 <td>Rao-Scott adjustment</td>
 </tr>
 <tr class="odd">
@@ -430,7 +430,7 @@ We summarise the various weight matrices that we use in this R package:</p>
 <td>Pearson V2</td>
 <td><span class="math inline">\(\mathop{\mathrm{diag}}({\boldsymbol\pi}_2)^{-1}\)</span></td>
 <td>est.</td>
-<td><code><a href="../reference/ligof-test-stats.html">Pearson_test_v2()</a></code></td>
+<td><code><a href="../reference/ligof-test-stats.html">Pearson_test()</a></code></td>
 <td>Moment matching</td>
 </tr>
 <tr class="even">
@@ -460,8 +460,8 @@ For this purpose, we use the sample versions of the relevant quantities, mostly 
 <span class="math inline">\(\hat{\tilde{\boldsymbol\Delta}_{sk}} = \frac{\partial\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})}{\partial\theta_k} \Big|_{{\boldsymbol\theta}=\hat{\boldsymbol\theta}_{\text{PL}}}\)</span>; and</li>
 <li>an appropriate estimator of <span class="math inline">\({\boldsymbol\Sigma}_2\)</span>.</li>
 </ul>
-<p>Finally, theory informs us that all of these test statistics are distributed according to a chi square distribution.
-However, for some of these tests, the degrees of freedom has to be estimated and may not be known a priori.
+<p>In general, all of these test statistics are chi square variates.
+However, for some of these tests, the degrees of freedom are not known a priori and have to be estimated.
 There are two methods that we consider: 1) A Rao-Scott type adjustment <span class="citation">(<a href="#ref-rao1979chi" role="doc-biblioref">Rao and Scott 1979</a>; <a href="#ref-rao1981analysis" role="doc-biblioref">Rao and Scott 1981</a>; <a href="#ref-rao1984chi" role="doc-biblioref">Rao and Scott 1984</a>)</span>; and 2) a moment matching procedure <span class="citation">(<a href="#ref-bartholomew2002goodness" role="doc-biblioref">Bartholomew and Leung 2002</a>)</span>.
 While in theory each test may be subjected to either a Rao-Scott type adjustment or a moment matching procedure, we only consider the Rao-Scott adjustment for the Pearson test.</p>
 </div>
