@@ -8,8 +8,8 @@
 #'   well as the population stratum and clusters (`type`, `school`, `class`).
 #' @export
 #'
-#' @seealso [gen_data_bin_complex1()], [gen_data_bin_complex2()],
-#'   [gen_data_bin_complex2()], [gen_data_bin_srs()]
+#' @seealso [gen_data_bin_strat()], [gen_data_bin_clust()],
+#'   [gen_data_bin_strcl()], [gen_data_bin_srs()]
 #'
 #'
 #' @examples
@@ -38,6 +38,7 @@ make_population <- function(model_no = 1, seed = 123, H1 = FALSE,
            nschools = c(400, 1000, 600),
            avg_class_size = c(15, 25, 20)) %>%
     rowwise() %>%
+    # mutate(school = list(sprintf("%04d", seq_len(nschools)))) %>%
     mutate(school = list(seq_len(nschools))) %>%
     unnest_longer(school) %>%
     mutate(nstudents = round(rnorm(n(), 500, sd = 100))) %>%
@@ -120,6 +121,9 @@ make_population <- function(model_no = 1, seed = 123, H1 = FALSE,
 #'   the number of schools (clusters) to sample. For the stratified cluster
 #'   sampling, this is also the number of schools (clusters) per school type
 #'   (strata). For the SRS procedure, this is the exact sample size.
+#' @param n (optional,integer > 0) Sample size. If provided, then the `npsu`
+#'   argument is ignored and adjusted accordingly to achieve a sample size of
+#'   (approximately) `n`.
 #'
 #' @seealso [make_population()]
 #'
@@ -141,16 +145,18 @@ NULL
 #' @rdname gen_data_bin_complex
 #' @export
 gen_data_bin_srs <- function(population = make_population(1, seed = NULL),
-                             npsu = 3000, seed = NULL) {
+                             npsu = 3000, n, seed = NULL) {
   set.seed(seed)
-  slice_sample(population, n = n, replace = FALSE) %>%
+  if (!missing(n)) npsu <- n
+  slice_sample(population, n = npsu, replace = FALSE) %>%
     mutate(across(starts_with("y"), ordered))
 }
 
 gen_data_bin_complex1 <- function(population = make_population(1, seed = NULL),
-                                  npsu = 1000, seed = NULL) {
+                                  npsu = 1000, n, seed = NULL) {
   # 1-stage stratified sampling
   set.seed(seed)
+  if (!missing(n)) npsu <- round(npsu / 3, 0)
 
   # Weights
   school_info <-
@@ -186,9 +192,10 @@ gen_data_bin_complex1 <- function(population = make_population(1, seed = NULL),
 gen_data_bin_strat <- gen_data_bin_complex1
 
 gen_data_bin_complex2 <- function(population = make_population(1, seed = NULL),
-                                  npsu = 140, seed = NULL) {
+                                  npsu = 140, n, seed = NULL) {
   # 2-stage cluster sampling
   set.seed(seed)
+  if (!missing(n)) npsu <- round(n / 21.5, 0)
 
   # Sampling of PSUs
   psu_sampled <- population %>%
@@ -233,9 +240,10 @@ gen_data_bin_complex2 <- function(population = make_population(1, seed = NULL),
 gen_data_bin_clust <- gen_data_bin_complex2
 
 gen_data_bin_complex3 <- function(population = make_population(1, seed = NULL),
-                                  npsu = 50, seed = NULL) {
+                                  npsu = 50, n, seed = NULL) {
   # 2-stage stratified cluster sampling
   set.seed(seed)
+  if (!missing(n)) npsu <- round(n / (15 + 20 + 25), 0)
 
   # Weights
   school_info <- population %>%

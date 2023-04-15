@@ -8,6 +8,10 @@
 #'
 #' @examples
 #' txt_mod(1)
+#' txt_mod(2)
+#' txt_mod(3)
+#' txt_mod(4)
+#' txt_mod(5)
 txt_mod <- function(model_no = 1L) {
 
   if (model_no == 1) mod <- "eta1 =~ NA*y1 + y2 + y3 + y4 + y5"
@@ -99,8 +103,8 @@ get_Sigmay <- function(model_no) {
 #' @return A vector of true parameter values used for the simulations.
 #' @export
 #'
-#' @seealso [gen_data_bin()], [gen_data_bin_complex1()],
-#'   [gen_data_bin_complex2()], [gen_data_bin_complex2()], [gen_data_bin_srs()]
+#' @seealso [gen_data_bin()], [gen_data_bin_strat()],
+#'   [gen_data_bin_clust()], [gen_data_bin_strcl()], [gen_data_bin_srs()]
 #'
 #' @examples
 #' get_true_values(1)

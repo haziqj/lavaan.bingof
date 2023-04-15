@@ -11,24 +11,28 @@
 gen_data_bin_srs(
   population = make_population(1, seed = NULL),
   npsu = 3000,
+  n,
   seed = NULL
 )
 
 gen_data_bin_strat(
   population = make_population(1, seed = NULL),
   npsu = 1000,
+  n,
   seed = NULL
 )
 
 gen_data_bin_clust(
   population = make_population(1, seed = NULL),
   npsu = 140,
+  n,
   seed = NULL
 )
 
 gen_data_bin_strcl(
   population = make_population(1, seed = NULL),
   npsu = 50,
+  n,
   seed = NULL
 )
 }
@@ -40,6 +44,10 @@ students within each strata to sample. For the cluster sampling, this is
 the number of schools (clusters) to sample. For the stratified cluster
 sampling, this is also the number of schools (clusters) per school type
 (strata). For the SRS procedure, this is the exact sample size.}
+
+\item{n}{(optional,integer > 0) Sample size. If provided, then the \code{npsu}
+argument is ignored and adjusted accordingly to achieve a sample size of
+(approximately) \code{n}.}
 
 \item{seed}{(numeric) The random seed.}
 }

@@ -19,7 +19,6 @@ globalVariables(c("i"))
 #'
 #' @examples
 #' \dontrun{
-#'
 #' library(tidyverse)
 #' library(lavaan.bingof)
 #' library(survey)
@@ -34,8 +33,8 @@ globalVariables(c("i"))
 #'                            sim_type)
 #'         cat("[", as.character(Sys.time()), "]", "Now running simulation",
 #'             sim_name, "\n")
-#'         sim <- ligof_sims(mod_no, samp_size = the_samp_size, samp = samp_method,
-#'                           simtype = sim_type)
+#'         sim <- run_ligof_sims(mod_no, samp_size = the_samp_size,
+#'                               samp = samp_method, simtype = sim_type)
 #'         invisible(list2env(setNames(list(sim), sim_name), envir = .GlobalEnv))
 #'         save(list = sim_name, file = paste0(analysis_path, "/Rsave/",
 #'                                             sim_name, ".RData"))
@@ -143,7 +142,7 @@ run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
 #'
 #' @name ligof_sims.methods
 #'
-#' @param x,object The output from [ligof_sims()].
+#' @param x,object The output from [run_ligof_sims()].
 #' @param ... Not used.
 #'
 #' @return The [print()] method displays useful information about the simulation study (number of replications, time taken, model information, etc.). The output of [summary()] is a [tibble()] summarising the rejection rate for an `alpha` level test. For convenience, [summary()] displays the table in the command line interface.

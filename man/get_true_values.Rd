@@ -29,6 +29,6 @@ get_true_values(1)
 get_theoretical_uni_bi_moments(1)
 }
 \seealso{
-\code{\link[=gen_data_bin]{gen_data_bin()}}, \code{\link[=gen_data_bin_complex1]{gen_data_bin_complex1()}},
-\code{\link[=gen_data_bin_complex2]{gen_data_bin_complex2()}}, \code{\link[=gen_data_bin_complex2]{gen_data_bin_complex2()}}, \code{\link[=gen_data_bin_srs]{gen_data_bin_srs()}}
+\code{\link[=gen_data_bin]{gen_data_bin()}}, \code{\link[=gen_data_bin_strat]{gen_data_bin_strat()}},
+\code{\link[=gen_data_bin_clust]{gen_data_bin_clust()}}, \code{\link[=gen_data_bin_strcl]{gen_data_bin_strcl()}}, \code{\link[=gen_data_bin_srs]{gen_data_bin_srs()}}
 }

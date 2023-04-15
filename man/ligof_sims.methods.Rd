@@ -11,7 +11,7 @@
 \method{summary}{ligof_sims}(object, alpha = 0.05, ...)
 }
 \arguments{
-\item{x, object}{The output from \code{\link[=ligof_sims]{ligof_sims()}}.}
+\item{x, object}{The output from \code{\link[=run_ligof_sims]{run_ligof_sims()}}.}
 
 \item{...}{Not used.}
 

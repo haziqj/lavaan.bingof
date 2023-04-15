@@ -41,7 +41,6 @@ Wrapper function for Type 1 and Power simulations
 }
 \examples{
 \dontrun{
-
 library(tidyverse)
 library(lavaan.bingof)
 library(survey)
@@ -56,8 +55,8 @@ for (sim_type in c("type1", "power")) {
                            sim_type)
         cat("[", as.character(Sys.time()), "]", "Now running simulation",
             sim_name, "\n")
-        sim <- ligof_sims(mod_no, samp_size = the_samp_size, samp = samp_method,
-                          simtype = sim_type)
+        sim <- run_ligof_sims(mod_no, samp_size = the_samp_size,
+                              samp = samp_method, simtype = sim_type)
         invisible(list2env(setNames(list(sim), sim_name), envir = .GlobalEnv))
         save(list = sim_name, file = paste0(analysis_path, "/Rsave/",
                                             sim_name, ".RData"))

@@ -19,4 +19,8 @@ simulation scenario we are investigating.
 }
 \examples{
 txt_mod(1)
+txt_mod(2)
+txt_mod(3)
+txt_mod(4)
+txt_mod(5)
 }
