@@ -368,9 +368,9 @@ The <a href="complex_sampling1.html">complex sampling procedure</a> article touc
 </h3>
 <p>In general, all (limited information) goodness-of-fit test statistics take the form
 <span class="math display">\[
-X^2 = n \hat{\mathbf e}_2^\top \hat{\mathbf W}{\mathbf e}_2,
+X^2 = n \hat{\mathbf e}_2^\top \hat{\boldsymbol\Xi}{\mathbf e}_2,
 \]</span>
-where <span class="math inline">\(\hat{\mathbf W}\xrightarrow{\text P} {\mathbf W}\)</span> is some <span class="math inline">\(S\times S\)</span> weight matrix.
+where <span class="math inline">\(\hat{\boldsymbol\Xi}\xrightarrow{\text P} {\boldsymbol\Xi}\)</span> is some <span class="math inline">\(S\times S\)</span> weight matrix.
 We summarise the various weight matrices that we use in this R package:</p>
 <table class="table">
 <colgroup>
@@ -384,7 +384,7 @@ We summarise the various weight matrices that we use in this R package:</p>
 <thead><tr class="header">
 <th></th>
 <th>Name</th>
-<th>Weight (<span class="math inline">\({\mathbf W}\)</span>)</th>
+<th>Weight (<span class="math inline">\({\boldsymbol\Xi}\)</span>)</th>
 <th>D.f.</th>
 <th>R function</th>
 <th>Remarks</th>
@@ -411,7 +411,7 @@ We summarise the various weight matrices that we use in this R package:</p>
 <tr class="odd">
 <td>3</td>
 <td>Wald V3</td>
-<td><span class="math inline">\({\mathbf W}{\boldsymbol\Omega}_2{\mathbf W}\)</span></td>
+<td><span class="math inline">\({\boldsymbol\Xi}{\boldsymbol\Omega}_2{\boldsymbol\Xi}\)</span></td>
 <td><span class="math inline">\(S-m\)</span></td>
 <td><code><a href="../reference/ligof-test-stats.html">Wald_vcovf_test()</a></code></td>
 <td>
