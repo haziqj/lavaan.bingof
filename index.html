@@ -144,8 +144,8 @@ for (let popover of popovers) {
 </tr>
 <tr class="odd">
 <td>3</td>
-<td>Wald test (orthogonal)</td>
-<td><code><a href="reference/ligof-test-stats.html">Wald_orth_test()</a></code></td>
+<td>Wald test (VCOV free)</td>
+<td><code><a href="reference/ligof-test-stats.html">Wald_vcovf_test()</a></code></td>
 <td>Described in Maydeu-Olivares and Joe (2005,2006)</td>
 </tr>
 <tr class="even">
@@ -201,15 +201,15 @@ for (let popover of popovers) {
 <span><span class="co">#&gt; # A tibble: 1,000 × 5</span></span>
 <span><span class="co">#&gt;    y1    y2    y3    y4    y5   </span></span>
 <span><span class="co">#&gt;    &lt;ord&gt; &lt;ord&gt; &lt;ord&gt; &lt;ord&gt; &lt;ord&gt;</span></span>
-<span><span class="co">#&gt;  1 1     0     0     1     0    </span></span>
+<span><span class="co">#&gt;  1 1     0     0     1     1    </span></span>
 <span><span class="co">#&gt;  2 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt;  3 1     1     0     1     1    </span></span>
+<span><span class="co">#&gt;  3 1     1     1     0     1    </span></span>
 <span><span class="co">#&gt;  4 1     1     0     1     1    </span></span>
-<span><span class="co">#&gt;  5 1     1     1     1     0    </span></span>
+<span><span class="co">#&gt;  5 1     1     0     1     1    </span></span>
 <span><span class="co">#&gt;  6 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt;  7 1     1     0     1     1    </span></span>
-<span><span class="co">#&gt;  8 0     0     0     1     1    </span></span>
-<span><span class="co">#&gt;  9 1     1     0     1     1    </span></span>
+<span><span class="co">#&gt;  7 1     1     1     1     0    </span></span>
+<span><span class="co">#&gt;  8 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt;  9 1     1     1     1     1    </span></span>
 <span><span class="co">#&gt; 10 1     0     0     1     1    </span></span>
 <span><span class="co">#&gt; # ℹ 990 more rows</span></span></code></pre></div>
 </div>
@@ -227,13 +227,13 @@ for (let popover of popovers) {
 <span><span class="co">#&gt; # A tibble: 7 × 6</span></span>
 <span><span class="co">#&gt;      X2    df name          pval W_rank     S</span></span>
 <span><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt;  &lt;int&gt; &lt;int&gt;</span></span>
-<span><span class="co">#&gt; 1  4.96  5    Wald         0.420     13    15</span></span>
-<span><span class="co">#&gt; 2  1.81  3.14 WaldDiag,MM3 0.638     15    15</span></span>
-<span><span class="co">#&gt; 3  4.96  5    WaldOrth     0.421      5    15</span></span>
-<span><span class="co">#&gt; 4  4.07  4.53 PearsonRS    0.474     15    15</span></span>
-<span><span class="co">#&gt; 5  3.30  3.72 Pearson,MM3  0.465     15    15</span></span>
-<span><span class="co">#&gt; 6  4.11  4.34 RSS,MM3      0.441     15    15</span></span>
-<span><span class="co">#&gt; 7  4.93  5.00 Multn,MM3    0.424     15    15</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 2.81   5    Wald         0.730     14    15</span></span>
+<span><span class="co">#&gt; 2 0.862  3.31 WaldDiag,MM3 0.872     15    15</span></span>
+<span><span class="co">#&gt; 3 2.80   5    WaldVCF      0.730      5    15</span></span>
+<span><span class="co">#&gt; 4 2.46   4.41 PearsonRS    0.710     15    15</span></span>
+<span><span class="co">#&gt; 5 1.86   3.63 Pearson,MM3  0.709     15    15</span></span>
+<span><span class="co">#&gt; 6 2.30   4.18 RSS,MM3      0.707     15    15</span></span>
+<span><span class="co">#&gt; 7 2.79   5.00 Multn,MM3    0.732     15    15</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="test-statistics-under-a-complex-sampling-scheme">Test statistics under a complex sampling scheme<a class="anchor" aria-label="anchor" href="#test-statistics-under-a-complex-sampling-scheme"></a>
@@ -297,7 +297,7 @@ for (let popover of popovers) {
 <span><span class="co">#&gt; Sampling design: Stratified sampling</span></span>
 <span><span class="co">#&gt; Sample size: 1000</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Simulations completed in 24.2 secs</span></span></code></pre></div>
+<span><span class="co">#&gt; Simulations completed in 23.2 secs</span></span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -314,7 +314,7 @@ for (let popover of popovers) {
 <span><span class="co">#&gt; ============  ==============  =============  =========</span></span>
 <span><span class="co">#&gt; Wald                   0.062           5.11       5.00</span></span>
 <span><span class="co">#&gt; WaldDiag,MM3           0.000           2.99       3.44</span></span>
-<span><span class="co">#&gt; WaldOrth               0.062           4.89       5.00</span></span>
+<span><span class="co">#&gt; WaldVCF                0.062           4.89       5.00</span></span>
 <span><span class="co">#&gt; PearsonRS              0.062           3.75       4.15</span></span>
 <span><span class="co">#&gt; Pearson,MM3            0.031           2.67       3.04</span></span>
 <span><span class="co">#&gt; RSS,MM3                0.031           3.30       3.62</span></span>
