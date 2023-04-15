@@ -41,7 +41,7 @@ make_population <- function(model_no = 1, seed = 123, H1 = FALSE,
     # mutate(school = list(sprintf("%04d", seq_len(nschools)))) %>%
     mutate(school = list(seq_len(nschools))) %>%
     unnest_longer(school) %>%
-    mutate(nstudents = round(rnorm(n(), 500, sd = 100))) %>%
+    mutate(nstudents = round(rnorm(dplyr::n(), 500, sd = 100))) %>%
     rowwise() %>%
     mutate(class = list(sample(letters[seq_len(nstudents / avg_class_size)],
                                size = nstudents, replace = TRUE))) %>%
@@ -80,7 +80,7 @@ make_population <- function(model_no = 1, seed = 123, H1 = FALSE,
     arrange(desc(z)) %>%
     mutate(type = pop$type) %>%
     group_by(type) %>%
-    mutate(rn2 = sample(n(), replace = FALSE)) %>%
+    mutate(rn2 = sample(dplyr::n(), replace = FALSE)) %>%
     arrange(type, rn2) %>%
     pull(rn)
   ystar <- ystar[abil_order, ]
@@ -163,7 +163,7 @@ gen_data_bin_complex1 <- function(population = make_population(1, seed = NULL),
     population %>%
     group_by(type) %>%
     summarise(
-      students_in_school_type = n(),
+      students_in_school_type = dplyr::n(),
     ) %>%
     mutate(
       prob = npsu / students_in_school_type,
@@ -180,7 +180,7 @@ gen_data_bin_complex1 <- function(population = make_population(1, seed = NULL),
     left_join(school_info, by = c("type")) %>%
     select(-starts_with("ystar")) %>%
     select(type, school, class, wt, starts_with("y")) %>%
-    mutate(wt = wt / sum(wt) * n(),
+    mutate(wt = wt / sum(wt) * dplyr::n(),
            across(starts_with("y"), ordered)) %>%
     arrange(type, school, class)
 
@@ -202,11 +202,11 @@ gen_data_bin_complex2 <- function(population = make_population(1, seed = NULL),
     select(type, school, class) %>%
     group_by(type, school) %>%
     summarise(
-      nstudents = n(),
+      nstudents = dplyr::n(),
       pr_class_selected = 1 / length(unique(class)),
       .groups = "drop"
     ) %>%
-    # mutate(pr_school_selected = npsu / n()) %>%
+    # mutate(pr_school_selected = npsu / dplyr::n()) %>%
     slice_sample(n = npsu, weight_by = nstudents, replace = FALSE) %>%
     mutate(
       pr_school_selected = nstudents / sum(nstudents),
@@ -228,7 +228,7 @@ gen_data_bin_complex2 <- function(population = make_population(1, seed = NULL),
                by = c("type", "school", "class")) %>%
     left_join(psu_sampled, by = c("type", "school")) %>%
     select(type, school, class, wt, starts_with("y")) %>%
-    mutate(wt = wt / sum(wt) * n(),
+    mutate(wt = wt / sum(wt) * dplyr::n(),
            across(starts_with("y"), ordered)) %>%
     arrange(type, school, class)
 
@@ -250,12 +250,12 @@ gen_data_bin_complex3 <- function(population = make_population(1, seed = NULL),
     select(type, school, class) %>%
     group_by(type, school) %>%
     summarise(
-      nstudents = n(),
+      nstudents = dplyr::n(),
       pr_class_selected = 1 / length(unique(class)),
       .groups = "drop"
     ) %>%
     group_by(type) %>%
-    mutate(pr_school_selected = npsu / n(),
+    mutate(pr_school_selected = npsu / dplyr::n(),
            prob = pr_school_selected * pr_class_selected,
            wt = 1 / prob)
 
@@ -278,7 +278,7 @@ gen_data_bin_complex3 <- function(population = make_population(1, seed = NULL),
                by = c("type", "school", "class")) %>%
     left_join(school_info, by = c("type", "school")) %>%
     select(type, school, class, wt, starts_with("y")) %>%
-    mutate(wt = wt / sum(wt) * n(),
+    mutate(wt = wt / sum(wt) * dplyr::n(),
            across(starts_with("y"), ordered)) %>%
     arrange(type, school, class)
 

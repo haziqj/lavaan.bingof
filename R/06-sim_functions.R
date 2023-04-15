@@ -196,7 +196,7 @@ summary.ligof_sims <- function(object, alpha = 0.05, ...) {
     mutate(alpha_ = pval < alpha,
            name = factor(name, levels = unique(name))) %>%
     group_by(name) %>%
-    summarise(n_sims = n(),
+    summarise(n_sims = dplyr::n(),
               n_converged = sum(converged),
               n_rank_def = sum(Omega2_rank < S),
               rej_rate = mean(alpha_[converged], na.rm = TRUE),
