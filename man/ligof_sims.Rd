@@ -6,7 +6,7 @@
 \usage{
 ligof_sims(
   model_no = 1,
-  nsim = 10,
+  nsim = 1000,
   samp_size = 1000,
   samp = c("srs", "strat", "clust", "strcl"),
   simtype = c("type1", "power"),

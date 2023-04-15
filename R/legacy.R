@@ -35,7 +35,7 @@ derModelUnivBivProbToTheta <- function(nvar = nvar,
   idxCat_var2 <- idxTH_var2[cdtn]
 
   cors <- Sigma.hat[lower.tri(Sigma.hat)]
-  th.rho.vec <- lavaan:::LongVecTH.Rho(no.x = nvar,
+  th.rho.vec <- LongVecTH.Rho(no.x = nvar,
                                   all.thres = TH,
                          index.var.of.thres = th.idx,
                                    rho.xixj = cors)
@@ -44,7 +44,7 @@ derModelUnivBivProbToTheta <- function(nvar = nvar,
   #correlations (rows of Delta in this order) with respect to model parameter vector
   #theta. In lavaan in a factor analysis model the order of the individual
   #parameters is: loadings, unstandardized thresholds, factor correlations
-  Delta <- lavaan:::computeDelta(lavmodel = lavmodel)[[1]]
+  Delta <- computeDelta(lavmodel = lavmodel)[[1]]
   noTH <- length(TH)
   derRhoToTheta <- Delta[-c(1:noTH), ]
   ##derRhoToTheta provides the derivatives of rhoij wrt theta
@@ -59,7 +59,7 @@ derModelUnivBivProbToTheta <- function(nvar = nvar,
   prob.vec[idxTH_var1==0 | idxTH_var2==0 |
            idxLastTH_var1 | idxLastTH_var2] <- 0
 
-  prob.vec[is.na(prob.vec)] <- lavaan:::dbinorm(th.rho.vec$thres.var1.of.pair,
+  prob.vec[is.na(prob.vec)] <- dbinorm(th.rho.vec$thres.var1.of.pair,
                                        th.rho.vec$thres.var2.of.pair,
                                        rho = th.rho.vec$rho.vector)
 
@@ -220,13 +220,13 @@ positiveUniBivTrivTetravModelProb_ObsUnivBivPropResid <- function(
 
  #### SECTION 1 : Compute the univariate quantities #######################
  #observed univariate frequencies
- univfreq_table <- lavaan:::lav_tables_oneway (lavobject = lavobject,
+ univfreq_table <- lav_tables_oneway (lavobject = lavobject,
                                                  lavdata = lavdata)
  prop_1 <- univfreq_table$obs.prop[univfreq_table$rhs==1]
  ##Note that in lavaan has recoded the data from 0 and 1 to 1 and 2 so the
  ##positive answer is coded as 2 rather than 1 that is in the theory.
 
- univModelProb_PI <- lavaan:::univariateExpProbVec(TH = TH, th.idx = th.idx)
+ univModelProb_PI <- univariateExpProbVec(TH = TH, th.idx = th.idx)
  modelProb_1 <- univModelProb_PI[univfreq_table$rhs==1]
 
 
@@ -236,16 +236,16 @@ positiveUniBivTrivTetravModelProb_ObsUnivBivPropResid <- function(
 
  #### SECTION 2 : Compute the bivariate quantities #######################
  #the observed bivariate frequencies and proportions
- bivfreq_table <- lavaan:::lav_tables_pairwise_freq_cell(lavdata = lavdata,
+ bivfreq_table <- lav_tables_pairwise_freq_cell(lavdata = lavdata,
                                                   as.data.frame. = TRUE)
  prop_11 <- (bivfreq_table$obs.freq / bivfreq_table$nobs)[bivfreq_table$row==2 &                                                               bivfreq_table$col==2]
  ##note that in lavaan the positive bivariate response pattern is coded as (2,2)
 
  #the model implied positive bivariate probabilities
  bivModelProb_PI <-
-          unlist(lavaan:::lav_tables_pairwise_model_pi(lavobject = lavobject) )
+          unlist(lav_tables_pairwise_model_pi(lavobject = lavobject) )
  ##the function above gives the same result as
- ## lavaan:::pairwiseExpProbVec(ind.vec = LONG1, th.rho.vec=LONG2)
+ ## pairwiseExpProbVec(ind.vec = LONG1, th.rho.vec=LONG2)
  modelProb_11 <- bivModelProb_PI[bivfreq_table$row==2 & bivfreq_table$col==2]
 
  #unstandardised bivariate probability residuals
@@ -531,7 +531,7 @@ Wald_Pearson_test_function <- function(lavobject = fit){
 
   #### SECTION 5 : Compute the Hessian matrix ###
   ################################################################
-  VCOV <-lavaan:::lav_model_vcov(lavmodel = lavmodel,
+  VCOV <-lav_model_vcov(lavmodel = lavmodel,
                            lavsamplestats = lavsamplestats,
                            lavoptions     = lavoptions,
                            lavdata        = lavdata,
