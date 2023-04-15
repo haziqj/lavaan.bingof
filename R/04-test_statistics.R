@@ -794,19 +794,19 @@ test_begin <- function(.lavobject, .approx_Omega2, .svy_design = NULL) {
   the_test_stuff
 }
 
-after_test <- function(x, .W, .S) {
+after_test <- function(x, .Xi, .S) {
   # x is a data.frame containing X2 and df
   x %>%
     mutate(pval = pchisq(X2, df, lower.tail = FALSE),
-           W_rank = Matrix::rankMatrix(.W),
+           Xi_rank = Matrix::rankMatrix(.Xi),
            S = .S)
 }
 
-moment_match <- function(X2, W, Omega2, df = NULL, order) {
-  WOmega2 <- W %*% Omega2
-  mu1 <- sum(diag(WOmega2))
-  mu2 <- 2 * sum(diag(WOmega2 %*% WOmega2))
-  mu3 <- 8 * sum(diag(WOmega2 %*% WOmega2 %*% WOmega2))
+moment_match <- function(X2, Xi, Omega2, df = NULL, order) {
+  XiOmega2 <- Xi %*% Omega2
+  mu1 <- sum(diag(XiOmega2))
+  mu2 <- 2 * sum(diag(XiOmega2 %*% XiOmega2))
+  mu3 <- 8 * sum(diag(XiOmega2 %*% XiOmega2 %*% XiOmega2))
 
   order <- match.arg(as.character(order), c("0", "1", "2", "3"))
   if (order == "3") {
@@ -863,22 +863,22 @@ NULL
 Wald_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL) {
   list2env(test_begin(object, approx_Omega2, svy_design), environment())
 
-  W <- MASS::ginv(Omega2)
-  X2 <- N * colSums(e2_hat * (W %*% e2_hat))
+  Xi <- MASS::ginv(Omega2)
+  X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
   data.frame(X2 = X2, df = Matrix::rankMatrix(Omega2) - q, name = "Wald") %>%
-    after_test(., W, S)
+    after_test(., Xi, S)
 }
 
 Wald_test_v2 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
                          .order = 3) {
   list2env(test_begin(object, approx_Omega2, svy_design), environment())
 
-  W <- diag(1 / diag(Omega2))
-  # X2 <- N * colSums(e2_hat * (W %*% e2_hat))
+  Xi <- diag(1 / diag(Omega2))
+  # X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
   X2 <- N * sum(e2_hat / diag(Omega2) * e2_hat)
-  out <- moment_match(X2, W, Omega2, df = S - q, order = .order)
+  out <- moment_match(X2, Xi, Omega2, df = S - q, order = .order)
   cbind(out, name = paste0("WaldDiag,MM", .order)) %>%
-    after_test(., W, S)
+    after_test(., Xi, S)
 }
 
 #' @describeIn ligof-test-stats The Wald test statistic using a simple diagonal
@@ -891,12 +891,12 @@ Wald_test_v3 <- function(object, svy_design = NULL) {
            environment())
 
   Delta2comp <- mcompanion::null_complement(Delta2)
-  W <- Delta2comp %*% MASS::ginv(
+  Xi <- Delta2comp %*% MASS::ginv(
     t(Delta2comp) %*% Sigma2 %*% Delta2comp
   ) %*% t(Delta2comp)
-  X2 <- N * colSums(e2_hat * (W %*% e2_hat))
+  X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
   data.frame(X2 = X2, df = S - q, name = "WaldVCF") %>%
-    after_test(., W, S)
+    after_test(., Xi, S)
 }
 
 #' @describeIn ligof-test-stats The Wald test statistic bypassing the
@@ -909,8 +909,8 @@ Pearson_test_v1 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
   .order <- match.arg(as.character(.order), c("1", "2"))
   list2env(test_begin(object, approx_Omega2, svy_design), environment())
 
-  W <- diag(1 / pi2_hat)
-  X2 <- N * colSums(e2_hat * (W %*% e2_hat))
+  Xi <- diag(1 / pi2_hat)
+  X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
 
   # Rao-Scott adjustment
   mat <- diag(1 / sqrt(pi2_hat)) %*% Omega2 %*% diag(1 / sqrt(pi2_hat))  # supposed to divide by N???
@@ -925,7 +925,7 @@ Pearson_test_v1 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
   }
 
   data.frame(X2 = X2, df = df, name = "PearsonRS") %>%
-    after_test(., W, S)
+    after_test(., Xi, S)
 }
 
 #' @describeIn ligof-test-stats The Pearson test with \eqn{p}-values calculated using a Rao-Scott type adjustment.
@@ -936,11 +936,11 @@ Pearson_test_v2 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
                             .order = "3") {
   list2env(test_begin(object, approx_Omega2, svy_design), environment())
 
-  W <- diag(1 / pi2_hat)
-  X2 <- N * colSums(e2_hat * (W %*% e2_hat))
-  out <- moment_match(X2, W, Omega2, df = S - q, order = .order)
+  Xi <- diag(1 / pi2_hat)
+  X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
+  out <- moment_match(X2, Xi, Omega2, df = S - q, order = .order)
   cbind(out, name = paste0("Pearson,MM", .order)) %>%
-    after_test(., W, S)
+    after_test(., Xi, S)
 }
 
 #' @describeIn ligof-test-stats The Pearson test with \eqn{p}-values calculated using a moment-matching procedure.
@@ -953,12 +953,12 @@ RSS_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
                      .order = "3") {
   list2env(test_begin(object, approx_Omega2, svy_design), environment())
 
-  W <- diag(S)
-  # X2 <- N * colSums(e2_hat * (W %*% e2_hat))
+  Xi <- diag(S)
+  # X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
   X2 <- N * sum(e2_hat ^ 2)
-  out <- moment_match(X2, W, Omega2, df = S - q, order = .order)
+  out <- moment_match(X2, Xi, Omega2, df = S - q, order = .order)
   cbind(out, name = paste0("RSS,MM", .order)) %>%
-    after_test(., W, S)
+    after_test(., Xi, S)
 }
 
 #' @describeIn ligof-test-stats The multinomial test. Uses moment-matching for \eqn{p}-value calculations.
@@ -967,11 +967,11 @@ Multn_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
                        .order = "3") {
   list2env(test_begin(object, approx_Omega2, svy_design), environment())
 
-  W <- MASS::ginv(Sigma2)
-  X2 <- N * colSums(e2_hat * (W %*% e2_hat))
-  out <- moment_match(X2, W, Omega2, df = S - q, order = .order)
+  Xi <- MASS::ginv(Sigma2)
+  X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
+  out <- moment_match(X2, Xi, Omega2, df = S - q, order = .order)
   cbind(out, name = paste0("Multn,MM", .order)) %>%
-    after_test(., W, S)
+    after_test(., Xi, S)
 }
 
 #' Return all test statistics values
