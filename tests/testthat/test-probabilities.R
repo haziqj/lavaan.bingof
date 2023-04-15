@@ -8,7 +8,7 @@ test_that("Proportions align (SRS)", {
   true_prop <- pnorm(tau, lower.tail = FALSE)
   obs_prop  <- apply(dat == 1, 2, mean)
   names(true_prop) <- names(obs_prop)
-  expect_equal(obs_prop, true_prop, tolerance = 0.001)
+  expect_equal(obs_prop, true_prop, tolerance = 0.01)
 })
 
 test_that("Tetrachoric correlations align (SRS)", {

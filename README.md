@@ -10,19 +10,34 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![R-CMD-check](https://github.com/haziqj/lavaan.bingof/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/haziqj/lavaan.bingof/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/haziqj/lavaan.bingof/branch/main/graph/badge.svg)](https://app.codecov.io/gh/haziqj/lavaan.bingof?branch=main)
+[![Lifecycle:
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
 
 <!-- https://github.com/r-lib/pkgdown/issues/133 -->
 
 ![](https://raw.githubusercontent.com/haziqj/lavaan.bingof/main/data-raw/mult_bern_data.png)
 
-This is the accompanying R package for the paper
+This is the accompanying R package for the research paper
 
-> Goodness-of-fit tests for composite likelihood estimation under simple
-> random and complex survey sampling
+> Jamil, H., Moustaki, I., & Skinner, C. (2023). Goodness-of-fit tests
+> for composite likelihood estimation under simple random and complex
+> survey sampling. *Manuscript in preparation*.
 
 This package contains the functions to compute the test statistics and
-conduct simulation studies described in the above manuscript.
+conduct simulation studies described in the above manuscript. Currently,
+the package implements the following tests based on univariate and
+bivariate residuals of a binary factor analysis model:
+
+|     | Name                    | R function          | Remarks                                          |
+|-----|-------------------------|---------------------|--------------------------------------------------|
+| 1   | Wald test               | `Wald_test()`       | Described in Reiser (1996)                       |
+| 2   | Wald test (diagonal)    | `Wald_test_v2()`    | A more efficient Wald test                       |
+| 3   | Wald test (orthogonal)  | `Wald_test_v3()`    | Described in Maydeu-Olivares and Joe (2005,2006) |
+| 4   | Pearson test            | `Pearson_test_v1()` | Rao-Scott adjusments                             |
+| 5   | Pearson test            | `Pearson_test_v2()` | Moment matching approximation                    |
+| 6   | Residual sum of squares | `RSS_test()`        | Moment matching approximation                    |
+| 7   | Multinomial test        | `Multn_test()`      | Moment matching approximation                    |
 
 ## Installation
 
@@ -158,7 +173,7 @@ res
 #> Sampling design: Stratified sampling
 #> Sample size: 1000
 #> 
-#> Simulations completed in 24 secs
+#> Simulations completed in 23.3 secs
 ```
 
 ``` r
