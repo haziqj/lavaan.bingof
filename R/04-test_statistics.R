@@ -199,7 +199,8 @@ create_G_mat <- function(p = 3) {
 #' @rdname transformation-matrices
 #' @export
 create_T2_mat <- function(p = 3) {
-  dat <- create_resp_pattern(p = p)
+  dat <- create_resp_pattern(p = p) %>%
+    select(starts_with("y"))
   pp <- choose(p, 2)
 
   M1 <- dat %>%
