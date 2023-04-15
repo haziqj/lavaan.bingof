@@ -102,7 +102,7 @@ for (let popover of popovers) {
 <span>  samp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"srs"</span>, <span class="st">"strat"</span>, <span class="st">"clust"</span>, <span class="st">"strcl"</span><span class="op">)</span>,</span>
 <span>  simtype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"type1"</span>, <span class="st">"power"</span><span class="op">)</span>,</span>
 <span>  starting_seed <span class="op">=</span> <span class="fl">4423</span>,</span>
-<span>  no.cores <span class="op">=</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">2</span></span>
+<span>  ncores <span class="op">=</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">2</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -136,7 +136,7 @@ simulation.</p></dd>
 <dd><p>(integer) The starting random seed.</p></dd>
 
 
-<dt>no.cores</dt>
+<dt>ncores</dt>
 <dd><p>(integer) The number of cores to use for parallelisation.</p></dd>
 
 </dl></div>

@@ -225,15 +225,15 @@ for (let popover of popovers) {
 <span><span class="co"># Test statistics</span></span>
 <span><span class="fu"><a href="reference/all_tests.html">all_tests</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 7 × 6</span></span>
-<span><span class="co">#&gt;       W    df name           pval Xi_rank     S</span></span>
-<span><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;         &lt;dbl&gt;   &lt;int&gt; &lt;int&gt;</span></span>
-<span><span class="co">#&gt; 1  4.96  5    Wald          0.420      13    15</span></span>
-<span><span class="co">#&gt; 2  1.81  3.14 WaldV2,MM3    0.638      15    15</span></span>
-<span><span class="co">#&gt; 3  4.96  5    WaldV3        0.421       5    15</span></span>
-<span><span class="co">#&gt; 4  4.07  4.53 Pearson       0.474      15    15</span></span>
-<span><span class="co">#&gt; 5  3.30  3.72 PearsonV2,MM3 0.465      15    15</span></span>
-<span><span class="co">#&gt; 6  4.11  4.34 RSS,MM3       0.441      15    15</span></span>
-<span><span class="co">#&gt; 7  4.93  5.00 Multn,MM3     0.424      15    15</span></span></code></pre></div>
+<span><span class="co">#&gt;      X2    df name           pval W_rank     S</span></span>
+<span><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;         &lt;dbl&gt;  &lt;int&gt; &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1  4.96  5    Wald          0.420     13    15</span></span>
+<span><span class="co">#&gt; 2  1.81  3.14 WaldV2,MM3    0.638     15    15</span></span>
+<span><span class="co">#&gt; 3  4.96  5    WaldV3        0.421      5    15</span></span>
+<span><span class="co">#&gt; 4  4.07  4.53 Pearson       0.474     15    15</span></span>
+<span><span class="co">#&gt; 5  3.30  3.72 PearsonV2,MM3 0.465     15    15</span></span>
+<span><span class="co">#&gt; 6  4.11  4.34 RSS,MM3       0.441     15    15</span></span>
+<span><span class="co">#&gt; 7  4.93  5.00 Multn,MM3     0.424     15    15</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="test-statistics-under-a-complex-sampling-scheme">Test statistics under a complex sampling scheme<a class="anchor" aria-label="anchor" href="#test-statistics-under-a-complex-sampling-scheme"></a>
@@ -267,11 +267,11 @@ for (let popover of popovers) {
 <span></span>
 <span><span class="co"># Compare with and without sampling weights</span></span>
 <span><span class="fu"><a href="reference/ligof-test-stats.html">Wald_test</a></span><span class="op">(</span><span class="va">fit0</span><span class="op">)</span></span>
-<span><span class="co">#&gt;          W df name      pval Xi_rank  S</span></span>
-<span><span class="co">#&gt; 1 4.561825  5 Wald 0.4716543      13 15</span></span>
+<span><span class="co">#&gt;         X2 df name      pval W_rank  S</span></span>
+<span><span class="co">#&gt; 1 4.561825  5 Wald 0.4716543     13 15</span></span>
 <span><span class="fu"><a href="reference/ligof-test-stats.html">Wald_test</a></span><span class="op">(</span><span class="va">fit1</span>, svy_design <span class="op">=</span> <span class="va">svy</span><span class="op">)</span></span>
-<span><span class="co">#&gt;          W df name      pval Xi_rank  S</span></span>
-<span><span class="co">#&gt; 1 4.633965  5 Wald 0.4621618      13 15</span></span></code></pre></div>
+<span><span class="co">#&gt;         X2 df name      pval W_rank  S</span></span>
+<span><span class="co">#&gt; 1 4.633965  5 Wald 0.4621618     13 15</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="simulation-wrapper">Simulation wrapper<a class="anchor" aria-label="anchor" href="#simulation-wrapper"></a>
@@ -283,7 +283,7 @@ for (let popover of popovers) {
 <span><span class="co">#&gt; [1] 32</span></span>
 <span></span>
 <span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ligof_sims.html">ligof_sims</a></span><span class="op">(</span>model_no <span class="op">=</span> <span class="fl">1</span>, nsim <span class="op">=</span> <span class="va">pc</span>, samp <span class="op">=</span> <span class="st">"strat"</span>, simtype <span class="op">=</span> <span class="st">"type1"</span>,</span>
-<span>                  no.cores <span class="op">=</span> <span class="va">pc</span> <span class="op">-</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>                  ncores <span class="op">=</span> <span class="va">pc</span> <span class="op">-</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt;|======================================================================| 100%</span></span></code></pre></div>
 <!-- #>|======================================================================| 100% -->
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -297,7 +297,7 @@ for (let popover of popovers) {
 <span><span class="co">#&gt; Sampling design: Stratified sampling</span></span>
 <span><span class="co">#&gt; Sample size: 1000</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Simulations completed in 23.3 secs</span></span></code></pre></div>
+<span><span class="co">#&gt; Simulations completed in 23.1 secs</span></span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -309,17 +309,17 @@ for (let popover of popovers) {
 <span><span class="co">#&gt; • Significance level: 0.05</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; =============  ==============  ============  =========</span></span>
-<span><span class="co">#&gt; Test name      Rejection rate  Mean W value  Mean d.f.</span></span>
-<span><span class="co">#&gt; =============  ==============  ============  =========</span></span>
-<span><span class="co">#&gt; Wald                    0.062          5.11       5.00</span></span>
-<span><span class="co">#&gt; WaldV2,MM3              0.000          2.99       3.44</span></span>
-<span><span class="co">#&gt; WaldV3                  0.062          4.89       5.00</span></span>
-<span><span class="co">#&gt; Pearson                 0.062          3.75       4.15</span></span>
-<span><span class="co">#&gt; PearsonV2,MM3           0.031          2.67       3.04</span></span>
-<span><span class="co">#&gt; RSS,MM3                 0.031          3.30       3.62</span></span>
-<span><span class="co">#&gt; Multn,MM3               0.062          4.92       4.99</span></span>
-<span><span class="co">#&gt; =============  ==============  ============  =========</span></span></code></pre></div>
+<span><span class="co">#&gt; =============  ==============  =============  =========</span></span>
+<span><span class="co">#&gt; Test name      Rejection rate  Mean X2 value  Mean d.f.</span></span>
+<span><span class="co">#&gt; =============  ==============  =============  =========</span></span>
+<span><span class="co">#&gt; Wald                    0.062           5.11       5.00</span></span>
+<span><span class="co">#&gt; WaldV2,MM3              0.000           2.99       3.44</span></span>
+<span><span class="co">#&gt; WaldV3                  0.062           4.89       5.00</span></span>
+<span><span class="co">#&gt; Pearson                 0.062           3.75       4.15</span></span>
+<span><span class="co">#&gt; PearsonV2,MM3           0.031           2.67       3.04</span></span>
+<span><span class="co">#&gt; RSS,MM3                 0.031           3.30       3.62</span></span>
+<span><span class="co">#&gt; Multn,MM3               0.062           4.92       4.99</span></span>
+<span><span class="co">#&gt; =============  ==============  =============  =========</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -351,10 +351,9 @@ for (let popover of popovers) {
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
 <li><a href="https://github.com/haziqj/lavaan.bingof/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/haziqj/lavaan.bingof/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://app.codecov.io/gh/haziqj/lavaan.bingof?branch=main" class="external-link"><img src="https://codecov.io/gh/haziqj/lavaan.bingof/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
 </ul>
 </div>
 

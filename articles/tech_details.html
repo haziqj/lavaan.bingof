@@ -213,7 +213,7 @@ In other words, <span class="math inline">\(\hat n_r\)</span> represents the (we
 The vector <span class="math inline">\(\hat{\mathbf n}= (\hat n_1, \dots, \hat n_R)^\top\)</span> then defines a <em>multivariate binomial distribution</em>, or more commonly called a multinomial distribution with parameters <span class="math inline">\(n\)</span>, <span class="math inline">\(R\)</span>, and <span class="math inline">\({\boldsymbol\pi}({\boldsymbol\theta})\)</span>.
 The probability mass function of <span class="math inline">\(\hat{\mathbf n}\)</span> is given by
 <span class="math display">\[\begin{equation}
-f_{\hat{\mathbf n}}(x_1,\dots,x_R) = N! \prod_{r=1}^R \frac{1}{x_r!} \big[\pi_{r}({\boldsymbol\theta})\big]^{x_r},
+f_{\hat{\mathbf n}}(x_1,\dots,x_R) = n! \prod_{r=1}^R \frac{1}{x_r!} \big[\pi_{r}({\boldsymbol\theta})\big]^{x_r},
 \end{equation}\]</span>
 and the log-likelihood for <span class="math inline">\({\boldsymbol\theta}\)</span> given the observed frequencies <span class="math inline">\(\hat{\mathbf n}\)</span> (ignoring constants) is then
 <span class="math display">\[\begin{equation}
@@ -295,7 +295,7 @@ where <span class="math inline">\({\boldsymbol\Sigma}= {\mathbf D}- {\boldsymbol
 Considering a parametric model, the proportion vector in <a href="#eq:propclt">(4)</a> reads <span class="math inline">\({\boldsymbol\pi}= {\boldsymbol\pi}({\boldsymbol\theta})\)</span>.
 An analogous result for the complex sampling design case exists as well <span class="citation">(<a href="#ref-fuller2009introduction" role="doc-biblioref">Fuller 2009</a>)</span>; however the covariance matrix <span class="math inline">\({\boldsymbol\Sigma}\)</span> need not take a multinomial form, and the true proportions <span class="math inline">\({\boldsymbol\pi}\)</span> may either be a finite population or a superpopulation quantity.</p>
 <p>Suppose we denote by <span class="math inline">\({\boldsymbol\pi}(\hat{\boldsymbol\theta})\)</span> the <em>estimated</em> proportions under a parametric model.
-For estimators <span class="math inline">\(\hat{\boldsymbol\theta}\)</span> satisfying <a href="#eq:ban">(3)</a>, <span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2005limited" role="doc-biblioref">2005</a>)</span> show that the distribution of the residuals <span class="math inline">\(\hat{\mathbf e}= {\mathbf p}- {\boldsymbol\pi}(\hat{\boldsymbol\theta})\)</span> is asymptotically normal:
+For estimators <span class="math inline">\(\hat{\boldsymbol\theta}\)</span> satisfying <a href="#eq:ban">(3)</a>, <span class="citation">Albert Maydeu-Olivares and Joe (<a href="#ref-maydeu2005limited" role="doc-biblioref">2005</a>)</span> show that the distribution of the residuals <span class="math inline">\(\hat{\mathbf e}= {\mathbf p}- {\boldsymbol\pi}(\hat{\boldsymbol\theta})\)</span> is asymptotically normal:
 <span class="math display">\[\begin{equation}
 \sqrt n \hat{\mathbf e}= \sqrt n \big( {\mathbf p}- {\boldsymbol\pi}(\hat{\boldsymbol\theta}) \big) \xrightarrow{\text D} {\mathop{\mathrm{N}}}_R ({\mathbf 0}, {\boldsymbol\Omega})
 \end{equation}\]</span>
@@ -306,7 +306,7 @@ where
 &amp;= {\boldsymbol\Sigma}- {\boldsymbol\Sigma}{\mathbf B}^\top{\boldsymbol\Delta}^\top - {\boldsymbol\Delta}{\mathbf B}{\boldsymbol\Sigma}+ {\boldsymbol\Delta}{\mathbf B}{\boldsymbol\Sigma}{\mathbf B}^\top {\boldsymbol\Delta}^\top,
 \end{align}\]</span>
 with <span class="math inline">\({\mathbf B}\)</span> being the transformation matrix and <span class="math inline">\({\boldsymbol\Delta}\)</span> the matrix of partial derivatives of <span class="math inline">\({\boldsymbol\pi}({\boldsymbol\theta})\)</span> (both described previously).
-<span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2005limited" role="doc-biblioref">2005</a>)</span> remarks that for maximum likelihood estimators, the residual covariance matrix simplifies to <span class="math inline">\({\boldsymbol\Omega}= {\boldsymbol\Sigma}- {\boldsymbol\Delta}{\mathcal I}^{-1}_1{\boldsymbol\Delta}^\top\)</span>.
+<span class="citation">Albert Maydeu-Olivares and Joe (<a href="#ref-maydeu2005limited" role="doc-biblioref">2005</a>)</span> remarks that for maximum likelihood estimators, the residual covariance matrix simplifies to <span class="math inline">\({\boldsymbol\Omega}= {\boldsymbol\Sigma}- {\boldsymbol\Delta}{\mathcal I}^{-1}_1{\boldsymbol\Delta}^\top\)</span>.
 We do not think such a simplification exists for the pairwise likelihood case (see article xxx for further details).</p>
 <div class="section level3">
 <h3 id="lower-order-residuals">Lower-order residuals<a class="anchor" aria-label="anchor" href="#lower-order-residuals"></a>
@@ -361,16 +361,16 @@ One, it involves multiplying an <span class="math inline">\(S \times R\)</span> 
 Two, storage requirements of the <span class="math inline">\(R\times R\)</span> matrix (e.g. <span class="math inline">\({\boldsymbol\Sigma}\)</span>) may possibly be large and/or involve small numbers, so precision might be a concern.</p>
 <p>The advantage of our equation in <a href="#eq:ourOmega2">(5)</a> is that <span class="math inline">\({\boldsymbol\Omega}_2\)</span> can be formed using the byproduct of the pairwise estimation procedure, i.e. using the matrices <span class="math inline">\({\mathcal H}\)</span> and <span class="math inline">\(\tilde{\boldsymbol\Delta}\)</span>, as well as the (estimated) pairwise probabilities <span class="math inline">\(\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})\)</span>.
 What remains is the proper estimation of <span class="math inline">\({\boldsymbol\Sigma}_2\)</span>, and this depends on the sampling design performed.
-The <a href="complex_sampling1.html">Complex sampling procedure</a> article touches upon this briefly, with further details available in the manuscript.</p>
+The <a href="complex_sampling1.html">complex sampling procedure</a> article touches upon this briefly, with further details available in the manuscript.</p>
 </div>
 <div class="section level3">
 <h3 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h3>
 <p>In general, all (limited information) goodness-of-fit test statistics take the form
 <span class="math display">\[
-W = n \hat{\mathbf e}_2^\top \hat{\boldsymbol\Xi}{\mathbf e}_2,
+X^2 = n \hat{\mathbf e}_2^\top \hat{\mathbf W}{\mathbf e}_2,
 \]</span>
-where <span class="math inline">\(\hat{\boldsymbol\Xi}\xrightarrow{\text P} {\boldsymbol\Xi}\)</span> is some <span class="math inline">\(S\times S\)</span> weight matrix.
+where <span class="math inline">\(\hat{\mathbf W}\xrightarrow{\text P} {\mathbf W}\)</span> is some <span class="math inline">\(S\times S\)</span> weight matrix.
 We summarise the various weight matrices that we use in this R package:</p>
 <table class="table">
 <colgroup>
@@ -384,7 +384,7 @@ We summarise the various weight matrices that we use in this R package:</p>
 <thead><tr class="header">
 <th></th>
 <th>Name</th>
-<th>Weight (<span class="math inline">\({\boldsymbol\Xi}\)</span>)</th>
+<th>Weight (<span class="math inline">\({\mathbf W}\)</span>)</th>
 <th>D.f.</th>
 <th>R function</th>
 <th>Remarks</th>
@@ -411,7 +411,7 @@ We summarise the various weight matrices that we use in this R package:</p>
 <tr class="odd">
 <td>3</td>
 <td>Wald V3</td>
-<td><span class="math inline">\({\boldsymbol\Xi}{\boldsymbol\Omega}_2{\boldsymbol\Xi}\)</span></td>
+<td><span class="math inline">\({\mathbf W}{\boldsymbol\Omega}_2{\mathbf W}\)</span></td>
 <td><span class="math inline">\(S-m\)</span></td>
 <td><code><a href="../reference/ligof-test-stats.html">Wald_test_v3()</a></code></td>
 <td>
@@ -479,8 +479,14 @@ Bartholomew, David J, and Shing On Leung. 2002. <span>“A Goodness of Fit Test 
 <div id="ref-fuller2009introduction" class="csl-entry">
 Fuller, Wayne A. 2009. <em>Introduction to Statistical Time Series</em>. John Wiley &amp; Sons.
 </div>
+<div id="ref-katsikatsou2012pairwise" class="csl-entry">
+Katsikatsou, Myrsini, Irini Moustaki, Fan Yang-Wallentin, and Karl G Jöreskog. 2012. <span>“Pairwise Likelihood Estimation for Factor Analysis Models with Ordinal Data.”</span> <em>Computational Statistics &amp; Data Analysis</em> 56 (12): 4243–58.
+</div>
 <div id="ref-maydeu2005limited" class="csl-entry">
 Maydeu-Olivares, Albert, and Harry Joe. 2005. <span>“Limited-and Full-Information Estimation and Goodness-of-Fit Testing in 2 n Contingency Tables: A Unified Framework.”</span> <em>Journal of the American Statistical Association</em> 100 (471): 1009–20.
+</div>
+<div id="ref-maydeu2008overview" class="csl-entry">
+Maydeu-Olivares, Alberto, and Harry Joe. 2008. <span>“An Overview of Limited Information Goodness-of-Fit Testing in Multidimensional Contingency Tables.”</span> <em>New Trends in Psychometrics</em>, 253–62.
 </div>
 <div id="ref-rao1979chi" class="csl-entry">
 Rao, Jon N K, and AJ Scott. 1979. <span>“Chi-Squared Tests for Analysis of Categorical Data from Complex Surveys.”</span> In <em>Proceedings of the American Statistical Association, Section on Survey Research Methods</em>, 58–66.
@@ -490,6 +496,9 @@ Rao, Jon N K, and Alastair J Scott. 1981. <span>“The Analysis of Categorical D
 </div>
 <div id="ref-rao1984chi" class="csl-entry">
 Rao, Jon N K, and Alistair J Scott. 1984. <span>“On Chi-Squared Tests for Multiway Contingency Tables with Cell Proportions Estimated from Survey Data.”</span> <em>The Annals of Statistics</em>, 46–60.
+</div>
+<div id="ref-reiser1996analysis" class="csl-entry">
+Reiser, Mark. 1996. <span>“Analysis of Residuals for the Multionmial Item Response Model.”</span> <em>Psychometrika</em> 61: 509–28.
 </div>
 </div>
 </div>
