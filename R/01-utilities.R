@@ -163,23 +163,17 @@ fit_facmod_pml <- function(model_no, samp = c("srs", "strat", "clust", "strcl"),
     pop <- make_population(model_no, seed = seed, H1 = H1)
     if (samp == "strat") {
       # Stratified sampling --------------------------------------------------
-      npsu <- round(n / 3, 0)
-      dat <- gen_data_bin_complex1(population = pop, npsu = npsu,
-                                   seed = seed_used)
+      dat <- gen_data_bin_strat(population = pop, n = n, seed = seed_used)
       svy <- svydesign(ids = ~ 1, strata = ~ type, weights = ~ wt, data = dat)
     }
     if (samp == "clust") {
       # Cluster sampling -----------------------------------------------------
-      npsu <- round(n / 21.5, 0)
-      dat <- gen_data_bin_complex2(population = pop, npsu = npsu,
-                                   seed = seed_used)
+      dat <- gen_data_bin_clust(population = pop, n = n, seed = seed_used)
       svy <- svydesign(ids = ~ school + class, weights = ~ wt, data = dat)
     }
     if (samp == "strcl") {
       # Stratified-cluster sampling ------------------------------------------
-      npsu <- round(n / (15 + 20 + 25), 0)
-      dat <- gen_data_bin_complex3(population = pop, npsu = npsu,
-                                   seed = seed_used)
+      dat <- gen_data_bin_strcl(population = pop, n = n, seed = seed_used)
       svy <- svydesign(ids = ~ school + class, strata = ~ type,
                        weights = ~ wt, data = dat, nest = TRUE)
     }
