@@ -30,22 +30,6 @@
       6   5.90  6.95 RSS,MM3       5.45e- 1      36    36
       7   3.08  2.45 Multn,MM3     2.86e- 1      36    36
 
-# Test statistics values (Cluster sampling) Model 3
-
-    Code
-      res
-    Output
-      # A tibble: 7 x 6
-             W    df name              pval Xi_rank     S
-         <dbl> <dbl> <chr>            <dbl>   <int> <int>
-      1 129.   32    Wald          1.18e-13      46   120
-      2  12.1  10.7  WaldV2,MM3    3.29e- 1     120   120
-      3 131.   90    WaldV3        3.40e- 3      46   120
-      4  17.4  21.4  Pearson       7.08e- 1     120   120
-      5   9.50 12.5  PearsonV2,MM3 7.02e- 1     120   120
-      6  10.2  12.9  RSS,MM3       6.65e- 1     120   120
-      7   5.51  4.36 Multn,MM3     2.80e- 1      46   120
-
 # Test statistics values (Cluster sampling) Model 4
 
     Code
@@ -61,20 +45,4 @@
       5   8.77  7.40 PearsonV2,MM3 3.06e- 1      55    55
       6   8.37  8.28 RSS,MM3       4.26e- 1      55    55
       7   9.22  2.05 Multn,MM3     1.05e- 2      46    55
-
-# Test statistics values (Cluster sampling) Model 5
-
-    Code
-      res
-    Output
-      # A tibble: 7 x 6
-            W    df name              pval Xi_rank     S
-        <dbl> <dbl> <chr>            <dbl>   <int> <int>
-      1 79.3   14   Wald          3.82e-11      46   120
-      2  9.06  11.9 WaldV2,MM3    6.91e- 1     120   120
-      3 71.7   87   WaldV3        8.83e- 1      46   120
-      4 14.4   21.3 Pearson       8.62e- 1     120   120
-      5  6.47  11.5 PearsonV2,MM3 8.69e- 1     120   120
-      6  7.71  12.2 RSS,MM3       8.22e- 1     120   120
-      7  3.51  11.6 Multn,MM3     9.87e- 1      46   120
 
