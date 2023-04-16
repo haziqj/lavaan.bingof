@@ -50,6 +50,8 @@ fix_table <- function(x) {
 }
 ```
 
+Download the \LaTeX source from this [link](https://raw.githubusercontent.com/haziqj/lavaan.bingof/gh-pages/articles/sim_tables.tex).
+
 ## Simple random sampling
 
 ```{r, results = "asis"}
