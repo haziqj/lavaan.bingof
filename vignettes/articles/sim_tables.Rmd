@@ -21,8 +21,34 @@ theme_set(theme_bw())
 library(kableExtra)
 library(lavaan.bingof)
 nn <- c(500, 1000, 2000, 3000)
-```
 
+colour_cells <- function(x, crit = crit10, alpha = 0.1) {
+  where_colour <- !is.na(x) & (x + crit < alpha | x - crit > alpha)
+  x <- as.character(formatC(x, digits = 3, format = "f"))
+  x[grepl("na", x, ignore.case = TRUE)] <- ""
+  cell_spec(x, color = ifelse(where_colour, "red", "black"))
+}
+
+fix_table <- function(x) {
+  crit10 <- 1.96 * sqrt(0.10 * 0.90 / 1000)
+  crit5  <- 1.96 * sqrt(0.05 * 0.95 / 1000)
+  crit1  <- 1.96 * sqrt(0.01 * 0.96 / 1000)
+  
+  x %>%
+    mutate(
+      rej_rate10 = colour_cells(rej_rate10, crit10, 0.1),
+      rej_rate5 = colour_cells(rej_rate5, crit5, 0.05),
+      rej_rate1 = colour_cells(rej_rate1, crit1, 0.01),
+    ) %>%
+    rename(Name = name,
+           `No. repl.` = n_sims,
+           `Converged` = n_converged,
+           `Rank def.` = n_rank_def,
+           `10\\%` = rej_rate10,
+           `5\\%` = rej_rate5,
+           `1\\%` = rej_rate1)
+}
+```
 
 ## Simple random sampling
 
@@ -30,12 +56,16 @@ nn <- c(500, 1000, 2000, 3000)
 # Type I errors
 for(the_n in nn) {
   cat(paste0("  \n### Type I errors ($n=",  the_n, "$)  \n"))
-  res_srs_type1 %>% 
+  tab <-
+    res_srs_type1 %>% 
     filter(n == the_n) %>%
     arrange(n, sim, name) %>%
-    select(sim, name, everything(), -n) %>%
-    kbl(booktabs = TRUE, digits = 3) %>%
-    kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+    select(sim, name, everything(), -n)
+  fix_table(tab) %>%
+    kbl(booktabs = TRUE, digits = 3, escape = FALSE, align = "lrrrrrrr") %>%
+    kable_styling(latex_options = c("HOLD_position", "scale_down"),
+                  font_size = 7) %>%
+    add_header_above(c(" " = 5, "Rejection rate" = 3)) %>%
     collapse_rows(1:2, row_group_label_position = "stack", 
                   latex_hline = "major") %>%
     print()
@@ -45,12 +75,16 @@ for(the_n in nn) {
 # Power 
 for(the_n in nn) {
   cat(paste0("  \n### Power ($n=",  the_n, "$)  \n"))
-  res_srs_power %>% 
+  tab <-
+    res_srs_power %>% 
     filter(n == the_n) %>%
     arrange(n, sim, name) %>%
-    select(sim, name, everything(), -n) %>%
-    kbl(booktabs = TRUE, digits = 3) %>%
-    kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+    select(sim, name, everything(), -n)
+  fix_table(tab) %>%
+    kbl(booktabs = TRUE, digits = 3, escape = FALSE, align = "lrrrrrrr") %>%
+    kable_styling(latex_options = c("HOLD_position", "scale_down"),
+                  font_size = 7) %>%
+    add_header_above(c(" " = 5, "Rejection rate" = 3)) %>%
     collapse_rows(1:2, row_group_label_position = "stack", 
                   latex_hline = "major") %>%
     print()
@@ -58,30 +92,29 @@ for(the_n in nn) {
 }
 ```
 
-
 <!--Complex sampling results-->
 
 ```{r, results = "asis"}
 samps <- c("Stratified", "Cluster", "Strat-clust")
-# samps <- "Stratified"
+# samps <- "Cluster"
 for (the_samp in samps) {
   cat(paste0("  \n## ", the_samp, " sampling", "  \n"))
   
   # Type I errors
   for(the_n in nn) {
     cat(paste0("  \n### Type I errors ($n=",  the_n, "$)  \n"))
-    dat <- 
+    tab <- 
       res_complex_type1 %>% 
       filter(n == the_n, sampling == the_samp) %>%
       arrange(n, sim, name) %>%
       select(sim, name, everything(), -n, -sampling)
-    dat %>%
+    fix_table(tab) %>%
       select(-sim) %>%
-      kbl(booktabs = TRUE, digits = 3, format = "latex") %>%
-      kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
-      # collapse_rows(1:2, row_group_label_position = "stack", 
-      #               latex_hline = "major") %>%
-      pack_rows(index = table(dat$sim)) %>%
+      kbl(booktabs = TRUE, digits = 3, escape = FALSE, align = "lrrrrrr") %>%
+      kable_styling(latex_options = c("HOLD_position", "scale_down"),
+                    font_size = 7) %>%
+      add_header_above(c(" " = 4, "Rejection rate" = 3)) %>%
+      pack_rows(index = table(tab$sim)) %>%
       print()
     cat("  \n")
   }
@@ -89,21 +122,20 @@ for (the_samp in samps) {
   # Power 
   for(the_n in nn) {
     cat(paste0("  \n### Power ($n=",  the_n, "$)  \n"))
-    dat <- 
+    tab <- 
       res_complex_power %>% 
       filter(n == the_n, sampling == the_samp) %>%
       arrange(n, sim, name) %>%
       select(sim, name, everything(), -n, -sampling)
-    dat %>%
+    fix_table(tab) %>%
       select(-sim) %>%
-      kbl(booktabs = TRUE, digits = 3, format = "latex") %>%
-      kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
-      # collapse_rows(1:2, row_group_label_position = "stack", 
-      #               latex_hline = "major") %>%
-      pack_rows(index = table(dat$sim)) %>%
+      kbl(booktabs = TRUE, digits = 3, escape = FALSE, align = "lrrrrrr") %>%
+      kable_styling(latex_options = c("HOLD_position", "scale_down"),
+                    font_size = 7) %>%
+      add_header_above(c(" " = 4, "Rejection rate" = 3)) %>%
+      pack_rows(index = table(tab$sim)) %>%
       print()
     cat("  \n")
   }
-  
 }
 ```
