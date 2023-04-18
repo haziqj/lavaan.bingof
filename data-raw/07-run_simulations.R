@@ -12,7 +12,7 @@ for (sim_type in c("type1", "power")) {
                            sim_type)
         cat("[", as.character(Sys.time()), "]", "Now running simulation",
             sim_name, "\n")
-        sim <- run_ligof_sims(mod_no, samp_size = the_samp_size, nsim = 2500,
+        sim <- run_ligof_sims(mod_no, samp_size = the_samp_size, nsim = 1000,
                               samp = samp_method, simtype = sim_type)
         invisible(list2env(setNames(list(sim), sim_name), envir = .GlobalEnv))
         save(list = sim_name, file = paste0(analysis_path, "/Rsave/",
@@ -38,7 +38,7 @@ x <- clust1_n1000_power
 # Clean results
 all_res <- mget(ls()) %>%
   lapply(., FUN = \(x) {
-    lapply(x, function(y) if(is_tibble(y)) { y } else { NULL }) %>%
+    lapply(x, \(y) ifelse(is_tibble(y), y, NULL)) %>%
       bind_rows() %>%
       mutate(name = case_when(
         name == "WaldOrth" ~ "WaldVCF",

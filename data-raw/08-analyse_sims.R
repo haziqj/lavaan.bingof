@@ -103,11 +103,12 @@ res_complex_power <- bind_rows(
 complex_plot <- function(x = res_complex_type1, alpha = 10, dashed_line = TRUE,
                          plot_title = "Type I errors") {
   var_name <- paste0("rej_rate", alpha)
+  nsim <- res_complex_type1$n_sims[1]
 
   p <-
     x %>%
     mutate(n = factor(n, labels = paste0("n =\n", unique(x$n)))) %>%
-    ggplot(aes(n, .data[[var_name]], fill = name, alpha = n_rank_def / 10)) +
+    ggplot(aes(n, .data[[var_name]], fill = name, alpha = n_rank_def / nsim * 100)) +
     geom_bar(stat = "identity", position = "dodge", width = 0.9)
 
   if (isTRUE(dashed_line)) {

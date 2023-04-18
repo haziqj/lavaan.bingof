@@ -29,10 +29,10 @@ colour_cells <- function(x, crit = crit10, alpha = 0.1) {
   cell_spec(x, color = ifelse(where_colour, "red", "black"))
 }
 
-fix_table <- function(x) {
-  crit10 <- 1.96 * sqrt(0.10 * 0.90 / 1000)
-  crit5  <- 1.96 * sqrt(0.05 * 0.95 / 1000)
-  crit1  <- 1.96 * sqrt(0.01 * 0.96 / 1000)
+fix_table <- function(x, nsim = res_srs_type1$n_sims[1]) {
+  crit10 <- 1.96 * sqrt(0.10 * 0.90 / nsim)
+  crit5  <- 1.96 * sqrt(0.05 * 0.95 / nsim)
+  crit1  <- 1.96 * sqrt(0.01 * 0.99 / nsim)
   
   x %>%
     mutate(
