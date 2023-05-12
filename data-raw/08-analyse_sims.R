@@ -26,8 +26,7 @@ grab_sims <- function(x = all_res, samp = "srs", type = "type1") {
            name = factor(name, levels = unique(name)),
            alpha10 = pval < 0.1,
            alpha5 = pval < 0.05,
-           alpha1 = pval < 0.01) %>%
-    filter(!name %in% c("RSS,MM3", "Multn,MM3"))
+           alpha1 = pval < 0.01)
 }
 
 summarise_sims <- function(samp = "srs", type = "type1") {
@@ -47,8 +46,11 @@ res_srs_type1 <- summarise_sims("srs", "type1")
 res_srs_power <- summarise_sims("srs", "power")
 
 srs_plot <- function(x = res_srs_type1, alpha = 10, dashed_line = TRUE,
-                     plot_title = "Type I errors") {
+                     plot_title = "Type I errors",
+                     exclude_tests = c("RSS,MM3", "Multn,MM3")) {
   var_name <- paste0("rej_rate", alpha)
+  x <- x %>%
+    filter(!name %in% exclude_tests)
 
   p <- ggplot(x, aes(n, .data[[var_name]], col = name, shape = name))
   if (isTRUE(dashed_line)) {
@@ -104,9 +106,14 @@ res_complex_power <- bind_rows(
                                                 "Strat-clust")))
 
 complex_plot <- function(x = res_complex_type1, alpha = 10, dashed_line = TRUE,
-                         plot_title = "Type I errors") {
+                         plot_title = "Type I errors",
+                         exclude_tests = c("RSS,MM3", "Multn,MM3"),
+                         exclude_sims = NULL) {
   var_name <- paste0("rej_rate", alpha)
   nsim <- res_complex_type1$n_sims[1]
+  x <- x %>%
+    filter(!name %in% exclude_tests) %>%
+    filter(!sim %in% exclude_sims)
 
   p <-
     x %>%
@@ -128,7 +135,7 @@ complex_plot <- function(x = res_complex_type1, alpha = 10, dashed_line = TRUE,
          shape = NULL, title = as.expression(bquote(
            .(plot_title)~"("*alpha~"="~.(iprior::dec_plac(alpha/100, 2))*")"
          ))) +
-    guides(fill = guide_legend(ncol = 2, order = 1),
+    guides(fill = guide_legend(nrow = 3, order = 1),
            alpha = guide_legend(ncol = 2, order = 2)) +
     # scale_fill_viridis_d(option = "turbo", direction = -1) +
     scale_fill_jcolors() +
@@ -156,4 +163,5 @@ save(p_srs_a, p_srs_b, p_srs_c,
      p_srs_d, p_srs_e, p_srs_f,
      p_complex_a, p_complex_b, p_complex_c,
      p_complex_d, p_complex_e, p_complex_f,
+     srs_plot, complex_plot,
      file = "vignettes/articles/simplots.RData")
