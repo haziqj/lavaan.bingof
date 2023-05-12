@@ -156,7 +156,7 @@ gen_data_bin_complex1 <- function(population = make_population(1, seed = NULL),
                                   npsu = 1000, n, seed = NULL) {
   # 1-stage stratified sampling
   set.seed(seed)
-  if (!missing(n)) npsu <- round(npsu / 3, 0)
+  if (!missing(n)) npsu <- round(n / 3, 0)
 
   # Weights
   school_info <-
