@@ -33,17 +33,12 @@ sim_saved <-
 for (i in sim_saved) load(i)
 rm(list = c("sim_saved", "i", "analysis_path"))
 
-x <- clust1_n1000_power
-
 # Clean results
-all_res <- mget(ls()) %>%
+all_res <-
+  mget(ls()) %>%
   lapply(., FUN = \(x) {
-    lapply(x, \(y) ifelse(is_tibble(y), y, NULL)) %>%
-      bind_rows() %>%
-      mutate(name = case_when(
-        name == "WaldOrth" ~ "WaldVCF",
-        TRUE ~ name
-      ))  # decided to change name without rerunning simulations
+    lapply(x, \(y) if(is_tibble(y)) { y } else { NULL }) %>%
+      bind_rows()
   })
 
 usethis::use_data(all_res, overwrite = TRUE, compress = "xz")
