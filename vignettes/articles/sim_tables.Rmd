@@ -29,17 +29,21 @@ colour_cells <- function(x, crit = crit10, alpha = 0.1) {
   cell_spec(x, color = ifelse(where_colour, "red", "black"))
 }
 
-fix_table <- function(x, nsim = res_srs_type1$n_sims[1]) {
+fix_table <- function(x, nsim = res_srs_type1$n_sims[1],
+                      highlight = TRUE) {
   crit10 <- 1.96 * sqrt(0.10 * 0.90 / nsim)
   crit5  <- 1.96 * sqrt(0.05 * 0.95 / nsim)
   crit1  <- 1.96 * sqrt(0.01 * 0.99 / nsim)
   
+  if (isTRUE(highlight)) {
+    x <- x %>%
+      mutate(
+        rej_rate10 = colour_cells(rej_rate10, crit10, 0.1),
+        rej_rate5 = colour_cells(rej_rate5, crit5, 0.05),
+        rej_rate1 = colour_cells(rej_rate1, crit1, 0.01),
+      )
+  } 
   x %>%
-    mutate(
-      rej_rate10 = colour_cells(rej_rate10, crit10, 0.1),
-      rej_rate5 = colour_cells(rej_rate5, crit5, 0.05),
-      rej_rate1 = colour_cells(rej_rate1, crit1, 0.01),
-    ) %>%
     rename(Name = name,
            `No. repl.` = n_sims,
            `Converged` = n_converged,
@@ -82,7 +86,7 @@ for(the_n in nn) {
     filter(n == the_n) %>%
     arrange(n, sim, name) %>%
     select(sim, name, everything(), -n)
-  fix_table(tab) %>%
+  fix_table(tab, highlight = FALSE) %>%
     kbl(booktabs = TRUE, digits = 3, escape = FALSE, align = "lrrrrrrr") %>%
     kable_styling(latex_options = c("HOLD_position", "scale_down"),
                   font_size = 7) %>%
@@ -129,7 +133,7 @@ for (the_samp in samps) {
       filter(n == the_n, sampling == the_samp) %>%
       arrange(n, sim, name) %>%
       select(sim, name, everything(), -n, -sampling)
-    fix_table(tab) %>%
+    fix_table(tab, highlight = FALSE) %>%
       select(-sim) %>%
       kbl(booktabs = TRUE, digits = 3, escape = FALSE, align = "lrrrrrr") %>%
       kable_styling(latex_options = c("HOLD_position", "scale_down"),
