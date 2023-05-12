@@ -1,5 +1,10 @@
 # lavaan.bingof (development version)
 
+## 2023-05-12
+
+- Bug in the `gen_data_bin_strat()` function. It ignores the sample size argument `n` so all simulations were actually using the same sample size.
+- Update simulation results accordingly.
+
 ## 2023-04-15
 
 - Added test suite for the package.
