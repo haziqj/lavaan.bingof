@@ -1,5 +1,6 @@
 library(tidyverse)
 theme_set(theme_bw())
+library(jcolors)
 library(lavaan.bingof)  # needs all_res data. be sure to build pkg
 # data(all_res, package = "lavaan.bingof")
 
@@ -25,7 +26,8 @@ grab_sims <- function(x = all_res, samp = "srs", type = "type1") {
            name = factor(name, levels = unique(name)),
            alpha10 = pval < 0.1,
            alpha5 = pval < 0.05,
-           alpha1 = pval < 0.01)
+           alpha1 = pval < 0.01) %>%
+    filter(!name %in% c("RSS,MM3", "Multn,MM3"))
 }
 
 summarise_sims <- function(samp = "srs", type = "type1") {
@@ -67,7 +69,8 @@ srs_plot <- function(x = res_srs_type1, alpha = 10, dashed_line = TRUE,
            .(plot_title)~"("*alpha~"="~.(iprior::dec_plac(alpha/100, 2))*")"
          ))) +
     guides(col = guide_legend(ncol = 1), shape = guide_legend(ncol = 1)) +
-    scale_colour_viridis_d(option = "turbo", direction = -1)
+    # scale_colour_viridis_d(option = "turbo", direction = -1)
+    scale_color_jcolors()
 }
 
 p_srs_a <- srs_plot(res_srs_type1, alpha = 10)
@@ -125,15 +128,19 @@ complex_plot <- function(x = res_complex_type1, alpha = 10, dashed_line = TRUE,
          shape = NULL, title = as.expression(bquote(
            .(plot_title)~"("*alpha~"="~.(iprior::dec_plac(alpha/100, 2))*")"
          ))) +
-    guides(fill = guide_legend(ncol = 3, order = 1),
+    guides(fill = guide_legend(ncol = 2, order = 1),
            alpha = guide_legend(ncol = 2, order = 2)) +
-    scale_fill_viridis_d(option = "turbo", direction = -1) +
+    # scale_fill_viridis_d(option = "turbo", direction = -1) +
+    scale_fill_jcolors() +
     facet_grid(sim ~ sampling)
 }
 
-p_complex_a <- complex_plot(res_complex_type1, alpha = 10)
-p_complex_b <- complex_plot(res_complex_type1, alpha = 5)
-p_complex_c <- complex_plot(res_complex_type1, alpha = 1)
+p_complex_a <- complex_plot(res_complex_type1, alpha = 10) +
+  coord_cartesian(ylim = c(0, 0.2))
+p_complex_b <- complex_plot(res_complex_type1, alpha = 5) +
+  coord_cartesian(ylim = c(0, 0.1))
+p_complex_c <- complex_plot(res_complex_type1, alpha = 1) +
+  coord_cartesian(ylim = c(0, 0.05))
 p_complex_d <- complex_plot(res_complex_power, alpha = 10, dashed_line = FALSE,
                             plot_title = "Power")
 p_complex_e <- complex_plot(res_complex_power, alpha = 5, dashed_line = FALSE,

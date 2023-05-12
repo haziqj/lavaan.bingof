@@ -65,7 +65,8 @@ semPaths(fit, intercepts = FALSE, #residuals = TRUE, whatLabels = "est",
          groups = list(c("eta1", paste0("y", c(2, 4))), c("extra")),
          manifests = paste0("y", 5:1),
          latents = c("extra", "eta1"),
-         color = c("#28BBECFF", "#7A0403FF"),
+         # color = c("#28BBECFF", "#7A0403FF"),
+         color = c("#00A5CF", "#DE1A1A"),
          node.width = 0.9, nCharNodes = 0, sizeMan = 8, sizeLat = 9, 
          thresholds = FALSE, rotation = 3, exoCov = FALSE)
 # "#30123BFF" "#28BBECFF" "#A2FC3CFF" "#FB8022FF" "#7A0403FF"
@@ -87,7 +88,8 @@ semPaths(fit, intercepts = FALSE, #residuals = TRUE, whatLabels = "est",
          groups = list(c("eta1", paste0("y", c(2, 4, 6, 8))), c("extra")),
          manifests = paste0("y", 8:1),
          latents = c("extra", "eta1"),
-         color = c("#28BBECFF", "#7A0403FF"),
+         # color = c("#28BBECFF", "#7A0403FF"),
+         color = c("#00A5CF", "#DE1A1A"),
          node.width = 0.9, nCharNodes = 0, sizeMan = 8, sizeLat = 9, 
          thresholds = FALSE, rotation = 3, exoCov = FALSE)
 # "#30123BFF" "#28BBECFF" "#A2FC3CFF" "#FB8022FF" "#7A0403FF"
@@ -113,7 +115,8 @@ semPaths(fit, intercepts = FALSE, #residuals = TRUE, whatLabels = "est",
          groups = list(c("eta1", paste0("y", c(2, 4, 6, 8))), c("extra")),
          manifests = paste0("y", 15:1),
          latents = c("extra", "eta1"),
-         color = c("#28BBECFF", "#7A0403FF"),
+         # color = c("#28BBECFF", "#7A0403FF"),
+         color = c("#00A5CF", "#DE1A1A"),
          node.width = 0.9, nCharNodes = 0, sizeMan = 5, sizeLat = 9, 
          thresholds = FALSE, rotation = 3, exoCov = FALSE)
 # "#30123BFF" "#28BBECFF" "#A2FC3CFF" "#FB8022FF" "#7A0403FF"
@@ -141,7 +144,8 @@ semPaths(fit, intercepts = FALSE, what = "par",
                        c("extra")),
          manifests = paste0("y", 10:1),
          latents = c("extra", "eta2", "eta1"),
-         color = c("#30123BFF", "#A2FC3CFF", "#7A0403FF"),
+         # color = c("#30123BFF", "#A2FC3CFF", "#7A0403FF"),
+         color = c("#00A5CF", "#29BF12", "#DE1A1A"),
          node.width = 0.9, nCharNodes = 0, sizeMan = 6, sizeLat = 9, 
          thresholds = FALSE, rotation = 3, weighted = FALSE)
 ```
@@ -171,12 +175,13 @@ semPaths(fit, intercepts = FALSE, what = "par",
                        c("extra")),
          manifests = paste0("y", 15:1),
          latents = c("extra", "eta3", "eta2", "eta1"),
-         color = c("#30123BFF", "#1AE4B6FF", "#FABA39FF", "#7A0403FF"),
+         # color = c("#30123BFF", "#1AE4B6FF", "#FABA39FF", "#7A0403FF"),
+         color = c("#00A5CF", "#29BF12", "#FFBF00", "#DE1A1A"),
          node.width = 0.9, nCharNodes = 0, sizeMan = 5, sizeLat = 9, 
          thresholds = FALSE, rotation = 3, weighted = FALSE)
 ```
 
-## SRS Type I errors {.tabset}
+## SRS type I errors {.tabset}
 
 ### 10% significance
 
@@ -197,7 +202,7 @@ p_srs_c
 ```
 
 
-## SRS Power plots  {.tabset}
+## SRS power plots  {.tabset}
 
 ### 10% significance
 
@@ -217,7 +222,7 @@ p_srs_e
 p_srs_f
 ```
 
-## Complex sampling Type I errors {.tabset}
+## Complex sampling type I errors {.tabset}
 
 ### 10% significance
 
@@ -237,7 +242,7 @@ p_complex_b
 p_complex_c
 ```
 
-## Complex sampling Power plots {.tabset}
+## Complex sampling power plots {.tabset}
 
 ### 10% significance
 
