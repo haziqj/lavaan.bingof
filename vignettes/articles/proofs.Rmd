@@ -1,0 +1,214 @@
+---
+title: "Proofs"
+output:
+  bookdown::html_document2:
+    toc: yes
+    toc_depth: 2
+    number_sections: FALSE
+link-citations: yes
+bibliography: refs.bib
+# nocite: |
+#   @maydeu2008overview, @reiser1996analysis, @bartholomew2002goodness, @katsikatsou2012pairwise
+pkgdown:
+  as_is: true
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(lavaan.bingof)
+```
+
+```{r, echo = FALSE, results = "asis"}
+# LaTeX shortcuts 
+cat(readr::read_file("maths_shortcuts.tex"))
+``` 
+
+<!-- Extra LaTeX commands -->
+\newcommand{\pimod}[1]{\pi_{#1}(\btheta)}
+\newcommand{\Sigmaystar}{\bSigma_{\by^*}}
+\newcommand{\pl}{\operatorname{\ell_P}}
+\newcommand{\mlepl}{\hat\btheta_{\text{PL}}}
+\newcommand{\mle}{\hat\btheta_{\text{ML}}}
+\newcommand{\pimodpl}{\pi_{y_iy_j}^{(ij)}(\btheta)}
+\newcommand{\tr}{\operatorname{tr}}
+\color{black}
+<!-- Extra LaTeX commands -->
+
+## Maximum likelihood
+
+::: {.proposition}
+For the multivariate Bernoulli model in the response pattern representation with log-likelihood given by
+\begin{equation}
+\ell(\btheta) = \sum_{r=1}^{R} \hat n_r \log \pimod{r},
+\end{equation}
+the expected (unit) Fisher information matrix about the $m$-dimensional real parameter vector $\btheta$ is $\cI = \bDelta^\top \bD^{-1} \bDelta \in \bbR^{m\times m}$, where
+
+- $\bDelta_{r,k} = \frac{\partial\pi_r(\btheta)}{\partial\theta_k}$, $r=1,\dots,R$, $k=1,\dots,m$; and
+- $\bD = \diag(\pi_1(\btheta),\dots,\pi_R(\btheta))$.
+
+:::
+
+::: {.proof}
+For $k=1,\dots,m$, the partial derivative of the log-likelihood $\ell(\btheta)$ with respect to $\theta_k$ is
+\begin{equation}
+\frac{\partial\ell(\btheta)}{\partial\theta_k} 
+= \sum_{r=1}^{R} \hat n_r \frac{\partial\log \pimod{r}}{\partial\theta_k}
+= \sum_{r=1}^{R}  \frac{\hat n_r}{\pimod{r}} \frac{\partial \pimod{r}}{\partial\theta_k}. (\#eq:derloglik)
+\end{equation}
+<!-- Evidently, we may write the score function as -->
+<!-- \begin{equation} -->
+<!-- \nabla \ell(\btheta) = \bDelta^\top \bD^{-1} \hat\bn \in \bbR^q. -->
+<!-- \end{equation} -->
+<!-- As $\hat\bn^\top = (\hat n_1,\dots,\hat n_R)$ represents a multivariate binomial vector, we have that $\E \hat\bn = n\bpi(\btheta)$ and $\Var(\hat\bn) = n(\bD - \pimod{}\pimod{}^\top)$. -->
+Differentiating again with respect to $\theta_l$ this time, where $l\in\{1,\dots,m\}$, we get
+\begin{equation}\label{eq:der_score}
+\frac{\partial\ell(\btheta)}{\partial\theta_k\partial\theta_l} 
+= \sum_{r=1}^{R}  \frac{\hat n_r}{\pimod{r}} \frac{\partial^2 \pimod{r}}{\partial\theta_k\partial\theta_l} - \sum_{r=1}^{R}  \frac{\hat n_r}{\pimod{r}^2} \frac{\partial \pimod{r}}{\partial\theta_k} \frac{\partial \pimod{r}}{\partial\theta_l}.
+\end{equation}
+Taking negative expectations of the quantity above yields the $(k,l)$th element of the **full** Fisher information matrix:
+\begin{align}\label{eq:negexpscore}
+-\E\left[\frac{\partial\ell(\btheta)}{\partial\theta_k\partial\theta_l}  \right] 
+&= \sum_{r=1}^{R}  \frac{\E (\hat n_r)}{\pimod{r}^2} \frac{\partial \pimod{r}}{\partial\theta_k} \frac{\partial \pimod{r}}{\partial\theta_l}  - \sum_{r=1}^{R}  \frac{\E (\hat n_r)}{\pimod{r}} \frac{\partial^2 \pimod{r}}{\partial\theta_k\partial\theta_l}  \nonumber  \\
+&=  n\sum_{r=1}^{R}  \frac{\cancel{\pimod{r}}}{\pimod{r}^{\cancel{2}}} \frac{\partial \pimod{r}}{\partial\theta_k} \frac{\partial \pimod{r}}{\partial\theta_l} -  n\sum_{r=1}^{R}  \frac{\cancel{\pimod{r}}}{\cancel{\pimod{r}}} \frac{\partial^2 \pimod{r}}{\partial\theta_k\partial\theta_l} \nonumber \\
+&= n\sum_{r=1}^{R}  \frac{1}{\pimod{r}} \frac{\partial \pimod{r}}{\partial\theta_k} \frac{\partial \pimod{r}}{\partial\theta_l} -    \cancel{ n\sum_{r=1}^{R} \frac{\partial^2 \pimod{r}}{\partial\theta_k\partial\theta_l} } ,
+\end{align}
+where the cancellation of the second term in the last line above follows again from the fact that for all $k=1,\dots,m$,
+\begin{equation}
+\sum_{r=1}^R \pimod{r} = 1 \ \ \Rightarrow \ \  \sum_{r=1}^R \frac{\partial \pimod{r}}{\partial\theta_k}  = 0.  (\#eq:sumderzero)
+\end{equation}
+Dividing by $n$ gives the desired result.
+
+
+<!-- Clearly, \eqref{eq:negexpscore} is the entry of the $k$th row and $j$th column of the matrix $\cI(\btheta) = N \bDelta^\top \bD^{-1} \bDelta^\top$ found earlier. -->
+
+
+
+
+
+:::
+
+
+::: {.proposition}
+The maximum likelihood estimators are a class of *best asymptotically normal* (BAN) estimators $\hat\btheta$ of $\btheta$ that satisfy
+\begin{equation}
+\sqrt n (\hat\btheta - \btheta) = \sqrt n \, \bB \big(\bp - \bpi(\btheta)\big) + o(1),
+(\#eq:ban)
+\end{equation}
+where $\bB = \cI^{-1} \bDelta^\top \bD^{-1}$ is an $m\times R$ matrix.
+:::
+
+::: {.proof}
+Let $\hat\btheta$ be the MLE of $\btheta$.
+Then, maximum likelihood theory tells us that as $n\to\infty$,
+\begin{equation}\label{eq:limitdisttheta}
+\sqrt n (\hat\btheta - \btheta) \xrightarrow{\text D} \N(\bzero, \cI^{-1}).
+\end{equation}
+Consider now the first order Taylor expansion of the score vector $\nabla\ell(\btheta)$ (with entries given in \@ref(eq:derloglik) above) about some parameter value $\btheta_0$:
+\begin{align}
+\nabla \ell (\btheta) 
+&= \nabla \ell(\btheta_0) + 
+\textcolor{gray}{\frac{n}{n}} \nabla^2\ell(\btheta_0) 
+(\btheta - \btheta_0 ) + o(n^{-1/2})  \\
+&\xrightarrow{\text P} \nabla \ell(\btheta_0) - n\cI (\btheta - \btheta_0)   \ \text{as $n\to\infty$}.
+\end{align}
+This implies that
+\begin{align}
+\cancelto{0}{\nabla \ell (\hat\btheta)} 
+&\approx \nabla \ell(\btheta) + n\cI (\btheta - \hat\btheta)  \\
+\Rightarrow (\hat\btheta-\btheta) &= \frac{1}{n} \cI^{-1} \nabla\ell(\btheta) \nonumber \\
+\Rightarrow \sqrt n (\hat\btheta-\btheta) &= \frac{\sqrt n}{n} \cI^{-1} \nabla\ell(\btheta) (\#eq:taylorscore)
+\end{align}
+
+We wish to express the score vector $\nabla\ell(\btheta)$ in terms of the *errors* $\be := \bp - \bpi(\btheta)$.
+Notice that
+\begin{align*}
+n \sum_{r=1}^{R} \big(p_r - \pimod{r}\big) \frac{1}{\pimod{r}}\frac{\partial\pimod{r}}{\partial\theta_k}
+&= \sum_{r=1}^{R}  \frac{\overbrace{n p_r}^{\hat n_r}}{\pimod{r}}\frac{\partial\pimod{r}}{\partial\theta_k}
+-
+n \sum_{r=1}^{R}  \frac{\pimod{r}}{\pimod{r}}\frac{\partial\pimod{r}}{\partial\theta_k}
+\\
+&= \frac{\partial\ell(\theta)}{\partial\theta_k} 
+-
+\cancel{ n \sum_{r=1}^{R}  \frac{\partial\pimod{r}}{\partial\theta_k}},
+\end{align*}
+where the cancellation is again due to \@ref(eq:sumderzero).
+We can now see how to write the score vector in terms of the residuals:
+\begin{equation} 
+\nabla\ell(\btheta) = n \bDelta^\top \bD^{-1} \big(\bp - \bpi(\btheta)\big). (\#eq:scoreaserrors)
+\end{equation}
+Substituting \@ref(eq:scoreaserrors) into \@ref(eq:taylorscore) gives us
+\begin{align}
+\sqrt n (\hat\btheta-\btheta) 
+&\approx \sqrt n \ \cI^{-1} \bDelta^\top \bD^{-1} \ \big(\bp - \bpi(\btheta)\big) (\#eq:subB).
+\end{align}
+:::
+
+::: {.proposition}
+The covariance matrix of the residuals, $\bOmega = (\bI - \bDelta\bB)\bSigma(\bI - \bDelta\bB)^\top$ simplifies to $\bSigma - \bDelta\cI^{-1}\bDelta^\top$.
+:::
+
+::: {.proof}
+\begin{align}
+\bOmega 
+&= \bSigma - \bDelta\bB\bSigma - \bSigma\bB^\top\bDelta^\top + \bDelta\bB\bSigma\bB^\top\bDelta^\top \nonumber \\
+&= \bSigma - \bDelta  \cI^{-1} \bDelta^\top \bD^{-1} (\bD - \bpi(\btheta)\bpi(\btheta)^\top) - \bSigma\bB^\top\bDelta^\top + \bDelta\bB\bSigma\bB^\top\bDelta^\top \nonumber \\
+&= \bSigma - \bDelta  \cI^{-1} \bDelta^\top  - 
+\cancel{\bDelta  \cI^{-1} \bDelta^\top\bD^{-1} \bpi(\btheta)\bpi(\btheta)^\top} 
+- \bSigma\bB^\top\bDelta^\top + \bDelta\bB\bSigma\bB^\top\bDelta^\top \nonumber \\
+&= \bSigma - \bDelta  \cI^{-1} \bDelta^\top - \bDelta \cI^{-1} \bDelta^\top +  \bDelta \cI^{-1} \overbrace{ \bDelta^\top \bD^{-1}\bDelta}^{\cI} \cI^{-1} \bDelta^\top \nonumber \\
+&=  \bSigma - \bDelta  \cI^{-1} \bDelta^\top.
+\end{align}
+
+The cancellation occurs because 
+$$
+\bDelta^\top\bD^{-1} \bpi(\btheta) = \bDelta^\top \bone = \bzero.
+$$
+:::
+
+
+## Pairwise likelihood
+
+Suppose that under pairwise likelihood estimation, the $\bB$ matrix is given by $\bB = \cH^{-1}\tilde\bDelta^{-1}\tilde \bD^{-1} \bG$, with 
+
+- $\tilde\bDelta \in \bbR^{\tilde R \times m}$ consists of partial derivatives of the pairwise probabilities, i.e. $\frac{\partial\pimodpl}{\partial\theta_k}$;
+- $\tilde\bD = \diag((\pimodpl)_{i<j})$; and 
+- $\bG$ is some indicator matrix to transform the quantities from $\tilde R$ dimensions to $R$ dimensions.
+
+::: {.proposition name=""}
+
+Something...
+:::  
+
+::: {.proof}
+The steps to show this is the same as in the maximum likelihood case, except we are now using pairwise quantities and the sensitivity matrix $\cH=-\E\nabla^2\pl(\btheta)$.
+Thus, we may arrive at the following line 
+\begin{equation}
+\nabla\pl(\btheta) = n \tilde\bDelta^\top \tilde\bD^{-1} \big(
+\myoverbrace{ \tilde  \bp - \tilde \bpi(\btheta) }{\tilde\be}\big). (\#eq:scorewithpairwiseresid)
+\end{equation}
+The tilde here indicates that we are dealing with the $\tilde R$ pairwise quantities, negative and positive outcomes alike.
+We need an indicator matrix $\bG$ of an appropriate size to transform the pairwise errors $\tilde\be \in \bbR^{\tilde R}$ appearing in the right-hand side of \eqref{eq:scorewithpairwiseresid} to the joint-model errors $\be \in \bbR^R$.
+In other words, $\bG$ should consist of stacked submatrices $\bG_{y_iy_j}^{(ij)}$ that satisfy
+$$
+\bG_{y_iy_j}^{(ij)} 
+\big(\bp - \bpi(\btheta)\big) = 
+\begin{pmatrix}
+p_{11}^{(ij)} - \pi(\btheta)_{11}^{(ij)}\\
+p_{10}^{(ij)} - \pi(\btheta)_{10}^{(ij)}\\
+p_{01}^{(ij)} - \pi(\btheta)_{01}^{(ij)}\\
+p_{00}^{(ij)} - \pi(\btheta)_{00}^{(ij)}\\
+\end{pmatrix}
+$$
+for all pairs $i,j=1,\dots,p$, $i<j$. 
+:::    
+
+
+::: {.proposition name=""}
+$G$ matrix.
+:::  
+
+
+## References

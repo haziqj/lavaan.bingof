@@ -54,6 +54,7 @@ articles:
   contents:
   - articles/intro
   - articles/tech_details
+  - articles/proofs
   - articles/complex_sampling
 - title: Simulation study
   navbar: Simulation study

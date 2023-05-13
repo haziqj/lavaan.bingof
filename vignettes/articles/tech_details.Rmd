@@ -148,10 +148,10 @@ and the log-likelihood for $\btheta$ given the observed frequencies $\hat\bn$ (i
 The maximum likelihood estimator $\mle$ satisfies $\mle = \argmax_{\btheta} \ell(\btheta)$.
 Maximum likelihood theory tells us that, under certain regularity conditions, as $n\to\infty$,
 \begin{equation}\label{eq:limitdisttheta}
-\sqrt n (\hat\btheta - \btheta) \xrightarrow{\text D} {\N}_m\big(\bzero, \cI_1(\btheta)^{-1}\big),
+\sqrt n (\hat\btheta - \btheta) \xrightarrow{\text D} {\N}_m\big(\bzero, \cI(\btheta)^{-1}\big),
 \end{equation}
-where $\bbR^{m\times m} \ni \cI_1(\btheta) = -\E \nabla^2 \ell(\btheta)$ is the *(unit) expected Fisher information matrix*.
-It can be further shown that $\cI_1(\btheta) = \bDelta^\top \bD^{-1} \bDelta$, where
+where $\bbR^{m\times m} \ni \cI = -n^{-1}\E \nabla^2 \ell(\btheta)$ is the *(unit) expected Fisher information matrix*.
+It can be further shown that $\cI = \bDelta^\top \bD^{-1} \bDelta$, where
 
 - $\bDelta_{r,k} = \frac{\partial\pi_r(\btheta)}{\partial\theta_k}$, $r=1,\dots,R$, $k=1,\dots,m$; and
 - $\bD = \diag(\bpi(\btheta))$.
