@@ -32,6 +32,9 @@ for (let popover of popovers) {
     })
   }
 }
+  MathJax.Hub.Config({
+    TeX: { extensions: ["autoload-all.js"] }
+  });
 </script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -60,6 +63,7 @@ for (let popover of popovers) {
     <h6 class="dropdown-header" data-toc-skip>Technical details</h6>
     <a class="dropdown-item" href="../articles/intro.html">Introduction</a>
     <a class="dropdown-item" href="../articles/tech_details.html">Technical details</a>
+    <a class="dropdown-item" href="../articles/proofs.html">Proofs</a>
     <a class="dropdown-item" href="../articles/complex_sampling.html">Complex sampling procedure</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Simulation study</h6>
@@ -127,17 +131,17 @@ probabilities only) based on model i.e. <code>pidot1</code> and <code>pidot2</co
 <span class="r-in"><span>                   estimator <span class="op">=</span> <span class="st">"PML"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">get_uni_bi_moments</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pdot1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.924 0.708 0.532 0.774 0.854</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.936 0.688 0.534 0.760 0.886</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pidot1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9239834 0.7080296 0.5320360 0.7739212 0.8540023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9360009 0.6880068 0.5340221 0.7599994 0.8859969</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pdot2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.682 0.506 0.744 0.798 0.408 0.578 0.614 0.430 0.466 0.672</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.674 0.518 0.718 0.836 0.416 0.542 0.614 0.416 0.484 0.668</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pidot2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.6822521 0.5085292 0.7421655 0.7983512 0.4008133 0.5803671 0.6161882</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.4333063 0.4621938 0.6713945</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.6740161 0.5188232 0.7181923 0.8332729 0.4155105 0.5387520 0.6184892</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.4173340 0.4795275 0.6754791</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
