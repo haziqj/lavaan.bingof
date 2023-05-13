@@ -34,7 +34,6 @@ cat(readr::read_file("maths_shortcuts.tex"))
 \newcommand{\mle}{\hat\btheta_{\text{ML}}}
 \newcommand{\pimodpl}{\pi_{y_iy_j}^{(ij)}(\btheta)}
 \newcommand{\tr}{\operatorname{tr}}
-\color{black}
 <!-- Extra LaTeX commands -->
 
 ## Maximum likelihood
@@ -171,26 +170,24 @@ $$
 
 ## Pairwise likelihood
 
-Suppose that under pairwise likelihood estimation, the $\bB$ matrix is given by $\bB = \cH^{-1}\tilde\bDelta^{-1}\tilde \bD^{-1} \bG$, with 
+::: {.proposition}
+The pairwise likelihood estimator $\mlepl$ satisfies the BAN requirement \ref(eq:ban) where the $\bB$ matrix is given by $\bB = \cH^{-1}\tilde\bDelta^{-1}\tilde \bD^{-1} \bG$, with 
 
 - $\tilde\bDelta \in \bbR^{\tilde R \times m}$ consists of partial derivatives of the pairwise probabilities, i.e. $\frac{\partial\pimodpl}{\partial\theta_k}$;
 - $\tilde\bD = \diag((\pimodpl)_{i<j})$; and 
-- $\bG$ is some indicator matrix to transform the quantities from $\tilde R$ dimensions to $R$ dimensions.
-
-::: {.proposition name=""}
-
-Something...
+- $\bG$ is some indicator matrix to transform the quantities from $\tilde R$ dimensions to $R$ dimensions. 
 :::  
 
 ::: {.proof}
-The steps to show this is the same as in the maximum likelihood case, except we are now using pairwise quantities and the sensitivity matrix $\cH=-\E\nabla^2\pl(\btheta)$.
+The steps to show this is the same as in the maximum likelihood case, except we are now using pairwise quantities and the (unit) sensitivity matrix $\cH=-n^{-1}\E\nabla^2\pl(\btheta)$.
 Thus, we may arrive at the following line 
 \begin{equation}
 \nabla\pl(\btheta) = n \tilde\bDelta^\top \tilde\bD^{-1} \big(
 \myoverbrace{ \tilde  \bp - \tilde \bpi(\btheta) }{\tilde\be}\big). (\#eq:scorewithpairwiseresid)
 \end{equation}
+by following the ML steps above to arrive at \ref(eq:scoreaserrors).
 The tilde here indicates that we are dealing with the $\tilde R$ pairwise quantities, negative and positive outcomes alike.
-We need an indicator matrix $\bG$ of an appropriate size to transform the pairwise errors $\tilde\be \in \bbR^{\tilde R}$ appearing in the right-hand side of \eqref{eq:scorewithpairwiseresid} to the joint-model errors $\be \in \bbR^R$.
+We need an indicator matrix $\bG$ of an appropriate size to transform the pairwise errors $\tilde\be \in \bbR^{\tilde R}$ appearing in the right-hand side of \@ref(eq:scorewithpairwiseresid) to the joint-model errors $\be \in \bbR^R$.
 In other words, $\bG$ should consist of stacked submatrices $\bG_{y_iy_j}^{(ij)}$ that satisfy
 $$
 \bG_{y_iy_j}^{(ij)} 
@@ -203,10 +200,16 @@ p_{00}^{(ij)} - \pi(\btheta)_{00}^{(ij)}\\
 \end{pmatrix}
 $$
 for all pairs $i,j=1,\dots,p$, $i<j$. 
+The form of this matrix $G$ is given by the next proposition.
+Therefore, we have 
+\begin{equation}
+\sqrt n (\mlepl - \btheta) \approx \sqrt n \ \myoverbrace{\cH^{-1}  \tilde\bDelta^\top \tilde\bD^{-1}\bG }{\bB} 
+\big (  \bp - \bpi(\btheta) \big). (\#eq:mleplminusthetaBmatrix)
+\end{equation}
 :::    
 
 
-::: {.proposition name=""}
+::: {.proposition}
 $G$ matrix.
 :::  
 
