@@ -245,7 +245,8 @@ Substituting <a href="#eq:scoreaserrors">(5)</a> into <a href="#eq:taylorscore">
 <div class="section level2">
 <h2 id="pairwise-likelihood">Pairwise likelihood<a class="anchor" aria-label="anchor" href="#pairwise-likelihood"></a>
 </h2>
-<p>Suppose that under pairwise likelihood estimation, the <span class="math inline">\({\mathbf B}\)</span> matrix is given by <span class="math inline">\({\mathbf B}= {\mathcal H}^{-1}\tilde{\boldsymbol\Delta}^{-1}\tilde {\mathbf D}^{-1} {\mathbf G}\)</span>, with</p>
+<div class="proposition">
+<p><span id="prp:unlabeled-div-7" class="proposition"><strong>Proposition 4  </strong></span>The pairwise likelihood estimator <span class="math inline">\(\hat{\boldsymbol\theta}_{\text{PL}}\)</span> satisfies the BAN requirement (eq:ban) where the <span class="math inline">\({\mathbf B}\)</span> matrix is given by <span class="math inline">\({\mathbf B}= {\mathcal H}^{-1}\tilde{\boldsymbol\Delta}^{-1}\tilde {\mathbf D}^{-1} {\mathbf G}\)</span>, with</p>
 <ul>
 <li>
 <span class="math inline">\(\tilde{\boldsymbol\Delta}\in \mathbb{R}^{\tilde R \times m}\)</span> consists of partial derivatives of the pairwise probabilities, i.e. <span class="math inline">\(\frac{\partial\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})}{\partial\theta_k}\)</span>;</li>
@@ -254,18 +255,17 @@ Substituting <a href="#eq:scoreaserrors">(5)</a> into <a href="#eq:taylorscore">
 <li>
 <span class="math inline">\({\mathbf G}\)</span> is some indicator matrix to transform the quantities from <span class="math inline">\(\tilde R\)</span> dimensions to <span class="math inline">\(R\)</span> dimensions.</li>
 </ul>
-<div class="proposition">
-<p><span id="prp:unlabeled-div-7" class="proposition"><strong>Proposition 4  () </strong></span>Something…</p>
 </div>
 <div class="proof">
-<p><span id="unlabeled-div-8" class="proof"><em>Proof</em>. </span>The steps to show this is the same as in the maximum likelihood case, except we are now using pairwise quantities and the sensitivity matrix <span class="math inline">\({\mathcal H}=-\mathop{\mathrm{E}}\nabla^2\operatorname{\ell_P}({\boldsymbol\theta})\)</span>.
+<p><span id="unlabeled-div-8" class="proof"><em>Proof</em>. </span>The steps to show this is the same as in the maximum likelihood case, except we are now using pairwise quantities and the (unit) sensitivity matrix <span class="math inline">\({\mathcal H}=-n^{-1}\mathop{\mathrm{E}}\nabla^2\operatorname{\ell_P}({\boldsymbol\theta})\)</span>.
 Thus, we may arrive at the following line
 <span class="math display" id="eq:scorewithpairwiseresid">\[\begin{equation}
 \nabla\operatorname{\ell_P}({\boldsymbol\theta}) = n \tilde{\boldsymbol\Delta}^\top \tilde{\mathbf D}^{-1} \big(
 {\color{gray}\overbrace{\color{black} \tilde  {\mathbf p}- \tilde {\boldsymbol\pi}({\boldsymbol\theta}) }^{\tilde{\mathbf e}}}\big). \tag{7}
 \end{equation}\]</span>
+by following the ML steps above to arrive at (eq:scoreaserrors).
 The tilde here indicates that we are dealing with the <span class="math inline">\(\tilde R\)</span> pairwise quantities, negative and positive outcomes alike.
-We need an indicator matrix <span class="math inline">\({\mathbf G}\)</span> of an appropriate size to transform the pairwise errors <span class="math inline">\(\tilde{\mathbf e}\in \mathbb{R}^{\tilde R}\)</span> appearing in the right-hand side of <span class="math inline">\(\eqref{eq:scorewithpairwiseresid}\)</span> to the joint-model errors <span class="math inline">\({\mathbf e}\in \mathbb{R}^R\)</span>.
+We need an indicator matrix <span class="math inline">\({\mathbf G}\)</span> of an appropriate size to transform the pairwise errors <span class="math inline">\(\tilde{\mathbf e}\in \mathbb{R}^{\tilde R}\)</span> appearing in the right-hand side of <a href="#eq:scorewithpairwiseresid">(7)</a> to the joint-model errors <span class="math inline">\({\mathbf e}\in \mathbb{R}^R\)</span>.
 In other words, <span class="math inline">\({\mathbf G}\)</span> should consist of stacked submatrices <span class="math inline">\({\mathbf G}_{y_iy_j}^{(ij)}\)</span> that satisfy
 <span class="math display">\[
 {\mathbf G}_{y_iy_j}^{(ij)}
@@ -277,10 +277,16 @@ p_{01}^{(ij)} - \pi({\boldsymbol\theta})_{01}^{(ij)}\\
 p_{00}^{(ij)} - \pi({\boldsymbol\theta})_{00}^{(ij)}\\
 \end{pmatrix}
 \]</span>
-for all pairs <span class="math inline">\(i,j=1,\dots,p\)</span>, <span class="math inline">\(i&lt;j\)</span>.</p>
+for all pairs <span class="math inline">\(i,j=1,\dots,p\)</span>, <span class="math inline">\(i&lt;j\)</span>.
+The form of this matrix <span class="math inline">\(G\)</span> is given by the next proposition.
+Therefore, we have
+<span class="math display" id="eq:mleplminusthetaBmatrix">\[\begin{equation}
+\sqrt n (\hat{\boldsymbol\theta}_{\text{PL}}- {\boldsymbol\theta}) \approx \sqrt n \ {\color{gray}\overbrace{\color{black}{\mathcal H}^{-1}  \tilde{\boldsymbol\Delta}^\top \tilde{\mathbf D}^{-1}{\mathbf G}}^{{\mathbf B}}}
+\big (  {\mathbf p}- {\boldsymbol\pi}({\boldsymbol\theta}) \big). \tag{8}
+\end{equation}\]</span></p>
 </div>
 <div class="proposition">
-<p><span id="prp:unlabeled-div-9" class="proposition"><strong>Proposition 5  () </strong></span><span class="math inline">\(G\)</span> matrix.</p>
+<p><span id="prp:unlabeled-div-9" class="proposition"><strong>Proposition 5  </strong></span><span class="math inline">\(G\)</span> matrix.</p>
 </div>
 </div>
 <div class="section level2">
