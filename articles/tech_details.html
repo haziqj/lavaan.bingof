@@ -337,29 +337,29 @@ See the articles for further details.</p>
 \hat{\mathbf e}_2 = {\mathbf p}_2 - {\boldsymbol\pi}_2(\hat{\boldsymbol\theta}) = {\mathbf T}_2 \big({\mathbf p}- {\boldsymbol\pi}(\hat{\boldsymbol\theta}) \big) = {\mathbf T}_2\hat{\mathbf e}.
 \end{equation}\]</span>
 It should be straightforward to see, using the previous results, that as <span class="math inline">\(n\to\infty\)</span> we get
-<span class="math display">\[\begin{equation}\label{eq:residuals2}
-\sqrt n \hat{\mathbf e}_2 = \sqrt N \big({\mathbf p}_2 - {\boldsymbol\pi}_2(\hat{\boldsymbol\theta})\big) \xrightarrow{\text D} \mathop{\mathrm{N}}({\mathbf 0}, {\boldsymbol\Omega}_2),
+<span class="math display" id="eq:asympdiste2">\[\begin{equation}
+\sqrt n \hat{\mathbf e}_2 = \sqrt N \big({\mathbf p}_2 - {\boldsymbol\pi}_2(\hat{\boldsymbol\theta})\big) \xrightarrow{\text D} \mathop{\mathrm{N}}({\mathbf 0}, {\boldsymbol\Omega}_2), \tag{5}
 \end{equation}\]</span>
 where
-<span class="math display">\[\begin{align}
+<span class="math display" id="eq:Omega2">\[\begin{align}
 {\boldsymbol\Omega}_2
 = {\mathbf T}_2{\boldsymbol\Omega}{\mathbf T}_2^\top
 &amp;= {\mathbf T}_2 ({\mathbf I}- {\boldsymbol\Delta}{\mathbf B}){\boldsymbol\Sigma}({\mathbf I}- {\boldsymbol\Delta}{\mathbf B})^\top  {\mathbf T}_2^\top  \\
-&amp;= {\boldsymbol\Sigma}_2 - {\mathbf T}_2{\boldsymbol\Sigma}{\mathbf B}^\top{\boldsymbol\Delta}_2^\top - {\boldsymbol\Delta}_2 {\mathbf B}{\boldsymbol\Sigma}{\mathbf T}_2^\top + {\boldsymbol\Delta}_2 {\mathbf B}{\boldsymbol\Sigma}{\mathbf B}^\top {\boldsymbol\Delta}_2^\top,
+&amp;= {\boldsymbol\Sigma}_2 - {\mathbf T}_2{\boldsymbol\Sigma}{\mathbf B}^\top{\boldsymbol\Delta}_2^\top - {\boldsymbol\Delta}_2 {\mathbf B}{\boldsymbol\Sigma}{\mathbf T}_2^\top + {\boldsymbol\Delta}_2 {\mathbf B}{\boldsymbol\Sigma}{\mathbf B}^\top {\boldsymbol\Delta}_2^\top, \tag{6}
 \end{align}\]</span>
 with <span class="math inline">\({\boldsymbol\Sigma}_2 = {\mathbf T}_2{\boldsymbol\Sigma}{\mathbf T}_2^\top\)</span> and <span class="math inline">\({\boldsymbol\Delta}_2={\mathbf T}_2{\boldsymbol\Delta}\)</span> being the
 the transformed version of the respective matrices.
 For the specific case of maximum likelihood estimation, this simplifies to <span class="math inline">\({\boldsymbol\Omega}_2 = {\boldsymbol\Sigma}_2 - {\boldsymbol\Delta}_2 {\mathcal I}_1^{-1} {\boldsymbol\Delta}_2^\top\)</span>.
 For pairwise likelihood estimation, we show that
 <span class="math display" id="eq:ourOmega2">\[
-{\boldsymbol\Omega}_2 = ({\mathbf I}- {\boldsymbol\Delta}_2{\mathbf B}_2){\boldsymbol\Sigma}_2({\mathbf I}- {\boldsymbol\Delta}_2{\mathbf B}_2)^\top, \tag{5}
+{\boldsymbol\Omega}_2 = ({\mathbf I}- {\boldsymbol\Delta}_2{\mathbf B}_2){\boldsymbol\Sigma}_2({\mathbf I}- {\boldsymbol\Delta}_2{\mathbf B}_2)^\top, \tag{7}
 \]</span>
 where the transformation matrix in full is given by <span class="math inline">\({\mathbf B}_2 = {\mathcal H}^{-1}\tilde{\boldsymbol\Delta}^\top\tilde{\mathbf D}^{-1}{\mathbf G}{\mathbf T}_2\)</span>.
 For posterity, the <span class="math inline">\({\mathbf B}({\boldsymbol\theta})\)</span> matrix in our manuscript is actually <span class="math inline">\({\mathbf B}({\boldsymbol\theta}) = \tilde{\boldsymbol\Delta}^\top\tilde{\mathbf D}^{-1} B\)</span>, where the indicator matrix <span class="math inline">\(B\)</span> is <span class="math inline">\(B = {\mathbf G}{\mathbf T}_2\)</span> in the notation of the present article.</p>
 <p>As a remark, while elegant in theory, forming the matrix <span class="math inline">\({\boldsymbol\Omega}_2\)</span> via the linear transformation <span class="math inline">\({\mathbf T}_2\)</span> is impractical when <span class="math inline">\(p\)</span> is large for two reasons.
 One, it involves multiplying an <span class="math inline">\(S \times R\)</span> matrix with an <span class="math inline">\(R \times R\)</span> matrix, and so this computation is of order <span class="math inline">\(O(SR^2) = O(p(p+1)2^{2p-1})\)</span>.
 Two, storage requirements of the <span class="math inline">\(R\times R\)</span> matrix (e.g. <span class="math inline">\({\boldsymbol\Sigma}\)</span>) may possibly be large and/or involve small numbers, so precision might be a concern.</p>
-<p>The advantage of our equation in <a href="#eq:ourOmega2">(5)</a> is that <span class="math inline">\({\boldsymbol\Omega}_2\)</span> can be formed using the byproduct of the pairwise estimation procedure, i.e. using the matrices <span class="math inline">\({\mathcal H}\)</span> and <span class="math inline">\(\tilde{\boldsymbol\Delta}\)</span>, as well as the (estimated) pairwise probabilities <span class="math inline">\(\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})\)</span>.
+<p>The advantage of our equation in <a href="#eq:ourOmega2">(7)</a> is that <span class="math inline">\({\boldsymbol\Omega}_2\)</span> can be formed using the byproduct of the pairwise estimation procedure, i.e. using the matrices <span class="math inline">\({\mathcal H}\)</span> and <span class="math inline">\(\tilde{\boldsymbol\Delta}\)</span>, as well as the (estimated) pairwise probabilities <span class="math inline">\(\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})\)</span>.
 What remains is the proper estimation of <span class="math inline">\({\boldsymbol\Sigma}_2\)</span>, and this depends on the sampling design performed.
 The <a href="complex_sampling1.html">complex sampling procedure</a> article touches upon this briefly, with further details available in the manuscript.</p>
 </div>
@@ -368,7 +368,7 @@ The <a href="complex_sampling1.html">complex sampling procedure</a> article touc
 </h3>
 <p>In general, all (limited information) goodness-of-fit test statistics take the form
 <span class="math display" id="eq:quadform">\[
-X^2 = n \hat{\mathbf e}_2^\top \hat{\boldsymbol\Xi}\hat{\mathbf e}_2, \tag{6}
+X^2 = n \hat{\mathbf e}_2^\top \hat{\boldsymbol\Xi}\hat{\mathbf e}_2, \tag{8}
 \]</span>
 where <span class="math inline">\(\hat{\boldsymbol\Xi}\xrightarrow{\text P} {\boldsymbol\Xi}\)</span> is some <span class="math inline">\(S\times S\)</span> weight matrix.
 We summarise the various weight matrices that we use in this R package:</p>
@@ -471,11 +471,11 @@ While in theory each test may be subjected to either a Rao-Scott type adjustment
 <div class="section level2">
 <h2 id="test-statistics">Test statistics<a class="anchor" aria-label="anchor" href="#test-statistics"></a>
 </h2>
-<p>In this section, we elaborate on the specific test statistics used.</p>
+<p>In this section, we elaborate further on the specific test statistics used.</p>
 <div class="section level3">
 <h3 id="wald-test">Wald test<a class="anchor" aria-label="anchor" href="#wald-test"></a>
 </h3>
-<p>One strategy is to choose <span class="math inline">\({\boldsymbol\Xi}\)</span> so that the resulting quadratic form <span class="math inline">\(X^2\)</span> in <a href="#eq:quadform">(6)</a> is asymptotically chi-square.
+<p>One strategy is to choose <span class="math inline">\({\boldsymbol\Xi}\)</span> so that the resulting quadratic form <span class="math inline">\(X^2\)</span> in <a href="#eq:quadform">(8)</a> is asymptotically chi-square.
 This strategy is followed by <span class="citation">Reiser (<a href="#ref-reiser1996analysis" role="doc-biblioref">1996</a>)</span>, <span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2005limited" role="doc-biblioref">2005</a>)</span>, and <span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2006limited" role="doc-biblioref">2006</a>)</span>.
 Choosing</p>
 <ul>
@@ -497,45 +497,126 @@ Finally, the degrees of freedom will be (at most) <span class="math inline">\(S-
 We refer to this as the <em>Diagonal Wald test</em>.
 The motivation here is stability and ease of computation because it is straightforward to inverse a diagonal matrix rather than a full matrix which grows rapidly with the number of items <span class="math inline">\(p\)</span>.
 However, it does not follow the same chi-square distribution as the original Wald test, and its distribution needs to be determined <span class="citation">(<a href="#ref-bartholomew2002goodness" role="doc-biblioref">Bartholomew and Leung 2002</a>)</span>.
-We use the moment-matching procedure for this.</p>
+We use the moment-matching procedure for this, which we briefly explain below.</p>
+<p>Suppose that <span class="math inline">\(Y\sim \chi^2_c\)</span>.
+Then we assume that the test statistic <span class="math inline">\(X^2 = n\hat{\mathbf e}_2 \hat{\boldsymbol\Xi}\hat{\mathbf e}_2\)</span> can be approximated by a linear transformation of this chi square random variate, i.e.
+<span class="math display">\[
+X^2 \approx a + bY
+\]</span>
+Let <span class="math inline">\(\mu_k(X)=\mathop{\mathrm{E}}[(X - \mathop{\mathrm{E}}X)^k]\)</span> represent the <span class="math inline">\(k\)</span>th central moment for a random variable <span class="math inline">\(X\)</span>.
+The first three asymptotic central moments of <span class="math inline">\(X^2\)</span> are <span class="citation">(<a href="#ref-mathai1992quadratic" role="doc-biblioref">Mathai and Provost 1992</a> Theorem 3.2b.2, p.53)</span>
+<span class="math display" id="eq:moment1">\[\begin{equation}
+\mu_1(X^2) = \operatorname{tr}(\hat{\boldsymbol\Xi}{\boldsymbol\Omega}_2), \hspace{1em}
+\mu_2(X^2) = 2\operatorname{tr}\big((\hat{\boldsymbol\Xi}{\boldsymbol\Omega}_2)^2\big), \hspace{1em}
+\mu_3(X^2) = 8\operatorname{tr}\big((\hat{\boldsymbol\Xi}{\boldsymbol\Omega}_2)^3\big), \tag{9}
+\end{equation}\]</span>
+while the first three central moments of the approximating random variables are
+<span class="math display" id="eq:moment2">\[\begin{equation}
+\mu_1 = a + bc, \hspace{2em}
+\mu_2 = 2b^2c, \hspace{2em}
+\mu_3 = 8b^3c. \tag{10}
+\end{equation}\]</span>
+Useful to note here are the relationships <span class="math inline">\(\mu_1=\mathop{\mathrm{E}}(Y)\)</span>, <span class="math inline">\(\mu_2=\mathop{\mathrm{Var}}(Y)\)</span>, and <span class="math inline">\(\mu_3=\mathop{\mathrm{E}}(Y^3)-3\mu\mathop{\mathrm{Var}}(Y)-\mu^3\)</span> for any random variable <span class="math inline">\(Y\)</span>, while
+the raw moments of a chi-square random variable with <span class="math inline">\(c\)</span> degrees of freedom are given by the formula <span class="math inline">\(\mathop{\mathrm{E}}(Y^k)=c(c+2)(c+4)\cdots(c+2k-2)\)</span>.
+Equating the two sets of moments in <a href="#eq:moment1">(9)</a> and <a href="#eq:moment2">(10)</a> yields the <strong>three-moment adjustment</strong> parameters
+<span class="math display">\[\begin{equation}
+b = \frac{\mu_3(X^2)}{4\mu_2(X^2)}, \hspace{2em}
+c = \frac{\mu_2(X^2)}{2b^2}, \hspace{2em}
+a = \mu_1(X^2) - bc.
+\end{equation}\]</span>
+Tail area probabilities for <span class="math inline">\(p\)</span>-value calculations can be computed as follows:
+<span class="math display">\[\begin{equation}
+\Pr(X^2 &gt; x) \approx \Pr\left(Y &gt; \frac{x-a}{b} \ \Big| \ Y \sim \chi^2_c\right).
+\end{equation}\]</span></p>
+<p>We can also use two-moments and one-moment matching techniques similarly.
+For the <strong>two-moment adjustment</strong>, assume that <span class="math inline">\(X^2 \approx bY\)</span> where <span class="math inline">\(Y\sim\chi^2_c\)</span>.
+Then matching the first two asymptotic moments of <span class="math inline">\(X^2\)</span> with the approximating random variable gives
+<span class="math display">\[\begin{equation}
+b = \frac{\mu_2(X^2)}{2\mu_1(X^2)}
+\hspace{1em}\text{and}\hspace{1em}
+c = \frac{\mu_1(X^2)}{b}.
+\end{equation}\]</span>
+As for the <strong>one-moment adjustment</strong>, <span class="math inline">\(X^2\)</span> is again approximated by <span class="math inline">\(Y\sim\chi^2_c\)</span>, but <span class="math inline">\(c\)</span> is fixed to be the number of degrees of freedom available for testing (taken to be <span class="math inline">\(c=S-m\)</span>).
+Solving for <span class="math inline">\(b\)</span> yields
+<span class="math display">\[\begin{equation}
+b = \frac{\mu_1(X^2)}{c}.
+\end{equation}\]</span>
+In both cases, tail probabilities are calculated as
+<span class="math display">\[\begin{equation}
+\Pr(X^2 &gt; x) \approx \Pr\left(Y &gt; \frac{x}{b} \ \Big| \ Y \sim \chi^2_c\right).
+\end{equation}\]</span>
+<span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2008overview" role="doc-biblioref">2008</a>)</span> advises that one-moment matching results in inaccurate <span class="math inline">\(p\)</span>-values.</p>
 </div>
 <div class="section level3">
 <h3 id="variance-covariance-free-wald-test">Variance-covariance free Wald test<a class="anchor" aria-label="anchor" href="#variance-covariance-free-wald-test"></a>
 </h3>
 <p>The drawbacks of using <span class="math inline">\(\hat{\boldsymbol\Omega}_2^+\)</span> as a weight matrix in the quadratic form is that 1) <span class="math inline">\({\boldsymbol\Omega}_2\)</span> needs to be estimated; and 2) the degrees of freedom <span class="math inline">\(k\)</span> cannot be determined a priori and can be tricky (if done by looking at small eigenvalues, it can be tricky to judge wchih are actually zero).</p>
 <p>To overcome this, <span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2005limited" role="doc-biblioref">2005</a>)</span> and <span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2006limited" role="doc-biblioref">2006</a>)</span> suggested using a weight matrix <span class="math inline">\({\boldsymbol\Xi}\)</span> such that <span class="math inline">\({\boldsymbol\Omega}_2\)</span> is a g-inverse of <span class="math inline">\({\boldsymbol\Xi}\)</span>, i.e. <span class="math inline">\({\boldsymbol\Xi}= {\boldsymbol\Xi}{\boldsymbol\Omega}_2{\boldsymbol\Xi}\)</span>.
-Specifically, they proposed using
-<span class="math display">\[\begin{align}
-{\boldsymbol\Xi}
-&amp;= {\boldsymbol\Sigma}_2^{-1} - {\boldsymbol\Sigma}_2^{-1}{\boldsymbol\Delta}_2({\boldsymbol\Delta}_2^\top {\boldsymbol\Sigma}_2^{-1}{\boldsymbol\Delta}_2)^{-1}{\boldsymbol\Delta}_2^\top{\boldsymbol\Sigma}_2^{-1} \nonumber \\
-&amp;= {\boldsymbol\Delta}_2^\perp \big( ({\boldsymbol\Delta}_2^\perp)^\top {\boldsymbol\Sigma}_2 {\boldsymbol\Delta}_2^\perp \big)^{-1} ({\boldsymbol\Delta}_2^\perp)^\top
-\end{align}\]</span>
-evaluated at <span class="math inline">\(\hat{\boldsymbol\theta}\)</span>.
-Here <span class="math inline">\({\boldsymbol\Delta}_2^\perp\)</span> is the <span class="math inline">\(S \times (S-m)\)</span> orthogonal complement of <span class="math inline">\({\boldsymbol\Delta}_2\)</span>, i.e. it satisfies <span class="math inline">\(({\boldsymbol\Delta}_2^\perp)^\top{\boldsymbol\Delta}_2 = {\mathbf 0}\)</span>.</p>
+<!-- Specifically, they proposed using -->
+<!-- \begin{align} -->
+<!-- \bXi  -->
+<!-- &= \bSigma_2^{-1} - \bSigma_2^{-1}\bDelta_2(\bDelta_2^\top \bSigma_2^{-1}\bDelta_2)^{-1}\bDelta_2^\top\bSigma_2^{-1} \nonumber \\ -->
+<!-- &= \bDelta_2^\perp \big( (\bDelta_2^\perp)^\top \bSigma_2 \bDelta_2^\perp \big)^{-1} (\bDelta_2^\perp)^\top -->
+<!-- \end{align} -->
+<!-- evaluated at $\hat\btheta$. -->
+<!-- Here $\bDelta_2^\perp$ is the $S \times (S-m)$ orthogonal complement of $\bDelta_2$, i.e. it satisfies $(\bDelta_2^\perp)^\top\bDelta_2 = \bzero$. -->
+Let <span class="math inline">\({\boldsymbol\Delta}_2^\perp\)</span> be an <span class="math inline">\(S \times (S-m)\)</span> orthogonal complement to <span class="math inline">\({\boldsymbol\Delta}_2\)</span>, i.e. it satisfies <span class="math inline">\(({\boldsymbol\Delta}_2^\perp)^\top{\boldsymbol\Delta}_2 = {\mathbf 0}\)</span>.
+Then from <a href="#eq:asympdiste2">(5)</a>, we see that
+<span class="math display" id="eq:e2OC">\[
+\sqrt n ({\boldsymbol\Delta}_2^\perp)^\top \hat {\mathbf e}_2 \xrightarrow{\text D} \mathop{\mathrm{N}}({\mathbf 0}, ({\boldsymbol\Delta}_2^\perp)^\top {\boldsymbol\Omega}_2 {\boldsymbol\Delta}_2^\perp). \tag{11}
+\]</span>
+Because of <a href="#eq:Omega2">(6)</a>, the asymptotic covariance matrix may be written
+<span class="math display">\[
+({\boldsymbol\Delta}_2^\perp)^\top {\boldsymbol\Omega}_2 {\boldsymbol\Delta}_2^\perp = ({\boldsymbol\Delta}_2^\perp)^\top {\boldsymbol\Sigma}_2 {\boldsymbol\Delta}_2^\perp,
+\]</span>
+since all the multiplications of <span class="math inline">\({\boldsymbol\Delta}_2\)</span> with its orthogonal complement cancels out.
+By letting
+<span class="math display">\[
+{\boldsymbol\Xi}= {\boldsymbol\Delta}_2^\perp \big( ({\boldsymbol\Delta}_2^\perp)^\top {\boldsymbol\Sigma}_2 {\boldsymbol\Delta}_2^\perp \big)^{-1} ({\boldsymbol\Delta}_2^\perp)^\top,
+\]</span>
+we can then verify <span class="math inline">\({\boldsymbol\Xi}= {\boldsymbol\Xi}{\boldsymbol\Omega}_2{\boldsymbol\Xi}\)</span>; that is, <span class="math inline">\({\boldsymbol\Omega}_2\)</span> is a generalised inverse of <span class="math inline">\({\boldsymbol\Xi}\)</span>.
+Let <span class="math inline">\(\hat{\boldsymbol\Xi}\)</span> be an appropriate estimate of <span class="math inline">\({\boldsymbol\Xi}\)</span>, e.g. by replacing the matrices above with their corresponding hat versions.
+The implication here is that
+<span class="math display">\[
+X^2
+= n \hat{\mathbf e}_2^\top \hat{\boldsymbol\Xi}\hat{\mathbf e}_2
+= n \hat{\mathbf e}_2^\top  \hat{\boldsymbol\Delta}_2^\perp \big( (\hat{\boldsymbol\Delta}_2^\perp)^\top \hat{\boldsymbol\Sigma}_2 \hat{\boldsymbol\Delta}_2^\perp \big)^{-1} (\hat{\boldsymbol\Delta}_2^\perp)^\top \hat{\mathbf e}_2
+\]</span>
+converges in distribution to a <span class="math inline">\(\chi^2_{S-m}\)</span> variate as <span class="math inline">\(n\to\infty\)</span> due to <a href="#eq:e2OC">(11)</a> and Slutsky’s theorem.
+The degrees of freedom is as such because <span class="math inline">\({\boldsymbol\Delta}_2^\perp\)</span> is of full column rank <span class="math inline">\(S-m\)</span> and hence <span class="math inline">\({\boldsymbol\Xi}\)</span> is also of rank <span class="math inline">\(S-m\)</span>.
+The dimensions of a vector space and its orthogonal complement always add up to the dimension of the whole space. Since <span class="math inline">\({\boldsymbol\Delta}_2 \in \mathbb{R}^{S\times m}\)</span> has dimension (column rank) <span class="math inline">\(m\)</span>, the column space has an orthogonal complement in <span class="math inline">\(\mathbb{R}^S\)</span>, and thus the dimension of this orthogonal complement is <span class="math inline">\(S-m\)</span>.</p>
 </div>
 <div class="section level3">
 <h3 id="pearson-test">Pearson test<a class="anchor" aria-label="anchor" href="#pearson-test"></a>
 </h3>
-</div>
-<div class="section level3">
-<h3 id="residual-sum-of-squares-test">Residual sum of squares test<a class="anchor" aria-label="anchor" href="#residual-sum-of-squares-test"></a>
-</h3>
-</div>
-<div class="section level3">
-<h3 id="multinomial-test">Multinomial test<a class="anchor" aria-label="anchor" href="#multinomial-test"></a>
-</h3>
-</div>
-</div>
-<div class="section level2">
-<h2 id="estimation-of-chi2-distribution">Estimation of <span class="math inline">\(\chi^2\)</span> distribution<a class="anchor" aria-label="anchor" href="#estimation-of-chi2-distribution"></a>
-</h2>
-<div class="section level3">
-<h3 id="rao-scott-adjustment">Rao-Scott adjustment<a class="anchor" aria-label="anchor" href="#rao-scott-adjustment"></a>
-</h3>
-</div>
-<div class="section level3">
-<h3 id="moment-matching">Moment matching<a class="anchor" aria-label="anchor" href="#moment-matching"></a>
-</h3>
+<p>To construct a Pearson test statistic, let <span class="math inline">\(\hat{\boldsymbol\Xi}^{-1} = \hat{\mathbf D}_2 := \mathop{\mathrm{diag}}\big( {\boldsymbol\pi}_2(\hat{\boldsymbol\theta}) \big) \xrightarrow{\text P} {\mathbf D}_2:=\mathop{\mathrm{diag}}\big( {\boldsymbol\pi}_2({\boldsymbol\theta}) \big).\)</span>
+Then we can see that
+<span class="math display">\[\begin{equation}\label{eq:Pearsontest}
+X^2 = n\hat{\mathbf e}_2^\top\hat{\mathbf D}_2^{-1}\hat{\mathbf e}_2 = n \sum_{r=1}^R \frac{(\dot p_r - \dot\pi_r(\hat{\boldsymbol\theta}))^2}{\dot\pi_r(\hat{\boldsymbol\theta})} +
+n \sum_{r&lt;s} \frac{(\dot p_{rs} - \dot\pi_{rs}(\hat{\boldsymbol\theta}))^2}{\dot\pi_{rs}(\hat{\boldsymbol\theta})},
+\end{equation}\]</span>
+which resembles the traditional Pearson chi-square test statistic.
+Note that
+<span class="math display">\[\begin{equation}
+\sqrt n \hat{\mathbf D}_2^{-1/2}\hat{\mathbf e}_2 \xrightarrow{\text D} \mathop{\mathrm{N}}({\mathbf 0}, {\mathbf D}_2^{-1/2}{\boldsymbol\Omega}_2 {\mathbf D}_2^{-1/2})
+\end{equation}\]</span>
+as <span class="math inline">\(N\to\infty\)</span>, and therefore <span class="math inline">\(X^2\)</span> has the limiting distribution of <span class="math inline">\(\sum_{s=1}^S \delta_s X_s\)</span>, where <span class="math inline">\(\delta_s\)</span> are eigenvalues of <span class="math inline">\(n^{-1} {\mathbf D}_2^{-1/2}{\boldsymbol\Omega}_2 {\mathbf D}_2^{-1/2}\)</span> and <span class="math inline">\(X_s\,\overset{\text{iid}}{\sim}\,\chi^2_1\)</span> <span class="citation">(<a href="#ref-mathai1992quadratic" role="doc-biblioref">Mathai and Provost 1992</a>, Representation 3.1a.1, p.29)</span>.
+These eigenvalues can be estimated by the eigenvalues of <span class="math inline">\(n^{-1} \hat{\mathbf D}_2^{-1/2}\hat{\boldsymbol\Omega}_2 \hat {\mathbf D}_2^{-1/2}\)</span>.
+In principle, this method can be applied more generally by considering a Choleski decomposition <span class="math inline">\({\boldsymbol\Xi}= {\mathbf L}{\mathbf L}^\top\)</span> instead of matrix square roots.
+Of course, this only works if the matrix <span class="math inline">\({\boldsymbol\Xi}\)</span> is of full rank, which rules out the Wald test statistic above.</p>
+<p>Let <span class="math inline">\(\bar\delta\)</span> represent the arithmetic mean of the eigenvalues <span class="math inline">\(\delta_s\)</span>.
+The asymptotic mean and variance of <span class="math inline">\(X^2\)</span> are
+<span class="math display">\[\begin{align}
+\mathop{\mathrm{E}}X^2 &amp;= \mathop{\mathrm{E}}\sum_{s=1}^S \delta_s X_s = \sum_{s=1}^S \delta_s = S\bar\delta = \operatorname{tr}(n^{-1} {\mathbf D}_2^{-1/2}{\boldsymbol\Omega}_2 {\mathbf D}_2^{-1/2}) \\
+\mathop{\mathrm{Var}}X^2 &amp;= \mathop{\mathrm{Var}}\sum_{s=1}^S \delta_s X_s = 2\sum_{s=1}^S\delta_s^2 = 2\sum_{s=1}^S (\delta_s - \bar\delta)^2 + 2S\bar\delta^2,
+\end{align}\]</span>
+So it seems that the power of the test is affected by the size and dispersion of the eigenvalues <span class="citation">(<a href="#ref-heo2014empirical" role="doc-biblioref">Heo 2014</a>)</span>.
+<span class="citation">Rao and Scott (<a href="#ref-rao1979chi" role="doc-biblioref">1979</a>)</span>;<span class="citation">Rao and Scott (<a href="#ref-rao1981analysis" role="doc-biblioref">1981</a>)</span>;<span class="citation">Rao and Scott (<a href="#ref-rao1984chi" role="doc-biblioref">1984</a>)</span> suggested adjustments to the Pearson test as follows.</p>
+<ol style="list-style-type: decimal">
+<li><p>First-order Rao-Scott type test is obtained by dividing <span class="math inline">\(X^2\)</span> by <span class="math inline">\(\bar \delta\)</span>. This statistic is distributed as <span class="math inline">\(\chi^2_S\)</span>.</p></li>
+<li><p>Second-order Rao-Scott type test is obtained by dividing <span class="math inline">\(X^2/\bar\delta\)</span> by <span class="math inline">\(1+\hat a^2\)</span>, where <span class="math inline">\(\hat a=\sqrt{S^{-1}\sum_{s=1}^S (\delta_s - \bar\delta)}\big/\bar\delta\)</span> is the coefficient of variation of the eigenvalues. Hence, <span class="math inline">\(1+\hat a^2= (S\bar\delta ^2)^{-1}\sum_{s=1}^s \delta_s^2\)</span>. This statistic is distributed as <span class="math inline">\(\chi^2_k\)</span> where <span class="math inline">\(k=S(1+\hat a^2)^{-1}\)</span>.</p></li>
+</ol>
+<!-- ### Residual sum of squares test --><!-- ### Multinomial test -->
 </div>
 </div>
 <div class="section level2 unnumbered">
@@ -551,8 +632,14 @@ Bartholomew, David J, and Shing On Leung. 2002. <span>“A Goodness of Fit Test 
 <div id="ref-fuller2009introduction" class="csl-entry">
 Fuller, Wayne A. 2009. <em>Introduction to Statistical Time Series</em>. John Wiley &amp; Sons.
 </div>
+<div id="ref-heo2014empirical" class="csl-entry">
+Heo, Sunyeong. 2014. <span>“Empirical Analysis on Rao-Scott First Order Adjustment for Two Population Homogeneity Test Based on Stratified Three-Stage Cluster Sampling with Pps.”</span> <em>Journal of the Chosun Natural Science</em> 7 (3): 208–13.
+</div>
 <div id="ref-katsikatsou2012pairwise" class="csl-entry">
 Katsikatsou, Myrsini, Irini Moustaki, Fan Yang-Wallentin, and Karl G Jöreskog. 2012. <span>“Pairwise Likelihood Estimation for Factor Analysis Models with Ordinal Data.”</span> <em>Computational Statistics &amp; Data Analysis</em> 56 (12): 4243–58.
+</div>
+<div id="ref-mathai1992quadratic" class="csl-entry">
+Mathai, Arakaparampil M, and Serge B Provost. 1992. <em>Quadratic Forms in Random Variables: Theory and Applications</em>. Dekker.
 </div>
 <div id="ref-maydeu2005limited" class="csl-entry">
 Maydeu-Olivares, Alberto, and Harry Joe. 2005. <span>“Limited-and Full-Information Estimation and Goodness-of-Fit Testing in 2 n Contingency Tables: A Unified Framework.”</span> <em>Journal of the American Statistical Association</em> 100 (471): 1009–20.
