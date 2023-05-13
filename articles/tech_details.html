@@ -283,7 +283,7 @@ where</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="goodness-of-fit-test-statistics">Goodness-of-fit test statistics<a class="anchor" aria-label="anchor" href="#goodness-of-fit-test-statistics"></a>
+<h2 id="goodness-of-fit">Goodness-of-fit<a class="anchor" aria-label="anchor" href="#goodness-of-fit"></a>
 </h2>
 <p>Collect all the sample proportions <span class="math inline">\(p_r = \hat n_r/n\)</span>, <span class="math inline">\(r=1,\dots,R\)</span> to form an <span class="math inline">\(R\)</span>-vector of proportions <span class="math inline">\({\mathbf p}\)</span>.
 For independent samples, it is widely known <span class="citation">(<a href="#ref-agresti2012categorical" role="doc-biblioref">Agresti 2012</a>)</span> that
@@ -295,7 +295,7 @@ where <span class="math inline">\({\boldsymbol\Sigma}= {\mathbf D}- {\boldsymbol
 Considering a parametric model, the proportion vector in <a href="#eq:propclt">(4)</a> reads <span class="math inline">\({\boldsymbol\pi}= {\boldsymbol\pi}({\boldsymbol\theta})\)</span>.
 An analogous result for the complex sampling design case exists as well <span class="citation">(<a href="#ref-fuller2009introduction" role="doc-biblioref">Fuller 2009</a>)</span>; however the covariance matrix <span class="math inline">\({\boldsymbol\Sigma}\)</span> need not take a multinomial form, and the true proportions <span class="math inline">\({\boldsymbol\pi}\)</span> may either be a finite population or a superpopulation quantity.</p>
 <p>Suppose we denote by <span class="math inline">\({\boldsymbol\pi}(\hat{\boldsymbol\theta})\)</span> the <em>estimated</em> proportions under a parametric model.
-For estimators <span class="math inline">\(\hat{\boldsymbol\theta}\)</span> satisfying <a href="#eq:ban">(3)</a>, <span class="citation">Albert Maydeu-Olivares and Joe (<a href="#ref-maydeu2005limited" role="doc-biblioref">2005</a>)</span> show that the distribution of the residuals <span class="math inline">\(\hat{\mathbf e}= {\mathbf p}- {\boldsymbol\pi}(\hat{\boldsymbol\theta})\)</span> is asymptotically normal:
+For estimators <span class="math inline">\(\hat{\boldsymbol\theta}\)</span> satisfying <a href="#eq:ban">(3)</a>, <span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2005limited" role="doc-biblioref">2005</a>)</span> show that the distribution of the residuals <span class="math inline">\(\hat{\mathbf e}= {\mathbf p}- {\boldsymbol\pi}(\hat{\boldsymbol\theta})\)</span> is asymptotically normal:
 <span class="math display">\[\begin{equation}
 \sqrt n \hat{\mathbf e}= \sqrt n \big( {\mathbf p}- {\boldsymbol\pi}(\hat{\boldsymbol\theta}) \big) \xrightarrow{\text D} {\mathop{\mathrm{N}}}_R ({\mathbf 0}, {\boldsymbol\Omega})
 \end{equation}\]</span>
@@ -306,8 +306,8 @@ where
 &amp;= {\boldsymbol\Sigma}- {\boldsymbol\Sigma}{\mathbf B}^\top{\boldsymbol\Delta}^\top - {\boldsymbol\Delta}{\mathbf B}{\boldsymbol\Sigma}+ {\boldsymbol\Delta}{\mathbf B}{\boldsymbol\Sigma}{\mathbf B}^\top {\boldsymbol\Delta}^\top,
 \end{align}\]</span>
 with <span class="math inline">\({\mathbf B}\)</span> being the transformation matrix and <span class="math inline">\({\boldsymbol\Delta}\)</span> the matrix of partial derivatives of <span class="math inline">\({\boldsymbol\pi}({\boldsymbol\theta})\)</span> (both described previously).
-<span class="citation">Albert Maydeu-Olivares and Joe (<a href="#ref-maydeu2005limited" role="doc-biblioref">2005</a>)</span> remarks that for maximum likelihood estimators, the residual covariance matrix simplifies to <span class="math inline">\({\boldsymbol\Omega}= {\boldsymbol\Sigma}- {\boldsymbol\Delta}{\mathcal I}^{-1}_1{\boldsymbol\Delta}^\top\)</span>.
-We do not think such a simplification exists for the pairwise likelihood case (see article xxx for further details).</p>
+<span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2005limited" role="doc-biblioref">2005</a>)</span> remarks that for maximum likelihood estimators, the residual covariance matrix simplifies to <span class="math inline">\({\boldsymbol\Omega}= {\boldsymbol\Sigma}- {\boldsymbol\Delta}{\mathcal I}^{-1}_1{\boldsymbol\Delta}^\top\)</span>.
+We do not think such a simplification exists for the pairwise likelihood case <strong>[Hold that thought. Maybe it’s possible. Still investigating.]</strong>.</p>
 <div class="section level3">
 <h3 id="lower-order-residuals">Lower-order residuals<a class="anchor" aria-label="anchor" href="#lower-order-residuals"></a>
 </h3>
@@ -367,8 +367,8 @@ The <a href="complex_sampling1.html">complex sampling procedure</a> article touc
 <h3 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h3>
 <p>In general, all (limited information) goodness-of-fit test statistics take the form
-<span class="math display">\[
-X^2 = n \hat{\mathbf e}_2^\top \hat{\boldsymbol\Xi}{\mathbf e}_2,
+<span class="math display" id="eq:quadform">\[
+X^2 = n \hat{\mathbf e}_2^\top \hat{\boldsymbol\Xi}\hat{\mathbf e}_2, \tag{6}
 \]</span>
 where <span class="math inline">\(\hat{\boldsymbol\Xi}\xrightarrow{\text P} {\boldsymbol\Xi}\)</span> is some <span class="math inline">\(S\times S\)</span> weight matrix.
 We summarise the various weight matrices that we use in this R package:</p>
@@ -457,13 +457,85 @@ For this purpose, we use the sample versions of the relevant quantities, mostly 
 <li>
 <span class="math inline">\({\mathbf H}= - \nabla^2\operatorname{\ell_P}({\boldsymbol\theta}) \Big|_{{\boldsymbol\theta}=\hat{\boldsymbol\theta}_{\text{PL}}}\)</span> as estimating <span class="math inline">\({\mathcal H}\)</span>;</li>
 <li>
-<span class="math inline">\(\hat{\tilde{\boldsymbol\Delta}_{sk}} = \frac{\partial\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})}{\partial\theta_k} \Big|_{{\boldsymbol\theta}=\hat{\boldsymbol\theta}_{\text{PL}}}\)</span>; and</li>
+<span class="math inline">\(\hat{\tilde{\boldsymbol\Delta}_{sk}} = \frac{\partial\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})}{\partial\theta_k} \Big|_{{\boldsymbol\theta}=\hat{\boldsymbol\theta}_{\text{PL}}}\)</span>;</li>
+<li>
+<span class="math inline">\(\hat{\tilde{\mathbf D}} = \mathop{\mathrm{diag}}(\hat\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta}))\)</span>; and</li>
 <li>an appropriate estimator of <span class="math inline">\({\boldsymbol\Sigma}_2\)</span>.</li>
 </ul>
 <p>In general, all of these test statistics are chi square variates.
 However, for some of these tests, the degrees of freedom are not known a priori and have to be estimated.
 There are two methods that we consider: 1) A Rao-Scott type adjustment <span class="citation">(<a href="#ref-rao1979chi" role="doc-biblioref">Rao and Scott 1979</a>; <a href="#ref-rao1981analysis" role="doc-biblioref">Rao and Scott 1981</a>; <a href="#ref-rao1984chi" role="doc-biblioref">Rao and Scott 1984</a>)</span>; and 2) a moment matching procedure <span class="citation">(<a href="#ref-bartholomew2002goodness" role="doc-biblioref">Bartholomew and Leung 2002</a>)</span>.
 While in theory each test may be subjected to either a Rao-Scott type adjustment or a moment matching procedure, we only consider the Rao-Scott adjustment for the Pearson test.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="test-statistics">Test statistics<a class="anchor" aria-label="anchor" href="#test-statistics"></a>
+</h2>
+<p>In this section, we elaborate on the specific test statistics used.</p>
+<div class="section level3">
+<h3 id="wald-test">Wald test<a class="anchor" aria-label="anchor" href="#wald-test"></a>
+</h3>
+<p>One strategy is to choose <span class="math inline">\({\boldsymbol\Xi}\)</span> so that the resulting quadratic form <span class="math inline">\(X^2\)</span> in <a href="#eq:quadform">(6)</a> is asymptotically chi-square.
+This strategy is followed by <span class="citation">Reiser (<a href="#ref-reiser1996analysis" role="doc-biblioref">1996</a>)</span>, <span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2005limited" role="doc-biblioref">2005</a>)</span>, and <span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2006limited" role="doc-biblioref">2006</a>)</span>.
+Choosing</p>
+<ul>
+<li>
+<span class="math inline">\(\hat{\boldsymbol\Xi}= \hat\Omega_2^-\)</span> (the generalised inverse); or</li>
+<li>
+<span class="math inline">\(\hat{\boldsymbol\Xi}= \hat\Omega_2^+\)</span> (the Moore-Penrose inverse)</li>
+</ul>
+<p>ensures that <span class="math inline">\(X^2 \xrightarrow{\text D} \chi^2_k\)</span> where <span class="math inline">\(k\)</span> equals the rank of <span class="math inline">\({\boldsymbol\Omega}_2\)</span>.
+The pseudoinverse needs to be employed because <span class="math inline">\({\boldsymbol\Omega}_2\)</span> may be of deficient rank.
+When <span class="math inline">\({\boldsymbol\Omega}_2\)</span> is full rank (rank = <span class="math inline">\(S\)</span>), then <span class="math inline">\({\boldsymbol\Xi}\)</span> is equal to the usual matrix inverse.
+For our implementation, and similar to <span class="citation">Reiser (<a href="#ref-reiser1996analysis" role="doc-biblioref">1996</a>)</span>, we will be using the Moore-Penrose inverse.
+Finally, the degrees of freedom will be (at most) <span class="math inline">\(S-m\)</span>, i.e. <span class="math inline">\(S\)</span> minus the number of free model parameters that need to be estimated.</p>
+</div>
+<div class="section level3">
+<h3 id="diagonal-wald-test">Diagonal Wald test<a class="anchor" aria-label="anchor" href="#diagonal-wald-test"></a>
+</h3>
+<p>An alternative Wald test is studied where <span class="math inline">\(\hat{\boldsymbol\Xi}= \mathop{\mathrm{diag}}(\hat{\boldsymbol\Omega}_2)^{-1}\)</span> is used instead of the pseudoinverse of <span class="math inline">\({\boldsymbol\Omega}_2\)</span>.
+We refer to this as the <em>Diagonal Wald test</em>.
+The motivation here is stability and ease of computation because it is straightforward to inverse a diagonal matrix rather than a full matrix which grows rapidly with the number of items <span class="math inline">\(p\)</span>.
+However, it does not follow the same chi-square distribution as the original Wald test, and its distribution needs to be determined <span class="citation">(<a href="#ref-bartholomew2002goodness" role="doc-biblioref">Bartholomew and Leung 2002</a>)</span>.
+We use the moment-matching procedure for this.</p>
+</div>
+<div class="section level3">
+<h3 id="variance-covariance-free-wald-test">Variance-covariance free Wald test<a class="anchor" aria-label="anchor" href="#variance-covariance-free-wald-test"></a>
+</h3>
+<p>The drawbacks of using <span class="math inline">\(\hat{\boldsymbol\Omega}_2^+\)</span> as a weight matrix in the quadratic form is that 1) <span class="math inline">\({\boldsymbol\Omega}_2\)</span> needs to be estimated; and 2) the degrees of freedom <span class="math inline">\(k\)</span> cannot be determined a priori and can be tricky (if done by looking at small eigenvalues, it can be tricky to judge wchih are actually zero).</p>
+<p>To overcome this, <span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2005limited" role="doc-biblioref">2005</a>)</span> and <span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2006limited" role="doc-biblioref">2006</a>)</span> suggested using a weight matrix <span class="math inline">\({\boldsymbol\Xi}\)</span> such that <span class="math inline">\({\boldsymbol\Omega}_2\)</span> is a g-inverse of <span class="math inline">\({\boldsymbol\Xi}\)</span>, i.e. <span class="math inline">\({\boldsymbol\Xi}= {\boldsymbol\Xi}{\boldsymbol\Omega}_2{\boldsymbol\Xi}\)</span>.
+Specifically, they proposed using
+<span class="math display">\[\begin{align}
+{\boldsymbol\Xi}
+&amp;= {\boldsymbol\Sigma}_2^{-1} - {\boldsymbol\Sigma}_2^{-1}{\boldsymbol\Delta}_2({\boldsymbol\Delta}_2^\top {\boldsymbol\Sigma}_2^{-1}{\boldsymbol\Delta}_2)^{-1}{\boldsymbol\Delta}_2^\top{\boldsymbol\Sigma}_2^{-1} \nonumber \\
+&amp;= {\boldsymbol\Delta}_2^\perp \big( ({\boldsymbol\Delta}_2^\perp)^\top {\boldsymbol\Sigma}_2 {\boldsymbol\Delta}_2^\perp \big)^{-1} ({\boldsymbol\Delta}_2^\perp)^\top
+\end{align}\]</span>
+evaluated at <span class="math inline">\(\hat{\boldsymbol\theta}\)</span>.
+Here <span class="math inline">\({\boldsymbol\Delta}_2^\perp\)</span> is the <span class="math inline">\(S \times (S-m)\)</span> orthogonal complement of <span class="math inline">\({\boldsymbol\Delta}_2\)</span>, i.e. it satisfies <span class="math inline">\(({\boldsymbol\Delta}_2^\perp)^\top{\boldsymbol\Delta}_2 = {\mathbf 0}\)</span>.</p>
+</div>
+<div class="section level3">
+<h3 id="pearson-test">Pearson test<a class="anchor" aria-label="anchor" href="#pearson-test"></a>
+</h3>
+</div>
+<div class="section level3">
+<h3 id="residual-sum-of-squares-test">Residual sum of squares test<a class="anchor" aria-label="anchor" href="#residual-sum-of-squares-test"></a>
+</h3>
+</div>
+<div class="section level3">
+<h3 id="multinomial-test">Multinomial test<a class="anchor" aria-label="anchor" href="#multinomial-test"></a>
+</h3>
+</div>
+</div>
+<div class="section level2">
+<h2 id="estimation-of-chi2-distribution">Estimation of <span class="math inline">\(\chi^2\)</span> distribution<a class="anchor" aria-label="anchor" href="#estimation-of-chi2-distribution"></a>
+</h2>
+<div class="section level3">
+<h3 id="rao-scott-adjustment">Rao-Scott adjustment<a class="anchor" aria-label="anchor" href="#rao-scott-adjustment"></a>
+</h3>
+</div>
+<div class="section level3">
+<h3 id="moment-matching">Moment matching<a class="anchor" aria-label="anchor" href="#moment-matching"></a>
+</h3>
 </div>
 </div>
 <div class="section level2 unnumbered">
@@ -483,10 +555,13 @@ Fuller, Wayne A. 2009. <em>Introduction to Statistical Time Series</em>. John Wi
 Katsikatsou, Myrsini, Irini Moustaki, Fan Yang-Wallentin, and Karl G Jöreskog. 2012. <span>“Pairwise Likelihood Estimation for Factor Analysis Models with Ordinal Data.”</span> <em>Computational Statistics &amp; Data Analysis</em> 56 (12): 4243–58.
 </div>
 <div id="ref-maydeu2005limited" class="csl-entry">
-Maydeu-Olivares, Albert, and Harry Joe. 2005. <span>“Limited-and Full-Information Estimation and Goodness-of-Fit Testing in 2 n Contingency Tables: A Unified Framework.”</span> <em>Journal of the American Statistical Association</em> 100 (471): 1009–20.
+Maydeu-Olivares, Alberto, and Harry Joe. 2005. <span>“Limited-and Full-Information Estimation and Goodness-of-Fit Testing in 2 n Contingency Tables: A Unified Framework.”</span> <em>Journal of the American Statistical Association</em> 100 (471): 1009–20.
+</div>
+<div id="ref-maydeu2006limited" class="csl-entry">
+———. 2006. <span>“Limited Information Goodness-of-Fit Testing in Multidimensional Contingency Tables.”</span> <em>Psychometrika</em> 71 (4): 713.
 </div>
 <div id="ref-maydeu2008overview" class="csl-entry">
-Maydeu-Olivares, Alberto, and Harry Joe. 2008. <span>“An Overview of Limited Information Goodness-of-Fit Testing in Multidimensional Contingency Tables.”</span> <em>New Trends in Psychometrics</em>, 253–62.
+———. 2008. <span>“An Overview of Limited Information Goodness-of-Fit Testing in Multidimensional Contingency Tables.”</span> <em>New Trends in Psychometrics</em>, 253–62.
 </div>
 <div id="ref-rao1979chi" class="csl-entry">
 Rao, Jon N K, and AJ Scott. 1979. <span>“Chi-Squared Tests for Analysis of Categorical Data from Complex Surveys.”</span> In <em>Proceedings of the American Statistical Association, Section on Survey Research Methods</em>, 58–66.
