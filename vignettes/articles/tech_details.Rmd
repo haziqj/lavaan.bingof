@@ -199,7 +199,7 @@ We can also show that the pairwise maximum likelihood estimator satisfies \@ref(
 - $\tilde\bD = \diag((\pimodpl)_{i<j})$; and 
 - $\bG$ is some indicator matrix to transform the quantities from $\tilde R$ dimensions to $R$ dimensions. See other articles for further details.
 
-## Goodness-of-fit test statistics
+## Goodness-of-fit
 
 Collect all the sample proportions $p_r = \hat n_r/n$, $r=1,\dots,R$ to form an $R$-vector of proportions $\bp$.
 For independent samples, it is widely known [@agresti2012categorical] that
@@ -224,7 +224,7 @@ where
 \end{align}
 with $\bB$ being the transformation matrix and $\bDelta$ the matrix of partial derivatives of $\bpi(\btheta)$ (both described previously). 
 @maydeu2005limited remarks that for maximum likelihood estimators, the residual covariance matrix simplifies to $\bOmega = \bSigma - \bDelta \cI^{-1}_1\bDelta^\top$. 
-We do not think such a simplification exists for the pairwise likelihood case (see article xxx for further details).
+We do not think such a simplification exists for the pairwise likelihood case **[Hold that thought. Maybe it's possible. Still investigating.]**.
 
 ### Lower-order residuals
 
@@ -288,7 +288,7 @@ The [complex sampling procedure](complex_sampling1.html) article touches upon th
 
 In general, all (limited information) goodness-of-fit test statistics take the form
 $$
-X^2 = n \hat\be_2^\top \hat\bXi \be_2,
+X^2 = n \hat\be_2^\top \hat\bXi \hat\be_2, (\#eq:quadform)
 $$
 where $\hat\bXi \xrightarrow{\text P} \bXi$ is some $S\times S$ weight matrix.
 We summarise the various weight matrices that we use in this R package:
@@ -307,13 +307,68 @@ It should be noted that all of the above tests, with the exception of the Wald V
 For this purpose, we use the sample versions of the relevant quantities, mostly evaluating $\pimodpl$ at the estimates $\btheta=\mlepl$, i.e.
 
 - $\bH = - \nabla^2\pl(\btheta) \Big|_{\btheta=\mlepl}$ as estimating $\cH$;
-- $\hat{\tilde\bDelta_{sk}} = \frac{\partial\pimodpl}{\partial\theta_k} \Big|_{\btheta=\mlepl}$; and
+- $\hat{\tilde\bDelta_{sk}} = \frac{\partial\pimodpl}{\partial\theta_k} \Big|_{\btheta=\mlepl}$; 
+- $\hat{\tilde\bD} = \diag(\hat\pimodpl)$; and
 - an appropriate estimator of $\bSigma_2$.
 
 In general, all of these test statistics are chi square variates.
 However, for some of these tests, the degrees of freedom are not known a priori and have to be estimated.
 There are two methods that we consider: 1) A Rao-Scott type adjustment [@rao1979chi;@rao1981analysis;@rao1984chi]; and 2) a moment matching procedure [@bartholomew2002goodness].
 While in theory each test may be subjected to either a Rao-Scott type adjustment or a moment matching procedure, we only consider the Rao-Scott adjustment for the Pearson test.
+
+
+## Test statistics
+
+In this section, we elaborate on the specific test statistics used.
+
+### Wald test
+
+One strategy is to choose $\bXi$ so that the resulting quadratic form $X^2$ in \@ref(eq:quadform) is asymptotically chi-square.
+This strategy is followed by @reiser1996analysis, @maydeu2005limited, and @maydeu2006limited.
+Choosing 
+
+- $\hat\bXi = \hat\Omega_2^-$ (the generalised inverse); or
+- $\hat\bXi = \hat\Omega_2^+$ (the Moore-Penrose inverse)
+
+ensures that $X^2 \xrightarrow{\text D} \chi^2_k$ where $k$ equals the rank of $\bOmega_2$.
+The pseudoinverse needs to be employed because $\bOmega_2$ may be of deficient rank.
+When $\bOmega_2$ is full rank (rank = $S$), then $\bXi$ is equal to the usual matrix inverse.
+For our implementation, and similar to @reiser1996analysis, we will be using the Moore-Penrose inverse.
+Finally, the degrees of freedom will be (at most) $S-m$, i.e. $S$ minus the number of free model parameters that need to be estimated.
+
+### Diagonal Wald test
+
+An alternative Wald test is studied where $\hat\bXi = \diag(\hat\bOmega_2)^{-1}$ is used instead of the pseudoinverse of $\bOmega_2$.
+We refer to this as the *Diagonal Wald test*.
+The motivation here is stability and ease of computation because it is straightforward to inverse a diagonal matrix rather than a full matrix which grows rapidly with the number of items $p$.
+However, it does not follow the same chi-square distribution as the original Wald test, and its distribution needs to be determined [@bartholomew2002goodness].
+We use the moment-matching procedure for this.
+
+### Variance-covariance free Wald test
+
+The drawbacks of using $\hat\bOmega_2^+$ as a weight matrix in the quadratic form is that 1) $\bOmega_2$ needs to be estimated; and 2) the degrees of freedom $k$ cannot be determined a priori and can be tricky (if done by looking at small eigenvalues, it can be tricky to judge wchih are actually zero).
+
+To overcome this, @maydeu2005limited and @maydeu2006limited suggested using a weight matrix $\bXi$ such that $\bOmega_2$ is a g-inverse of $\bXi$, i.e. $\bXi = \bXi\bOmega_2\bXi$.
+Specifically, they proposed using
+\begin{align}
+\bXi 
+&= \bSigma_2^{-1} - \bSigma_2^{-1}\bDelta_2(\bDelta_2^\top \bSigma_2^{-1}\bDelta_2)^{-1}\bDelta_2^\top\bSigma_2^{-1} \nonumber \\
+&= \bDelta_2^\perp \big( (\bDelta_2^\perp)^\top \bSigma_2 \bDelta_2^\perp \big)^{-1} (\bDelta_2^\perp)^\top
+\end{align}
+evaluated at $\hat\btheta$.
+Here $\bDelta_2^\perp$ is the $S \times (S-m)$ orthogonal complement of $\bDelta_2$, i.e. it satisfies $(\bDelta_2^\perp)^\top\bDelta_2 = \bzero$.
+
+### Pearson test
+
+### Residual sum of squares test
+
+### Multinomial test
+
+## Estimation of $\chi^2$ distribution
+
+### Rao-Scott adjustment
+
+### Moment matching
 
 ## References
 
