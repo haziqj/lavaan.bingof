@@ -33,6 +33,7 @@ cat(readr::read_file("maths_shortcuts.tex"))
 \newcommand{\mlepl}{\hat\btheta_{\text{PL}}}
 \newcommand{\mle}{\hat\btheta_{\text{ML}}}
 \newcommand{\pimodpl}{\pi_{y_iy_j}^{(ij)}(\btheta)}
+\newcommand{\tr}{\operatorname{tr}}
 <!-- Extra LaTeX commands -->
 
 Let $\bY = (Y_1, \dots, Y_p)^\top \in \{0,1\}^p$ be a vector of Bernoulli random variables. 
@@ -214,7 +215,7 @@ An analogous result for the complex sampling design case exists as well [@fuller
 Suppose we denote by $\bpi(\hat\btheta)$ the *estimated* proportions under a parametric model.
 For estimators $\hat\btheta$ satisfying \@ref(eq:ban), @maydeu2005limited show that the distribution of the residuals $\hat\be = \bp - \bpi(\hat\btheta)$ is asymptotically normal:
 \begin{equation}
-\sqrt n \hat\be = \sqrt n \big( \bp - \bpi(\hat\btheta) \big) \xrightarrow{\text D} {\N}_R (\bzero, \bOmega)
+\sqrt n \hat\be = \sqrt n \big( \bp - \bpi(\hat\btheta) \big) \xrightarrow{\text D} {\N}_R (\bzero, \bOmega) 
 \end{equation}
 where 
 \begin{align}
@@ -256,15 +257,15 @@ Consider now the lower order residuals of up to order 2 under a parametric model
 \hat\be_2 = \bp_2 - \bpi_2(\hat\btheta) = \bT_2 \big(\bp - \bpi(\hat\btheta) \big) = \bT_2\hat\be.
 \end{equation}
 It should be straightforward to see, using the previous results, that as $n\to\infty$ we get
-\begin{equation}\label{eq:residuals2}
-\sqrt n \hat\be_2 = \sqrt N \big(\bp_2 - \bpi_2(\hat\btheta)\big) \xrightarrow{\text D} \N(\bzero, \bOmega_2),
+\begin{equation}
+\sqrt n \hat\be_2 = \sqrt N \big(\bp_2 - \bpi_2(\hat\btheta)\big) \xrightarrow{\text D} \N(\bzero, \bOmega_2), (\#eq:asympdiste2)
 \end{equation}
 where 
 \begin{align}
 \bOmega_2 
 = \bT_2\bOmega\bT_2^\top 
 &= \bT_2 (\bI - \bDelta\bB)\bSigma(\bI - \bDelta\bB)^\top  \bT_2^\top  \\
-&= \bSigma_2 - \bT_2\bSigma\bB^\top\bDelta_2^\top - \bDelta_2 \bB \bSigma \bT_2^\top + \bDelta_2 \bB \bSigma \bB^\top \bDelta_2^\top,
+&= \bSigma_2 - \bT_2\bSigma\bB^\top\bDelta_2^\top - \bDelta_2 \bB \bSigma \bT_2^\top + \bDelta_2 \bB \bSigma \bB^\top \bDelta_2^\top, (\#eq:Omega2)
 \end{align}
 with $\bSigma_2 = \bT_2\bSigma\bT_2^\top$ and $\bDelta_2=\bT_2\bDelta$ being the
 the transformed version of the respective matrices.
@@ -319,7 +320,7 @@ While in theory each test may be subjected to either a Rao-Scott type adjustment
 
 ## Test statistics
 
-In this section, we elaborate on the specific test statistics used.
+In this section, we elaborate further on the specific test statistics used.
 
 ### Wald test
 
@@ -342,33 +343,132 @@ An alternative Wald test is studied where $\hat\bXi = \diag(\hat\bOmega_2)^{-1}$
 We refer to this as the *Diagonal Wald test*.
 The motivation here is stability and ease of computation because it is straightforward to inverse a diagonal matrix rather than a full matrix which grows rapidly with the number of items $p$.
 However, it does not follow the same chi-square distribution as the original Wald test, and its distribution needs to be determined [@bartholomew2002goodness].
-We use the moment-matching procedure for this.
+We use the moment-matching procedure for this, which we briefly explain below.
+
+Suppose that $Y\sim \chi^2_c$.
+Then we assume that the test statistic $X^2 = n\hat\be_2 \hat\bXi \hat\be_2$ can be approximated by a linear transformation of this chi square random variate, i.e.
+$$
+X^2 \approx a + bY
+$$
+Let $\mu_k(X)=\E[(X - \E X)^k]$ represent the $k$th central moment for a random variable $X$.
+The first three asymptotic central moments of $X^2$ are [@mathai1992quadratic Theorem 3.2b.2, p.53]
+\begin{equation}
+\mu_1(X^2) = \tr(\hat\bXi\bOmega_2), \hspace{1em}
+\mu_2(X^2) = 2\tr\big((\hat\bXi\bOmega_2)^2\big), \hspace{1em}
+\mu_3(X^2) = 8\tr\big((\hat\bXi\bOmega_2)^3\big), (\#eq:moment1)
+\end{equation}
+while the first three central moments of the approximating random variables are
+\begin{equation}
+\mu_1 = a + bc, \hspace{2em}
+\mu_2 = 2b^2c, \hspace{2em}
+\mu_3 = 8b^3c. (\#eq:moment2)
+\end{equation}
+Useful to note here are the relationships $\mu_1=\E(Y)$, $\mu_2=\Var(Y)$, and $\mu_3=\E(Y^3)-3\mu\Var(Y)-\mu^3$ for any random variable $Y$, while
+the raw moments of a chi-square random variable with $c$ degrees of freedom are given by the formula $\E(Y^k)=c(c+2)(c+4)\cdots(c+2k-2)$.
+Equating the two sets of moments in \@ref(eq:moment1) and \@ref(eq:moment2) yields the **three-moment adjustment** parameters
+\begin{equation}
+b = \frac{\mu_3(X^2)}{4\mu_2(X^2)}, \hspace{2em}
+c = \frac{\mu_2(X^2)}{2b^2}, \hspace{2em}
+a = \mu_1(X^2) - bc.
+\end{equation}
+Tail area probabilities for $p$-value calculations can be computed as follows:
+\begin{equation}
+\Pr(X^2 > x) \approx \Pr\left(Y > \frac{x-a}{b} \ \Big| \ Y \sim \chi^2_c\right).
+\end{equation}
+
+We can also use two-moments and one-moment matching techniques similarly.
+For the **two-moment adjustment**, assume that $X^2 \approx bY$ where $Y\sim\chi^2_c$.
+Then matching the first two asymptotic moments of $X^2$ with the approximating random variable gives 
+\begin{equation}
+b = \frac{\mu_2(X^2)}{2\mu_1(X^2)}
+\hspace{1em}\text{and}\hspace{1em}
+c = \frac{\mu_1(X^2)}{b}.
+\end{equation}
+As for the **one-moment adjustment**, $X^2$ is again approximated by $Y\sim\chi^2_c$, but $c$ is fixed to be the number of degrees of freedom available for testing (taken to be $c=S-m$).
+Solving for $b$ yields
+\begin{equation}
+b = \frac{\mu_1(X^2)}{c}.
+\end{equation}
+In both cases, tail probabilities are calculated as 
+\begin{equation}
+\Pr(X^2 > x) \approx \Pr\left(Y > \frac{x}{b} \ \Big| \ Y \sim \chi^2_c\right).
+\end{equation}
+@maydeu2008overview advises that one-moment matching results in inaccurate $p$-values.
 
 ### Variance-covariance free Wald test
 
 The drawbacks of using $\hat\bOmega_2^+$ as a weight matrix in the quadratic form is that 1) $\bOmega_2$ needs to be estimated; and 2) the degrees of freedom $k$ cannot be determined a priori and can be tricky (if done by looking at small eigenvalues, it can be tricky to judge wchih are actually zero).
 
 To overcome this, @maydeu2005limited and @maydeu2006limited suggested using a weight matrix $\bXi$ such that $\bOmega_2$ is a g-inverse of $\bXi$, i.e. $\bXi = \bXi\bOmega_2\bXi$.
-Specifically, they proposed using
-\begin{align}
-\bXi 
-&= \bSigma_2^{-1} - \bSigma_2^{-1}\bDelta_2(\bDelta_2^\top \bSigma_2^{-1}\bDelta_2)^{-1}\bDelta_2^\top\bSigma_2^{-1} \nonumber \\
-&= \bDelta_2^\perp \big( (\bDelta_2^\perp)^\top \bSigma_2 \bDelta_2^\perp \big)^{-1} (\bDelta_2^\perp)^\top
-\end{align}
-evaluated at $\hat\btheta$.
-Here $\bDelta_2^\perp$ is the $S \times (S-m)$ orthogonal complement of $\bDelta_2$, i.e. it satisfies $(\bDelta_2^\perp)^\top\bDelta_2 = \bzero$.
+<!-- Specifically, they proposed using -->
+<!-- \begin{align} -->
+<!-- \bXi  -->
+<!-- &= \bSigma_2^{-1} - \bSigma_2^{-1}\bDelta_2(\bDelta_2^\top \bSigma_2^{-1}\bDelta_2)^{-1}\bDelta_2^\top\bSigma_2^{-1} \nonumber \\ -->
+<!-- &= \bDelta_2^\perp \big( (\bDelta_2^\perp)^\top \bSigma_2 \bDelta_2^\perp \big)^{-1} (\bDelta_2^\perp)^\top -->
+<!-- \end{align} -->
+<!-- evaluated at $\hat\btheta$. -->
+<!-- Here $\bDelta_2^\perp$ is the $S \times (S-m)$ orthogonal complement of $\bDelta_2$, i.e. it satisfies $(\bDelta_2^\perp)^\top\bDelta_2 = \bzero$. -->
+Let $\bDelta_2^\perp$ be an $S \times (S-m)$ orthogonal complement to $\bDelta_2$, i.e. it satisfies $(\bDelta_2^\perp)^\top\bDelta_2 = \bzero$.
+Then from \@ref(eq:asympdiste2), we see that 
+$$
+\sqrt n (\bDelta_2^\perp)^\top \hat \be_2 \xrightarrow{\text D} \N(\bzero, (\bDelta_2^\perp)^\top \bOmega_2 \bDelta_2^\perp). (\#eq:e2OC)
+$$
+Because of \@ref(eq:Omega2), the asymptotic covariance matrix may be written
+$$
+(\bDelta_2^\perp)^\top \bOmega_2 \bDelta_2^\perp = (\bDelta_2^\perp)^\top \bSigma_2 \bDelta_2^\perp,
+$$
+since all the multiplications of $\bDelta_2$ with its orthogonal complement cancels out.
+By letting
+$$
+\bXi = \bDelta_2^\perp \big( (\bDelta_2^\perp)^\top \bSigma_2 \bDelta_2^\perp \big)^{-1} (\bDelta_2^\perp)^\top,
+$$
+we can then verify $\bXi = \bXi \bOmega_2\bXi$; that is, $\bOmega_2$ is a generalised inverse of $\bXi$.
+Let $\hat\bXi$ be an appropriate estimate of $\bXi$, e.g. by replacing the matrices above with their corresponding hat versions.
+The implication here is that
+$$
+X^2 
+= n \hat\be_2^\top \hat\bXi \hat\be_2 
+= n \hat\be_2^\top  \hat\bDelta_2^\perp \big( (\hat\bDelta_2^\perp)^\top \hat\bSigma_2 \hat\bDelta_2^\perp \big)^{-1} (\hat\bDelta_2^\perp)^\top \hat\be_2
+$$
+converges in distribution to a $\chi^2_{S-m}$ variate as $n\to\infty$ due to \@ref(eq:e2OC) and Slutsky's theorem.
+The degrees of freedom is as such because $\bDelta_2^\perp$ is of full column rank $S-m$ and hence $\bXi$ is also of rank $S-m$.
+The dimensions of a vector space and its orthogonal complement always add up to the dimension of the whole space. Since $\bDelta_2 \in \bbR^{S\times m}$ has dimension (column rank) $m$, the column space has an orthogonal complement in $\bbR^S$, and thus the dimension of this orthogonal complement is $S-m$.
 
 ### Pearson test
 
-### Residual sum of squares test
+To construct a Pearson test statistic, let $\hat\bXi^{-1} = \hat\bD_2 := \diag\big( \bpi_2(\hat\btheta) \big) \xrightarrow{\text P} \bD_2:=\diag\big( \bpi_2(\btheta) \big).$
+Then we can see that
+\begin{equation}\label{eq:Pearsontest}
+X^2 = n\hat\be_2^\top\hat\bD_2^{-1}\hat\be_2 = n \sum_{r=1}^R \frac{(\dot p_r - \dot\pi_r(\hat\btheta))^2}{\dot\pi_r(\hat\btheta)} + 
+n \sum_{r<s} \frac{(\dot p_{rs} - \dot\pi_{rs}(\hat\btheta))^2}{\dot\pi_{rs}(\hat\btheta)},
+\end{equation}
+which resembles the traditional Pearson chi-square test statistic.
+Note that
+\begin{equation}
+\sqrt n \hat\bD_2^{-1/2}\hat\be_2 \xrightarrow{\text D} \N(\bzero, \bD_2^{-1/2}\bOmega_2 \bD_2^{-1/2})
+\end{equation}
+as $N\to\infty$, and therefore $X^2$ has the limiting distribution of $\sum_{s=1}^S \delta_s X_s$, where $\delta_s$ are eigenvalues of $n^{-1} \bD_2^{-1/2}\bOmega_2 \bD_2^{-1/2}$ and $X_s\iid \chi^2_1$ [@mathai1992quadratic, Representation 3.1a.1, p.29].
+These eigenvalues can be estimated by the eigenvalues of $n^{-1} \hat\bD_2^{-1/2}\hat\bOmega_2 \hat \bD_2^{-1/2}$.
+In principle, this method can be applied more generally by considering a Choleski decomposition $\bXi = \bL\bL^\top$ instead of matrix square roots.
+Of course, this only works if the matrix $\bXi$ is of full rank, which rules out the Wald test statistic above.
 
-### Multinomial test
+Let $\bar\delta$ represent the arithmetic mean of the eigenvalues $\delta_s$.
+The asymptotic mean and variance of $X^2$ are
+\begin{align}
+\E X^2 &= \E \sum_{s=1}^S \delta_s X_s = \sum_{s=1}^S \delta_s = S\bar\delta = \tr(n^{-1} \bD_2^{-1/2}\bOmega_2 \bD_2^{-1/2}) \\
+\Var X^2 &= \Var \sum_{s=1}^S \delta_s X_s = 2\sum_{s=1}^S\delta_s^2 = 2\sum_{s=1}^S (\delta_s - \bar\delta)^2 + 2S\bar\delta^2,
+\end{align}
+So it seems that the power of the test is affected by the size and dispersion of the eigenvalues [@heo2014empirical].
+@rao1979chi;@rao1981analysis;@rao1984chi suggested adjustments to the Pearson test as follows.
 
-## Estimation of $\chi^2$ distribution
+1. First-order Rao-Scott type test is obtained by dividing $X^2$ by $\bar \delta$. This statistic is distributed as $\chi^2_S$.
 
-### Rao-Scott adjustment
+2. Second-order Rao-Scott type test is obtained by dividing $X^2/\bar\delta$ by $1+\hat a^2$, where $\hat a=\sqrt{S^{-1}\sum_{s=1}^S (\delta_s - \bar\delta)}\big/\bar\delta$ is the coefficient of variation of the eigenvalues. Hence, $1+\hat a^2= (S\bar\delta ^2)^{-1}\sum_{s=1}^s \delta_s^2$. This statistic is distributed as $\chi^2_k$ where $k=S(1+\hat a^2)^{-1}$.
 
-### Moment matching
+
+<!-- ### Residual sum of squares test -->
+
+<!-- ### Multinomial test -->
 
 ## References
 
