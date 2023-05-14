@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(lavaan)
 library(lavaan.bingof)
 ```
 
@@ -193,15 +194,15 @@ $$
 \bG_{y_iy_j}^{(ij)} 
 \big(\bp - \bpi(\btheta)\big) = 
 \begin{pmatrix}
-p_{11}^{(ij)} - \pi(\btheta)_{11}^{(ij)}\\
+p_{00}^{(ij)} - \pi(\btheta)_{00}^{(ij)}\\
 p_{10}^{(ij)} - \pi(\btheta)_{10}^{(ij)}\\
 p_{01}^{(ij)} - \pi(\btheta)_{01}^{(ij)}\\
-p_{00}^{(ij)} - \pi(\btheta)_{00}^{(ij)}\\
+p_{11}^{(ij)} - \pi(\btheta)_{11}^{(ij)}\\
 \end{pmatrix}
 $$
-for all pairs $i,j=1,\dots,p$, $i<j$. 
-The form of this matrix $G$ is given by the next proposition.
-Therefore, we have 
+for all pairs $i,j=1,\dots,p$, $i<j$, with the added condition that the sum of 4 entries is equal to 0 (because the proportions and probabilities must sum to 1).
+Such a matrix $\bG$ is not difficult to find, but the derivation can be a bit tedious, so is omitted for brevity (however, an example is given next).
+Finally, we have 
 \begin{equation}
 \sqrt n (\mlepl - \btheta) \approx \sqrt n \ \myoverbrace{\cH^{-1}  \tilde\bDelta^\top \tilde\bD^{-1}\bG }{\bB} 
 \big (  \bp - \bpi(\btheta) \big). (\#eq:mleplminusthetaBmatrix)
@@ -209,9 +210,170 @@ Therefore, we have
 :::    
 
 
-::: {.proposition}
-$G$ matrix.
+::: {.example}
+Consider $p=3$. 
+Then $\tilde R = 4 \times {3 \choose 2 } = 12$ (the total number of pairwise probabilities).
+All pairwise outcomes can be tabulated as below.
+We are interested in obtaining the final column from the joint errors $\be = (\bp - \bpi)$.
+
+|   | $(i,j)$ | $Y_i$ | $Y_j$ | $\tilde e_{y_i,y_j}^{(ij)}$ |
+|---|-------|-------|-------|------------------------|
+| 1 | (1,2) | 0     | 0     | $p_{00}^{(12)} - \pi_{00}^{(12)}$      |
+| 2 | (1,2) | 1     | 0     | $p_{10}^{(12)} - \pi_{10}^{(12)}$      |
+| 3 | (1,2) | 0     | 1     | $p_{01}^{(12)} - \pi_{01}^{(12)}$      |
+| 4 | (1,2) | 1     | 1     | $p_{11}^{(12)} - \pi_{11}^{(12)}$      |
+| 5 | (1,3) | 0     | 0     | $p_{00}^{(13)} - \pi_{00}^{(13)}$      |
+| 6 | (1,3) | 1     | 0     | $p_{10}^{(13)} - \pi_{10}^{(13)}$      |
+| 7 | (1,3) | 0     | 1     | $p_{01}^{(13)} - \pi_{01}^{(13)}$      |
+| 8 | (1,3) | 1     | 1     | $p_{11}^{(13)} - \pi_{11}^{(13)}$      |
+|9  | (2,3) | 0     | 0     | $p_{00}^{(23)} - \pi_{00}^{(23)}$      |
+|10 | (2,3) | 1     | 0     | $p_{10}^{(23)} - \pi_{10}^{(23)}$      |
+|11 | (2,3) | 0     | 1     | $p_{01}^{(23)} - \pi_{01}^{(23)}$      |
+| 12 | (2,3) | 1     | 1     | $p_{11}^{(23)} - \pi_{11}^{(23)}$      |
+
+For the cases '10', '01' and '11', these are straightforward. 
+Example:
+
+- $\tilde e_{10}^{(12)}$ is obtained from $(p_{100} + p_{101}) - (\pi_{100} + \pi_{101})$
+  - $B_{10}^{(12)} (\bp - \bpi) = (00110000)(\bp - \bpi)$
+- $\tilde e_{01}^{(12)}$ is obtained from $(p_{010} + p_{011}) - (\pi_{010} + \pi_{011})$
+  - $B_{01}^{(12)} (\bp - \bpi) = (00001100)(\bp - \bpi)$
+- $\tilde e_{11}^{(12)}$ is obtained from $(p_{110} + p_{111}) - (\pi_{110} + \pi_{111})$
+  - $B_{11}^{(12)} (\bp - \bpi) = (11000000)(\bp - \bpi)$.
+
+For the remaining case of '00', notice that
+\begin{align*}
+\tilde e_{00}^{(12)}
+&= p_{00}^{(12)} - \pi_{00}^{(12)} \\
+&=  (1 - p_{10}^{(12)} - p_{01}^{(12)} - p_{11}^{(12)}) - (1 - \pi_{10}^{(12)} - \pi_{01}^{(12)} - \pi_{11}^{(12)}) \\
+&= - B_{10}^{(12)} (\bp - \bpi) - B_{01}^{(12)} (\bp - \bpi) - B_{11}^{(12)} (\bp - \bpi) \\
+&= - (\myunderbrace{B_{10}^{(12)} + B_{01}^{(12)} + B_{11}^{(12)}}{B_{00}^{(12)}} )  (\bp - \bpi) 
+\end{align*}
+
+Following the pattern above, we should be getting the following design matrix:
+
+|        | $e_{111}$  |  $e_{110}$ | $e_{101}$  | $e_{100}$  |  $e_{011}$ | $e_{010}$  |  $e_{001}$ | $e_{000}$  |
+|-------:|---:|---:|---:|---:|---:|---:|---:|---:|
+|$\tilde e_{00}^{(12)}$|  -1|  -1|  -1|  -1|  -1|  -1| 0|  0|
+|$\tilde e_{10}^{(12)}$|  0|  0|  1|  1|  0|  0|  0|  0|
+|$\tilde e_{01}^{(12)}$|  0|  0|  0|  0|  1|  1|  0|  0|
+|$\tilde e_{11}^{(12)}$|  1|  1|  0|  0|  0|  0|  0|  0|
+|$\tilde e_{00}^{(13)}$|  -1|  -1|  -1|  -1|  -1|  0|  -1|  0|
+|$\tilde e_{10}^{(13)}$|  0|  1|  0|  1|  0|  0|  0|  0|
+|$\tilde e_{01}^{(13)}$|  0|  0|  0|  0|  1|  0|  1|  0|
+|$\tilde e_{11}^{(13)}$|  1|  0|  1|  0|  0|  0|  0|  0|
+|$\tilde e_{00}^{(23)}$|  -1|  -1|  -1|  0|  -1|  -1|  -1|  0|
+|$\tilde e_{10}^{(23)}$|  0|  1|  0|  0|  0|  1|  0|  0|
+|$\tilde e_{01}^{(23)}$|  0|  0|  1|  0|  0|  0|  1|  0|
+|$\tilde e_{11}^{(23)}$|  1|  0|  0|  0|  1|  0|  0|  0|
+
+This is implemented in the R function `create_G_mat()`:
+
+```{r}
+create_G_mat(p = 3)
+```
+
+A couple of notes:
+
+- In the manuscript, we describe the matrix $B$ which is a design matrix that transforms the pairwise residuals $\tilde\be$ to the unviariate and bivariate  residuals $\be_2$.
+- The relationship between $\bG$, $\bT_2$ and $B$ is that $\bG = B \bT_2$.
+- Thus, the $B$ matrix may be obtained by postmultiplying $\bG$ with the right inverse of $\bT_2$. The right inverse exists because $\bT_2$ is of full row rank.
+
+```{r}
+require(testthat)
+B  <- lavaan.bingof:::Beta_mat_design(3)
+G  <- lavaan.bingof::create_G_mat(3)
+T2 <- lavaan.bingof::create_T2_mat(3)
+
+# equal
+G
+B %*% T2
+test_that("G and BT2 are equal", {
+  expect_equal(G, B %*% T2, ignore_attr = TRUE)  
+})
+
+
+# equal
+B
+(altB <- round(G %*% MASS::ginv(T2), 0))
+test_that("B can be created from T2 inv", {
+  expect_equal(B, altB, ignore_attr = TRUE)
+})
+```
+
 :::  
+
+::: {.proposition}
+The unit sensitivity matrix $\cH$ under the pairwise likelihood estimation method is $\cH = \tilde\bDelta^\top \tilde\bD^{-1} \tilde\bDelta$.
+:::  
+
+::: {.proof}
+The maximum pairwise likelihood estimator $\mlepl$ solves the estimating equations $\bbR^q \ni \nabla \pl(\btheta) = \bzero$.
+The score vector has entries
+\begin{equation} 
+\frac{\partial\!\pl(\btheta)}{\partial\theta_k} =
+\sum_{i<j} \sum_{y_i}\sum_{y_j}  \frac{\hat n_{y_iy_j}^{(ij)} }{\pimodpl} \frac{\partial \pimodpl}{\partial\theta_k} (\#eq:bivderall)
+\end{equation}
+for each $k=1,\dots,q$.
+Differentiating again with respect to $\theta_l$ can be derived to be
+\begin{equation}
+\frac{\partial\!\pl(\btheta)}{\partial\theta_k\partial\theta_l}
+= 
+\sum_{i<j} \sum_{y_i} \sum_{y_j} 
+\left\{
+\frac{\hat n_{y_iy_j}^{(ij)}}{\pimodpl}
+\frac{\partial^2\pimodpl}{\partial\theta_k\partial\theta_l}
+- 
+\frac{\hat n_{y_iy_j}^{(ij)}}{\pimodpl^2}
+\frac{\partial\pimodpl}{\partial\theta_k}
+\frac{\partial\pimodpl}{\partial\theta_l}\right\}
+. (\#eq:secderpl)
+\end{equation}
+The $(k,l)$th entry of the (full) *sensitivity matrix* is the expected value of \@ref(eq:secderpl), shown to be
+\begin{equation}\label{eq:sensitivitymatrix}
+-\E\left[ \frac{\partial\!\pl(\btheta)}{\partial\theta_k\partial\theta_l}
+ \right]
+=
+n \sum_{i<j} \sum_{y_i} \sum_{y_j} 
+\frac{1}{\pimodpl}
+\frac{\partial\pimodpl}{\partial\theta_k}
+\frac{\partial\pimodpl}{\partial\theta_l},
+\end{equation}
+which in matrix form is $n\tilde\bDelta^\top \tilde\bD^{-1} \tilde\bDelta$.
+Dividing by $n$ gives the desired result.
+
+:::    
+
+
+::: {.proposition}
+The covariance matrix of the residuals, $\bOmega = (\bI - \bDelta\bB)\bSigma(\bI - \bDelta\bB)^\top$ simplifies to $\bSigma - \bDelta\cH^{-1}\bDelta^\top$ under the pairwise likelihood framework.
+:::  
+
+
+::: {.proof}
+Consider first the matrix $\bDelta\bB\bSigma$:
+
+\begin{align*}
+\bDelta\bB\bSigma 
+&= \bDelta \cH^{-1}\tilde\bDelta^{-1}\tilde \bD^{-1} \bG \bSigma  \\
+&= \bDelta \cH^{-1}\tilde\bDelta^{-1}\tilde \bD^{-1} \bG (\bD - \pimod{}\pimod{}^\top) \\
+&= \vdots
+\end{align*}
+
+**Actually, this might not work...**
+:::    
+
+
+```{r}
+fit <- lavaan.bingof:::fit_facmod_pml(1, "srs", 1000)$fit
+res <- lavaan.bingof:::calc_test_stuff(fit)
+attach(res)
+mat1 <- Omega2
+mat2 <- Sigma2 - Delta2 %*% H_inv %*% t(Delta2)
+detach(res)
+plot(mat1, mat2)
+```
+
 
 
 ## References

@@ -419,44 +419,44 @@ Cov_pXi1_pXiXj11 <- function(modelProb_1 = modelProb_1,
 
 
 # Beta matrix  - applies only to binary data
-Beta_mat_design <- function(nvar) {
-
-  no_biv  <- nvar * (nvar-1) /2
-  idx_univ <- 1:nvar
-  idx_biv <- (nvar+1):(nvar+no_biv)
-  idx_cat_var1 <- rep(c(0,1,0,1), times=no_biv)
-  idx_cat_var2 <- rep(c(0,0,1,1), times=no_biv)
-  idx_pairs <- combn(nvar,2)
-  idx_var1 <- rep( idx_pairs[1,], each=4)
-  idx_var2 <- rep( idx_pairs[2,], each=4)
-
-  nrow_B <- 4*no_biv
-  idx_row <- 1:nrow_B
-  B_mat <- matrix(0, nrow=nrow_B, ncol=(nvar + no_biv) )
-
-  #determine the pxixj11
-  diag( B_mat[ (idx_cat_var1==1)&(idx_cat_var2==1) , idx_biv]) <- 1
-
-  #determines the pxixj10
-  cdtn10 <- (idx_cat_var1==1)&(idx_cat_var2==0)
-  idc_row10 <- idx_row[cdtn10]
-  B_mat[ cbind(idc_row10, idx_univ[idx_var1[cdtn10]]) ] <- 1
-  diag( B_mat[idc_row10, idx_biv] ) <- (-1)
-
-  #determines the pxixj01
-  cdtn01 <- (idx_cat_var1==0)&(idx_cat_var2==1)
-  idc_row01 <- idx_row[cdtn01]
-  B_mat[ cbind(idc_row01, idx_univ[idx_var2[cdtn01]]) ] <- 1
-  diag( B_mat[idc_row01, idx_biv] ) <- (-1)
-
-  #determines the pxixj00
-  cdtn00 <- (idx_cat_var1==0)&(idx_cat_var2==0)
-  cdtn11 <- (idx_cat_var1==1)&(idx_cat_var2==1)
-  B_mat[cdtn00, ] <- (-1)* (B_mat[cdtn10, ] +
-                            B_mat[cdtn01, ] +
-                            B_mat[cdtn11, ] )
-  B_mat
-}
+# Beta_mat_design <- function(nvar) {
+#
+#   no_biv  <- nvar * (nvar-1) /2
+#   idx_univ <- 1:nvar
+#   idx_biv <- (nvar+1):(nvar+no_biv)
+#   idx_cat_var1 <- rep(c(0,1,0,1), times=no_biv)
+#   idx_cat_var2 <- rep(c(0,0,1,1), times=no_biv)
+#   idx_pairs <- combn(nvar,2)
+#   idx_var1 <- rep( idx_pairs[1,], each=4)
+#   idx_var2 <- rep( idx_pairs[2,], each=4)
+#
+#   nrow_B <- 4*no_biv
+#   idx_row <- 1:nrow_B
+#   B_mat <- matrix(0, nrow=nrow_B, ncol=(nvar + no_biv) )
+#
+#   #determine the pxixj11
+#   diag( B_mat[ (idx_cat_var1==1)&(idx_cat_var2==1) , idx_biv]) <- 1
+#
+#   #determines the pxixj10
+#   cdtn10 <- (idx_cat_var1==1)&(idx_cat_var2==0)
+#   idc_row10 <- idx_row[cdtn10]
+#   B_mat[ cbind(idc_row10, idx_univ[idx_var1[cdtn10]]) ] <- 1
+#   diag( B_mat[idc_row10, idx_biv] ) <- (-1)
+#
+#   #determines the pxixj01
+#   cdtn01 <- (idx_cat_var1==0)&(idx_cat_var2==1)
+#   idc_row01 <- idx_row[cdtn01]
+#   B_mat[ cbind(idc_row01, idx_univ[idx_var2[cdtn01]]) ] <- 1
+#   diag( B_mat[idc_row01, idx_biv] ) <- (-1)
+#
+#   #determines the pxixj00
+#   cdtn00 <- (idx_cat_var1==0)&(idx_cat_var2==0)
+#   cdtn11 <- (idx_cat_var1==1)&(idx_cat_var2==1)
+#   B_mat[cdtn00, ] <- (-1)* (B_mat[cdtn10, ] +
+#                             B_mat[cdtn01, ] +
+#                             B_mat[cdtn11, ] )
+#   B_mat
+# }
 ###############################################################################
 
 
