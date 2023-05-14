@@ -271,23 +271,476 @@ In other words, <span class="math inline">\({\mathbf G}\)</span> should consist 
 {\mathbf G}_{y_iy_j}^{(ij)}
 \big({\mathbf p}- {\boldsymbol\pi}({\boldsymbol\theta})\big) =
 \begin{pmatrix}
-p_{11}^{(ij)} - \pi({\boldsymbol\theta})_{11}^{(ij)}\\
+p_{00}^{(ij)} - \pi({\boldsymbol\theta})_{00}^{(ij)}\\
 p_{10}^{(ij)} - \pi({\boldsymbol\theta})_{10}^{(ij)}\\
 p_{01}^{(ij)} - \pi({\boldsymbol\theta})_{01}^{(ij)}\\
-p_{00}^{(ij)} - \pi({\boldsymbol\theta})_{00}^{(ij)}\\
+p_{11}^{(ij)} - \pi({\boldsymbol\theta})_{11}^{(ij)}\\
 \end{pmatrix}
 \]</span>
-for all pairs <span class="math inline">\(i,j=1,\dots,p\)</span>, <span class="math inline">\(i&lt;j\)</span>.
-The form of this matrix <span class="math inline">\(G\)</span> is given by the next proposition.
-Therefore, we have
+for all pairs <span class="math inline">\(i,j=1,\dots,p\)</span>, <span class="math inline">\(i&lt;j\)</span>, with the added condition that the sum of 4 entries is equal to 0 (because the proportions and probabilities must sum to 1).
+Such a matrix <span class="math inline">\({\mathbf G}\)</span> is not difficult to find, but the derivation can be a bit tedious, so is omitted for brevity (however, an example is given next).
+Finally, we have
 <span class="math display" id="eq:mleplminusthetaBmatrix">\[\begin{equation}
 \sqrt n (\hat{\boldsymbol\theta}_{\text{PL}}- {\boldsymbol\theta}) \approx \sqrt n \ {\color{gray}\overbrace{\color{black}{\mathcal H}^{-1}  \tilde{\boldsymbol\Delta}^\top \tilde{\mathbf D}^{-1}{\mathbf G}}^{{\mathbf B}}}
 \big (  {\mathbf p}- {\boldsymbol\pi}({\boldsymbol\theta}) \big). \tag{8}
 \end{equation}\]</span></p>
 </div>
-<div class="proposition">
-<p><span id="prp:unlabeled-div-9" class="proposition"><strong>Proposition 5  </strong></span><span class="math inline">\(G\)</span> matrix.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-9" class="example"><strong>Example 1  </strong></span>Consider <span class="math inline">\(p=3\)</span>.
+Then <span class="math inline">\(\tilde R = 4 \times {3 \choose 2 } = 12\)</span> (the total number of pairwise probabilities).
+All pairwise outcomes can be tabulated as below.
+We are interested in obtaining the final column from the joint errors <span class="math inline">\({\mathbf e}= ({\mathbf p}- {\boldsymbol\pi})\)</span>.</p>
+<table class="table">
+<thead><tr class="header">
+<th></th>
+<th><span class="math inline">\((i,j)\)</span></th>
+<th><span class="math inline">\(Y_i\)</span></th>
+<th><span class="math inline">\(Y_j\)</span></th>
+<th><span class="math inline">\(\tilde e_{y_i,y_j}^{(ij)}\)</span></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>(1,2)</td>
+<td>0</td>
+<td>0</td>
+<td><span class="math inline">\(p_{00}^{(12)} - \pi_{00}^{(12)}\)</span></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>(1,2)</td>
+<td>1</td>
+<td>0</td>
+<td><span class="math inline">\(p_{10}^{(12)} - \pi_{10}^{(12)}\)</span></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>(1,2)</td>
+<td>0</td>
+<td>1</td>
+<td><span class="math inline">\(p_{01}^{(12)} - \pi_{01}^{(12)}\)</span></td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>(1,2)</td>
+<td>1</td>
+<td>1</td>
+<td><span class="math inline">\(p_{11}^{(12)} - \pi_{11}^{(12)}\)</span></td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>(1,3)</td>
+<td>0</td>
+<td>0</td>
+<td><span class="math inline">\(p_{00}^{(13)} - \pi_{00}^{(13)}\)</span></td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>(1,3)</td>
+<td>1</td>
+<td>0</td>
+<td><span class="math inline">\(p_{10}^{(13)} - \pi_{10}^{(13)}\)</span></td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>(1,3)</td>
+<td>0</td>
+<td>1</td>
+<td><span class="math inline">\(p_{01}^{(13)} - \pi_{01}^{(13)}\)</span></td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>(1,3)</td>
+<td>1</td>
+<td>1</td>
+<td><span class="math inline">\(p_{11}^{(13)} - \pi_{11}^{(13)}\)</span></td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>(2,3)</td>
+<td>0</td>
+<td>0</td>
+<td><span class="math inline">\(p_{00}^{(23)} - \pi_{00}^{(23)}\)</span></td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>(2,3)</td>
+<td>1</td>
+<td>0</td>
+<td><span class="math inline">\(p_{10}^{(23)} - \pi_{10}^{(23)}\)</span></td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>(2,3)</td>
+<td>0</td>
+<td>1</td>
+<td><span class="math inline">\(p_{01}^{(23)} - \pi_{01}^{(23)}\)</span></td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>(2,3)</td>
+<td>1</td>
+<td>1</td>
+<td><span class="math inline">\(p_{11}^{(23)} - \pi_{11}^{(23)}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>For the cases ‘10’, ‘01’ and ‘11’, these are straightforward.
+Example:</p>
+<ul>
+<li>
+<span class="math inline">\(\tilde e_{10}^{(12)}\)</span> is obtained from <span class="math inline">\((p_{100} + p_{101}) - (\pi_{100} + \pi_{101})\)</span>
+<ul>
+<li><span class="math inline">\(B_{10}^{(12)} ({\mathbf p}- {\boldsymbol\pi}) = (00110000)({\mathbf p}- {\boldsymbol\pi})\)</span></li>
+</ul>
+</li>
+<li>
+<span class="math inline">\(\tilde e_{01}^{(12)}\)</span> is obtained from <span class="math inline">\((p_{010} + p_{011}) - (\pi_{010} + \pi_{011})\)</span>
+<ul>
+<li><span class="math inline">\(B_{01}^{(12)} ({\mathbf p}- {\boldsymbol\pi}) = (00001100)({\mathbf p}- {\boldsymbol\pi})\)</span></li>
+</ul>
+</li>
+<li>
+<span class="math inline">\(\tilde e_{11}^{(12)}\)</span> is obtained from <span class="math inline">\((p_{110} + p_{111}) - (\pi_{110} + \pi_{111})\)</span>
+<ul>
+<li>
+<span class="math inline">\(B_{11}^{(12)} ({\mathbf p}- {\boldsymbol\pi}) = (11000000)({\mathbf p}- {\boldsymbol\pi})\)</span>.</li>
+</ul>
+</li>
+</ul>
+<p>For the remaining case of ‘00’, notice that
+<span class="math display">\[\begin{align*}
+\tilde e_{00}^{(12)}
+&amp;= p_{00}^{(12)} - \pi_{00}^{(12)} \\
+&amp;=  (1 - p_{10}^{(12)} - p_{01}^{(12)} - p_{11}^{(12)}) - (1 - \pi_{10}^{(12)} - \pi_{01}^{(12)} - \pi_{11}^{(12)}) \\
+&amp;= - B_{10}^{(12)} ({\mathbf p}- {\boldsymbol\pi}) - B_{01}^{(12)} ({\mathbf p}- {\boldsymbol\pi}) - B_{11}^{(12)} ({\mathbf p}- {\boldsymbol\pi}) \\
+&amp;= - ({\color{gray}\underbrace{\color{black}B_{10}^{(12)} + B_{01}^{(12)} + B_{11}^{(12)}}_{B_{00}^{(12)}}} )  ({\mathbf p}- {\boldsymbol\pi})
+\end{align*}\]</span></p>
+<p>Following the pattern above, we should be getting the following design matrix:</p>
+<table style="width:100%;" class="table">
+<colgroup>
+<col width="20%">
+<col width="10%">
+<col width="10%">
+<col width="10%">
+<col width="10%">
+<col width="10%">
+<col width="10%">
+<col width="10%">
+<col width="10%">
+</colgroup>
+<thead><tr class="header">
+<th align="right"></th>
+<th align="right"><span class="math inline">\(e_{111}\)</span></th>
+<th align="right"><span class="math inline">\(e_{110}\)</span></th>
+<th align="right"><span class="math inline">\(e_{101}\)</span></th>
+<th align="right"><span class="math inline">\(e_{100}\)</span></th>
+<th align="right"><span class="math inline">\(e_{011}\)</span></th>
+<th align="right"><span class="math inline">\(e_{010}\)</span></th>
+<th align="right"><span class="math inline">\(e_{001}\)</span></th>
+<th align="right"><span class="math inline">\(e_{000}\)</span></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right"><span class="math inline">\(\tilde e_{00}^{(12)}\)</span></td>
+<td align="right">-1</td>
+<td align="right">-1</td>
+<td align="right">-1</td>
+<td align="right">-1</td>
+<td align="right">-1</td>
+<td align="right">-1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right"><span class="math inline">\(\tilde e_{10}^{(12)}\)</span></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right"><span class="math inline">\(\tilde e_{01}^{(12)}\)</span></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right"><span class="math inline">\(\tilde e_{11}^{(12)}\)</span></td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right"><span class="math inline">\(\tilde e_{00}^{(13)}\)</span></td>
+<td align="right">-1</td>
+<td align="right">-1</td>
+<td align="right">-1</td>
+<td align="right">-1</td>
+<td align="right">-1</td>
+<td align="right">0</td>
+<td align="right">-1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right"><span class="math inline">\(\tilde e_{10}^{(13)}\)</span></td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right"><span class="math inline">\(\tilde e_{01}^{(13)}\)</span></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right"><span class="math inline">\(\tilde e_{11}^{(13)}\)</span></td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right"><span class="math inline">\(\tilde e_{00}^{(23)}\)</span></td>
+<td align="right">-1</td>
+<td align="right">-1</td>
+<td align="right">-1</td>
+<td align="right">0</td>
+<td align="right">-1</td>
+<td align="right">-1</td>
+<td align="right">-1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right"><span class="math inline">\(\tilde e_{10}^{(23)}\)</span></td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right"><span class="math inline">\(\tilde e_{01}^{(23)}\)</span></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right"><span class="math inline">\(\tilde e_{11}^{(23)}\)</span></td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>This is implemented in the R function <code><a href="../reference/transformation-matrices.html">create_G_mat()</a></code>:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/transformation-matrices.html">create_G_mat</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="co">#&gt;       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]</span></span>
+<span><span class="co">#&gt;  [1,]   -1   -1   -1   -1   -1   -1    0    0</span></span>
+<span><span class="co">#&gt;  [2,]    0    0    1    1    0    0    0    0</span></span>
+<span><span class="co">#&gt;  [3,]    0    0    0    0    1    1    0    0</span></span>
+<span><span class="co">#&gt;  [4,]    1    1    0    0    0    0    0    0</span></span>
+<span><span class="co">#&gt;  [5,]   -1   -1   -1   -1   -1    0   -1    0</span></span>
+<span><span class="co">#&gt;  [6,]    0    1    0    1    0    0    0    0</span></span>
+<span><span class="co">#&gt;  [7,]    0    0    0    0    1    0    1    0</span></span>
+<span><span class="co">#&gt;  [8,]    1    0    1    0    0    0    0    0</span></span>
+<span><span class="co">#&gt;  [9,]   -1   -1   -1    0   -1   -1   -1    0</span></span>
+<span><span class="co">#&gt; [10,]    0    1    0    0    0    1    0    0</span></span>
+<span><span class="co">#&gt; [11,]    0    0    1    0    0    0    1    0</span></span>
+<span><span class="co">#&gt; [12,]    1    0    0    0    1    0    0    0</span></span>
+<span><span class="co">#&gt; attr(,"pairwise")</span></span>
+<span><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
+<span><span class="co">#&gt; [1,]    1    1    2</span></span>
+<span><span class="co">#&gt; [2,]    2    3    3</span></span></code></pre></div>
+<p>A couple of notes:</p>
+<ul>
+<li>In the manuscript, we describe the matrix <span class="math inline">\(B\)</span> which is a design matrix that transforms the pairwise residuals <span class="math inline">\(\tilde{\mathbf e}\)</span> to the unviariate and bivariate residuals <span class="math inline">\({\mathbf e}_2\)</span>.</li>
+<li>The relationship between <span class="math inline">\({\mathbf G}\)</span>, <span class="math inline">\({\mathbf T}_2\)</span> and <span class="math inline">\(B\)</span> is that <span class="math inline">\({\mathbf G}= B {\mathbf T}_2\)</span>.</li>
+<li>Thus, the <span class="math inline">\(B\)</span> matrix may be obtained by postmultiplying <span class="math inline">\({\mathbf G}\)</span> with the right inverse of <span class="math inline">\({\mathbf T}_2\)</span>. The right inverse exists because <span class="math inline">\({\mathbf T}_2\)</span> is of full row rank.</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://testthat.r-lib.org" class="external-link">testthat</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loading required package: testthat</span></span>
+<span><span class="va">B</span>  <span class="op">&lt;-</span> <span class="fu">lavaan.bingof</span><span class="fu">:::</span><span class="fu">Beta_mat_design</span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
+<span><span class="va">G</span>  <span class="op">&lt;-</span> <span class="fu">lavaan.bingof</span><span class="fu">::</span><span class="fu"><a href="../reference/transformation-matrices.html">create_G_mat</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
+<span><span class="va">T2</span> <span class="op">&lt;-</span> <span class="fu">lavaan.bingof</span><span class="fu">::</span><span class="fu"><a href="../reference/transformation-matrices.html">create_T2_mat</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># equal</span></span>
+<span><span class="va">G</span></span>
+<span><span class="co">#&gt;       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]</span></span>
+<span><span class="co">#&gt;  [1,]   -1   -1   -1   -1   -1   -1    0    0</span></span>
+<span><span class="co">#&gt;  [2,]    0    0    1    1    0    0    0    0</span></span>
+<span><span class="co">#&gt;  [3,]    0    0    0    0    1    1    0    0</span></span>
+<span><span class="co">#&gt;  [4,]    1    1    0    0    0    0    0    0</span></span>
+<span><span class="co">#&gt;  [5,]   -1   -1   -1   -1   -1    0   -1    0</span></span>
+<span><span class="co">#&gt;  [6,]    0    1    0    1    0    0    0    0</span></span>
+<span><span class="co">#&gt;  [7,]    0    0    0    0    1    0    1    0</span></span>
+<span><span class="co">#&gt;  [8,]    1    0    1    0    0    0    0    0</span></span>
+<span><span class="co">#&gt;  [9,]   -1   -1   -1    0   -1   -1   -1    0</span></span>
+<span><span class="co">#&gt; [10,]    0    1    0    0    0    1    0    0</span></span>
+<span><span class="co">#&gt; [11,]    0    0    1    0    0    0    1    0</span></span>
+<span><span class="co">#&gt; [12,]    1    0    0    0    1    0    0    0</span></span>
+<span><span class="co">#&gt; attr(,"pairwise")</span></span>
+<span><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
+<span><span class="co">#&gt; [1,]    1    1    2</span></span>
+<span><span class="co">#&gt; [2,]    2    3    3</span></span>
+<span><span class="va">B</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">T2</span></span>
+<span><span class="co">#&gt;       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]</span></span>
+<span><span class="co">#&gt;  [1,]   -1   -1   -1   -1   -1   -1    0    0</span></span>
+<span><span class="co">#&gt;  [2,]    0    0    1    1    0    0    0    0</span></span>
+<span><span class="co">#&gt;  [3,]    0    0    0    0    1    1    0    0</span></span>
+<span><span class="co">#&gt;  [4,]    1    1    0    0    0    0    0    0</span></span>
+<span><span class="co">#&gt;  [5,]   -1   -1   -1   -1   -1    0   -1    0</span></span>
+<span><span class="co">#&gt;  [6,]    0    1    0    1    0    0    0    0</span></span>
+<span><span class="co">#&gt;  [7,]    0    0    0    0    1    0    1    0</span></span>
+<span><span class="co">#&gt;  [8,]    1    0    1    0    0    0    0    0</span></span>
+<span><span class="co">#&gt;  [9,]   -1   -1   -1    0   -1   -1   -1    0</span></span>
+<span><span class="co">#&gt; [10,]    0    1    0    0    0    1    0    0</span></span>
+<span><span class="co">#&gt; [11,]    0    0    1    0    0    0    1    0</span></span>
+<span><span class="co">#&gt; [12,]    1    0    0    0    1    0    0    0</span></span>
+<span><span class="fu"><a href="https://testthat.r-lib.org/reference/test_that.html" class="external-link">test_that</a></span><span class="op">(</span><span class="st">"G and BT2 are equal"</span>, <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://testthat.r-lib.org/reference/equality-expectations.html" class="external-link">expect_equal</a></span><span class="op">(</span><span class="va">G</span>, <span class="va">B</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">T2</span>, ignore_attr <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>  </span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">Test passed</span> 🎊</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># equal</span></span>
+<span><span class="va">B</span></span>
+<span><span class="co">#&gt;       [,1] [,2] [,3] [,4] [,5] [,6]</span></span>
+<span><span class="co">#&gt;  [1,]   -1   -1    0    1    0    0</span></span>
+<span><span class="co">#&gt;  [2,]    1    0    0   -1    0    0</span></span>
+<span><span class="co">#&gt;  [3,]    0    1    0   -1    0    0</span></span>
+<span><span class="co">#&gt;  [4,]    0    0    0    1    0    0</span></span>
+<span><span class="co">#&gt;  [5,]   -1    0   -1    0    1    0</span></span>
+<span><span class="co">#&gt;  [6,]    1    0    0    0   -1    0</span></span>
+<span><span class="co">#&gt;  [7,]    0    0    1    0   -1    0</span></span>
+<span><span class="co">#&gt;  [8,]    0    0    0    0    1    0</span></span>
+<span><span class="co">#&gt;  [9,]    0   -1   -1    0    0    1</span></span>
+<span><span class="co">#&gt; [10,]    0    1    0    0    0   -1</span></span>
+<span><span class="co">#&gt; [11,]    0    0    1    0    0   -1</span></span>
+<span><span class="co">#&gt; [12,]    0    0    0    0    0    1</span></span>
+<span><span class="op">(</span><span class="va">altB</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">G</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/ginv.html" class="external-link">ginv</a></span><span class="op">(</span><span class="va">T2</span><span class="op">)</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;       [,1] [,2] [,3] [,4] [,5] [,6]</span></span>
+<span><span class="co">#&gt;  [1,]   -1   -1    0    1    0    0</span></span>
+<span><span class="co">#&gt;  [2,]    1    0    0   -1    0    0</span></span>
+<span><span class="co">#&gt;  [3,]    0    1    0   -1    0    0</span></span>
+<span><span class="co">#&gt;  [4,]    0    0    0    1    0    0</span></span>
+<span><span class="co">#&gt;  [5,]   -1    0   -1    0    1    0</span></span>
+<span><span class="co">#&gt;  [6,]    1    0    0    0   -1    0</span></span>
+<span><span class="co">#&gt;  [7,]    0    0    1    0   -1    0</span></span>
+<span><span class="co">#&gt;  [8,]    0    0    0    0    1    0</span></span>
+<span><span class="co">#&gt;  [9,]    0   -1   -1    0    0    1</span></span>
+<span><span class="co">#&gt; [10,]    0    1    0    0    0   -1</span></span>
+<span><span class="co">#&gt; [11,]    0    0    1    0    0   -1</span></span>
+<span><span class="co">#&gt; [12,]    0    0    0    0    0    1</span></span>
+<span><span class="fu"><a href="https://testthat.r-lib.org/reference/test_that.html" class="external-link">test_that</a></span><span class="op">(</span><span class="st">"B can be created from T2 inv"</span>, <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://testthat.r-lib.org/reference/equality-expectations.html" class="external-link">expect_equal</a></span><span class="op">(</span><span class="va">B</span>, <span class="va">altB</span>, ignore_attr <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">Test passed</span> 🥇</span></span></code></pre></div>
 </div>
+<div class="proposition">
+<p><span id="prp:unlabeled-div-10" class="proposition"><strong>Proposition 5  </strong></span>The unit sensitivity matrix <span class="math inline">\({\mathcal H}\)</span> under the pairwise likelihood estimation method is <span class="math inline">\({\mathcal H}= \tilde{\boldsymbol\Delta}^\top \tilde{\mathbf D}^{-1} \tilde{\boldsymbol\Delta}\)</span>.</p>
+</div>
+<div class="proof">
+<p><span id="unlabeled-div-11" class="proof"><em>Proof</em>. </span>The maximum pairwise likelihood estimator <span class="math inline">\(\hat{\boldsymbol\theta}_{\text{PL}}\)</span> solves the estimating equations <span class="math inline">\(\mathbb{R}^q \ni \nabla \operatorname{\ell_P}({\boldsymbol\theta}) = {\mathbf 0}\)</span>.
+The score vector has entries
+<span class="math display" id="eq:bivderall">\[\begin{equation}
+\frac{\partial\!\operatorname{\ell_P}({\boldsymbol\theta})}{\partial\theta_k} =
+\sum_{i&lt;j} \sum_{y_i}\sum_{y_j}  \frac{\hat n_{y_iy_j}^{(ij)} }{\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})} \frac{\partial \pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})}{\partial\theta_k} \tag{9}
+\end{equation}\]</span>
+for each <span class="math inline">\(k=1,\dots,q\)</span>.
+Differentiating again with respect to <span class="math inline">\(\theta_l\)</span> can be derived to be
+<span class="math display" id="eq:secderpl">\[\begin{equation}
+\frac{\partial\!\operatorname{\ell_P}({\boldsymbol\theta})}{\partial\theta_k\partial\theta_l}
+=
+\sum_{i&lt;j} \sum_{y_i} \sum_{y_j}
+\left\{
+\frac{\hat n_{y_iy_j}^{(ij)}}{\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})}
+\frac{\partial^2\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})}{\partial\theta_k\partial\theta_l}
+-
+\frac{\hat n_{y_iy_j}^{(ij)}}{\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})^2}
+\frac{\partial\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})}{\partial\theta_k}
+\frac{\partial\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})}{\partial\theta_l}\right\}
+. \tag{10}
+\end{equation}\]</span>
+The <span class="math inline">\((k,l)\)</span>th entry of the (full) <em>sensitivity matrix</em> is the expected value of <a href="#eq:secderpl">(10)</a>, shown to be
+<span class="math display">\[\begin{equation}\label{eq:sensitivitymatrix}
+-\mathop{\mathrm{E}}\left[ \frac{\partial\!\operatorname{\ell_P}({\boldsymbol\theta})}{\partial\theta_k\partial\theta_l}
+\right]
+=
+n \sum_{i&lt;j} \sum_{y_i} \sum_{y_j}
+\frac{1}{\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})}
+\frac{\partial\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})}{\partial\theta_k}
+\frac{\partial\pi_{y_iy_j}^{(ij)}({\boldsymbol\theta})}{\partial\theta_l},
+\end{equation}\]</span>
+which in matrix form is <span class="math inline">\(n\tilde{\boldsymbol\Delta}^\top \tilde{\mathbf D}^{-1} \tilde{\boldsymbol\Delta}\)</span>.
+Dividing by <span class="math inline">\(n\)</span> gives the desired result.</p>
+</div>
+<div class="proposition">
+<p><span id="prp:unlabeled-div-12" class="proposition"><strong>Proposition 6  </strong></span>The covariance matrix of the residuals, <span class="math inline">\({\boldsymbol\Omega}= ({\mathbf I}- {\boldsymbol\Delta}{\mathbf B}){\boldsymbol\Sigma}({\mathbf I}- {\boldsymbol\Delta}{\mathbf B})^\top\)</span> simplifies to <span class="math inline">\({\boldsymbol\Sigma}- {\boldsymbol\Delta}{\mathcal H}^{-1}{\boldsymbol\Delta}^\top\)</span> under the pairwise likelihood framework.</p>
+</div>
+<div class="proof">
+<p><span id="unlabeled-div-13" class="proof"><em>Proof</em>. </span>Consider first the matrix <span class="math inline">\({\boldsymbol\Delta}{\mathbf B}{\boldsymbol\Sigma}\)</span>:</p>
+<p><span class="math display">\[\begin{align*}
+{\boldsymbol\Delta}{\mathbf B}{\boldsymbol\Sigma}
+&amp;= {\boldsymbol\Delta}{\mathcal H}^{-1}\tilde{\boldsymbol\Delta}^{-1}\tilde {\mathbf D}^{-1} {\mathbf G}{\boldsymbol\Sigma}\\
+&amp;= {\boldsymbol\Delta}{\mathcal H}^{-1}\tilde{\boldsymbol\Delta}^{-1}\tilde {\mathbf D}^{-1} {\mathbf G}({\mathbf D}- \pi_{}({\boldsymbol\theta})\pi_{}({\boldsymbol\theta})^\top) \\
+&amp;= \vdots
+\end{align*}\]</span></p>
+<p><strong>Actually, this might not work…</strong></p>
+</div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan.bingof</span><span class="fu">:::</span><span class="fu">fit_facmod_pml</span><span class="op">(</span><span class="fl">1</span>, <span class="st">"srs"</span>, <span class="fl">1000</span><span class="op">)</span><span class="op">$</span><span class="va">fit</span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">lavaan.bingof</span><span class="fu">:::</span><span class="fu">calc_test_stuff</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/attach.html" class="external-link">attach</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
+<span><span class="va">mat1</span> <span class="op">&lt;-</span> <span class="va">Omega2</span></span>
+<span><span class="va">mat2</span> <span class="op">&lt;-</span> <span class="va">Sigma2</span> <span class="op">-</span> <span class="va">Delta2</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">H_inv</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">Delta2</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/detach.html" class="external-link">detach</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mat1</span>, <span class="va">mat2</span><span class="op">)</span></span></code></pre></div>
+<p><img src="proofs_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
