@@ -375,5 +375,3 @@ plot(mat1, mat2)
 ```
 
 
-
-## References

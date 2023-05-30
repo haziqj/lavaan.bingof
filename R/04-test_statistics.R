@@ -934,6 +934,36 @@ Pearson_test_v1 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
 #' @export
 Pearson_RS_test <- Pearson_test_v1
 
+Pearson_test_v3 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
+                            .order = 2) {
+  .order <- match.arg(as.character(.order), c("1", "2"))
+  list2env(test_begin(object, approx_Omega2, svy_design), environment())
+
+  Xi <- diag(1 / pi2_hat)
+  X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
+
+  # Rao-Scott adjustment
+  tmp <- eigen(Omega2)
+  U <- diag(tmp$val)
+  V <- tmp$vec
+  Omegahalf <- V %*% sqrt(U) %*% t(V)
+  # same as below
+  Omegahalf <- t(chol(Omega2))
+  mat <- t(Omegahalf) %*% Xi %*% (Omegahalf)
+  delta <- eigen(mat)$values
+
+  X2 <- X2 / mean(delta)
+  df <- S
+  if (.order == "2") {
+    a_sq <- (sum((delta - mean(delta)) ^ 2) / S) / (mean(delta)) ^ 2
+    X2 <- X2 / (1 + a_sq)
+    df <- S / (1 + a_sq)
+  }
+
+  data.frame(X2 = X2, df = df, name = "PearsonRS") %>%
+    after_test(., Xi, S)
+}
+
 Pearson_test_v2 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
                             .order = "3") {
   list2env(test_begin(object, approx_Omega2, svy_design), environment())
