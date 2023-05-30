@@ -131,16 +131,21 @@ arose during model fit.)</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html" class="external-link">sem</a></span><span class="op">(</span><span class="fu"><a href="txt_mod.html">txt_mod</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="gen_data_bin.html">gen_data_bin</a></span><span class="op">(</span><span class="fl">1</span>, n <span class="op">=</span> <span class="fl">500</span><span class="op">)</span>, std.lv <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>                   estimator <span class="op">=</span> <span class="st">"PML"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">all_tests</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 7 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      X2    df name          pval Xi_rank     S</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>  4.72  5    Wald         0.451      14    15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>  2.80  3.85 WaldDiag,MM3 0.568      15    15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>  4.71  5    WaldVCF      0.452       5    15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>  4.31  4.63 PearsonRS    0.455      15    15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>  3.41  3.70 Pearson,MM3  0.444      15    15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span>  3.87  4.29 RSS,MM3      0.467      15    15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span>  4.62  5.02 Multn,MM3    0.467      15    15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 12 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       X2    df name           pval Xi_rank     S</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>  6.66  5    Wald         0.247       13    15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>  6.65  5    WaldVCF      0.248        5    15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>  7.58  5    WaldDiag,MM1 0.181       15    15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>  7.96  5.25 WaldDiag,MM2 0.178       15    15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>  6.12  3.81 WaldDiag,MM3 0.173       15    15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 22.7  15    WaldDiag,RS1 0.090<span style="text-decoration: underline;">0</span>      15    15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>  7.96  5.25 WaldDiag,RS2 0.178       15    15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 22.8  15    Pearson,RS1  0.088<span style="text-decoration: underline;">4</span>      15    15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>  7.25  4.77 Pearson,RS2  0.183       15    15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>  7.60  5    Pearson,MM1  0.180       15    15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span>  7.25  4.77 Pearson,MM2  0.183       15    15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span>  6.03  3.81 Pearson,MM3  0.179       15    15</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
