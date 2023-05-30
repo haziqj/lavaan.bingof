@@ -888,6 +888,31 @@ Wald_test_v2 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
 #' @export
 Wald_diag_test <- Wald_test_v2
 
+Wald_diag_RS_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
+                              .order = 2) {
+  .order <- match.arg(as.character(.order), c("1", "2"))
+  list2env(test_begin(object, approx_Omega2, svy_design), environment())
+
+  omega_diag <- diag(Omega2)
+  Xi <- diag(1 / omega_diag)
+  X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
+
+  # Rao-Scott adjustment
+  mat <- diag(1 / sqrt(omega_diag)) %*% Omega2 %*% diag(1 / sqrt(omega_diag))  # supposed to divide by N???
+  delta <- eigen(mat)$values
+
+  X2 <- X2 / mean(delta)
+  df <- S
+  if (.order == "2") {
+    a_sq <- (sum((delta - mean(delta)) ^ 2) / S) / (mean(delta)) ^ 2
+    X2 <- X2 / (1 + a_sq)
+    df <- S / (1 + a_sq)
+  }
+
+  data.frame(X2 = X2, df = df, name = paste0("WaldDiag,RS", .order)) %>%
+    after_test(., Xi, S)
+}
+
 Wald_test_v3 <- function(object, svy_design = NULL) {
   list2env(test_begin(object, .approx_Omega2 = FALSE, svy_design),
            environment())
@@ -926,7 +951,7 @@ Pearson_test_v1 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
     df <- S / (1 + a_sq)
   }
 
-  data.frame(X2 = X2, df = df, name = "PearsonRS") %>%
+  data.frame(X2 = X2, df = df, name = paste0("Pearson,RS", .order)) %>%
     after_test(., Xi, S)
 }
 
@@ -1030,21 +1055,25 @@ all_tests <- function(object, svy_design = NULL, sim = NULL) {
 
   res <- bind_rows(
     Wald_test(test_stuff),
-    # Wald_test_v2(test_stuff, .order = 1),
-    # Wald_test_v2(test_stuff, .order = 2),
-    Wald_test_v2(test_stuff, .order = 3),  # diagonal
-    Wald_test_v3(test_stuff),  # VCOV free
-    # Pearson_test_v1(test_stuff, .order = 1),
-    Pearson_test_v1(test_stuff, .order = 2),  # RS adjustment
-    # Pearson_test_v2(test_stuff, .order = 1),
-    # Pearson_test_v2(test_stuff, .order = 2),
-    Pearson_test_v2(test_stuff, .order = 3),  # MM adjustment
+    Wald_vcovf_test(test_stuff),
+    Wald_diag_test(test_stuff, .order = 1),
+    Wald_diag_test(test_stuff, .order = 2),
+    Wald_diag_test(test_stuff, .order = 3),
+    Wald_diag_RS_test(test_stuff, .order = 1),
+    Wald_diag_RS_test(test_stuff, .order = 2),
+
+    Pearson_RS_test(test_stuff, .order = 1),
+    Pearson_RS_test(test_stuff, .order = 2),
+    Pearson_test(test_stuff, .order = 1),
+    Pearson_test(test_stuff, .order = 2),
+    Pearson_test(test_stuff, .order = 3)
+
     # RSS_test(test_stuff, .order = 1),
     # RSS_test(test_stuff, .order = 2),
-    RSS_test(test_stuff, .order = 3),
+    # RSS_test(test_stuff, .order = 3),
     # Multn_test(test_stuff, .order = 1),
     # Multn_test(test_stuff, .order = 2),
-    Multn_test(test_stuff, .order = 3)
+    # Multn_test(test_stuff, .order = 3)
   ) %>%
     as_tibble()
   if (!is.null(sim)) {
