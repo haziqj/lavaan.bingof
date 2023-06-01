@@ -62,7 +62,7 @@ srs_plot <- function(x = res_srs_type1, alpha = 10, dashed_line = TRUE,
     geom_line() +
     facet_wrap(. ~ sim, ncol = 3) +
     scale_x_continuous(breaks = unique(res_srs_power$n)) +
-    scale_shape_manual(values = c(16, 17, 15, 3, 7, 8, 11)) +
+    scale_shape_manual(values = c(16, 17, 15, 3, 7, 8, 11, 16, 17, 15, 3, 7)) +
     scale_alpha("% rank def.", range = c(1, 0.3)) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1),
           legend.position = c(0.85, 0.2)) +
@@ -71,8 +71,8 @@ srs_plot <- function(x = res_srs_type1, alpha = 10, dashed_line = TRUE,
            .(plot_title)~"("*alpha~"="~.(iprior::dec_plac(alpha/100, 2))*")"
          ))) +
     guides(col = guide_legend(ncol = 1), shape = guide_legend(ncol = 1)) +
-    # scale_colour_viridis_d(option = "turbo", direction = -1)
-    scale_color_jcolors()
+    scale_colour_viridis_d(option = "turbo", direction = -1)
+    # scale_color_jcolors()
 }
 
 p_srs_a <- srs_plot(res_srs_type1, alpha = 10)
@@ -137,8 +137,8 @@ complex_plot <- function(x = res_complex_type1, alpha = 10, dashed_line = TRUE,
          ))) +
     guides(fill = guide_legend(nrow = 3, order = 1),
            alpha = guide_legend(ncol = 2, order = 2)) +
-    # scale_fill_viridis_d(option = "turbo", direction = -1) +
-    scale_fill_jcolors() +
+    scale_fill_viridis_d(option = "turbo", direction = -1) +
+    # scale_fill_jcolors() +
     facet_grid(sim ~ sampling)
 }
 
