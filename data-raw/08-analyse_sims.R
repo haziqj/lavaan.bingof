@@ -130,7 +130,7 @@ complex_plot <- function(x = res_complex_type1, alpha = 10, dashed_line = TRUE,
       scale_linetype_manual(NULL, values = "dashed")
   }
   p +
-    facet_wrap(. ~ sim, ncol = 3, scales = "free") +
+    facet_wrap(. ~ sim, ncol = 3) +
     scale_alpha("% rank\ndef.", range = c(1, 0.5)) +
     theme(legend.position = "bottom") +
     labs(x = "Sample size", y = "Rejection proportion", fill = NULL,
@@ -141,7 +141,7 @@ complex_plot <- function(x = res_complex_type1, alpha = 10, dashed_line = TRUE,
            alpha = guide_legend(ncol = 2, order = 2)) +
     scale_fill_viridis_d(option = "turbo", direction = -1) +
     # scale_fill_jcolors() +
-    facet_grid(sim ~ sampling, scales = "free")
+    facet_grid(sim ~ sampling)
 }
 
 # res_complex_type1 %>%
@@ -149,11 +149,12 @@ complex_plot <- function(x = res_complex_type1, alpha = 10, dashed_line = TRUE,
 #   filter(n != 500) %>%
 #   filter(!(name %in% c("WaldDiag,RS1", "Pearson,RS1"))) %>%
 #   complex_plot(alpha = 5)
-complex_plot(res_complex_type1, alpha = 5) + ggtitle("Using prob2 est. model probs.")
+complex_plot(res_complex_type1, alpha = 5) + ggtitle("Using est. model probs. (pi2)") +
+  coord_cartesian(ylim = c(0, 0.2))
 
 p_complex_a <- complex_plot(res_complex_type1, alpha = 10) +
   coord_cartesian(ylim = c(0, 0.2))
-p_complex_b <- complex_plot(res_complex_type1, alpha = 5)
+p_complex_b <- complex_plot(res_complex_type1, alpha = 5) +
   coord_cartesian(ylim = c(0, 0.1))
 p_complex_c <- complex_plot(res_complex_type1, alpha = 1) +
   coord_cartesian(ylim = c(0, 0.05))
