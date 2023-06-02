@@ -118,7 +118,9 @@ complex_plot <- function(x = res_complex_type1, alpha = 10, dashed_line = TRUE,
   p <-
     x %>%
     mutate(n = factor(n, labels = paste0("n =\n", unique(x$n)))) %>%
-    ggplot(aes(n, .data[[var_name]], fill = name, alpha = n_rank_def / nsim * 100)) +
+    ggplot(aes(n, .data[[var_name]], fill = name,
+               alpha = n_rank_def / nsim * 100
+               )) +
     geom_bar(stat = "identity", position = "dodge", width = 0.9)
 
   if (isTRUE(dashed_line)) {
@@ -128,23 +130,30 @@ complex_plot <- function(x = res_complex_type1, alpha = 10, dashed_line = TRUE,
       scale_linetype_manual(NULL, values = "dashed")
   }
   p +
-    facet_wrap(. ~ sim, ncol = 3) +
-    scale_alpha("% rank\ndef.", range = c(1, 0.3)) +
+    facet_wrap(. ~ sim, ncol = 3, scales = "free") +
+    scale_alpha("% rank\ndef.", range = c(1, 0.5)) +
     theme(legend.position = "bottom") +
     labs(x = "Sample size", y = "Rejection proportion", fill = NULL,
          shape = NULL, title = as.expression(bquote(
            .(plot_title)~"("*alpha~"="~.(iprior::dec_plac(alpha/100, 2))*")"
          ))) +
-    guides(fill = guide_legend(nrow = 3, order = 1),
+    guides(fill = guide_legend(nrow = 2, order = 1),
            alpha = guide_legend(ncol = 2, order = 2)) +
     scale_fill_viridis_d(option = "turbo", direction = -1) +
     # scale_fill_jcolors() +
-    facet_grid(sim ~ sampling)
+    facet_grid(sim ~ sampling, scales = "free")
 }
+
+# res_complex_type1 %>%
+#   filter(sim %in% c("1F 5V", "1F 8V")) %>%
+#   filter(n != 500) %>%
+#   filter(!(name %in% c("WaldDiag,RS1", "Pearson,RS1"))) %>%
+#   complex_plot(alpha = 5)
+complex_plot(res_complex_type1, alpha = 5) + ggtitle("Using prob2 est. model probs.")
 
 p_complex_a <- complex_plot(res_complex_type1, alpha = 10) +
   coord_cartesian(ylim = c(0, 0.2))
-p_complex_b <- complex_plot(res_complex_type1, alpha = 5) +
+p_complex_b <- complex_plot(res_complex_type1, alpha = 5)
   coord_cartesian(ylim = c(0, 0.1))
 p_complex_c <- complex_plot(res_complex_type1, alpha = 1) +
   coord_cartesian(ylim = c(0, 0.05))

@@ -639,7 +639,7 @@ create_Sigma2_matrix_complex_old <- function(.lavobject, .svy_design) {
   Reduce("+", Sigma) / N
 }
 
-create_Sigma2_matrix_complex <- function(.lavobject, .svy_design) {
+create_Sigma2_matrix_complex_alt <- function(.lavobject, .svy_design) {
   list2env(extract_lavaan_info(.lavobject), environment())
   y_form <- paste0("~ ", paste0("y", 1:p, collapse = " + "), sep = "")
   v <-
@@ -663,6 +663,36 @@ create_Sigma2_matrix_complex <- function(.lavobject, .svy_design) {
   attr(v, "var") <- NULL
   attr(v, "statistic") <- NULL
   v
+}
+
+create_Sigma2_matrix_complex <- function(.lavobject, .svy_design) {
+  list2env(extract_lavaan_info(.lavobject), environment())
+  list2env(get_uni_bi_moments(.lavobject), environment())
+
+  y_form <- paste0("~ ", paste0("y", 1:p, collapse = " + "), sep = "")
+  v <-
+    srvyr::as_survey(.svy_design) %>%
+    mutate(across(starts_with("y"), \(y) as.numeric(y) - 1))
+  ystart <- min(grep("^y[0-9]", names(v$variables))) - 1
+  idx <- combn(p, 2)
+  for (k in seq_len(ncol(idx))) {
+    i <- idx[1, k] + ystart
+    j <- idx[2, k] + ystart
+    varname <- paste0("y", i, j, collapse = "")
+    yi <- v$variables[, i, drop = TRUE]
+    yj <- v$variables[, j, drop = TRUE]
+    yij <- (yi == 1) * (yj == 1)  # both positive
+    v$variables[[varname]] <- yij
+    y_form <- paste0(y_form, paste0(" + ", varname))
+  }
+
+  x <- v$variables[, -(1:ystart)]
+  # xbar <- pi2 <- c(pidot1, pidot2)
+  xbar <- pi2 <- c(pdot1, pdot2)
+  x <- t(t(x) - xbar)
+  pweights <- 1 / .svy_design$prob
+
+  cov.wt(x, pweights, center = FALSE)$cov
 }
 
 create_Sigma_univariate_matrix_complex <- function(.lavobject, .svy_design) {
@@ -1085,13 +1115,13 @@ all_tests <- function(object, svy_design = NULL, sim = NULL) {
     # Wald_diag_test(test_stuff, .order = 1),
     # Wald_diag_test(test_stuff, .order = 2),
     Wald_diag_test(test_stuff, .order = 3),
-    Wald_diag_RS_test(test_stuff, .order = 1),
+    # Wald_diag_RS_test(test_stuff, .order = 1),
     Wald_diag_RS_test(test_stuff, .order = 2),
 
     # Pearson_test(test_stuff, .order = 1),
     # Pearson_test(test_stuff, .order = 2),
     Pearson_test(test_stuff, .order = 3),
-    Pearson_RS_test(test_stuff, .order = 1),
+    # Pearson_RS_test(test_stuff, .order = 1),
     Pearson_RS_test(test_stuff, .order = 2)
 
     # RSS_test(test_stuff, .order = 1),
