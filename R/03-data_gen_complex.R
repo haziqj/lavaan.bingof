@@ -1,3 +1,20 @@
+convert_dat_to_unibiv <- function(dat) {
+  p <- ncol(dat)
+  idx <- combn(p, 2)
+
+  for (k in seq_len(ncol(idx))) {
+    i <- idx[1, k]
+    j <- idx[2, k]
+    varname <- paste0("y", i, ".", j, collapse = "")
+    yi <- dat[, i, drop = TRUE]
+    yj <- dat[, j, drop = TRUE]
+    yij <- (yi == 1) * (yj == 1)  # both positive
+    dat[[varname]] <- yij
+  }
+  dat
+}
+
+
 #' Simulate the school population data set
 #'
 #' @inheritParams gen_data_bin
@@ -90,15 +107,19 @@ make_population <- function(model_no = 1, seed = 123, H1 = FALSE,
     t(apply(ystar, 1, function(x) as.numeric(x > tau))) %>%
     as.data.frame()
   colnames(y) <- paste0("y", seq_len(nitems))
+  Sigma2 <- (N - 1) / N * cov(convert_dat_to_unibiv(y))
 
   ystar <- as.data.frame(ystar)
   colnames(ystar) <- paste0("ystar", seq_len(nitems))
 
   if (isTRUE(return_all)) {
-    bind_cols(pop, y, ystar, eta[abil_order, , drop = FALSE])
+    res <- bind_cols(pop, y, ystar, eta[abil_order, , drop = FALSE])
   } else {
-    bind_cols(pop, y)
+    res <- bind_cols(pop, y)
   }
+
+  attr(res, "Sigma2") <- Sigma2
+  res
 }
 
 #' Sample from the school population

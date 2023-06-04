@@ -678,7 +678,7 @@ create_Sigma2_matrix_complex <- function(.lavobject, .svy_design) {
   for (k in seq_len(ncol(idx))) {
     i <- idx[1, k] + ystart
     j <- idx[2, k] + ystart
-    varname <- paste0("y", i, j, collapse = "")
+    varname <- paste0("y", i, ".", j, collapse = "")
     yi <- v$variables[, i, drop = TRUE]
     yj <- v$variables[, j, drop = TRUE]
     yij <- (yi == 1) * (yj == 1)  # both positive
@@ -1102,11 +1102,11 @@ Multn_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
 #' fit <- lavaan::sem(txt_mod(1), gen_data_bin(1, n = 500), std.lv = TRUE,
 #'                    estimator = "PML")
 #' all_tests(fit)
-all_tests <- function(object, svy_design = NULL, sim = NULL) {
+all_tests <- function(object, svy_design = NULL, sim = NULL, Sigma2 = NULL) {
   if (isTRUE(attr(object, "bingof_calc_test_stuff"))) {
     test_stuff <- object
   } else {
-    test_stuff <- calc_test_stuff(object, svy_design)
+    test_stuff <- calc_test_stuff(object, svy_design, .Sigma2 = Sigma2)
   }
 
   res <- bind_rows(

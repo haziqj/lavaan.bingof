@@ -46,7 +46,8 @@ globalVariables(c("i"))
 run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
                        samp = c("srs", "strat", "clust", "strcl"),
                        simtype = c("type1", "power"), starting_seed = 16423,
-                       ncores = parallel::detectCores() - 2) {
+                       ncores = parallel::detectCores() - 2,
+                       pop_Sigma = FALSE) {
 
   # Model setup
   mod <- txt_mod(model_no)
@@ -58,7 +59,9 @@ run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
   if (samp != "srs") {
     the_wt <- "wt"
     pop <- make_population(model_no, seed = starting_seed, H1 = H1)
+    Sigma2 <- attr(pop, "Sigma2")
   }
+  if (!isTRUE(pop_Sigma)) Sigma2 <- NULL
 
   # Random seeds for replication
   set.seed(starting_seed)
@@ -113,7 +116,7 @@ run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
 
     fit <- lavaan::sem(model = mod, data = dat, estimator = "PML",
                        std.lv = TRUE, sampling.weights = the_wt)
-    bind_cols(all_tests(fit, svy, sim = i), seed = seed_used)
+    bind_cols(all_tests(fit, svy, sim = i, Sigma2 = Sigma2), seed = seed_used)
   }
 
   end_time <- Sys.time()

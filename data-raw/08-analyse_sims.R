@@ -36,8 +36,11 @@ summarise_sims <- function(samp = "srs", type = "type1") {
               n_converged = sum(converged),
               n_rank_def = sum(Omega2_rank < S),
               rej_rate10 = mean(alpha10[converged], na.rm = TRUE),
+              se10 = sd(alpha10[converged], na.rm = TRUE) / sqrt(n_sims),
               rej_rate5 = mean(alpha5[converged], na.rm = TRUE),
+              se5 = sd(alpha5[converged], na.rm = TRUE) / sqrt(n_sims),
               rej_rate1 = mean(alpha1[converged], na.rm = TRUE),
+              se1 = sd(alpha1[converged], na.rm = TRUE) / sqrt(n_sims),
               .groups = "drop")
 }
 
@@ -110,6 +113,7 @@ complex_plot <- function(x = res_complex_type1, alpha = 10, dashed_line = TRUE,
                          exclude_tests = c("RSS,MM3", "Multn,MM3"),
                          exclude_sims = NULL) {
   var_name <- paste0("rej_rate", alpha)
+  se_name <- paste0("se", alpha)
   nsim <- res_complex_type1$n_sims[1]
   x <- x %>%
     filter(!name %in% exclude_tests) %>%
@@ -121,7 +125,11 @@ complex_plot <- function(x = res_complex_type1, alpha = 10, dashed_line = TRUE,
     ggplot(aes(n, .data[[var_name]], fill = name,
                alpha = n_rank_def / nsim * 100
                )) +
-    geom_bar(stat = "identity", position = "dodge", width = 0.9)
+    geom_bar(stat = "identity", position = "dodge", width = 0.9) +
+    geom_errorbar(aes(ymin = .data[[var_name]] - 1.96 * .data[[se_name]],
+                      ymax = .data[[var_name]] + 1.96 * .data[[se_name]]),
+                  col = "black", width = 0.2, alpha = 1,
+                  position = position_dodge(width = 0.9))
 
   if (isTRUE(dashed_line)) {
     p <- p +
@@ -138,18 +146,15 @@ complex_plot <- function(x = res_complex_type1, alpha = 10, dashed_line = TRUE,
            .(plot_title)~"("*alpha~"="~.(iprior::dec_plac(alpha/100, 2))*")"
          ))) +
     guides(fill = guide_legend(nrow = 2, order = 1),
-           alpha = guide_legend(ncol = 2, order = 2)) +
+           alpha = guide_legend(ncol = 3, order = 2)) +
     scale_fill_viridis_d(option = "turbo", direction = -1) +
+    scale_colour_viridis_d(option = "turbo", direction = -1) +
     # scale_fill_jcolors() +
     facet_grid(sim ~ sampling)
 }
 
-# res_complex_type1 %>%
-#   filter(sim %in% c("1F 5V", "1F 8V")) %>%
-#   filter(n != 500) %>%
-#   filter(!(name %in% c("WaldDiag,RS1", "Pearson,RS1"))) %>%
-#   complex_plot(alpha = 5)
-complex_plot(res_complex_type1, alpha = 5) + ggtitle("Using est. model probs. (pi2)") +
+
+complex_plot(res_complex_type1, alpha = 5) + ggtitle("Using true population Sigma") +
   coord_cartesian(ylim = c(0, 0.2))
 
 p_complex_a <- complex_plot(res_complex_type1, alpha = 10) +
