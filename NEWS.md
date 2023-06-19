@@ -1,5 +1,11 @@
 # lavaan.bingof (development version)
 
+## 2023-06-04
+
+- Rewrote the function for estimating complex multinomial matrix $\boldsymbol\Sigma$ which uses the method from the `{survey}` package. (Although the one from that package does not work well when $p=15$ and $S=120$).
+- Added bootstrap functionality for finding the complex multinomial matrix. This uses the bootstrap sampling functionality from the `{svrep}` package.
+- Increment package version to 0.1.1
+
 ## 2023-05-12
 
 - Bug in the `gen_data_bin_strat()` function. It ignores the sample size argument `n` so all simulations were actually using the same sample size.

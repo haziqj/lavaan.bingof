@@ -639,33 +639,8 @@ create_Sigma2_matrix_complex_old <- function(.lavobject, .svy_design) {
   Reduce("+", Sigma) / N
 }
 
-create_Sigma2_matrix_complex_alt <- function(.lavobject, .svy_design) {
-  list2env(extract_lavaan_info(.lavobject), environment())
-  y_form <- paste0("~ ", paste0("y", 1:p, collapse = " + "), sep = "")
-  v <-
-    srvyr::as_survey(.svy_design) %>%
-    mutate(across(starts_with("y"), as.numeric))
-  ystart <- min(grep("^y[0-9]", names(v$variables))) - 1
-  idx <- combn(p, 2) + ystart
-  for (k in seq_len(ncol(idx))) {
-    i <- idx[1, k]
-    j <- idx[2, k]
-    varname <- paste0("y", i - ystart, j - ystart, collapse = "")
-    yi <- v$variables[, i, drop = TRUE]
-    yj <- v$variables[, j, drop = TRUE]
-    yij <- 1 + (yi == 2) * (yj == 2)  # both positive
-    v$variables[[varname]] <- yij
-    y_form <- paste0(y_form, paste0(" + ", varname))
-  }
-  v <- v %>%
-    svyvar(as.formula(y_form), .) %>%
-    as.matrix()
-  attr(v, "var") <- NULL
-  attr(v, "statistic") <- NULL
-  v
-}
-
-create_Sigma2_matrix_complex <- function(.lavobject, .svy_design) {
+create_Sigma2_matrix_complex <- function(.lavobject, .svy_design,
+                                         bootstrap = FALSE, nboot = 100) {
   list2env(extract_lavaan_info(.lavobject), environment())
   list2env(get_uni_bi_moments(.lavobject), environment())
 
@@ -676,11 +651,11 @@ create_Sigma2_matrix_complex <- function(.lavobject, .svy_design) {
   ystart <- min(grep("^y[0-9]", names(v$variables))) - 1
   idx <- combn(p, 2)
   for (k in seq_len(ncol(idx))) {
-    i <- idx[1, k] + ystart
-    j <- idx[2, k] + ystart
+    i <- idx[1, k]
+    j <- idx[2, k]
     varname <- paste0("y", i, ".", j, collapse = "")
-    yi <- v$variables[, i, drop = TRUE]
-    yj <- v$variables[, j, drop = TRUE]
+    yi <- v$variables[, i + ystart, drop = TRUE]
+    yj <- v$variables[, j + ystart, drop = TRUE]
     yij <- (yi == 1) * (yj == 1)  # both positive
     v$variables[[varname]] <- yij
     y_form <- paste0(y_form, paste0(" + ", varname))
@@ -690,9 +665,22 @@ create_Sigma2_matrix_complex <- function(.lavobject, .svy_design) {
   xbar <- c(pidot1, pidot2)  # pi2 (model probs)
   # xbar <- c(pdot1, pdot2)  #p2 (proportions)
   x <- t(t(x) - xbar)
-  pweights <- 1 / .svy_design$prob
+  if (isTRUE(bootstrap)) {
+    bootsvy <- svrep::as_bootstrap_design(.svy_design,
+                                          type = "Rao-Wu-Yue-Beaumont",
+                                          replicates = nboot)
+    wt <- bootsvy$repweights
+    res <- NULL
+    for (b in seq_len(ncol(wt))) {
+      res[[b]] <- cov.wt(x, wt[, b], center = FALSE)$cov
+    }
+    res <- apply(simplify2array(res), 1:2, mean)
+  } else {
+    wt <- 1 / .svy_design$prob
+    res <- cov.wt(x, wt, center = FALSE)$cov
+  }
 
-  cov.wt(x, pweights, center = FALSE)$cov
+  res
 }
 
 create_Sigma_univariate_matrix_complex <- function(.lavobject, .svy_design) {
@@ -747,31 +735,33 @@ create_Sigma_univariate_matrix_complex <- function(.lavobject, .svy_design) {
 }
 
 ## ---- Test preliminaries ----------------------------------------------------
-calc_test_stuff <- function(lavobject, svy_design = NULL, .H_inv,
-                            .Delta_mat_list, .Sigma2, .pi_tilde) {
+calc_test_stuff <- function(lavobject, svy_design = NULL, .H_inv = NULL,
+                            .Delta_mat_list  = NULL, .Sigma2  = NULL,
+                            .pi_tilde = NULL, bootstrap = FALSE, nboot = 100) {
   # These are all the stuff needed to compute the test statistic X2
   list2env(extract_lavaan_info(lavobject), environment())
 
-  if (missing(.H_inv)) {
+  if (is.null(.H_inv)) {
     H_inv <- get_sensitivity_inv_mat(.lavobject = lavobject)
   } else {
     H_inv <- .H_inv
   }
-  if (missing(.Delta_mat_list)) {
+  if (is.null(.Delta_mat_list)) {
     Delta_mat_list <- get_Delta_mats(.lavobject = lavobject)
   } else {
     Delta_mat_list <- .Delta_mat_list
   }
-  if (missing(.Sigma2)) {
+  if (is.null(.Sigma2)) {
     if (is.null(svy_design)) {
       Sigma2 <- create_Sigma2_matrix(lavobject)
     } else {
-      Sigma2 <- create_Sigma2_matrix_complex(lavobject, svy_design)
+      Sigma2 <- create_Sigma2_matrix_complex(lavobject, svy_design, bootstrap,
+                                             nboot)
     }
   } else {
     Sigma2 <- .Sigma2
   }
-  if (missing(.pi_tilde)) {
+  if (is.null(.pi_tilde)) {
     pi_tilde <- unlist(lav_tables_pairwise_model_pi(lavobject))
   } else {
     pi_tilde <- .pi_tilde
@@ -1102,11 +1092,13 @@ Multn_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
 #' fit <- lavaan::sem(txt_mod(1), gen_data_bin(1, n = 500), std.lv = TRUE,
 #'                    estimator = "PML")
 #' all_tests(fit)
-all_tests <- function(object, svy_design = NULL, sim = NULL, Sigma2 = NULL) {
+all_tests <- function(object, svy_design = NULL, sim = NULL, Sigma2 = NULL,
+                      bootstrap = FALSE, nboot = 100) {
   if (isTRUE(attr(object, "bingof_calc_test_stuff"))) {
     test_stuff <- object
   } else {
-    test_stuff <- calc_test_stuff(object, svy_design, .Sigma2 = Sigma2)
+    test_stuff <- calc_test_stuff(object, svy_design, .Sigma2 = Sigma2,
+                                  bootstrap = bootstrap, nboot = nboot)
   }
 
   res <- bind_rows(

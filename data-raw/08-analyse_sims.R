@@ -154,7 +154,7 @@ complex_plot <- function(x = res_complex_type1, alpha = 10, dashed_line = TRUE,
 }
 
 
-complex_plot(res_complex_type1, alpha = 5) + ggtitle("Using true population Sigma") +
+complex_plot(res_complex_type1, alpha = 5) + ggtitle("Using bootstrap Sigma") +
   coord_cartesian(ylim = c(0, 0.2))
 
 p_complex_a <- complex_plot(res_complex_type1, alpha = 10) +

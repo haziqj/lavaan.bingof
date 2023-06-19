@@ -47,7 +47,7 @@ run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
                        samp = c("srs", "strat", "clust", "strcl"),
                        simtype = c("type1", "power"), starting_seed = 16423,
                        ncores = parallel::detectCores() - 2,
-                       pop_Sigma = FALSE) {
+                       pop_Sigma = FALSE, bootstrap = FALSE, nboot = 1000) {
 
   # Model setup
   mod <- txt_mod(model_no)
@@ -116,7 +116,8 @@ run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
 
     fit <- lavaan::sem(model = mod, data = dat, estimator = "PML",
                        std.lv = TRUE, sampling.weights = the_wt)
-    bind_cols(all_tests(fit, svy, sim = i, Sigma2 = Sigma2), seed = seed_used)
+    bind_cols(all_tests(fit, svy, sim = i, Sigma2 = Sigma2,
+                        bootstrap = bootstrap, nboot = nboot), seed = seed_used)
   }
 
   end_time <- Sys.time()
