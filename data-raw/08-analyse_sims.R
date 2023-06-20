@@ -160,7 +160,7 @@ complex_plot(res_complex_type1, alpha = 5) + ggtitle("Using bootstrap Sigma") +
 p_complex_a <- complex_plot(res_complex_type1, alpha = 10) +
   coord_cartesian(ylim = c(0, 0.2))
 p_complex_b <- complex_plot(res_complex_type1, alpha = 5) +
-  coord_cartesian(ylim = c(0, 0.1))
+  coord_cartesian(ylim = c(0, 0.2))
 p_complex_c <- complex_plot(res_complex_type1, alpha = 1) +
   coord_cartesian(ylim = c(0, 0.05))
 p_complex_d <- complex_plot(res_complex_power, alpha = 10, dashed_line = FALSE,

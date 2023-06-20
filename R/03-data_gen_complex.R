@@ -14,7 +14,6 @@ convert_dat_to_unibiv <- function(dat) {
   dat
 }
 
-
 #' Simulate the school population data set
 #'
 #' @inheritParams gen_data_bin
@@ -39,6 +38,12 @@ make_population <- function(model_no = 1, seed = 123, H1 = FALSE,
 
   set.seed(seed)
 
+  # Population settings --------------------------------------------------------
+  nschools       <- c(400, 1000, 600)  # types A, B, C
+  avg_class_size <- c(15, 25, 20)
+  avg_nstudent   <- 500  # so pop total is nschools x avg_nstudent
+  sd_nstudent    <- 100
+
   # Set up the loadings and covariance matrices --------------------------------
   Lambda      <- loading_mat(model_no)
   neta        <- ncol(Lambda)  # q
@@ -52,13 +57,14 @@ make_population <- function(model_no = 1, seed = 123, H1 = FALSE,
   letters <- c(letters, sapply(letters, function(x) paste0(x, letters)))
   pop <-
     tibble(type = LETTERS[1:3],
-           nschools = c(400, 1000, 600),
-           avg_class_size = c(15, 25, 20)) %>%
+           nschools = nschools,
+           avg_class_size = avg_class_size) %>%
     rowwise() %>%
     # mutate(school = list(sprintf("%04d", seq_len(nschools)))) %>%
     mutate(school = list(seq_len(nschools))) %>%
     unnest_longer(school) %>%
-    mutate(nstudents = round(rnorm(dplyr::n(), 500, sd = 100))) %>%
+    mutate(nstudents = round(rnorm(dplyr::n(), avg_nstudent,
+                                   sd = sd_nstudent))) %>%
     rowwise() %>%
     mutate(class = list(sample(letters[seq_len(nstudents / avg_class_size)],
                                size = nstudents, replace = TRUE))) %>%
