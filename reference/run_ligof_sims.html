@@ -42,7 +42,7 @@ for (let popover of popovers) {
     
     <a class="navbar-brand me-2" href="../index.html">lavaan.bingof</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9002</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,6 +61,7 @@ for (let popover of popovers) {
     <a class="dropdown-item" href="../articles/tech_details.html">Technical details</a>
     <a class="dropdown-item" href="../articles/proofs.html">Proofs</a>
     <a class="dropdown-item" href="../articles/complex_sampling.html">Complex sampling procedure</a>
+    <a class="dropdown-item" href="../articles/sigma.html">Estimating the multinomial covariance matrix</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Simulation study</h6>
     <a class="dropdown-item" href="../articles/sim_results.html">Description and results</a>
@@ -106,7 +107,10 @@ for (let popover of popovers) {
 <span>  samp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"srs"</span>, <span class="st">"strat"</span>, <span class="st">"clust"</span>, <span class="st">"strcl"</span><span class="op">)</span>,</span>
 <span>  simtype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"type1"</span>, <span class="st">"power"</span><span class="op">)</span>,</span>
 <span>  starting_seed <span class="op">=</span> <span class="fl">16423</span>,</span>
-<span>  ncores <span class="op">=</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">2</span></span>
+<span>  ncores <span class="op">=</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">2</span>,</span>
+<span>  pop_Sigma <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  bootstrap <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  nboot <span class="op">=</span> <span class="fl">1000</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -142,6 +146,20 @@ simulation.</p></dd>
 
 <dt>ncores</dt>
 <dd><p>(integer) The number of cores to use for parallelisation.</p></dd>
+
+
+<dt>pop_Sigma</dt>
+<dd><p>(boolean) Should the population value for the multinomial covariance matrix be used, and not estimated?</p></dd>
+
+
+<dt>bootstrap</dt>
+<dd><p>(boolean) Use the <code>svyrep</code> package to compute bootstrap
+variance estimator?</p></dd>
+
+
+<dt>nboot</dt>
+<dd><p>(integer) Optional if <code>bootstrap = TRUE</code> then how many bootstrap
+replications?</p></dd>
 
 </dl></div>
     <div class="section level2">

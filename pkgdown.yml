@@ -6,10 +6,11 @@ articles:
   intro: intro.html
   outro: outro.html
   proofs: proofs.html
+  sigma: sigma.html
   sim_results: sim_results.html
   sim_tables: sim_tables.pdf
   tech_details: tech_details.html
-last_built: 2023-05-30T13:43Z
+last_built: 2023-06-20T14:51Z
 urls:
   reference: https://haziqj.ml/lavaan.bingof/reference
   article: https://haziqj.ml/lavaan.bingof/articles
