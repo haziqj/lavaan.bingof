@@ -1081,6 +1081,11 @@ Multn_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
 #'
 #' @inherit ligof-test-stats params return
 #' @param sim (integer) Optional and used for large-scale simulations.
+#' @param bootstrap (boolean) Use the `svyrep` package to compute bootstrap
+#'   variance estimator?
+#' @param nboot (integer) Optional if `bootstrap = TRUE` then how many bootstrap
+#'   replications?
+#' @param Sigma2 (for internal testing only)
 #'
 #' @returns Additionally, if `sim` argument is provided, two columns are
 #'   appended: Whether the [lavaan::lavaan()]  fit has `converged` and the

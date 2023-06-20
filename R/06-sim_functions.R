@@ -3,6 +3,7 @@ globalVariables(c("i"))
 #' Wrapper function for Type 1 and Power simulations
 #'
 #' @inheritParams txt_mod
+#' @inheritParams all_tests
 #' @param nsim (integer) The number of simulations to conduct.
 #' @param samp_size (integer) The exact sample size for SRS simulations or
 #'   stratified sampling; otherwise the *average* sample size for the other
@@ -13,6 +14,8 @@ globalVariables(c("i"))
 #'   simulation.
 #' @param starting_seed (integer) The starting random seed.
 #' @param ncores (integer) The number of cores to use for parallelisation.
+#' @param pop_Sigma (boolean) Should the population value for the multinomial covariance matrix be used, and not estimated?
+#'
 #'
 #' @return A list of [tibble()]s with the output from [all_tests()].
 #' @export

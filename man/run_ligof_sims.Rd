@@ -11,7 +11,10 @@ run_ligof_sims(
   samp = c("srs", "strat", "clust", "strcl"),
   simtype = c("type1", "power"),
   starting_seed = 16423,
-  ncores = parallel::detectCores() - 2
+  ncores = parallel::detectCores() - 2,
+  pop_Sigma = FALSE,
+  bootstrap = FALSE,
+  nboot = 1000
 )
 }
 \arguments{
@@ -32,6 +35,14 @@ simulation.}
 \item{starting_seed}{(integer) The starting random seed.}
 
 \item{ncores}{(integer) The number of cores to use for parallelisation.}
+
+\item{pop_Sigma}{(boolean) Should the population value for the multinomial covariance matrix be used, and not estimated?}
+
+\item{bootstrap}{(boolean) Use the \code{svyrep} package to compute bootstrap
+variance estimator?}
+
+\item{nboot}{(integer) Optional if \code{bootstrap = TRUE} then how many bootstrap
+replications?}
 }
 \value{
 A list of \code{\link[=tibble]{tibble()}}s with the output from \code{\link[=all_tests]{all_tests()}}.
