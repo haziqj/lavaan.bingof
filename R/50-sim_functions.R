@@ -47,7 +47,7 @@ globalVariables(c("i"))
 #' }
 #' }
 run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
-                       samp = c("srs", "strat", "clust", "strcl"),
+                       samp = c("srs", "strat", "clust", "strcl", "strat2"),
                        simtype = c("type1", "power"), starting_seed = 16423,
                        ncores = parallel::detectCores() - 2,
                        pop_Sigma = FALSE, bootstrap = FALSE, nboot = 1000) {
@@ -57,7 +57,7 @@ run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
   simtype <- match.arg(simtype, c("type1", "power"))
   if (simtype == "type1") H1 <- FALSE
   if (simtype == "power") H1 <- TRUE
-  samp <- match.arg(samp, c("srs", "strat", "clust", "strcl"))
+  samp <- match.arg(samp, c("srs", "strat", "clust", "strcl", "strat2"))
   the_wt <- NULL
   if (samp != "srs") {
     the_wt <- "wt"
@@ -99,6 +99,14 @@ run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
         dat <- gen_data_bin_complex1(population = pop, n = samp_size,
                                      seed = seed_used)
         svy <- svydesign(ids = ~ 1, strata = ~ type, weights = ~ wt, data = dat)
+      }
+      if (samp == "strat2") {
+        # Stratified sampling --------------------------------------------------
+        seed_used <- the_seeds[i, 2]
+        dat <- gen_data_bin_strat2(population = pop, n = samp_size,
+                                   seed = seed_used)
+        svy <- svydesign(ids = ~ 1, strata = ~ type, weights = ~ wt,
+                         data = dat)
       }
       if (samp == "clust") {
         # Cluster sampling -----------------------------------------------------
@@ -181,6 +189,7 @@ cleanup_model <- function(x) {
 cleanup_samp <- function(x) {
   if (x == "srs") res <- "Simple random sampling"
   if (x == "strat") res <- "Stratified sampling"
+  if (x == "strat2") res <- "Stratified sampling 2"
   if (x == "clust") res <- "Two-stage cluster sampling"
   if (x == "strcl") res <- "Two-stage stratified cluster sampling"
   noquote(res)

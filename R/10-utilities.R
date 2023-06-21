@@ -176,6 +176,11 @@ fit_facmod_pml <- function(model_no, samp = c("srs", "strat", "clust", "strcl"),
       svy <- svydesign(ids = ~ school + class, strata = ~ type,
                        weights = ~ wt, data = dat, nest = TRUE)
     }
+    if (samp == "strat2") {
+      # Stratified sampling --------------------------------------------------
+      dat <- gen_data_bin_strat(population = pop, n = n, seed = seed_used)
+      svy <- svydesign(ids = ~ class, strata = ~ type, weights = ~ wt, data = dat)
+    }
   }
 
   suppressWarnings(
