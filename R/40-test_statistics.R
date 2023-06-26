@@ -665,6 +665,7 @@ create_Sigma2_matrix_complex <- function(.lavobject, .svy_design,
   xbar <- c(pidot1, pidot2)  # pi2 (model probs)
   # xbar <- c(pdot1, pdot2)  #p2 (proportions)
   x <- t(t(x) - xbar)
+
   if (isTRUE(bootstrap)) {
     bootsvy <- svrep::as_bootstrap_design(.svy_design,
                                           type = "Rao-Wu-Yue-Beaumont",

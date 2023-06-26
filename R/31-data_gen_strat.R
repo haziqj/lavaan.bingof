@@ -7,10 +7,10 @@ make_population2 <- function(model_no = 1, seed = 123, H1 = FALSE,
   set.seed(seed)
 
   # Population settings --------------------------------------------------------
-  nschools       <- c(400, 1000, 600)  # types A, B, C
-  avg_class_size <- c(15, 25, 20)
-  avg_nstudent   <- 500  # so pop total is nschools x avg_nstudent
-  sd_nstudent    <- 100
+  # create the population per
+  Nh <- abs(rnorm(50, mean = 1e6 / 50, sd = 1e6 / 50))
+  Nh <- round(1e6 * Nh / sum(Nh), 0)
+  Nh[length(Nh)] <- 1e6 - sum(Nh[-length(Nh)])
 
   # Set up the loadings and covariance matrices --------------------------------
   Lambda      <- loading_mat(model_no)
@@ -23,24 +23,15 @@ make_population2 <- function(model_no = 1, seed = 123, H1 = FALSE,
 
   # Prepare population data ----------------------------------------------------
   letters <- c(letters, sapply(letters, function(x) paste0(x, letters)))
+  LETTERS <- c(LETTERS, sapply(LETTERS, function(x) paste0(x, LETTERS)))
+
   pop <-
-    tibble(type = LETTERS[1:3],
-           nschools = nschools,
-           avg_class_size = avg_class_size) %>%
+    tibble(strata = factor(LETTERS[1:50], levels = LETTERS),
+           Nh     = Nh) %>%
     rowwise() %>%
-    # mutate(school = list(sprintf("%04d", seq_len(nschools)))) %>%
-    mutate(school = list(seq_len(nschools))) %>%
-    unnest_longer(school) %>%
-    mutate(nstudents = round(rnorm(dplyr::n(), avg_nstudent,
-                                   sd = sd_nstudent))) %>%
-    rowwise() %>%
-    mutate(class = list(sample(letters[seq_len(nstudents / avg_class_size)],
-                               size = nstudents, replace = TRUE))) %>%
-    unnest_longer(class) %>%
-    select(type, school, class) %>%
-    arrange(type, school, class) %>%
-    mutate(school = paste0(type, school),
-           class = paste0(school, class))
+    mutate(type = list(rep(.data$strata, Nh))) %>%
+    unnest_longer(type) %>%
+    select(type)
   N <- nrow(pop)
 
   # Generate the data ----------------------------------------------------------
@@ -96,42 +87,36 @@ make_population2 <- function(model_no = 1, seed = 123, H1 = FALSE,
   res
 }
 
-
-#' @export
-gen_data_bin_strat2 <- function(population = make_population(1, seed = NULL),
-                                  npsu = 2, n, seed = NULL) {
-  # I want to sample x number of schools, and select all students from that
-  # school.
+gen_data_bin_strat2 <- function(population = make_population2(1, seed = NULL),
+                                npsu = 20, n, seed = NULL) {
 
   # 1-stage stratified sampling
   set.seed(seed)
-  if (!missing(n)) npsu <- max(1, round(n / 1500, 0))
+  if (!missing(n)) npsu <- round(n / 50, 0)
 
   # Weights
   school_info <-
     population %>%
     group_by(type) %>%
-    summarise(nschools = n_distinct(school)) %>%
+    summarise(nind = dplyr::n()) %>%
     mutate(
-      prob = npsu / nschools,
+      prob = npsu / .data$nind,
       wt = 1 /prob
     )
 
   # Sampling of PSUs
   psu_sampled <- population %>%
     group_by(type) %>%
-    distinct(school) %>%
-    slice_sample(n = 1) %>%
+    slice_sample(n = npsu) %>%
     ungroup()
 
   # Add the classrooms to the sample
   sampled <-
-    inner_join(population, psu_sampled, by = c("type", "school")) %>%
-    left_join(school_info, by = c("type")) %>%
-    select(type, school, class, wt, starts_with("y")) %>%
+    left_join(psu_sampled, school_info, by = "type") %>%
+    select(type, wt, starts_with("y")) %>%
     mutate(wt = wt / sum(wt) * dplyr::n(),
            across(starts_with("y"), ordered)) %>%
-    arrange(type, school, class)
+    arrange(type)
 
   sampled
 }
