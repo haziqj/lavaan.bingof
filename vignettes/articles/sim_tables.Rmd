@@ -31,9 +31,9 @@ colour_cells <- function(x, crit = crit10, alpha = 0.1) {
 
 fix_table <- function(x, nsim = res_srs_type1$n_sims[1],
                       highlight = TRUE) {
-  crit10 <- 1.96 * sqrt(0.10 * 0.90 / nsim)
-  crit5  <- 1.96 * sqrt(0.05 * 0.95 / nsim)
-  crit1  <- 1.96 * sqrt(0.01 * 0.99 / nsim)
+  # crit10 <- 1.96 * sqrt(0.10 * 0.90 / nsim)
+  # crit5  <- 1.96 * sqrt(0.05 * 0.95 / nsim)
+  # crit1  <- 1.96 * sqrt(0.01 * 0.99 / nsim)
   
   if (isTRUE(highlight)) {
     x <- x %>%

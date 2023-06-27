@@ -36,11 +36,14 @@ summarise_sims <- function(samp = "srs", type = "type1") {
               n_converged = sum(converged),
               n_rank_def = sum(Omega2_rank < S),
               rej_rate10 = mean(alpha10[converged], na.rm = TRUE),
-              se10 = sd(alpha10[converged], na.rm = TRUE) / sqrt(n_sims),
+              crit10 = qnorm(0.975) * sqrt(rej_rate10 * (1 - rej_rate10) /
+                                             n_converged),
               rej_rate5 = mean(alpha5[converged], na.rm = TRUE),
-              se5 = sd(alpha5[converged], na.rm = TRUE) / sqrt(n_sims),
+              crit5 = qnorm(0.975) * sqrt(rej_rate5 * (1 - rej_rate5) /
+                                            n_converged),
               rej_rate1 = mean(alpha1[converged], na.rm = TRUE),
-              se1 = sd(alpha1[converged], na.rm = TRUE) / sqrt(n_sims),
+              crit1 = qnorm(0.975) * sqrt(rej_rate1 * (1 - rej_rate1) /
+                                            n_converged),
               .groups = "drop")
 }
 
@@ -52,6 +55,8 @@ srs_plot <- function(x = res_srs_type1, alpha = 10, dashed_line = TRUE,
                      plot_title = "Type I errors",
                      exclude_tests = c("RSS,MM3", "Multn,MM3")) {
   var_name <- paste0("rej_rate", alpha)
+  crit_name <- paste0("crit", alpha)
+
   x <- x %>%
     filter(!name %in% exclude_tests)
 
@@ -61,6 +66,9 @@ srs_plot <- function(x = res_srs_type1, alpha = 10, dashed_line = TRUE,
                         col = "grey50")
   }
   p +
+    geom_ribbon(aes(ymin = .data[[var_name]] - .data[[crit_name]],
+                    ymax = .data[[var_name]] + .data[[crit_name]],
+                    fill = name), col = NA, alpha = 0.1) +
     geom_point() +
     geom_line() +
     facet_wrap(. ~ sim, ncol = 3) +
@@ -70,11 +78,13 @@ srs_plot <- function(x = res_srs_type1, alpha = 10, dashed_line = TRUE,
     theme(axis.text.x = element_text(angle = 45, hjust = 1),
           legend.position = c(0.85, 0.2)) +
     labs(x = "Sample size (n)", y = "Rejection proportion", col = NULL,
+         fill = NULL,
          shape = NULL, title = as.expression(bquote(
            .(plot_title)~"("*alpha~"="~.(iprior::dec_plac(alpha/100, 2))*")"
          ))) +
     guides(col = guide_legend(ncol = 1), shape = guide_legend(ncol = 1)) +
-    scale_colour_viridis_d(option = "turbo", direction = -1)
+    scale_colour_viridis_d(option = "turbo", direction = -1) +
+    scale_fill_viridis_d(option = "turbo", direction = -1)
     # scale_color_jcolors()
 }
 
@@ -113,7 +123,7 @@ complex_plot <- function(x = res_complex_type1, alpha = 10, dashed_line = TRUE,
                          exclude_tests = c("RSS,MM3", "Multn,MM3"),
                          exclude_sims = NULL) {
   var_name <- paste0("rej_rate", alpha)
-  se_name <- paste0("se", alpha)
+  crit_name <- paste0("crit", alpha)
   nsim <- res_complex_type1$n_sims[1]
   x <- x %>%
     filter(!name %in% exclude_tests) %>%
@@ -126,8 +136,8 @@ complex_plot <- function(x = res_complex_type1, alpha = 10, dashed_line = TRUE,
                alpha = n_rank_def / nsim * 100
                )) +
     geom_bar(stat = "identity", position = "dodge", width = 0.9) +
-    geom_errorbar(aes(ymin = .data[[var_name]] - 1.96 * .data[[se_name]],
-                      ymax = .data[[var_name]] + 1.96 * .data[[se_name]]),
+    geom_errorbar(aes(ymin = .data[[var_name]] - .data[[crit_name]],
+                      ymax = .data[[var_name]] + .data[[crit_name]]),
                   col = "black", width = 0.2, alpha = 1,
                   position = position_dodge(width = 0.9))
 
@@ -152,10 +162,6 @@ complex_plot <- function(x = res_complex_type1, alpha = 10, dashed_line = TRUE,
     # scale_fill_jcolors() +
     facet_grid(sim ~ sampling)
 }
-
-
-complex_plot(res_complex_type1, alpha = 5) + ggtitle("Using bootstrap Sigma") +
-  coord_cartesian(ylim = c(0, 0.2))
 
 p_complex_a <- complex_plot(res_complex_type1, alpha = 10) +
   coord_cartesian(ylim = c(0, 0.2))
