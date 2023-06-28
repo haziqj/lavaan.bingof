@@ -84,14 +84,15 @@ res_complex_type1 %>%
   scale_linetype_manual(NULL, values = "dashed") +
   scale_alpha("% rank\ndef.", range = c(1, 0.5)) +
   theme(legend.position = "bottom") +
-  labs(x = "Sample size", y = "Rejection proportion", fill = NULL,
-       shape = NULL) +
+  labs(x = NULL, y = "Rejection proportion", fill = NULL,
+       shape = NULL, title = "Type I errors") +
   guides(fill = guide_legend(nrow = 2, order = 1),
          alpha = guide_legend(ncol = 3, order = 2)) +
   scale_fill_viridis_d(option = "turbo", direction = -1) +
   scale_colour_viridis_d(option = "turbo", direction = -1) +
   facet_grid(sim ~ sampling) +
-  coord_cartesian(ylim = c(0, 0.1))
+  coord_cartesian(ylim = c(0, 0.1)) +
+  theme(legend.position = "none") -> p1
 # ggsave("complex_type1.pdf", width = 7, height = 5)
 
 
@@ -110,14 +111,16 @@ res_complex_power %>%
   scale_alpha("% rank\ndef.", range = c(1, 0.5)) +
   theme(legend.position = "bottom") +
   labs(x = "Sample size", y = "Rejection proportion", fill = NULL,
-       shape = NULL) +
+       shape = NULL, title = "Power analysis") +
   guides(fill = guide_legend(nrow = 2, order = 1),
          alpha = guide_legend(ncol = 3, order = 2)) +
   scale_fill_viridis_d(option = "turbo", direction = -1) +
   scale_colour_viridis_d(option = "turbo", direction = -1) +
   facet_grid(sim ~ sampling) +
-  coord_cartesian(ylim = c(0, 1))
-# ggsave("complex_power.pdf", width = 7, height = 5)
+  coord_cartesian(ylim = c(0, 1)) -> p2
+
+cowplot::plot_grid(p1, p2, ncol = 1, rel_heights = c(0.8, 1))
+ggsave("complex_plot.pdf", width = 7, height = 9)
 
 
 # Sankey plots -----------------------------------------------------------------

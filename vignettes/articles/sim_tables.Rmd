@@ -23,7 +23,7 @@ library(lavaan.bingof)
 nn <- c(500, 1000, 2000, 3000)
 
 colour_cells <- function(x, crit = crit10, alpha = 0.1) {
-  where_colour <- !is.na(x) & (x + crit < alpha | x - crit > alpha)
+  where_colour <- !is.na(x) & !(abs(x - alpha) < crit)
   x <- as.character(formatC(x, digits = 3, format = "f"))
   x[grepl("na", x, ignore.case = TRUE)] <- ""
   cell_spec(x, color = ifelse(where_colour, "red", "black"))
@@ -44,6 +44,7 @@ fix_table <- function(x, nsim = res_srs_type1$n_sims[1],
       )
   } 
   x %>%
+    select(-starts_with("crit")) %>%
     rename(Name = name,
            `No. repl.` = n_sims,
            `Converged` = n_converged,
