@@ -124,7 +124,9 @@ ggsave("complex_plot.pdf", width = 7, height = 9)
 
 
 # Sankey plots -----------------------------------------------------------------
+library(lavaan.bingof)
 library(tidyverse)
+# pak::pkg_install("davidsjoberg/ggsankey")
 library(ggsankey)
 theme_set(theme_sankey())
 
@@ -166,7 +168,7 @@ get_uni2 <- function(x) {
 plot_df <-
   dat %>%
   mutate(pattern = apply(across(everything()), 1, paste0, collapse = ""),
-         data = "All\n(n=1,000)") %>%
+         data = "All\n(N x p)") %>%
   bind_cols(biv_dat) %>%
 
   # Flow from response patterns to bivariate marginals (positive responses)
@@ -225,3 +227,4 @@ p <-
   labs(x = NULL, y = NULL); p
 
 ggsave("mult_bern_data.png", p, width = 8.5, height = 5)
+ggsave("mult_bern_data.pdf", p, width = 8.5, height = 5)
