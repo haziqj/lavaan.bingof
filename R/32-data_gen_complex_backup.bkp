@@ -41,8 +41,8 @@ make_population <- function(model_no = 1, seed = 123, H1 = FALSE,
   # Population settings --------------------------------------------------------
   nschools       <- c(400, 1000, 600)  # types A, B, C
   avg_class_size <- c(15, 25, 20)
-  avg_nstudents  <- c(200, 500, 700)  # so pop total is nschools x avg_nstudent
-  sd_nstudents   <- 25
+  avg_nstudent   <- 500  # so pop total is nschools x avg_nstudent
+  sd_nstudent    <- 100
 
   # Set up the loadings and covariance matrices --------------------------------
   Lambda      <- loading_mat(model_no)
@@ -58,14 +58,13 @@ make_population <- function(model_no = 1, seed = 123, H1 = FALSE,
   pop <-
     tibble(type = LETTERS[1:3],
            nschools = nschools,
-           avg_class_size = avg_class_size,
-           avg_nstudent = avg_nstudents) %>%
+           avg_class_size = avg_class_size) %>%
     rowwise() %>%
     # mutate(school = list(sprintf("%04d", seq_len(nschools)))) %>%
     mutate(school = list(seq_len(nschools))) %>%
     unnest_longer(school) %>%
-    mutate(nstudents = round(rnorm(dplyr::n(), mean = avg_nstudent,
-                                   sd = sd_nstudents))) %>%
+    mutate(nstudents = round(rnorm(dplyr::n(), avg_nstudent,
+                                   sd = sd_nstudent))) %>%
     rowwise() %>%
     mutate(class = list(sample(letters[seq_len(nstudents / avg_class_size)],
                                size = nstudents, replace = TRUE))) %>%
@@ -268,57 +267,6 @@ gen_data_bin_complex2 <- function(population = make_population(1, seed = NULL),
 #' @rdname gen_data_bin_complex
 #' @export
 gen_data_bin_clust <- gen_data_bin_complex2
-
-# gen_data_bin_complex3 <- function(population = make_population(1, seed = NULL),
-#                                   npsu = 50, n, seed = NULL) {
-#   # 2-stage stratified cluster sampling
-#   set.seed(seed)
-#   if (!missing(n)) npsu <- round(n / (5 * 3), 0)
-#
-#   # Weights
-#   school_info <-
-#     population %>%
-#     select(type, school, class) %>%
-#     group_by(type, school, class) %>%
-#     summarise(
-#       pr_student_selected = 5 / dplyr::n(),
-#       .groups = "drop"
-#     ) %>%
-#     group_by(school) %>%  # clusters
-#     mutate(pr_class_selected = 1 / length(unique(class))) %>%
-#     group_by(type) %>%  # stratum
-#     mutate(pr_school_selected = npsu / dplyr::n(),
-#            prob = pr_school_selected * pr_class_selected * pr_student_selected,
-#            wt = 1 / prob)
-#
-#   # Sampling of PSUs
-#   psu_sampled <- population %>%
-#     distinct(type, school) %>%
-#     group_by(type) %>%
-#     slice_sample(n = npsu, replace = FALSE)
-#
-#   # Sampling of classes within PSUs (using SRS)
-#   classes_sampled <-
-#     inner_join(population, psu_sampled, by = c("type", "school")) %>%
-#     distinct(type, school, class) %>%
-#     group_by(type, school) %>%
-#     slice_sample(n = 1, replace = FALSE) %>%
-#     ungroup()
-#
-#   sampled <-
-#     inner_join(population, classes_sampled,
-#                by = c("type", "school", "class")) %>%
-#     group_by(class) %>%
-#     slice_sample(n = 5, replace = TRUE) %>%
-#     ungroup() %>%
-#     left_join(school_info, by = c("type", "school", "class")) %>%
-#     select(type, school, class, wt, starts_with("y")) %>%
-#     mutate(wt = wt / sum(wt) * dplyr::n(),
-#            across(starts_with("y"), ordered)) %>%
-#     arrange(type, school, class)
-#
-#   sampled
-# }
 
 gen_data_bin_complex3 <- function(population = make_population(1, seed = NULL),
                                   npsu = 50, n, seed = NULL) {
