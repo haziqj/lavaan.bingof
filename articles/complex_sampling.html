@@ -197,31 +197,31 @@ A
 400
 </td>
 <td style="text-align:right;">
-80,164
+200,670
 </td>
 <td style="text-align:right;">
-200.4
+501.7
 </td>
 <td style="text-align:right;">
-24.2
+96.9
 </td>
 <td style="text-align:right;">
-138
+253
 </td>
 <td style="text-align:right;">
-281
+824
 </td>
 <td style="text-align:right;">
-15.6
+15.2
 </td>
 <td style="text-align:right;">
-3.8
+3.9
 </td>
 <td style="text-align:right;">
-4
+3
 </td>
 <td style="text-align:right;">
-32
+36
 </td>
 </tr>
 <tr>
@@ -232,31 +232,31 @@ B
 1,000
 </td>
 <td style="text-align:right;">
-500,341
+501,326
 </td>
 <td style="text-align:right;">
-500.3
+501.3
 </td>
 <td style="text-align:right;">
-25.1
+100.2
 </td>
 <td style="text-align:right;">
-430
+219
 </td>
 <td style="text-align:right;">
-585
+839
 </td>
 <td style="text-align:right;">
-25.6
+25.7
 </td>
 <td style="text-align:right;">
 5.0
 </td>
 <td style="text-align:right;">
-9
+6
 </td>
 <td style="text-align:right;">
-47
+48
 </td>
 </tr>
 <tr>
@@ -267,31 +267,31 @@ C
 600
 </td>
 <td style="text-align:right;">
-420,962
+303,861
 </td>
 <td style="text-align:right;">
-701.6
+506.4
 </td>
 <td style="text-align:right;">
-25.5
+101.9
 </td>
 <td style="text-align:right;">
-624
+195
 </td>
 <td style="text-align:right;">
-782
+829
 </td>
 <td style="text-align:right;">
-20.3
+20.4
 </td>
 <td style="text-align:right;">
-4.5
+4.4
 </td>
 <td style="text-align:right;">
-3
+6
 </td>
 <td style="text-align:right;">
-37
+39
 </td>
 </tr>
 </tbody>
@@ -359,12 +359,12 @@ The true model parameter values <span class="math inline">\({\boldsymbol\theta}\
 <span><span class="co"># Univariate moments (population statistics)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">prop1</span>, <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="co">#&gt;     y1     y2     y3     y4     y5 </span></span>
-<span><span class="co">#&gt; 0.9240 0.7091 0.5514 0.7643 0.8708</span></span>
+<span><span class="co">#&gt; 0.9240 0.7083 0.5515 0.7643 0.8709</span></span>
 <span></span>
 <span><span class="co"># Errors (percentage)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="op">(</span><span class="va">prop1</span> <span class="op">-</span> <span class="va">pi1</span><span class="op">)</span> <span class="op">/</span> <span class="va">pi1</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    y1    y2    y3    y4    y5 </span></span>
-<span><span class="co">#&gt;  0.03  0.04 -0.05  0.01  0.00</span></span></code></pre></div>
+<span><span class="co">#&gt;  0.04 -0.07 -0.03  0.01  0.01</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="model-fit">Model fit<a class="anchor" aria-label="anchor" href="#model-fit"></a>
@@ -445,51 +445,51 @@ The true model parameter values <span class="math inline">\({\boldsymbol\theta}\
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3,000 × 9</span></span></span>
 <span><span class="co">#&gt;    type  school class    wt y1    y2    y3    y4    y5   </span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> A     A1     A1b   0.240 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> A     A1     A1c   0.240 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> A     A1     A1e   0.240 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> A     A10    A10a  0.240 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> A     A10    A10a  0.240 1     1     1     1     0    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> A     A10    A10b  0.240 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> A     A10    A10f  0.240 1     1     1     0     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> A     A10    A10g  0.240 1     1     0     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> A     A100   A100j 0.240 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> A     A101   A101f 0.240 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> A     A1     A1ab  0.599 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> A     A1     A1y   0.599 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> A     A10    A10a  0.599 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> A     A10    A10b  0.599 1     1     1     0     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> A     A10    A10i  0.599 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> A     A10    A10s  0.599 1     1     1     1     0    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> A     A101   A101g 0.599 1     1     0     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> A     A101   A101l 0.599 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> A     A101   A101q 0.599 1     1     0     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> A     A101   A101v 0.599 1     1     1     1     1    </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,990 more rows</span></span></span>
 <span></span>
 <span><span class="co"># Two-stage cluster sampling</span></span>
 <span><span class="op">(</span><span class="va">samp2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_data_bin_complex.html">gen_data_bin_clust</a></span><span class="op">(</span>population <span class="op">=</span> <span class="va">pop</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3,252 × 9</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3,155 × 9</span></span></span>
 <span><span class="co">#&gt;    type  school class    wt y1    y2    y3    y4    y5   </span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> A     A101   A101l  1.49 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> A     A101   A101l  1.49 1     1     0     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> A     A101   A101l  1.49 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> A     A101   A101l  1.49 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> A     A101   A101l  1.49 1     1     0     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> A     A101   A101l  1.49 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> A     A101   A101l  1.49 1     1     0     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> A     A101   A101l  1.49 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> A     A101   A101l  1.49 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> A     A101   A101l  1.49 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3,242 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> A     A100   A100l  1.48 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> A     A100   A100l  1.48 1     1     0     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> A     A100   A100l  1.48 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> A     A100   A100l  1.48 1     1     1     0     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> A     A100   A100l  1.48 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> A     A100   A100l  1.48 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> A     A100   A100l  1.48 1     1     0     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> A     A100   A100l  1.48 1     1     1     1     0    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> A     A100   A100l  1.48 1     1     0     0     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> A     A100   A100l  1.48 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3,145 more rows</span></span></span>
 <span></span>
 <span><span class="co"># Two-stage stratified cluster sampling</span></span>
 <span><span class="op">(</span><span class="va">samp3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_data_bin_complex.html">gen_data_bin_strcl</a></span><span class="op">(</span>population <span class="op">=</span> <span class="va">pop</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3,013 × 9</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 750 × 9</span></span></span>
 <span><span class="co">#&gt;    type  school class    wt y1    y2    y3    y4    y5   </span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> A     A109   A109f 0.296 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> A     A109   A109f 0.296 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> A     A109   A109f 0.296 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> A     A109   A109f 0.296 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> A     A109   A109f 0.296 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> A     A109   A109f 0.296 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> A     A109   A109f 0.296 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> A     A109   A109f 0.296 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> A     A109   A109f 0.296 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> A     A109   A109f 0.296 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3,003 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> A     A109   A109b 0.808 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> A     A109   A109b 0.808 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> A     A109   A109b 0.808 1     1     0     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> A     A109   A109b 0.808 1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> A     A109   A109b 0.808 1     1     1     0     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> A     A118   A118v 1.07  1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> A     A118   A118v 1.07  1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> A     A118   A118v 1.07  1     1     1     1     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> A     A118   A118v 1.07  1     1     1     0     0    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> A     A118   A118v 1.07  1     1     1     0     1    </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 740 more rows</span></span></span></code></pre></div>
 <div class="section level3">
 <h3 id="comparison-of-uni-and-bivariate-moments">Comparison of uni and bivariate moments<a class="anchor" aria-label="anchor" href="#comparison-of-uni-and-bivariate-moments"></a>
 </h3>
