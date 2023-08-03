@@ -107,7 +107,7 @@ get_Sigmay <- function(model_no) {
 #'
 #' @examples
 #' get_true_values(1)
-get_true_values <- function(model_no) {
+get_true_values <- function(model_no, arrange = c("lambda", "rho", "tau")) {
 
   # Loadings -------------------------------------------------------------------
   Lambda <- get_Lambda(model_no)
@@ -137,11 +137,14 @@ get_true_values <- function(model_no) {
       paste0("rho", .)
   }
 
-  # Threholds ------------------------------------------------------------------
+  # Thresholds -----------------------------------------------------------------
   tau <- get_tau(model_no)
   names(tau) <- paste0("tau", seq_along(tau))
 
-  c(lambda, rho, tau)
+  res <- list(lambda = lambda, rho = rho, tau = tau)
+  res <- res[arrange]
+  names(res) <- NULL
+  unlist(res)
 
 }
 
