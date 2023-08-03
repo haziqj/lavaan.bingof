@@ -12,7 +12,7 @@ for (sim_type in c("type1", "power")) {
                            sim_type)
         cat("[", as.character(Sys.time()), "]", "Now running simulation",
             sim_name, "\n")
-        sim <- run_ligof_sims(mod_no, samp_size = the_samp_size, nsim = 1000,
+        sim <- run_ligof_sims(mod_no, samp_size = the_samp_size, nsim = 100,
                               samp = samp_method, simtype = sim_type,
                               pop_Sigma = FALSE, bootstrap = FALSE)
         invisible(list2env(setNames(list(sim), sim_name), envir = .GlobalEnv))

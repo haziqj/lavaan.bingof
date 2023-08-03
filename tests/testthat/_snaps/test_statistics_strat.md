@@ -6,12 +6,12 @@
       # A tibble: 6 x 6
            X2    df name          pval Xi_rank     S
         <dbl> <dbl> <chr>        <dbl>   <int> <int>
-      1 2.74   5    Wald         0.739      12    15
-      2 2.74   5    WaldVCF      0.741       5    15
-      3 0.664  3.04 WaldDiag,MM3 0.886      15    15
-      4 1.42   4.23 WaldDiag,RS2 0.863      15    15
-      5 1.52   3.90 Pearson,MM3  0.811      15    15
-      6 2.01   4.59 Pearson,RS2  0.807      15    15
+      1  7.81  5    Wald         0.167      14    15
+      2  7.49  5    WaldVCF      0.186       5    15
+      3  3.47  3.26 WaldDiag,MM3 0.366      15    15
+      4  4.77  4.52 WaldDiag,RS2 0.381      15    15
+      5  4.93  2.58 Pearson,MM3  0.134      15    15
+      6  7.00  4.05 Pearson,RS2  0.140      15    15
 
 # Test statistics values (Stratified sampling) Model 2
 
@@ -21,12 +21,12 @@
       # A tibble: 6 x 6
            X2    df name          pval Xi_rank     S
         <dbl> <dbl> <chr>        <dbl>   <int> <int>
-      1 11.4  20    Wald         0.937      31    36
-      2 11.2  20    WaldVCF      0.941      20    36
-      3  3.04 10.1  WaldDiag,MM3 0.981      36    36
-      4  7.18 16.1  WaldDiag,RS2 0.970      36    36
-      5  9.06  8.53 Pearson,MM3  0.387      36    36
-      6 14.2  13.6  Pearson,RS2  0.400      36    36
+      1 21.5  20    Wald         0.368      35    36
+      2 20.2  20    WaldVCF      0.446      20    36
+      3 11.4  11.4  WaldDiag,MM3 0.444      36    36
+      4 16.8  16.8  WaldDiag,RS2 0.454      36    36
+      5  8.53  7.98 Pearson,MM3  0.381      36    36
+      6 13.7  13.0  Pearson,RS2  0.395      36    36
 
 # Test statistics values (Stratified sampling) Model 3
 
@@ -34,14 +34,14 @@
       res
     Output
       # A tibble: 6 x 6
-           X2    df name            pval Xi_rank     S
-        <dbl> <dbl> <chr>          <dbl>   <int> <int>
-      1 126.   90   Wald         0.00717     114   120
-      2 114.   90   WaldVCF      0.0430       90   120
-      3  55.3  43.7 WaldDiag,MM3 0.111       120   120
-      4  84.0  69.3 WaldDiag,RS2 0.110       120   120
-      5  37.0  29.0 Pearson,MM3  0.146       120   120
-      6  64.4  53.5 Pearson,RS2  0.146       120   120
+           X2    df name             pval Xi_rank     S
+        <dbl> <dbl> <chr>           <dbl>   <int> <int>
+      1 139.   90   Wald         0.000719     114   120
+      2 119.   90   WaldVCF      0.0217        90   120
+      3  53.6  37.9 WaldDiag,MM3 0.0463       120   120
+      4  86.2  65.5 WaldDiag,RS2 0.0440       120   120
+      5  45.4  31.4 Pearson,MM3  0.0508       120   120
+      6  72.8  54.4 Pearson,RS2  0.0484       120   120
 
 # Test statistics values (Stratified sampling) Model 4
 
@@ -51,12 +51,12 @@
       # A tibble: 6 x 6
            X2    df name          pval Xi_rank     S
         <dbl> <dbl> <chr>        <dbl>   <int> <int>
-      1  34.5 34    Wald         0.445      49    55
-      2  31.9 34    WaldVCF      0.569      34    55
-      3  14.0 13.1  WaldDiag,MM3 0.379      55    55
-      4  24.9 23.7  WaldDiag,RS2 0.392      55    55
-      5  12.2  9.98 Pearson,MM3  0.273      55    55
-      6  23.5 20.4  Pearson,RS2  0.285      55    55
+      1  43.4  33   Wald         0.106      49    55
+      2  41.1  34   WaldVCF      0.188      34    55
+      3  15.9  14.3 WaldDiag,MM3 0.346      55    55
+      4  26.4  24.5 WaldDiag,RS2 0.356      55    55
+      5  14.0  10.6 Pearson,MM3  0.210      55    55
+      6  24.9  20.2 Pearson,RS2  0.217      55    55
 
 # Test statistics values (Stratified sampling) Model 5
 
@@ -64,12 +64,12 @@
       res
     Output
       # A tibble: 6 x 6
-           X2    df name           pval Xi_rank     S
-        <dbl> <dbl> <chr>         <dbl>   <int> <int>
-      1 112.   87   Wald         0.0367     111   120
-      2 105.   87   WaldVCF      0.0960      87   120
-      3  37.2  30.6 WaldDiag,MM3 0.194      120   120
-      4  68.5  59.4 WaldDiag,RS2 0.196      120   120
-      5  31.2  25.8 Pearson,MM3  0.213      120   120
-      6  56.8  49.3 Pearson,RS2  0.217      120   120
+           X2    df name             pval Xi_rank     S
+        <dbl> <dbl> <chr>           <dbl>   <int> <int>
+      1 141.   87   Wald         0.000215     108   120
+      2 130.   87   WaldVCF      0.00192       87   120
+      3  41.4  30.2 WaldDiag,MM3 0.0842       120   120
+      4  74.5  58.8 WaldDiag,RS2 0.0822       120   120
+      5  40.5  28.3 Pearson,MM3  0.0641       120   120
+      6  67.2  50.9 Pearson,RS2  0.0617       120   120
 
