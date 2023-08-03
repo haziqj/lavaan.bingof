@@ -98,6 +98,7 @@ get_Sigmay <- function(model_no) {
 #' - `get_theoretical_uni_bi_moments()` returns the univariate (`pidot1`) and bivariate (`pidot2`) theoretical probabilities of successes.
 #'
 #' @inheritParams txt_mod
+#' @param arrange How should the true values be arranged? By default it is in the order of loadings, factor correlations, and thresholds.
 #'
 #' @return A vector of true parameter values used for the simulations.
 #' @export

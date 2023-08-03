@@ -5,12 +5,14 @@
 \alias{get_theoretical_uni_bi_moments}
 \title{Returns theoretical true values}
 \usage{
-get_true_values(model_no)
+get_true_values(model_no, arrange = c("lambda", "rho", "tau"))
 
 get_theoretical_uni_bi_moments(model_no, collapse = FALSE)
 }
 \arguments{
 \item{model_no}{(integer) Choose from 1--5. See pkgdown articles for details.}
+
+\item{arrange}{How should the true values be arranged? By default it is in the order of loadings, factor correlations, and thresholds.}
 
 \item{collapse}{(logical) Should a vector be returned instead of a list
 separating the univariate and bivariate quantities?}

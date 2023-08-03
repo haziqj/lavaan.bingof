@@ -14,14 +14,14 @@ lav_tables_pairwise_freq_cell <- utils::getFromNamespace("lav_tables_pairwise_fr
 univariateExpProbVec <- utils::getFromNamespace("univariateExpProbVec", "lavaan")
 
 # No visible binding notes
-globalVariables(c(".", "Delta2", "N", "Omega2", "S", "Sigma2", "TH", "X2",
-                  "Var_ystar", "avg_class_size", "dat", "e2_hat", "lavcache",
-                  "lavdata", "lavmodel", "lavoptions", "lavpartable",
-                  "lavsamplestats", "mu_ystar", "nschools", "nstudents", "p",
-                  "pdot1", "pdot2", "pi2_hat", "pidot1", "pidot2",
-                  "pr_class_selected", "pr_school_selected", "prob", "rn",
-                  "rn2", "school", "students_in_school_type", "th.idx", "type",
-                  "var1", "var2", "wt", "z", "Omega2_rank", "Sigmahat",
+globalVariables(c(".",".data", "Delta2", "N", "Omega2", "S", "Sigma2", "TH",
+                  "X2", "Var_ystar", "avg_class_size", "dat", "e2_hat",
+                  "lavcache", "lavdata", "lavmodel", "lavoptions",
+                  "lavpartable", "lavsamplestats", "mu_ystar", "nschools",
+                  "nstudents", "p", "pdot1", "pdot2", "pi2_hat", "pidot1",
+                  "pidot2", "pr_class_selected", "pr_school_selected", "prob",
+                  "rn", "rn2", "school", "students_in_school_type", "th.idx",
+                  "type", "var1", "var2", "wt", "z", "Omega2_rank", "Sigmahat",
                   "alpha_", "converged", "fit", "mean_X2", "mean_df", "name",
                   "pval", "rej_rate"))
 
