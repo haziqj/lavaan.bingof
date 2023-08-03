@@ -1,10 +1,6 @@
 # Legacy code written by Myrsini Katsikatsou. Used for testing purposes.
+
 # ------------------------------------------------------------------------------
-
-
-
-
-
 #the derivatives of the UNIVARIATE & BIVARIATE probabilities (for all pairs
 #and all response patterns) with respect to model parameter vector theta
 #
@@ -12,7 +8,6 @@
 # der.pi.xixj.ab.to.theta = der.pi.xixj.ab.to.Rho %*% der.Rho.to.Theta +
 #                           der.pi.xixj.ab.to.tau.xi %*% der.Tau.to.Theta +
 #                           der.pi.xixj.ab.to.tau.xj %*% der.Tau.to.Theta +
-
 
 derModelUnivBivProbToTheta <- function(nvar = nvar,
                                          TH = TH,
