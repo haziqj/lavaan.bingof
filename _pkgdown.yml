@@ -65,6 +65,9 @@ articles:
   contents:
   - articles/sim_results
   - articles/sim_tables
+- title: Comparing ML and PL estimators
+  contents: 
+    - articles/mle 
 - title: Outro
   contents:
   - articles/outro

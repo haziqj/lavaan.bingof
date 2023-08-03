@@ -1,0 +1,128 @@
+---
+title: "Comparing ML and PL estimators"
+output:
+  bookdown::html_document2:
+    toc: yes
+    toc_depth: 2
+    number_sections: FALSE
+link-citations: yes
+bibliography: refs.bib
+# nocite: |
+#   @maydeu2008overview, @reiser1996analysis, @bartholomew2002goodness, @katsikatsou2012pairwise
+pkgdown:
+  as_is: true
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE
+)
+library(tidyverse)
+theme_set(theme_bw())
+library(lavaan)
+library(survey)
+library(lavaan.bingof)
+library(furrr)
+load("check_complex_bias2.RData")
+
+stuff <- c("ml", "pl", "mlw", "plw")
+plot_bias <- function(mn) {
+  res %>%
+  filter(model_no == mn) %>%
+  mutate(across(all_of(stuff), \(x) abs(x - truth) ^ 1)) %>%
+  mutate(samp = factor(samp, levels = c("strat", "clust", "strcl"))) %>%
+  pivot_longer(cols = stuff, names_to = "type",
+               values_to = "bias") %>%
+  mutate(type = factor(type, levels = stuff),
+         kind = factor(kind, levels = c("lambda", "tau", "rho"))) %>%
+  ggplot(aes(name, bias, fill = type)) +
+  # geom_point(position = position_dodge(width = 0.5)) +
+  geom_boxplot(outlier.shape = NA) +
+  facet_grid(samp ~ ., scales = "free") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(x = NULL, y = "Absolute bias")
+}
+
+```
+
+```{r, echo = FALSE, results = "asis"}
+# LaTeX shortcuts 
+cat(readr::read_file("maths_shortcuts.tex"))
+``` 
+
+<!-- Extra LaTeX commands -->
+\newcommand{\pimod}[1]{\pi_{#1}(\btheta)}
+\newcommand{\Sigmaystar}{\bSigma_{\by^*}}
+\newcommand{\pl}{\operatorname{\ell_P}}
+\newcommand{\mlepl}{\hat\btheta_{\text{PL}}}
+\newcommand{\mle}{\hat\btheta_{\text{ML}}}
+\newcommand{\pimodpl}{\pi_{y_iy_j}^{(ij)}(\btheta)}
+\newcommand{\tr}{\operatorname{tr}}
+<!-- Extra LaTeX commands -->
+
+
+## Plotting the weights
+
+```{r}
+model_no <- 1
+pop <- make_population(model_no)
+
+dat1 <- gen_data_bin_strat(pop, n = 1000) %>% mutate(x = row_number(),
+                                                     samp = "strat")
+dat2 <- gen_data_bin_clust(pop, n = 1000) %>% mutate(x = row_number(),
+                                                     samp = "clust")
+dat3 <- gen_data_bin_strcl(pop, n = 1000) %>% mutate(x = row_number(),
+                                                     samp = "strcl")
+
+bind_rows(dat1, dat2, dat3) %>%
+  mutate(samp = factor(samp, levels = c("strat", "clust", "strcl")),
+         samp = factor(samp, labels = c("Stratified", "2S Cluster",
+                                        "2S Strat-Cluster"))) %>%
+  ggplot(aes(x, wt, col = type)) +
+  geom_point() +
+  facet_grid(. ~ samp) +
+  labs(x = "Individual", y = "Sampling weight", col = "School\ntype")
+```
+
+## Comparison of estimates {.tabset .tabset-fade}
+
+
+### Model 1
+
+```{r, fig.height = 8}
+plot_bias(1)
+```
+
+### Model 2
+
+
+```{r, fig.height = 8}
+plot_bias(2)
+```
+
+### Model 3
+
+
+```{r, fig.height = 8}
+plot_bias(3)
+```
+
+### Model 4
+
+
+```{r, fig.height = 8}
+plot_bias(4)
+```
+
+### Model 5
+
+
+```{r, fig.height = 8}
+plot_bias(5)
+```
+
+
