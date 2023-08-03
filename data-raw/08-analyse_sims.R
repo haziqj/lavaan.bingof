@@ -11,7 +11,7 @@ grab_sims <- function(x = all_res, samp = "srs", type = "type1") {
   type_of_analysis <- grepl(type, names(x))
   res <- list(NULL)
 
-  for (n in c(500, 1000, 2000, 3000)) {
+  for (n in c(500, 1000, 2000, 3000, 5000, 10000)) {
     type_of_n <- grepl(n, names(x))
     ind <- which(type_of_sampling & type_of_analysis & type_of_n)
     tmp <- NULL
