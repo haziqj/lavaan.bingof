@@ -5,8 +5,8 @@ analysis_path <- dirname(rstudioapi::getSourceEditorContext()$path)
 
 # All simulations --------------------------------------------------------------
 for (sim_type in c("type1")) {
-  for (samp_method in c("clust", "strcl")) {
-    for (the_samp_size in c(5000, 10000)) {
+  for (samp_method in c("strat", "clust", "strcl")) {
+    for (the_samp_size in c(500, 1000, 2000, 3000, 5000, 10000)) {
       for (mod_no in 1:5) {
         sim_name <- paste0(samp_method, mod_no, "_n", the_samp_size, "_",
                            sim_type)
