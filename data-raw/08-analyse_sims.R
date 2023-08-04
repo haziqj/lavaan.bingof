@@ -4,15 +4,16 @@ library(jcolors)
 library(lavaan.bingof)  # needs all_res data. be sure to build pkg
 # data(all_res, package = "lavaan.bingof")
 
-grab_sims <- function(x = all_res, samp = "srs", type = "type1") {
+grab_sims <- function(x = all_res, samp = "srs", type = "type1",
+                      the_n = c(500, 1000, 2000, 3000, 5000, 10000)) {
   mod_names <- c("1F 5V", "1F 8V", "1F 15V", "2F 10V", "3F 15V")
 
   type_of_sampling <- grepl(samp, names(x))
   type_of_analysis <- grepl(type, names(x))
   res <- list(NULL)
 
-  for (n in c(500, 1000, 2000, 3000, 5000, 10000)) {
-    type_of_n <- grepl(n, names(x))
+  for (n in the_n) {
+    type_of_n <- grepl(paste0(n, "_"), names(x))
     ind <- which(type_of_sampling & type_of_analysis & type_of_n)
     tmp <- NULL
     for (i in seq_along(ind)) {
@@ -72,7 +73,7 @@ srs_plot <- function(x = res_srs_type1, alpha = 10, dashed_line = TRUE,
     geom_point() +
     geom_line() +
     facet_wrap(. ~ sim, ncol = 3) +
-    scale_x_continuous(breaks = unique(res_srs_power$n)) +
+    scale_x_continuous(breaks = unique(res_srs_type1$n)) +
     scale_shape_manual(values = c(16, 17, 15, 3, 7, 8, 11, 16, 17, 15, 3, 7)) +
     scale_alpha("% rank def.", range = c(1, 0.3)) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1),
