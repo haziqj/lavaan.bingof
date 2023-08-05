@@ -20,7 +20,7 @@ library(tidyverse)
 theme_set(theme_bw())
 library(kableExtra)
 library(lavaan.bingof)
-nn <- c(500, 1000, 2000, 3000)
+nn <- c(500, 1000, 2000, 3000, 5000, 10000)
 
 colour_cells <- function(x, crit = crit10, alpha = 0.1) {
   where_colour <- !is.na(x) & !(abs(x - alpha) < crit)
