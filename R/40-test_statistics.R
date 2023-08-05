@@ -951,8 +951,8 @@ Wald_diag_RS_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
   X2 <- X2 / mean(delta)
   df <- S
   if (.order == "2") {
-    # a_sq <- (sum((delta - mean(delta)) ^ 2) / S) / (mean(delta)) ^ 2
-    a_sq <- (sd(delta) / mean(delta)) ^ 2
+    a_sq <- mean((delta - mean(delta)) ^ 2) / mean(delta) ^ 2
+    # a_sq <- (sd(delta) / mean(delta)) ^ 2
     X2 <- X2 / (1 + a_sq)
     df <- S / (1 + a_sq)
   }
@@ -994,8 +994,8 @@ Pearson_test_v1 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
   X2 <- X2 / mean(delta)
   df <- S
   if (.order == "2") {
-    # a_sq <- (sum((delta - mean(delta)) ^ 2) / S) / (mean(delta)) ^ 2
-    a_sq <- (sd(delta) / mean(delta)) ^ 2
+    a_sq <- mean((delta - mean(delta)) ^ 2) / mean(delta) ^ 2
+    # a_sq <- (sd(delta) / mean(delta)) ^ 2
     X2 <- X2 / (1 + a_sq)
     df <- S / (1 + a_sq)
   }
@@ -1029,8 +1029,8 @@ Pearson_test_v3 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
   X2 <- X2 / mean(delta)
   df <- S
   if (.order == "2") {
-    # a_sq <- (sum((delta - mean(delta)) ^ 2) / S) / (mean(delta)) ^ 2
-    a_sq <- (sd(delta) / mean(delta)) ^ 2
+    a_sq <- mean((delta - mean(delta)) ^ 2) / mean(delta) ^ 2
+    # a_sq <- (sd(delta) / mean(delta)) ^ 2
     X2 <- X2 / (1 + a_sq)
     df <- S / (1 + a_sq)
   }
