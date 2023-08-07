@@ -124,11 +124,17 @@ p_srs_a <- srs_plot2(res_srs_type1, alpha = 10)
 p_srs_b <- srs_plot2(res_srs_type1, alpha = 5)
 p_srs_c <- srs_plot2(res_srs_type1, alpha = 1)
 p_srs_d <- srs_plot(res_srs_power, alpha = 10, dashed_line = FALSE,
-                    plot_title = "Power")
+                    plot_title = "Power") +
+  scale_colour_viridis_d(option = "turbo", direction = -1) +
+  scale_fill_viridis_d(option = "turbo", direction = -1)
 p_srs_e <- srs_plot(res_srs_power, alpha = 5, dashed_line = FALSE,
-                    plot_title = "Power")
+                    plot_title = "Power") +
+  scale_colour_viridis_d(option = "turbo", direction = -1) +
+  scale_fill_viridis_d(option = "turbo", direction = -1)
 p_srs_f <- srs_plot(res_srs_power, alpha = 1, dashed_line = FALSE,
-                    plot_title = "Power")
+                    plot_title = "Power") +
+  scale_colour_viridis_d(option = "turbo", direction = -1) +
+  scale_fill_viridis_d(option = "turbo", direction = -1)
 
 usethis::use_data(res_srs_type1, overwrite = TRUE)
 usethis::use_data(res_srs_power, overwrite = TRUE)
