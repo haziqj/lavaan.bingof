@@ -29,8 +29,11 @@ txt_mod <- function(model_no = 1L) {
 
 ## ---- Loading matrix ---------------------------------------------------------
 loading_mat <- function(model_no) {
-  lam_entries <- c(0.80, 0.70, 0.47, 0.38, 0.34)
-  lam_index <- rep(seq_along(lam_entries), 3)
+  # lam_entries <- c(0.80, 0.70, 0.47, 0.38, 0.34)
+  # lam_index <- rep(seq_along(lam_entries), 3)
+  lam_entries <- c(0.80, 0.70, 0.60, 0.50, 0.40,
+                   0.85, 0.75, 0.65, 0.55, 0.42,
+                   0.90, 0.77, 0.67, 0.57, 0.45)
 
   if (model_no == 1) { nitems <- 5;  neta <- 1 }
   if (model_no == 2) { nitems <- 8;  neta <- 1 }
@@ -41,10 +44,10 @@ loading_mat <- function(model_no) {
   res <- matrix(0, nrow = nitems, ncol = neta)
 
   if (model_no %in% 1:3) {
-    res[, 1] <- lam_entries[lam_index[seq_len(nitems)]]
+    res[, 1] <- lam_entries[seq_len(nitems)]
   } else {
     for (k in seq_len(neta)) {
-      res[(k - 1) * 5 + 1:5, k] <- lam_entries
+      res[(k - 1) * 5 + 1:5, k] <- lam_entries[(k - 1) * 5 + 1:5]
     }
   }
 
@@ -73,7 +76,10 @@ get_Psi <- cov_lv_mat
 ## ---- Get thresholds----------------------------------------------------------
 get_tau <- function(model_no = 1) {
   nitems <- nrow(loading_mat(model_no))
-  tau <- rep(c(-1.43, -0.55, -0.13, -0.72, -1.13), 3)
+  # tau <- rep(c(-1.43, -0.55, -0.13, -0.72, -1.13), 3)
+  tau <- c(-1.5, -0.9, -0.3, 0.3, 0.9,
+           -1.3, -0.7, -0.1, 0.5, 1.1,
+           -1.1, -0.5, 0.1, 0.7, 1.3)
   tau[seq_len(nitems)]
 }
 
