@@ -664,7 +664,7 @@ create_Sigma2_matrix_complex <- function(.lavobject, .svy_design,
   x <- v$variables[, -(1:ystart)]
   xbar <- c(pidot1, pidot2)  # pi2 (model probs)
   # xbar <- c(pdot1, pdot2)  #p2 (proportions)
-  x <- t(t(x) - xbar)
+  # x <- t(t(x) - xbar)
 
   if (isTRUE(bootstrap)) {
     bootsvy <- svrep::as_bootstrap_design(.svy_design,
@@ -678,7 +678,7 @@ create_Sigma2_matrix_complex <- function(.lavobject, .svy_design,
     res <- apply(simplify2array(res), 1:2, mean)
   } else {
     wt <- 1 / .svy_design$prob
-    res <- cov.wt(x, wt, center = FALSE)$cov
+    res <- cov.wt(x, wt, center = xbar)$cov
   }
 
   res
