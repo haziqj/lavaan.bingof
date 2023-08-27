@@ -39,6 +39,7 @@ jobs:
             any::devtools
             any::survey
             any::ggcorrplot
+            any::corrplot
             any::semPlot
             local::.
           needs: website
