@@ -154,39 +154,45 @@ get_true_values <- function(model_no, arrange = c("lambda", "rho", "tau")) {
 
 }
 
-fit_facmod_pml <- function(model_no, samp = c("srs", "strat", "clust", "strcl"),
+fit_facmod_pml <- function(model_no, samp = c("srs", "strat", "clust",
+                                              "strcl", "wtd"),
                            n = 1000, seed = NULL, H1 = FALSE) {
   # Convenience function to fit one of our 5 models using lavaan's PML estimator
   # (with weights if necessary) just by specifying the model number. Mostly used
   # for testing so will suppress warning messages.
-  samp <- match.arg(samp, c("srs", "strat", "clust", "strcl"))
+  samp <- match.arg(samp, c("srs", "strat", "clust", "strcl", "wtd"))
   seed_used <- seed
   the_wt <- NULL
   if (samp == "srs") {
-    # Simple random sampling -------------------------------------------------
+    # Simple random sampling ---------------------------------------------------
     dat <- gen_data_bin(model_no = model_no, n = n, seed = seed_used, H1 = H1)
     svy <- NULL
+  } else if (samp == "wtd") {
+    # Informative sampling -----------------------------------------------------
+    dat <- gen_data_bin_wt(model_no = model_no, n = n, seed = seed_used,
+                           H1 = H1)
+    svy <- svydesign(ids = ~ 1, weights = ~ wt, data = dat)
   } else {
     the_wt <- "wt"
     pop <- make_population(model_no, seed = seed, H1 = H1)
     if (samp == "strat") {
-      # Stratified sampling --------------------------------------------------
+      # Stratified sampling ----------------------------------------------------
       dat <- gen_data_bin_strat(population = pop, n = n, seed = seed_used)
       svy <- svydesign(ids = ~ 1, strata = ~ type, weights = ~ wt, data = dat)
     }
     if (samp == "clust") {
-      # Cluster sampling -----------------------------------------------------
+      # Cluster sampling -------------------------------------------------------
       dat <- gen_data_bin_clust(population = pop, n = n, seed = seed_used)
       svy <- svydesign(ids = ~ school + class, weights = ~ wt, data = dat)
     }
     if (samp == "strcl") {
-      # Stratified-cluster sampling ------------------------------------------
+      # Stratified-cluster sampling --------------------------------------------
       dat <- gen_data_bin_strcl(population = pop, n = n, seed = seed_used)
       svy <- svydesign(ids = ~ school + class, strata = ~ type,
                        weights = ~ wt, data = dat, nest = TRUE)
     }
     if (samp == "strat2") {
-      # Stratified sampling --------------------------------------------------
+      # Stratified sampling ----------------------------------------------------
       dat <- gen_data_bin_strat(population = pop, n = n, seed = seed_used)
       svy <- svydesign(ids = ~ class, strata = ~ type, weights = ~ wt, data = dat)
     }
