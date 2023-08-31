@@ -155,12 +155,12 @@ get_true_values <- function(model_no, arrange = c("lambda", "rho", "tau")) {
 }
 
 fit_facmod_pml <- function(model_no, samp = c("srs", "strat", "clust",
-                                              "strcl", "wtd"),
+                                              "strcl",  "strat2", "wtd"),
                            n = 1000, seed = NULL, H1 = FALSE) {
   # Convenience function to fit one of our 5 models using lavaan's PML estimator
   # (with weights if necessary) just by specifying the model number. Mostly used
   # for testing so will suppress warning messages.
-  samp <- match.arg(samp, c("srs", "strat", "clust", "strcl", "wtd"))
+  samp <- match.arg(samp, c("srs", "strat", "clust", "strcl", "strat2", "wtd"))
   seed_used <- seed
   the_wt <- NULL
   if (samp == "srs") {

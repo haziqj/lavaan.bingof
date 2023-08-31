@@ -19,6 +19,8 @@ convert_dat_to_unibiv <- function(dat) {
 #' @inheritParams gen_data_bin
 #' @param return_all (logical) Return the underlying latent variables (\eqn{y^*}
 #'   and \eqn{\eta}) as well? well?
+#' @param Sigma2_attr (logical) Should the population $\Sigma_2$ matrix be
+#'   computed and stored as an attribute?
 #'
 #' @return A [tibble()] containing ordinal binary values (0/1) for the items, as
 #'   well as the population stratum and clusters (`type`, `school`, `class`).
@@ -34,7 +36,7 @@ convert_dat_to_unibiv <- function(dat) {
 #' }
 #'
 make_population <- function(model_no = 1, seed = 123, H1 = FALSE,
-                            return_all = FALSE) {
+                            return_all = FALSE, Sigma2_attr = FALSE) {
 
   set.seed(seed)
 
@@ -126,7 +128,10 @@ make_population <- function(model_no = 1, seed = 123, H1 = FALSE,
     res <- bind_cols(pop, y)
   }
 
-  Sigma2 <- (N - 1) / N * cov(convert_dat_to_unibiv(y))
+  Sigma2 <- NULL
+  if (isTRUE(Sigma2_attr)) {
+    Sigma2 <- (N - 1) / N * cov(convert_dat_to_unibiv(y))
+  }
   attr(res, "Sigma2") <- Sigma2
 
   res

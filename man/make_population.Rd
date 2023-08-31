@@ -4,7 +4,13 @@
 \alias{make_population}
 \title{Simulate the school population data set}
 \usage{
-make_population(model_no = 1, seed = 123, H1 = FALSE, return_all = FALSE)
+make_population(
+  model_no = 1,
+  seed = 123,
+  H1 = FALSE,
+  return_all = FALSE,
+  Sigma2_attr = FALSE
+)
 }
 \arguments{
 \item{model_no}{(integer) Choose from 1--5. See pkgdown articles for details.}
@@ -16,6 +22,9 @@ For power simulations.}
 
 \item{return_all}{(logical) Return the underlying latent variables (\eqn{y^*}
 and \eqn{\eta}) as well? well?}
+
+\item{Sigma2_attr}{(logical) Should the population $\Sigma_2$ matrix be
+computed and stored as an attribute?}
 }
 \value{
 A \code{\link[=tibble]{tibble()}} containing ordinal binary values (0/1) for the items, as
