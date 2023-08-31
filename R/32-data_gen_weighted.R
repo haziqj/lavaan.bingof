@@ -21,7 +21,7 @@ gen_data_bin_wt <- function(model_no = 1, seed = 123, H1 = FALSE,
     select(-dplyr::contains("ystar")) %>%
     mutate(prob = rowSums(across(starts_with("eta"))),
            prob = 1 / (1 + exp(prob))) %>%
-    mutate(sampled = rbinom::rbinom(dplyr::n(), size = 1, prob = prob) %>%
+    mutate(sampled = stats::rbinom(dplyr::n(), size = 1, prob = prob) %>%
              as.logical()) %>%
     filter(.data$sampled) %>%
     mutate(wt = 1 / prob,

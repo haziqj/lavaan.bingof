@@ -5,11 +5,11 @@ library(survey)
 library(lavaan.bingof)
 library(furrr)
 
-model_no <- 1
+model_no <- 3
 pop <- make_population(model_no)
 
 make_bias_table <- function(n = 10000, .pop = pop, samp) {
-  samp <- match.arg(samp, c("srs", "strat", "clust", "strcl"))
+  samp <- match.arg(samp, c("srs", "strat", "clust", "strcl", "wt"))
 
   if (samp == "srs") {
     dat <- gen_data_bin(model_no, n = n) %>%
@@ -18,6 +18,8 @@ make_bias_table <- function(n = 10000, .pop = pop, samp) {
   if (samp == "strat") dat <- gen_data_bin_strat(.pop, n = n)
   if (samp == "clust") dat <- gen_data_bin_clust(.pop, n = n)
   if (samp == "strcl") dat <- gen_data_bin_strcl(.pop, n = n)
+  if (samp == "wt") dat <- gen_data_bin_wt(model_no = model_no, n = n,
+                                           seed = NULL)
 
   mod <- txt_mod(model_no)
 
@@ -44,7 +46,7 @@ make_bias_table <- function(n = 10000, .pop = pop, samp) {
 
 res <- list()
 for (model_no in 1) {
-  for (samp in c("srs", "strat", "clust", "strcl")) {
+  for (samp in c("srs", "strat", "clust", "strcl", "wt")) {
     pop <- make_population(model_no)
     plan(multisession, workers = 30)
 
@@ -71,5 +73,5 @@ res %>%
   ggplot(aes(name, bias, fill = type)) +
   # geom_point(position = position_dodge(width = 0.5)) +
   geom_boxplot(outlier.shape = NA) +
-  facet_grid(samp ~ .) +
+  facet_grid(samp ~ ., scale = "free") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
