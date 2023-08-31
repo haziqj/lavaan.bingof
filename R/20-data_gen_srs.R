@@ -55,7 +55,9 @@ gen_data_bin <- function(model_no = 1, n = 1000, seed = NULL, H1 = FALSE,
   colnames(ystar) <- paste0("ystar", seq_len(nitems))
 
   if (isTRUE(return_all)) {
-    as_tibble(bind_cols(y, ystar))
+    eta <- as.data.frame(eta)
+    colnames(eta) <- paste0("eta", seq_len(neta))
+    as_tibble(bind_cols(y, ystar, eta))
   } else {
     as_tibble(y)
   }

@@ -47,7 +47,8 @@ globalVariables(c("i"))
 #' }
 #' }
 run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
-                           samp = c("srs", "strat", "clust", "strcl", "strat2"),
+                           samp = c("srs", "strat", "clust", "strcl", "strat2",
+                                    "uneqpr"),
                            simtype = c("type1", "power"), starting_seed = 16423,
                            ncores = parallel::detectCores() - 2,
                            pop_Sigma = FALSE, bootstrap = FALSE, nboot = 1000) {
@@ -57,7 +58,8 @@ run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
   simtype <- match.arg(simtype, c("type1", "power"))
   if (simtype == "type1") H1 <- FALSE
   if (simtype == "power") H1 <- TRUE
-  samp <- match.arg(samp, c("srs", "strat", "clust", "strcl", "strat2"))
+  samp <- match.arg(samp, c("srs", "strat", "clust", "strcl", "strat2",
+                            "uneqpr"))
   the_wt <- NULL
   if (samp != "srs") {
     the_wt <- "wt"
@@ -126,6 +128,13 @@ run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
         svy <- svydesign(ids = ~ school + class, strata = ~ type,
                          weights = ~ wt, data = dat, nest = TRUE)
       }
+      if (samp == "uneqpr") {
+        # Stratified-cluster sampling ------------------------------------------
+        seed_used <- the_seeds[i, 1]
+        dat <- gen_data_bin_wt(model_no, n = samp_size, seed = seed_used,
+                               H1 = H1)
+        svy <- svydesign(ids = ~ 1, weights = ~ wt, data = dat)
+      }
     }
 
     fit <- lavaan::sem(model = mod, data = dat, estimator = "PML",
@@ -166,20 +175,25 @@ NULL
 #' @rdname ligof_sims.methods
 #' @export
 print.ligof_sims <- function(x, ...) {
-  list2env(attr(x, "sim_settings"), environment())
-  time_taken <- attr(x, "duration")
-
-  cli::cli_h1("LIGOF simulations")
-
-  cli::cli_text("")
-  cli::cli_text("{.strong Settings}")
-  cli::cli_dl(c("Number of replications" = "{.val {nsim}}"))
-  cli::cli_dl(c("Model" = "{.val {cleanup_model(model_no)}}"))
-  cli::cli_dl(c("Sampling design" = "{.val {cleanup_samp(samp)}}"))
-  cli::cli_dl(c("Sample size" = "{.val {samp_size}}"))
-  cli::cli_text("")
-  cli::cli_text("Simulations completed in {.field {cleanup_duration(time_taken)}}")
+  # summary.ligof_sims(x = x, ...)
+  print(summary.ligof_sims(x))
 }
+
+# print.ligof_sims <- function(x, ...) {
+#   list2env(attr(x, "sim_settings"), environment())
+#   time_taken <- attr(x, "duration")
+#
+#   cli::cli_h1("LIGOF simulations")
+#
+#   cli::cli_text("")
+#   cli::cli_text("{.strong Settings}")
+#   cli::cli_dl(c("Number of replications" = "{.val {nsim}}"))
+#   cli::cli_dl(c("Model" = "{.val {cleanup_model(model_no)}}"))
+#   cli::cli_dl(c("Sampling design" = "{.val {cleanup_samp(samp)}}"))
+#   cli::cli_dl(c("Sample size" = "{.val {samp_size}}"))
+#   cli::cli_text("")
+#   cli::cli_text("Simulations completed in {.field {cleanup_duration(time_taken)}}")
+# }
 
 cleanup_model <- function(x) {
   paste0(
@@ -195,6 +209,8 @@ cleanup_samp <- function(x) {
   if (x == "strat2") res <- "Stratified sampling 2"
   if (x == "clust") res <- "Two-stage cluster sampling"
   if (x == "strcl") res <- "Two-stage stratified cluster sampling"
+  if (x == "uneqpr") res <- "Two-stage stratified cluster sampling"
+  else res <- "UNKNOWN--NOT CODED YET??"
   noquote(res)
 }
 
@@ -251,3 +267,5 @@ print.ligof_sims_summary <- function(x, ...) {
     kableExtra::kbl(format = "rst", digits = c(1, 3, 2, 2)) %>%
     print()
 }
+
+

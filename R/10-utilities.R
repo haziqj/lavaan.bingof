@@ -197,5 +197,5 @@ fit_facmod_pml <- function(model_no, samp = c("srs", "strat", "clust", "strcl"),
                        std.lv = TRUE, sampling.weights = the_wt)
   )
 
-  list(fit = fit, svy = svy)
+  list(dat = dat, fit = fit, svy = svy)
 }

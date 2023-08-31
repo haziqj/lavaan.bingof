@@ -23,7 +23,7 @@ globalVariables(c(".",".data", "Delta2", "N", "Omega2", "S", "Sigma2", "TH",
                   "rn", "rn2", "school", "students_in_school_type", "th.idx",
                   "type", "var1", "var2", "wt", "z", "Omega2_rank", "Sigmahat",
                   "alpha_", "converged", "fit", "mean_X2", "mean_df", "name",
-                  "pval", "rej_rate"))
+                  "pval", "rej_rate", "approx_delta"))
 
 ## ---- Utilities --------------------------------------------------------------
 extract_lavaan_info <- function(lavobject) {
@@ -684,6 +684,38 @@ create_Sigma2_matrix_complex <- function(.lavobject, .svy_design,
   res
 }
 
+
+create_Sigma2_matrix_complex2 <- function(.lavobject, .svy_design) {
+  list2env(extract_lavaan_info(.lavobject), environment())
+  list2env(get_uni_bi_moments(.lavobject), environment())
+
+  y_form <- paste0("~ ", paste0("y", 1:p, collapse = " + "), sep = "")
+  v <-
+    srvyr::as_survey(.svy_design) %>%
+    mutate(across(starts_with("y"), \(y) as.numeric(y) - 1))
+  ystart <- min(grep("^y[0-9]", names(v$variables))) - 1
+  idx <- combn(p, 2)
+  for (k in seq_len(ncol(idx))) {
+    i <- idx[1, k]
+    j <- idx[2, k]
+    varname <- paste0("y", i, ".", j, collapse = "")
+    yi <- v$variables[, i + ystart, drop = TRUE]
+    yj <- v$variables[, j + ystart, drop = TRUE]
+    yij <- (yi == 1) * (yj == 1)  # both positive
+    v$variables[[varname]] <- yij
+    y_form <- paste0(y_form, paste0(" + ", varname))
+  }
+
+  x <- v$variables[, -(1:ystart)]
+  survey::svyvar(x, .svy_design) %>%
+    as.matrix()
+  # wt <- 1 / .svy_design$prob
+  # res <- cov.wt(x, wt, center = c(pidot1, pidot2))$cov
+  # res
+}
+
+
+
 create_Sigma_univariate_matrix_complex <- function(.lavobject, .svy_design) {
   list2env(extract_lavaan_info(.lavobject), environment())
   list2env(get_uni_bi_moments(.lavobject), environment())
@@ -733,6 +765,32 @@ create_Sigma_univariate_matrix_complex <- function(.lavobject, .svy_design) {
     Sigma[[i]] <- crossprod(sweep(uab, 2, ubar, "-")) * na / (na - 1)
   }
   Reduce("+", Sigma) / N
+}
+
+get_w_for_delta <- function(.lavobject, .svy_design) {
+  if (is.null(.svy_design)) return(NA)
+
+  list2env(extract_lavaan_info(.lavobject), environment())
+  list2env(get_uni_bi_moments(.lavobject), environment())
+  y_form <- paste0("~ ", paste0("y", 1:p, collapse = " + "), sep = "")
+  v <-
+    srvyr::as_survey(.svy_design) %>%
+    mutate(across(starts_with("y"), \(y) as.numeric(y) - 1))
+  ystart <- min(grep("^y[0-9]", names(v$variables))) - 1
+  idx <- combn(p, 2)
+  for (k in seq_len(ncol(idx))) {
+    i <- idx[1, k]
+    j <- idx[2, k]
+    varname <- paste0("y", i, ".", j, collapse = "")
+    yi <- v$variables[, i + ystart, drop = TRUE]
+    yj <- v$variables[, j + ystart, drop = TRUE]
+    yij <- (yi == 1) * (yj == 1)  # both positive
+    v$variables[[varname]] <- yij
+    y_form <- paste0(y_form, paste0(" + ", varname))
+  }
+  x <- v$variables[, -(1:ystart)]
+  wt <- 1 / .svy_design$prob
+  apply(x, 2, \(x) sum(x * wt ^ 2)) / apply(x, 2, \(x) sum(x * wt))
 }
 
 ## ---- Test preliminaries ----------------------------------------------------
@@ -818,7 +876,10 @@ calc_test_stuff <- function(lavobject, svy_design = NULL, .H_inv = NULL,
     Sigma2    = Sigma2,
     H_inv     = H_inv,
     B2        = B2,
-    Delta2    = Delta2
+    Delta2    = Delta2,
+
+    # Asparouhov Muthen approx delta
+    approx_delta = get_w_for_delta(lavobject, svy_design)
   )
   attr(res, "bingof_calc_test_stuff") <- TRUE
   res
@@ -961,6 +1022,56 @@ Wald_diag_RS_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
     after_test(., Xi, S)
 }
 
+Wald_diag_RS_approx_test <- function(object, approx_Omega2 = FALSE,
+                                     svy_design = NULL, .order = 2) {
+  .order <- match.arg(as.character(.order), c("1", "2"))
+  list2env(test_begin(object, approx_Omega2, svy_design), environment())
+
+  omega_diag <- diag(Omega2)
+  Xi <- diag(1 / omega_diag)
+  X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
+  delta <- approx_delta
+
+  X2 <- X2 / mean(delta)
+  df <- S
+  if (.order == "2") {
+    a_sq <- mean((delta - mean(delta)) ^ 2) / mean(delta) ^ 2
+    # a_sq <- (sd(delta) / mean(delta)) ^ 2
+    X2 <- X2 / (1 + a_sq)
+    df <- S / (1 + a_sq)
+  }
+
+  data.frame(X2 = X2, df = df, name = paste0("WaldDiag,RSaprx", .order)) %>%
+    after_test(., Xi, S)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Wald_test_v3 <- function(object, svy_design = NULL) {
   list2env(test_begin(object, .approx_Omega2 = FALSE, svy_design),
            environment())
@@ -1008,23 +1119,14 @@ Pearson_test_v1 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
 #' @export
 Pearson_RS_test <- Pearson_test_v1
 
-Pearson_test_v3 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
-                            .order = 2) {
+Pearson_RS_approx_test <- function(object, approx_Omega2 = FALSE,
+                                   svy_design = NULL, .order = 2) {
   .order <- match.arg(as.character(.order), c("1", "2"))
   list2env(test_begin(object, approx_Omega2, svy_design), environment())
 
   Xi <- diag(1 / pi2_hat)
   X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
-
-  # Rao-Scott adjustment
-  tmp <- eigen(Omega2)
-  U <- diag(tmp$val)
-  V <- tmp$vec
-  Omegahalf <- V %*% sqrt(U) %*% t(V)
-  # same as below
-  Omegahalf <- t(chol(Omega2))
-  mat <- t(Omegahalf) %*% Xi %*% (Omegahalf)
-  delta <- eigen(mat)$values
+  delta <- approx_delta
 
   X2 <- X2 / mean(delta)
   df <- S
@@ -1035,9 +1137,40 @@ Pearson_test_v3 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
     df <- S / (1 + a_sq)
   }
 
-  data.frame(X2 = X2, df = df, name = "PearsonRS") %>%
+  data.frame(X2 = X2, df = df, name = paste0("Pearson,RSaprx", .order)) %>%
     after_test(., Xi, S)
 }
+
+# Pearson_test_v3 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
+#                             .order = 2) {
+#   .order <- match.arg(as.character(.order), c("1", "2"))
+#   list2env(test_begin(object, approx_Omega2, svy_design), environment())
+#
+#   Xi <- diag(1 / pi2_hat)
+#   X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
+#
+#   # Rao-Scott adjustment
+#   tmp <- eigen(Omega2)
+#   U <- diag(tmp$val)
+#   V <- tmp$vec
+#   Omegahalf <- V %*% sqrt(U) %*% t(V)
+#   # same as below
+#   Omegahalf <- t(chol(Omega2))
+#   mat <- t(Omegahalf) %*% Xi %*% (Omegahalf)
+#   delta <- eigen(mat)$values
+#
+#   X2 <- X2 / mean(delta)
+#   df <- S
+#   if (.order == "2") {
+#     a_sq <- mean((delta - mean(delta)) ^ 2) / mean(delta) ^ 2
+#     # a_sq <- (sd(delta) / mean(delta)) ^ 2
+#     X2 <- X2 / (1 + a_sq)
+#     df <- S / (1 + a_sq)
+#   }
+#
+#   data.frame(X2 = X2, df = df, name = "PearsonRS") %>%
+#     after_test(., Xi, S)
+# }
 
 Pearson_test_v2 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
                             .order = "3") {
@@ -1118,12 +1251,14 @@ all_tests <- function(object, svy_design = NULL, sim = NULL, Sigma2 = NULL,
     Wald_diag_test(test_stuff, .order = 3),
     # Wald_diag_RS_test(test_stuff, .order = 1),
     Wald_diag_RS_test(test_stuff, .order = 2),
+    # Wald_diag_RS_approx_test(test_stuff, .order = 2),
 
     # Pearson_test(test_stuff, .order = 1),
     # Pearson_test(test_stuff, .order = 2),
     Pearson_test(test_stuff, .order = 3),
     # Pearson_RS_test(test_stuff, .order = 1),
     Pearson_RS_test(test_stuff, .order = 2)
+    # Pearson_RS_approx_test(test_stuff, .order = 2)
 
     # RSS_test(test_stuff, .order = 1),
     # RSS_test(test_stuff, .order = 2),
