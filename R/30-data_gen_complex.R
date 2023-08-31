@@ -112,10 +112,10 @@ make_population <- function(model_no = 1, seed = 123, H1 = FALSE,
 
   # Get the response patterns --------------------------------------------------
   y <-
-    t(apply(ystar, 1, function(x) as.numeric(x > tau))) %>%
+  #   # t(apply(ystar, 1, function(x) as.numeric(x > tau))) %>%
+    1 * (ystar > matrix(tau, nrow = N, ncol = nitems, byrow = TRUE)) %>%
     as.data.frame()
   colnames(y) <- paste0("y", seq_len(nitems))
-  Sigma2 <- (N - 1) / N * cov(convert_dat_to_unibiv(y))
 
   ystar <- as.data.frame(ystar)
   colnames(ystar) <- paste0("ystar", seq_len(nitems))
@@ -126,7 +126,9 @@ make_population <- function(model_no = 1, seed = 123, H1 = FALSE,
     res <- bind_cols(pop, y)
   }
 
+  Sigma2 <- (N - 1) / N * cov(convert_dat_to_unibiv(y))
   attr(res, "Sigma2") <- Sigma2
+
   res
 }
 
