@@ -178,7 +178,7 @@ fit_facmod_pml <- function(model_no, samp = c("srs", "strat", "clust",
       pop <- make_population2(model_no, seed = seed, H1 = H1)
       # Stratified sampling v2 -------------------------------------------------
       dat <- gen_data_bin_strat2(population = pop, n = n, seed = seed_used)
-      svy <- svydesign(ids = ~ class, strata = ~ type, weights = ~ wt, data = dat)
+      svy <- svydesign(ids = ~ 0, strata = ~ type, weights = ~ wt, data = dat)
     } else {
       pop <- make_population(model_no, seed = seed, H1 = H1)
       if (samp == "strat") {
