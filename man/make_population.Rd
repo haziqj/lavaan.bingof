@@ -23,7 +23,7 @@ For power simulations.}
 \item{return_all}{(logical) Return the underlying latent variables (\eqn{y^*}
 and \eqn{\eta}) as well? well?}
 
-\item{Sigma2_attr}{(logical) Should the population $\Sigma_2$ matrix be
+\item{Sigma2_attr}{(logical) Should the population Sigma2 matrix be
 computed and stored as an attribute?}
 }
 \value{

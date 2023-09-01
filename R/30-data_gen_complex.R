@@ -19,7 +19,7 @@ convert_dat_to_unibiv <- function(dat) {
 #' @inheritParams gen_data_bin
 #' @param return_all (logical) Return the underlying latent variables (\eqn{y^*}
 #'   and \eqn{\eta}) as well? well?
-#' @param Sigma2_attr (logical) Should the population $\Sigma_2$ matrix be
+#' @param Sigma2_attr (logical) Should the population Sigma2 matrix be
 #'   computed and stored as an attribute?
 #'
 #' @return A [tibble()] containing ordinal binary values (0/1) for the items, as
