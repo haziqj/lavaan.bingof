@@ -217,7 +217,6 @@ p_complex_f <- complex_plot(res_complex_power, alpha = 1, dashed_line = FALSE,
 usethis::use_data(res_complex_type1, overwrite = TRUE)
 usethis::use_data(res_complex_power, overwrite = TRUE)
 
-
 # Distribution of test statistics ----------------------------------------------
 plot_X2_dens <- function(samp = "strcl") {
   dat <- grab_sims(samp = samp)
@@ -246,8 +245,8 @@ plot_X2_dens <- function(samp = "strcl") {
     # geom_freqpoly() +
     geom_line(data = plot_df2, aes(xx, yy), col = "black", inherit.aes = FALSE) +
     facet_wrap(name ~ sim, scales = "free", ncol = 5) +
-    jcolors::scale_colour_jcolors(palette = "pal7") +
-    jcolors::scale_fill_jcolors(palette = "pal7") +
+    jcolors::scale_colour_jcolors(palette = "pal7", name = NULL) +
+    jcolors::scale_fill_jcolors(palette = "pal7", name = NULL) +
     theme(legend.position = "bottom") +
     guides(fill = guide_legend(nrow = 1))
 }

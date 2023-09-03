@@ -122,6 +122,14 @@ res_complex_power %>%
 cowplot::plot_grid(p1, p2, ncol = 1, rel_heights = c(0.8, 1))
 ggsave("complex_plot.pdf", width = 7, height = 9)
 
+load("vignettes/articles/simplots.RData")
+ggsave("hist_1_srs.pdf", p_hist_a, width = 7, height = 9)
+ggsave("hist_1_strat.pdf", p_hist_b, width = 7, height = 9)
+ggsave("hist_1_clust.pdf", p_hist_c, width = 7, height = 9)
+ggsave("hist_1_strcl.pdf", p_hist_d, width = 7, height = 9)
+
+
+
 
 # Sankey plots -----------------------------------------------------------------
 library(lavaan.bingof)
