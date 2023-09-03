@@ -6,11 +6,10 @@
 \usage{
 gen_data_bin_wt(
   model_no = 1,
-  seed = 123,
+  seed = NULL,
   H1 = FALSE,
   return_all = FALSE,
-  N = 1000,
-  n
+  n = 1000
 )
 }
 \arguments{
@@ -24,10 +23,10 @@ For power simulations.}
 \item{return_all}{(logical) Return the underlying latent variable \eqn{y^*} as
 well?}
 
-\item{N}{The population size to sample from.}
-
 \item{n}{The sample size, which is a subsample of \code{N}. If this is supplied,
 then \code{N} will be ignored.}
+
+\item{N}{The population size to sample from.}
 }
 \value{
 A \code{\link[=tibble]{tibble()}} containing ordinal binary values (0/1) for the items.
