@@ -1,9 +1,6 @@
 #' Generate an informative (weighted) data sample according to `model_no`
 #'
 #' @inheritParams gen_data_bin
-#' @param N The population size to sample from.
-#' @param n The sample size, which is a subsample of `N`. If this is supplied,
-#'   then `N` will be ignored.
 #'
 #' @return A [tibble()] containing ordinal binary values (0/1) for the items.
 #' @export
