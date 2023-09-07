@@ -827,7 +827,7 @@ calc_test_stuff <- function(lavobject, svy_design = NULL, .H_inv = NULL,
   wstar_tmp <- attr(svy_design$variables, "wstar")
   if (!is.null(wstar_tmp)) {
     wstar <- wstar_tmp
-    # wstar <- 1.14
+    # wstar <- 1
   } else {
     wstar <- .wstar
   }

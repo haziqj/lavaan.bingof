@@ -66,7 +66,8 @@ run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
     if (samp == "strat2") {
       pop <- make_population2(model_no, seed = starting_seed, H1 = H1)
     } else {
-      pop <- make_population(model_no, seed = starting_seed, H1 = H1)
+      pop <- make_population(model_no, seed = starting_seed, H1 = H1,
+                             Sigma2_attr = isTRUE(pop_Sigma))
     }
     Sigma2 <- attr(pop, "Sigma2")
   }
