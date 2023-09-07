@@ -204,13 +204,13 @@ cleanup_model <- function(x) {
 }
 
 cleanup_samp <- function(x) {
+  res <- "UNKNOWN--NOT CODED YET??"
   if (x == "srs") res <- "Simple random sampling"
   if (x == "strat") res <- "Stratified sampling"
   if (x == "strat2") res <- "Stratified sampling 2"
   if (x == "clust") res <- "Two-stage cluster sampling"
   if (x == "strcl") res <- "Two-stage stratified cluster sampling"
   if (x == "uneqpr") res <- "Two-stage stratified cluster sampling"
-  else res <- "UNKNOWN--NOT CODED YET??"
   noquote(res)
 }
 

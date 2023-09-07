@@ -516,8 +516,9 @@ get_theoretical_uni_bi_moments <- function(model_no, collapse = FALSE) {
 #' fit <- lavaan::sem(txt_mod(1), gen_data_bin(1, n = 500), std.lv = TRUE,
 #'                    estimator = "PML")
 #' get_uni_bi_moments(fit)
-get_uni_bi_moments <- function(.lavobject) {
+get_uni_bi_moments <- function(.lavobject, wtd = TRUE) {
   list2env(extract_lavaan_info(.lavobject), environment())
+  if (!isTRUE(wtd)) dat$wt <- 1
 
   # Univariate -----------------------------------------------------------------
   pdot1 <- pidot1 <- rep(NA, p)
@@ -677,7 +678,7 @@ create_Sigma2_matrix_complex <- function(.lavobject, .svy_design,
     }
     res <- apply(simplify2array(res), 1:2, mean)
   } else {
-    wt <- 1 / .svy_design$prob
+    wt <- .svy_design$allprob$wt
     res <- cov.wt(x, wt, center = xbar)$cov
   }
 
@@ -792,7 +793,7 @@ get_w_for_delta <- function(.lavobject, .svy_design) {
 
 ## ---- Test preliminaries ----------------------------------------------------
 calc_test_stuff <- function(lavobject, svy_design = NULL, .H_inv = NULL,
-                            .Delta_mat_list  = NULL, .Sigma2  = NULL,
+                            .Delta_mat_list  = NULL, .Sigma2  = NULL, .wstar = 1,
                             .pi_tilde = NULL, bootstrap = FALSE, nboot = 100) {
   # These are all the stuff needed to compute the test statistic X2
   list2env(extract_lavaan_info(lavobject), environment())
@@ -823,6 +824,12 @@ calc_test_stuff <- function(lavobject, svy_design = NULL, .H_inv = NULL,
     pi_tilde <- .pi_tilde
   }
 
+  wstar_tmp <- attr(svy_design$dat, "wstar")
+  if (!is.null(wstar_tmp)) {
+    wstar <- wstar_tmp
+    wstar <- 1.14
+  }
+
   # Delta tilde and Delta_2 matrices
   Delta2 <- Delta_mat_list$Delta2
   Delta_til <- Delta_mat_list$Delta_til
@@ -840,7 +847,7 @@ calc_test_stuff <- function(lavobject, svy_design = NULL, .H_inv = NULL,
   # Bivariate pairs are usually ordered as follows: y1y2, y1y3, ..., y1yp,
   # y2y3, y2y4, ..., y2yp, ..., yp-1yp. In each pair, the permutation is 00,
   # 10, 01, 11. Thus, every four entry sums to 1.
-  B2 <- H_inv %*% t(Delta_til * (1 / pi_tilde)) %*% B_mat
+  B2 <- wstar * H_inv %*% t(Delta_til * (1 / pi_tilde)) %*% B_mat
 
   # Omega_2 matrix
   Omega2 <- Sigma2 -
@@ -1003,7 +1010,7 @@ Wald_diag_RS_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
   X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
 
   # Rao-Scott adjustment
-  mat <- diag(1 / sqrt(omega_diag)) %*% Omega2 %*% diag(1 / sqrt(omega_diag))  # supposed to divide by N???
+  mat <- Omega2 %*% diag(1 / omega_diag)
   delta <- eigen(mat)$values
 
   X2 <- X2 / mean(delta)
@@ -1042,33 +1049,6 @@ Wald_diag_RS_approx_test <- function(object, approx_Omega2 = FALSE,
     after_test(., Xi, S)
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Wald_test_v3 <- function(object, svy_design = NULL) {
   list2env(test_begin(object, .approx_Omega2 = FALSE, svy_design),
            environment())
@@ -1096,7 +1076,7 @@ Pearson_test_v1 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
   X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
 
   # Rao-Scott adjustment
-  mat <- diag(1 / sqrt(pi2_hat)) %*% Omega2 %*% diag(1 / sqrt(pi2_hat))  # supposed to divide by N???
+  mat <- Omega2 %*% diag(1 / pi2_hat)
   delta <- eigen(mat)$values
 
   X2 <- X2 / mean(delta)
@@ -1232,12 +1212,13 @@ Multn_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
 #'                    estimator = "PML")
 #' all_tests(fit)
 all_tests <- function(object, svy_design = NULL, sim = NULL, Sigma2 = NULL,
-                      bootstrap = FALSE, nboot = 100) {
+                      wstar = 1, bootstrap = FALSE, nboot = 100) {
   if (isTRUE(attr(object, "bingof_calc_test_stuff"))) {
     test_stuff <- object
   } else {
     test_stuff <- calc_test_stuff(object, svy_design, .Sigma2 = Sigma2,
-                                  bootstrap = bootstrap, nboot = nboot)
+                                  .wstar = wstar, bootstrap = bootstrap,
+                                  nboot = nboot)
   }
 
   res <- bind_rows(

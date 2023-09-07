@@ -206,21 +206,27 @@ gen_data_bin_complex1 <- function(population = make_population(1, seed = NULL),
       wt = 1 / prob
     )
 
+  # Add back the school_info to the population
+  population <-
+    population %>%
+    left_join(school_info, by = c("type"))
+
+  wstar <- mean(population$wt)
+
   # Sampling of PSUs
-  psu_sampled <- population %>%
+  sampled <- population %>%
     group_by(type) %>%
     slice_sample(n = npsu, replace = FALSE) %>%
-    ungroup()
-
-  sampled <- psu_sampled %>%
-    left_join(school_info, by = c("type")) %>%
+    ungroup() %>%
     select(-starts_with("ystar")) %>%
-    select(type, school, class, wt, starts_with("y")) %>%
+    select(type, school, class, wt, starts_with("y"))
+
+  out <- sampled %>%
     mutate(wt = wt / sum(wt) * dplyr::n(),
            across(starts_with("y"), ordered)) %>%
     arrange(type, school, class)
-
-  sampled
+  attr(out, "wstar") <- wstar / sum(sampled$wt) * nrow(sampled)
+  out
 }
 
 #' @rdname gen_data_bin_complex
