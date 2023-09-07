@@ -11,7 +11,7 @@ library(kableExtra)
 
 # Single runs ------------------------------------------------------------------
 model_no <- 1
-dat <- gen_data_bin_wt(model_no = model_no, n = 100000, seed = NULL)
+dat <- gen_data_bin_wt(model_no = model_no, n = 2000, seed = NULL)
 fit <- sem(model = txt_mod(model_no), data = dat, estimator = "PML",
            std.lv = TRUE, sampling.weights = "wt")
 svy <- svydesign(ids = ~ 1, weights = ~ wt, data = dat)

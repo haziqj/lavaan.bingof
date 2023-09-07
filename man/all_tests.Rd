@@ -9,8 +9,10 @@ all_tests(
   svy_design = NULL,
   sim = NULL,
   Sigma2 = NULL,
+  wstar = 1,
   bootstrap = FALSE,
-  nboot = 100
+  nboot = 100,
+  Hinv = NULL
 )
 }
 \arguments{
@@ -22,11 +24,15 @@ all_tests(
 
 \item{Sigma2}{(for internal testing only)}
 
+\item{wstar}{(for internal testing only)}
+
 \item{bootstrap}{(boolean) Use the \code{svyrep} package to compute bootstrap
 variance estimator?}
 
 \item{nboot}{(integer) Optional if \code{bootstrap = TRUE} then how many bootstrap
 replications?}
+
+\item{Hinv}{(for internal testing only)}
 }
 \value{
 Additionally, if \code{sim} argument is provided, two columns are

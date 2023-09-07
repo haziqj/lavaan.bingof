@@ -4,10 +4,12 @@
 \alias{get_uni_bi_moments}
 \title{Get univariate and bivariate moments}
 \usage{
-get_uni_bi_moments(.lavobject)
+get_uni_bi_moments(.lavobject, wtd = TRUE)
 }
 \arguments{
 \item{.lavobject}{A \code{\link[lavaan:lavaan]{lavaan::lavaan()}} fit object.}
+
+\item{wtd}{(logical) Should the weighted proportions be used?}
 }
 \value{
 A list of univariate and bivariate moments.

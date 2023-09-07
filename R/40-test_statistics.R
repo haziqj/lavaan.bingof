@@ -506,6 +506,7 @@ get_theoretical_uni_bi_moments <- function(model_no, collapse = FALSE) {
 #'
 #'
 #' @param .lavobject A [lavaan::lavaan()] fit object.
+#' @param wtd (logical) Should the weighted proportions be used?
 #'
 #' @returns A list of univariate and bivariate moments.
 #' @export
@@ -827,7 +828,7 @@ calc_test_stuff <- function(lavobject, svy_design = NULL, .H_inv = NULL,
   wstar_tmp <- attr(svy_design$variables, "wstar")
   if (!is.null(wstar_tmp)) {
     wstar <- wstar_tmp
-    # wstar <- 1
+    wstar <- 1  # Actually I think this should just be 1...
   } else {
     wstar <- .wstar
   }
@@ -1202,6 +1203,8 @@ Multn_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
 #' @param nboot (integer) Optional if `bootstrap = TRUE` then how many bootstrap
 #'   replications?
 #' @param Sigma2 (for internal testing only)
+#' @param Hinv (for internal testing only)
+#' @param wstar (for internal testing only)
 #'
 #' @returns Additionally, if `sim` argument is provided, two columns are
 #'   appended: Whether the [lavaan::lavaan()]  fit has `converged` and the
@@ -1214,13 +1217,13 @@ Multn_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
 #'                    estimator = "PML")
 #' all_tests(fit)
 all_tests <- function(object, svy_design = NULL, sim = NULL, Sigma2 = NULL,
-                      wstar = 1, bootstrap = FALSE, nboot = 100) {
+                      wstar = 1, bootstrap = FALSE, nboot = 100, Hinv = NULL) {
   if (isTRUE(attr(object, "bingof_calc_test_stuff"))) {
     test_stuff <- object
   } else {
     test_stuff <- calc_test_stuff(object, svy_design, .Sigma2 = Sigma2,
                                   .wstar = wstar, bootstrap = bootstrap,
-                                  nboot = nboot)
+                                  nboot = nboot, .H_inv = Hinv)
   }
 
   res <- bind_rows(
