@@ -9,28 +9,25 @@
 #' gen_data_bin_wt(1)
 gen_data_bin_wt <- function(model_no = 1, seed = NULL, H1 = FALSE,
                             return_all = FALSE, n = 1000) {
-  # if (!missing(n)) N <- n * 10
   population <-
-    gen_data_bin(model_no = model_no, n = n * 25, seed = 1923, H1 = H1,
+    gen_data_bin(model_no = model_no, n = n * 25, seed = NULL, H1 = H1,
                  return_all = TRUE)
 
   set.seed(seed)
 
   population <-
     population %>%
-    select(-dplyr::contains("ystar")) %>%
-    mutate(prob = 2 * rowSums(across(starts_with("eta"))),
-           prob = exp(prob) / (1 + exp(prob)))
+    # mutate(prob = 2 * rowSums(across(starts_with("eta"))),
+    #        prob = exp(prob) / (1 + exp(prob)))
+    mutate(prob = 1 / (1 + exp(ystar1))) %>%
+    select(-dplyr::contains("ystar"))
 
   wstar <- 1 / mean(population$prob)
 
   sampled <-
     population %>%
-    slice_sample(n = n, weight_by = prob, replace = TRUE)
+    slice_sample(n = n, weight_by = prob, replace = FALSE)
     # NOTE TO SELF: weight_by is actually probability of selection (sums to 1)
-    # mutate(sampled = stats::rbinom(dplyr::n(), size = 1, prob = prob) %>%
-    #          as.logical()) %>%
-    # filter(.data$sampled) %>%
 
   out <-
     sampled %>%

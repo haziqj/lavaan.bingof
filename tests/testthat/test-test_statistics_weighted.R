@@ -1,6 +1,6 @@
 test_that("Test statistics values (Informative sample) Model 1", {
   fit <- fit_facmod_pml(1, samp = "wtd", seed = 123)
-  res <- all_tests(fit$fit, fit$svy)
+  res <- all_tests(fit$fit)
   expect_snapshot(res)
 })
 

@@ -4,33 +4,14 @@
 \alias{all_tests}
 \title{Return all test statistics values}
 \usage{
-all_tests(
-  object,
-  svy_design = NULL,
-  sim = NULL,
-  Sigma2 = NULL,
-  wstar = 1,
-  bootstrap = FALSE,
-  nboot = 100,
-  Hinv = NULL
-)
+all_tests(object, sim = NULL, Sigma2 = NULL, Hinv = NULL)
 }
 \arguments{
 \item{object}{A \code{\link[lavaan:lavaan]{lavaan::lavaan()}} fit object.}
 
-\item{svy_design}{(optional) A \code{\link[survey:svydesign]{survey::svydesign()}} object.}
-
 \item{sim}{(integer) Optional and used for large-scale simulations.}
 
 \item{Sigma2}{(for internal testing only)}
-
-\item{wstar}{(for internal testing only)}
-
-\item{bootstrap}{(boolean) Use the \code{svyrep} package to compute bootstrap
-variance estimator?}
-
-\item{nboot}{(integer) Optional if \code{bootstrap = TRUE} then how many bootstrap
-replications?}
 
 \item{Hinv}{(for internal testing only)}
 }

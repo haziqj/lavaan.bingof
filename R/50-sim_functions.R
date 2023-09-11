@@ -9,7 +9,7 @@ globalVariables(c("i"))
 #'   stratified sampling; otherwise the *average* sample size for the other
 #'   complex sampling methods.
 #' @param samp (character) Choose the sampling method for the simulated data.
-#'   One of `srs`, `strat`, `clust` or `strcl`.
+#'   One of `srs`, `wtd`, `strat`, `clust` or `strcl`.
 #' @param simtype (character) Whether this is a `type1` simulation or `power`
 #'   simulation.
 #' @param starting_seed (integer) The starting random seed.
@@ -47,49 +47,47 @@ globalVariables(c("i"))
 #' }
 #' }
 run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
-                           samp = c("srs", "strat", "clust", "strcl", "strat2",
-                                    "uneqpr"),
-                           simtype = c("type1", "power"), starting_seed = 16423,
+                           samp = c("srs", "wtd", "strat", "clust", "strcl",
+                                    "strat2"),
+                           simtype = c("type1", "power"), starting_seed = 29923,
                            ncores = parallel::detectCores() - 2,
-                           pop_Sigma = FALSE, bootstrap = FALSE, nboot = 1000) {
+                           pop_Sigma = FALSE, Sigma2 = NULL) {
 
-  # Model setup
+  # Model setup ----------------------------------------------------------------
   mod <- txt_mod(model_no)
   simtype <- match.arg(simtype, c("type1", "power"))
   if (simtype == "type1") H1 <- FALSE
   if (simtype == "power") H1 <- TRUE
-  samp <- match.arg(samp, c("srs", "strat", "clust", "strcl", "strat2",
-                            "uneqpr"))
+  samp <- match.arg(samp, c("srs", "wtd", "strat", "clust", "strcl", "strat2"))
   the_wt <- NULL
   if (samp != "srs") {
     the_wt <- "wt"
-    if (samp == "strat2") {
-      pop <- make_population2(model_no, seed = starting_seed, H1 = H1)
-    } else {
-      pop <- make_population(model_no, seed = starting_seed, H1 = H1,
-                             Sigma2_attr = isTRUE(pop_Sigma))
-    }
-    Sigma2 <- attr(pop, "Sigma2")
+    pop <- make_population(model_no, seed = starting_seed, H1 = H1,
+                           Sigma2_attr = isTRUE(pop_Sigma))
+    Sigma2pop <- attr(pop, "Sigma2")
   }
-  if (!isTRUE(pop_Sigma)) Sigma2 <- NULL
+  if (isTRUE(pop_Sigma)) {
+    Sigma2 <- Sigma2pop
+    if (!is.null(Sigma2)) cli::cli_alert_warning("Overriding choice of Sigma2.")
+  }
 
-  # Random seeds for replication
+  # Random seeds for replication -----------------------------------------------
   set.seed(starting_seed)
   the_seeds <- 2 ^ (simtype == "power") * model_no * matrix(
-    sample(seq_len(100 + nsim ^ 2), size = nsim * 4), ncol = 4
+    sample(seq_len(100 + nsim ^ 2), size = nsim * 5), ncol = 5
   ) + samp_size
 
-  # Initialise parallel stuff
+  # Initialise parallel stuff --------------------------------------------------
   pb <- txtProgressBar(min = 0, max = nsim, style = 3)
   progress <- function(i) setTxtProgressBar(pb, i)
   cl <- makeCluster(ncores)
   registerDoSNOW(cl)
-
   start_time <- Sys.time()
 
+  # Begin sims -----------------------------------------------------------------
   res <- foreach(
     i = 1:nsim, #.combine = bind_rows,
-    .packages = c("tidyverse", "lavaan", "survey"),
+    .packages = c("tidyverse", "lavaan"),
     .export = ls(globalenv()),
     .errorhandling = "pass",
     .options.snow = list(progress = progress)
@@ -105,50 +103,43 @@ run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
         seed_used <- the_seeds[i, 2]
         dat <- gen_data_bin_complex1(population = pop, n = samp_size,
                                      seed = seed_used)
-        svy <- svydesign(ids = ~ 0, strata = ~ type, weights = ~ wt, data = dat)
       }
       if (samp == "strat2") {
-        # Stratified sampling --------------------------------------------------
+        # Stratified sampling v2 -----------------------------------------------
         seed_used <- the_seeds[i, 2]
-        dat <- gen_data_bin_strat2(population = pop, n = samp_size,
-                                   seed = seed_used)
-        svy <- svydesign(ids = ~ 0, strata = ~ type, weights = ~ wt, data = dat)
+        dat <- gen_data_bin_strat2(model_no, n = samp_size, seed = seed_used,
+                                   H1 = H1)
       }
       if (samp == "clust") {
         # Cluster sampling -----------------------------------------------------
         seed_used <- the_seeds[i, 3]
         dat <- gen_data_bin_complex2(population = pop, n = samp_size,
                                      seed = seed_used)
-        svy <- svydesign(ids = ~ school + class, weights = ~ wt, data = dat)
       }
       if (samp == "strcl") {
         # Stratified-cluster sampling ------------------------------------------
         seed_used <- the_seeds[i, 4]
         dat <- gen_data_bin_complex3(population = pop, n = samp_size,
                                      seed = seed_used)
-        svy <- svydesign(ids = ~ school + class, strata = ~ type,
-                         weights = ~ wt, data = dat, nest = TRUE)
       }
       if (samp == "uneqpr") {
         # Stratified-cluster sampling ------------------------------------------
-        seed_used <- the_seeds[i, 1]
-        dat <- gen_data_bin_wt(model_no, n = samp_size, seed = seed_used,
-                               H1 = H1)
-        svy <- svydesign(ids = ~ 1, weights = ~ wt, data = dat)
+        seed_used <- the_seeds[i, 5]
+        dat <- gen_data_bin_wt(model_no = model_no, n = samp_size,
+                               seed = seed_used, H1 = H1)
       }
     }
 
-    fit <- lavaan::sem(model = mod, data = dat, estimator = "PML",
+    fit <- lavaan::sem(model = txt_mod(model_no), data = dat, estimator = "PML",
                        std.lv = TRUE, sampling.weights = the_wt)
-    bind_cols(all_tests(fit, svy, sim = i, Sigma2 = Sigma2,
-                        bootstrap = bootstrap, nboot = nboot), seed = seed_used)
+    bind_cols(all_tests(fit, sim = i, Sigma2 = Sigma2), seed = seed_used)
   }
 
   end_time <- Sys.time()
   close(pb)
   stopCluster(cl)
 
-  # Prepare output
+  # Prepare output -------------------------------------------------------------
   class(res) <- "ligof_sims"
   attr(res, "duration") <- difftime(end_time, start_time)
   attr(res, "sim_settings") <- list(
@@ -268,5 +259,3 @@ print.ligof_sims_summary <- function(x, ...) {
     kableExtra::kbl(format = "rst", digits = c(1, 3, 2, 2)) %>%
     print()
 }
-
-

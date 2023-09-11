@@ -44,8 +44,8 @@ extract_lavaan_info <- function(lavobject) {
   }
 
   # Distribution of ystar (underlying variables)
-  Sigmahat <- lavobject@Fit@Sigma.hat[[1]]  #g for multigroup analysis
-  Meanhat <- c(lavobject@implied$mean[[1]]) #g for multigroup analysis
+  Sigmahat <- lavobject@Fit@Sigma.hat[[1]]  # g for multigroup analysis
+  Meanhat <- c(lavobject@implied$mean[[1]]) # g for multigroup analysis
   nsize <- lavobject@Data@nobs[[1]]
 
   # Raw data tibble
@@ -53,7 +53,6 @@ extract_lavaan_info <- function(lavobject) {
   colnames(dat) <- lavdata@ov.names[[1]]
   wt <- lavdata@weights[[1]]
   if (is.null(wt)) wt <- rep(1, nsize)
-  dat$wt <- wt
 
   list(
     lavdata        = lavdata,  # data saved in lavaan object
@@ -67,6 +66,7 @@ extract_lavaan_info <- function(lavobject) {
     p              = nvar,  # no. of items
     N              = nsize,
     dat            = dat,
+    wt             = wt,
     Var_ystar      = Sigmahat,  # varcov matrix of underlying MVN dist
     mu_ystar       = Meanhat  # mean vector of underlying MVN dist
   )
@@ -88,181 +88,18 @@ get_sensitivity_inv_mat <- function(.lavobject, matrix_type = c("Sensitivity",
                          lavpartable    = lavpartable,
                          lavcache       = lavcache)
   # Note: VCOV here is (H %*% J^{-1} %*% H)^{-1} = H^{-1} %*% J %*% H^{-1} and
-  # it is the "full" information matrix. E.inv is therefore the unit information
-  # matrix, and J has the full information.
+  # it is the "full" information matrix.
 
   if (matrix_type == "Sensitivity") {
-    mat <- attr(VCOV, "E.inv")  # not yet divided by sqrt n
+    mat <- attr(VCOV, "E.inv")
   } else if (matrix_type == "Sandwich") {
-    mat <- VCOV  # already divided by sqrt n
+    mat <- VCOV
   }
 
-  tt <- sum(lavpartable$free != 0)
-  if (is.null(mat)) mat <- diag(tt)
+  # In case E.inv cannot be computed, return identity matrix instead
+  # tt <- sum(lavpartable$free != 0)
+  # if (is.null(mat)) mat <- diag(tt)
   mat
-}
-
-# ORDER OF THE PROBABILITIES IS IMPORTANT. SHOULD JUST USE LAVAAN's ORDERING?
-# But possible that not all response patterns are observed...
-
-
-#' Create a table of binary response patterns
-#'
-#' @description Ordering is incremental patterns of power 2 from right to left.
-#'
-#' @param p (integer > 0) The number of items.
-#'
-#' @return A [tibble()] containing ordinal binary values (0/1) for the items as
-#'   well as a column indicating one of the \eqn{2^p} response patterns.
-#' @export
-#'
-#' @examples
-#' create_resp_pattern(p = 3)
-create_resp_pattern <- function(p = 3) {
-  vars <- list()
-  for (P in 1:p) vars[[P]] <- 1:0
-  names(vars) <- paste0("y", p:1)
-  tab <- expand.grid(vars)[p:1] %>%
-    as_tibble() %>%
-    unite("pattern", everything(), sep = "", remove = FALSE) %>%
-    mutate(across(starts_with("y"), ordered)) %>%
-    select(starts_with("y"), everything())
-
-  # attr(tab, "patterns") <-
-  #   tab %>%
-  #   mutate(across(everything(), as.numeric)) %>%
-  #   unite("r", everything(), sep = "") %>%
-  #   unlist()
-
-  tab
-}
-
-#' Create transformation matrices
-#'
-#' @name transformation-matrices
-#' @rdname transformation-matrices
-#' @description The derived limited information test statistics involves some
-#'   design matrices which act as transformations from the larger \eqn{2^p}
-#'   response pattern space to the lower order univariate and bivariate
-#'   marginals.
-#'
-#' - `create_G_mat()` returns the \eqn{\tilde R \times R} indicator matrix to obtain all pairwise components.
-#'
-#' - `create_T2_mat()` returns the \eqn{p(p+1)/2 \times 2^p} indicator matrix \eqn{T_2} to pick out the unviariate and bivariate moments from the response patterns.
-#'
-#' - `create_Beta_mat()` returns the \eqn{4p \times p(p+1)/2} design matrix \eqn{\Beta} described in the manuscript (used to express parameters in terms of residuals).
-#'
-#' Note that ordering is similar to the ordering in [create_resp_pattern()].
-#' These design matrices currently only apply to binary data. See technical
-#' documents for more details.
-#'
-#' @inheritParams create_resp_pattern
-#'
-#' @return A matrix. Additionally, we may inspect the attributes regarding the
-#'   ordering of the pairwise components of the \eqn{G} matrix.
-#'
-#' @examples
-#' create_G_mat(p = 3)
-#' create_T2_mat(p = 3)
-#' create_Beta_mat(p = 3)
-NULL
-
-#' @rdname transformation-matrices
-#' @export
-create_G_mat <- function(p = 3) {
-  dat <- create_resp_pattern(p = p) %>%
-    select(starts_with("y"))
-  id <- combn(p, 2)
-  counter <- 0
-  G <- list()
-  for (k in seq_len(ncol(id))) {
-    i <- id[1, k]  # var1
-    j <- id[2, k]  # var2
-    for (y2 in 0:1) {
-      for (y1 in 0:1) {
-        # the sequence is 00, 10, 01, 11
-        counter <- counter + 1
-        G[[counter]] <- as.numeric(dat[, i, drop = TRUE] ==
-                                     y1 & dat[, j, drop = TRUE] == y2)
-      }
-    }
-    the_ind <- (counter - 3):counter
-    G[[the_ind[1]]] <- - (G[[the_ind[2]]] + G[[the_ind[3]]] + G[[the_ind[4]]])
-  }
-  G <- as.data.frame(G)
-  colnames(G) <- NULL
-  G <- as.matrix(G)
-  attr(G, "patterns") <- attr(dat, "patterns")
-  attr(G, "pairwise") <- id
-
-  t(G)
-}
-
-#' @rdname transformation-matrices
-#' @export
-create_T2_mat <- function(p = 3) {
-  dat <- create_resp_pattern(p = p) %>%
-    select(starts_with("y"))
-  pp <- choose(p, 2)
-
-  M1 <- dat %>%
-    mutate(across(everything(), function(x) as.numeric(x) - 1)) %>%
-    as.matrix() %>%
-    t()
-
-  # Only works for binary data right now... the M2 matrix is picking out every
-  # 4th row because for binary data there are total of 4 possible choices within
-  # the pairwise groups.
-  M2 <- create_G_mat(p = p)[seq(4, 4 * pp, by = 4), ]
-
-  M <- rbind(M1, M2)
-  rownames(M) <- NULL
-  M
-}
-
-#' @rdname transformation-matrices
-#' @export
-#' @author Myrsini Katsikatsou (`create_Beta_mat()`)
-create_Beta_mat <- function(p = 3) Beta_mat_design(nvar = p)
-
-Beta_mat_design <- function(nvar) {
-  # Warning: Only applies to binary data.
-  # Written by Myrsini Katsikatsou
-
-  no_biv  <- nvar * (nvar - 1) / 2
-  idx_univ <- 1:nvar
-  idx_biv <- (nvar + 1):(nvar + no_biv)
-  idx_cat_var1 <- rep(c(0, 1, 0, 1), times = no_biv)
-  idx_cat_var2 <- rep(c(0, 0, 1, 1), times = no_biv)
-  idx_pairs <- combn(nvar, 2)
-  idx_var1 <- rep(idx_pairs[1, ], each = 4)
-  idx_var2 <- rep(idx_pairs[2, ], each = 4)
-
-  nrow_B <- 4 * no_biv
-  idx_row <- 1:nrow_B
-  B_mat <- matrix(0, nrow = nrow_B, ncol = (nvar + no_biv))
-
-  # Determine the pxixj11, i.e. P(yi = 1, yj = 1)
-  diag(B_mat[idx_cat_var1 == 1 & idx_cat_var2 == 1, idx_biv]) <- 1
-
-  # Determine the pxixj10, i.e. P(yi = 1, yj = 0)
-  cdtn10 <- idx_cat_var1 == 1 & idx_cat_var2 == 0
-  idc_row10 <- idx_row[cdtn10]
-  B_mat[cbind(idc_row10, idx_univ[idx_var1[cdtn10]])] <- 1
-  diag(B_mat[idc_row10, idx_biv]) <- -1
-
-  # Determine the pxixj01, i.e. P(yi = 0, yj = 1)
-  cdtn01 <- idx_cat_var1 == 0 & idx_cat_var2 == 1
-  idc_row01 <- idx_row[cdtn01]
-  B_mat[cbind(idc_row01, idx_univ[idx_var2[cdtn01]])] <- 1
-  diag(B_mat[idc_row01, idx_biv]) <- -1
-
-  # Determine the pxixj00, , i.e. P(yi = 0, yj = 0)
-  cdtn00 <- idx_cat_var1 == 0 & idx_cat_var2 == 0
-  cdtn11 <- idx_cat_var1 == 1 & idx_cat_var2 == 1
-  B_mat[cdtn00, ] <- -1 * (B_mat[cdtn10, ] + B_mat[cdtn01, ] + B_mat[cdtn11, ])
-
-  B_mat
 }
 
 ## ---- Delta matrices ---------------------------------------------------------
@@ -460,343 +297,96 @@ get_Delta_mats <- function(.lavobject) {
   )
 }
 
-#' @rdname get_true_values
-#' @param collapse (logical) Should a vector be returned instead of a list
-#'   separating the univariate and bivariate quantities?
-#' @inherit get_uni_bi_moments return
-#' @export
-#' @examples
-#' get_theoretical_uni_bi_moments(1)
-get_theoretical_uni_bi_moments <- function(model_no, collapse = FALSE) {
-  Var_ystar <- get_Sigmay(model_no)
-  mu_ystar <- rep(0, nrow(Var_ystar))
-  TH <- get_tau(model_no)
-  p <- nrow(get_Lambda(model_no))
-
-  # Univariate -----------------------------------------------------------------
-  pidot1 <- rep(NA, p)
-  for (i in seq_along(pidot1)) {
-    pidot1[i] <- pnorm(TH[i], mean = mu_ystar[i], sd = sqrt(Var_ystar[i, i]),
-                       lower.tail = FALSE)
-  }
-
-  # Bivariate ------------------------------------------------------------------
-  id <- combn(p, 2)
-  pidot2 <- rep(NA, ncol(id))
-  for (k in seq_along(pidot2)) {
-    i <- id[1, k]  # var1
-    j <- id[2, k]  # var2
-    pidot2[k] <- mnormt::sadmvn(lower = c(TH[i], TH[j]), upper = c(Inf, Inf),
-                                mean = mu_ystar[c(i, j)],
-                                varcov = Var_ystar[c(i, j), c(i, j)])
-  }
-
-  if (isTRUE(collapse)) {
-    c(pidot1, pidot2)
-  } else {
-    list(pidot1 = pidot1, pidot2 = pidot2)
-  }
-}
-
-#' Get univariate and bivariate moments
-#'
-#' @description Returns univariate and bivariate moments (i.e. positive
-#'   probabilities only) based on model i.e. `pidot1` and `pidot2` and
-#'   (weighted) sample i.e. `pdot1` and `pdot2`.
-#'
-#'
-#' @param .lavobject A [lavaan::lavaan()] fit object.
-#' @param wtd (logical) Should the weighted proportions be used?
-#'
-#' @returns A list of univariate and bivariate moments.
-#' @export
-#'
-#' @seealso [get_theoretical_uni_bi_moments()]
-#'
-#' @examples
-#' fit <- lavaan::sem(txt_mod(1), gen_data_bin(1, n = 500), std.lv = TRUE,
-#'                    estimator = "PML")
-#' get_uni_bi_moments(fit)
-get_uni_bi_moments <- function(.lavobject, wtd = TRUE) {
-  list2env(extract_lavaan_info(.lavobject), environment())
-  if (!isTRUE(wtd)) dat$wt <- 1
-
-  # Univariate -----------------------------------------------------------------
-  pdot1 <- pidot1 <- rep(NA, p)
-  for (i in seq_along(pidot1)) {
-    pdot1[i] <- sum(dat$wt[dat[, i] == 2]) / N
-    pidot1[i] <- pnorm(TH[i], mean = mu_ystar[i], sd = sqrt(Var_ystar[i, i]),
-                       lower.tail = FALSE)
-  }
-
-  # Bivariate ------------------------------------------------------------------
-  id <- combn(p, 2)
-  pdot2 <- pidot2 <- rep(NA, ncol(id))
-  for (k in seq_along(pidot2)) {
-    i <- id[1, k]  # var1
-    j <- id[2, k]  # var2
-    pdot2[k] <- sum(dat$wt[dat[, i] == 2 & dat[, j] == 2]) / N
-    pidot2[k] <- mnormt::sadmvn(lower = c(TH[i], TH[j]), upper = c(Inf, Inf),
-                                mean = mu_ystar[c(i, j)],
-                                varcov = Var_ystar[c(i, j), c(i, j)])
-  }
-
-  list(
-    # Univariate moments
-    pdot1  = pdot1,   # sample
-    pidot1 = pidot1,  # model
-
-    # Bivariate moments
-    pdot2 = pdot2,    # sample
-    pidot2 = pidot2   # model
-  )
-}
-
 ## ---- Sigma multinomial matrices ---------------------------------------------
-create_Sigma2_matrix <- function(.lavobject) {
+# Several ways to calculate Sigma2:
+# 1. The theoretical moments (using uni, bi, tri, tetra variate moments)
+# 2. Using the data sample
+#   - weighted
+#   - force unweighted
+#   - stratified
+
+create_Sigma2_matrix <- function(.lavobject, method = c("theoretical",
+                                                        "weighted",
+                                                        "force_unweighted",
+                                                        "strat")) {
   list2env(extract_lavaan_info(.lavobject), environment())
   list2env(get_uni_bi_moments(.lavobject), environment())
+  ymean <- c(pidot1, pidot2)  # uni and bivariate moments (model implied)
+  # ymean <- c(pdot1, pdot2)  # or the proportions?
 
-  S <- p * (p + 1) / 2
-  Eysq <- matrix(NA, S, S)
+  method <- match.arg(method, c("theoretical", "weighted", "force_unweighted",
+                                "strat"))
 
-  id <- c(1:p, asplit(combn(p, 2), 2))
-  # idS <- t(combn(S, 2))
-  idS <- gtools::combinations(S, 2, repeats = TRUE)
-  colnames(idS) <- c("i", "j")
-  idy <- as_tibble(idS) %>%
-    mutate(var1 = id[i], var2 = id[j],
-           y = mapply(c, var1, var2, SIMPLIFY = FALSE))
+  if (method == "theoretical") {
+    S <- p * (p + 1) / 2
+    Eysq <- matrix(NA, S, S)
 
-  for (s in seq_len(nrow(idS))) {
-    i <- idy$i[s]
-    j <- idy$j[s]
-    yy <- unique(idy$y[[s]])
+    id <- c(1:p, asplit(combn(p, 2), 2))
+    idS <- gtools::combinations(S, 2, repeats = TRUE)
+    colnames(idS) <- c("i", "j")
+    idy <- as_tibble(idS) %>%
+      mutate(var1 = id[i], var2 = id[j],
+             y = mapply(c, var1, var2, SIMPLIFY = FALSE))
 
-    dimy <- length(yy)
-    Eysq[i, j] <- mnormt::sadmvn(lower = TH[yy], upper = rep(Inf, dimy),
-                                 mean = mu_ystar[yy], varcov = Var_ystar[yy, yy])
+    for (s in seq_len(nrow(idS))) {
+      i <- idy$i[s]
+      j <- idy$j[s]
+      yy <- unique(idy$y[[s]])
 
-  }
-  Eysq[lower.tri(Eysq)] <- t(Eysq)[lower.tri(Eysq)]
-  Eysq - tcrossprod(c(pidot1, pidot2))
-}
+      dimy <- length(yy)
+      Eysq[i, j] <-
+        mnormt::sadmvn(lower = TH[yy], upper = rep(Inf, dimy),
+                       mean = mu_ystar[yy], varcov = Var_ystar[yy, yy])
 
-# create_Sigma2_matrix_complex_old <- function(.lavobject, .svy_design) {
-#   list2env(extract_lavaan_info(.lavobject), environment())
-#   list2env(get_uni_bi_moments(.lavobject), environment())
-#
-#   # Get strata information
-#   strata  <- .svy_design$strata[, 1, drop = FALSE]
-#   colnames(strata) <- "strata"
-#   a <- unique(strata[, 1])
-#
-#   # Get cluster information
-#   cluster <- .svy_design$cluster
-#   colnames(cluster)[1] <- "cluster"
-#
-#   dat <-
-#     dat %>%
-#     bind_cols(strata, cluster)
-#
-#   # Create the data set of univariate and bivariate responses (1/0)
-#   tmp <- dat %>%
-#     select(starts_with("y")) %>%
-#     mutate(across(starts_with("y"), function(x) as.numeric(x == 2)))
-#
-#   id <- combn(p, 2)
-#   the_names <- paste0("y", 1:p)
-#   the_names <- c(the_names, paste0(the_names[id[1, ]], the_names[id[2, ]]))
-#   tmp2 <- as_tibble(((tmp[, id[1, ]] == 1) + (tmp[, id[2, ]] == 1)) == 2) %>%
-#     mutate(across(everything(), as.numeric)) %>% suppressWarnings()
-#   colnames(tmp2) <- the_names[-(1:p)]
-#   tmp <- bind_cols(dat %>% select(-starts_with("y")), tmp, tmp2)
-#
-#   pi2 <- c(pidot1, pidot2)
-#   Sigma <- list()
-#   for (i in a) {
-#     # Filter the strata a
-#     current_dat <- tmp %>%
-#       filter(strata == i)
-#
-#     # Obtain the responses in this strata (i.e. according to S_ab)
-#     y <- current_dat %>%
-#       select(starts_with("y")) %>%
-#       mutate(across(starts_with("y"), function(x) as.numeric(x == 1))) %>%
-#       as.matrix()
-#
-#     uab <- {sweep(y, 2, pi2, "-") * current_dat$wt} %>%
-#       as_tibble() %>%
-#       bind_cols(current_dat %>% select(-starts_with("y")), .) %>%
-#       group_by(cluster) %>%
-#       summarise(across(starts_with("y"), sum), .groups = "drop") %>%
-#       select(starts_with("y")) %>%
-#       as.matrix()
-#     na <- nrow(uab)
-#
-#     ubar <- apply(uab, 2, mean)
-#
-#     Sigma[[i]] <- crossprod(sweep(uab, 2, ubar, "-")) * na / (na - 1)
-#   }
-#   Reduce("+", Sigma) / N
-# }
-
-create_Sigma2_matrix_complex <- function(.lavobject, .svy_design,
-                                         bootstrap = FALSE, nboot = 100) {
-  list2env(extract_lavaan_info(.lavobject), environment())
-  list2env(get_uni_bi_moments(.lavobject), environment())
-
-  y_form <- paste0("~ ", paste0("y", 1:p, collapse = " + "), sep = "")
-  v <-
-    srvyr::as_survey(.svy_design) %>%
-    mutate(across(starts_with("y"), \(y) as.numeric(y) - 1))
-  ystart <- min(grep("^y[0-9]", names(v$variables))) - 1
-  idx <- combn(p, 2)
-  for (k in seq_len(ncol(idx))) {
-    i <- idx[1, k]
-    j <- idx[2, k]
-    varname <- paste0("y", i, ".", j, collapse = "")
-    yi <- v$variables[, i + ystart, drop = TRUE]
-    yj <- v$variables[, j + ystart, drop = TRUE]
-    yij <- (yi == 1) * (yj == 1)  # both positive
-    v$variables[[varname]] <- yij
-    y_form <- paste0(y_form, paste0(" + ", varname))
-  }
-
-  x <- v$variables[, -(1:ystart)]
-  xbar <- c(pidot1, pidot2)  # pi2 (model probs)
-  # xbar <- c(pdot1, pdot2)  #p2 (proportions)
-  # x <- t(t(x) - xbar)
-
-  if (isTRUE(bootstrap)) {
-    bootsvy <- svrep::as_bootstrap_design(.svy_design,
-                                          type = "Rao-Wu-Yue-Beaumont",
-                                          replicates = nboot)
-    wt <- bootsvy$repweights
-    res <- NULL
-    for (b in seq_len(ncol(wt))) {
-      res[[b]] <- cov.wt(x, wt[, b], center = FALSE)$cov
     }
-    res <- apply(simplify2array(res), 1:2, mean)
+    Eysq[lower.tri(Eysq)] <- t(Eysq)[lower.tri(Eysq)]
+    res <- Eysq - tcrossprod(c(pidot1, pidot2))
   } else {
-    wt <- .svy_design$allprob$wt
-    res <- cov.wt(x, wt, center = xbar)$cov
+    # Prepare the sample data --------------------------------------------------
+    dat <-
+      dat %>%
+      mutate(across(everything(), \(y) as.numeric(y) - 1))
+    idx <- combn(p, 2)
+    varnames <- colnames(dat)
+    for (k in seq_len(ncol(idx))) {
+      # Create the uni and bivariate data
+      i <- idx[1, k]
+      j <- idx[2, k]
+      varname <- paste0(varnames[i], varnames[j])
+      yi <- dat[, i, drop = TRUE]
+      yj <- dat[, j, drop = TRUE]
+      yij <- (yi == 1) * (yj == 1)  # both positive
+      dat[[varname]] <- yij
+    }
+    if (method == "strat") {
+      # For stratified, compute Sigma2 in each stratum
+      strat_wt <- unique(wt)
+      nstrat <- length(strat_wt)
+
+      res_strat <- list()
+      for (k in seq_along(strat_wt)) {
+        idxl <- wt == strat_wt[k]
+        dats <- dat[idxl, ]
+        wts <- wt[idxl]
+        ymeans <- apply(dats, 2, mean)
+        res_strat[[k]] <- strat_wt[k] * (
+          cov.wt(dats, wts, center = ymean)$cov + tcrossprod(ymeans - ymean)
+        )
+      }
+      res <- Reduce("+", res_strat)
+    } else {
+      if (method == "force_unweighted") wt[] <- 1
+      res <- cov.wt(dat, wt, center = ymean)$cov
+    }
   }
 
   res
 }
 
-# create_Sigma2_matrix_complex2 <- function(.lavobject, .svy_design) {
-#   list2env(extract_lavaan_info(.lavobject), environment())
-#   list2env(get_uni_bi_moments(.lavobject), environment())
-#
-#   y_form <- paste0("~ ", paste0("y", 1:p, collapse = " + "), sep = "")
-#   v <-
-#     srvyr::as_survey(.svy_design) %>%
-#     mutate(across(starts_with("y"), \(y) as.numeric(y) - 1))
-#   ystart <- min(grep("^y[0-9]", names(v$variables))) - 1
-#   idx <- combn(p, 2)
-#   for (k in seq_len(ncol(idx))) {
-#     i <- idx[1, k]
-#     j <- idx[2, k]
-#     varname <- paste0("y", i, ".", j, collapse = "")
-#     yi <- v$variables[, i + ystart, drop = TRUE]
-#     yj <- v$variables[, j + ystart, drop = TRUE]
-#     yij <- (yi == 1) * (yj == 1)  # both positive
-#     v$variables[[varname]] <- yij
-#     y_form <- paste0(y_form, paste0(" + ", varname))
-#   }
-#
-#   x <- v$variables[, -(1:ystart)]
-#   survey::svyvar(x, .svy_design) %>%
-#     as.matrix()  # NOT GOOD BECAUSE svyvar() not as efficient as cov.wt()
-#   # wt <- 1 / .svy_design$prob
-#   # res <- cov.wt(x, wt, center = c(pidot1, pidot2))$cov
-#   # res
-# }
-
-# create_Sigma_univariate_matrix_complex <- function(.lavobject, .svy_design) {
-#   list2env(extract_lavaan_info(.lavobject), environment())
-#   list2env(get_uni_bi_moments(.lavobject), environment())
-#
-#   # Get strata information
-#   strata  <- .svy_design$strata[, 1, drop = FALSE]
-#   colnames(strata) <- "strata"
-#   a <- unique(strata[, 1])
-#
-#   # Get cluster information
-#   cluster <- .svy_design$cluster
-#   colnames(cluster)[1] <- "cluster"
-#
-#   dat <-
-#     dat %>%
-#     bind_cols(strata, cluster)
-#
-#   # Create the data set of univariate and bivariate responses (1/0)
-#   tmp <- dat %>%
-#     select(starts_with("y")) %>%
-#     mutate(across(starts_with("y"), function(x) as.numeric(x == 2)))
-#   tmp <- bind_cols(dat %>% select(-starts_with("y")), tmp)
-#
-#   Sigma <- list()
-#   for (i in a) {
-#     # Filter the strata a
-#     current_dat <- tmp %>%
-#       filter(strata == i)
-#
-#     # Obtain the responses in this strata (i.e. according to S_ab)
-#     y <- current_dat %>%
-#       select(starts_with("y")) %>%
-#       mutate(across(starts_with("y"), function(x) as.numeric(x == 1))) %>%
-#       as.matrix()
-#
-#     uab <- {sweep(y, 2, pidot1, "-") * current_dat$wt} %>%
-#       as_tibble() %>%
-#       bind_cols(current_dat %>% select(-starts_with("y")), .) %>%
-#       group_by(cluster) %>%
-#       summarise(across(starts_with("y"), sum), .groups = "drop") %>%
-#       select(starts_with("y")) %>%
-#       as.matrix()
-#     na <- nrow(uab)
-#
-#     ubar <- apply(uab, 2, mean)
-#
-#     Sigma[[i]] <- crossprod(sweep(uab, 2, ubar, "-")) * na / (na - 1)
-#   }
-#   Reduce("+", Sigma) / N
-# }
-
-get_w_for_delta <- function(.lavobject, .svy_design) {
-  if (is.null(.svy_design)) return(NA)
-
-  list2env(extract_lavaan_info(.lavobject), environment())
-  list2env(get_uni_bi_moments(.lavobject), environment())
-  y_form <- paste0("~ ", paste0("y", 1:p, collapse = " + "), sep = "")
-  v <-
-    srvyr::as_survey(.svy_design) %>%
-    mutate(across(starts_with("y"), \(y) as.numeric(y) - 1))
-  ystart <- min(grep("^y[0-9]", names(v$variables))) - 1
-  idx <- combn(p, 2)
-  for (k in seq_len(ncol(idx))) {
-    i <- idx[1, k]
-    j <- idx[2, k]
-    varname <- paste0("y", i, ".", j, collapse = "")
-    yi <- v$variables[, i + ystart, drop = TRUE]
-    yj <- v$variables[, j + ystart, drop = TRUE]
-    yij <- (yi == 1) * (yj == 1)  # both positive
-    v$variables[[varname]] <- yij
-    y_form <- paste0(y_form, paste0(" + ", varname))
-  }
-  x <- v$variables[, -(1:ystart)]
-  wt <- 1 / .svy_design$prob
-  apply(x, 2, \(x) sum(x * wt ^ 2)) / apply(x, 2, \(x) sum(x * wt))
-}
-
-## ---- Test preliminaries ----------------------------------------------------
-calc_test_stuff <- function(lavobject, svy_design = NULL, .H_inv = NULL,
-                            .Delta_mat_list  = NULL, .Sigma2  = NULL, .wstar = 1,
-                            .pi_tilde = NULL, bootstrap = FALSE, nboot = 100) {
-  # These are all the stuff needed to compute the test statistic X2
+## ---- Test preliminaries -----------------------------------------------------
+calc_test_stuff <- function(lavobject, .H_inv = NULL, .Sigma2  = NULL,
+                            .Delta_mat_list  = NULL, .pi_tilde = NULL) {
+  # These are all the ingredients needed to compute the test statistic X2
   list2env(extract_lavaan_info(lavobject), environment())
 
   if (is.null(.H_inv)) {
@@ -810,27 +400,19 @@ calc_test_stuff <- function(lavobject, svy_design = NULL, .H_inv = NULL,
     Delta_mat_list <- .Delta_mat_list
   }
   if (is.null(.Sigma2)) {
-    if (is.null(svy_design)) {
-      Sigma2 <- create_Sigma2_matrix(lavobject)
-    } else {
-      Sigma2 <- create_Sigma2_matrix_complex(lavobject, svy_design, bootstrap,
-                                             nboot)
-    }
+    # Default is to use weights (SRS means all weights are 1)
+    Sigma2 <- create_Sigma2_matrix(.lavobject = lavobject, method = "weighted")
   } else {
-    Sigma2 <- .Sigma2
+    if (is.character(.Sigma2)) {
+      Sigma2 <- create_Sigma2_matrix(.lavobject = lavobject, method = .Sigma2)
+    } else {
+      Sigma2 <- .Sigma2
+    }
   }
   if (is.null(.pi_tilde)) {
     pi_tilde <- unlist(lav_tables_pairwise_model_pi(lavobject))
   } else {
     pi_tilde <- .pi_tilde
-  }
-
-  wstar_tmp <- attr(svy_design$variables, "wstar")
-  if (!is.null(wstar_tmp)) {
-    wstar <- wstar_tmp
-    wstar <- 1  # Actually I think this should just be 1...
-  } else {
-    wstar <- .wstar
   }
 
   # Delta tilde and Delta_2 matrices
@@ -850,7 +432,7 @@ calc_test_stuff <- function(lavobject, svy_design = NULL, .H_inv = NULL,
   # Bivariate pairs are usually ordered as follows: y1y2, y1y3, ..., y1yp,
   # y2y3, y2y4, ..., y2yp, ..., yp-1yp. In each pair, the permutation is 00,
   # 10, 01, 11. Thus, every four entry sums to 1.
-  B2 <- wstar * H_inv %*% t(Delta_til * (1 / pi_tilde)) %*% B_mat
+  B2 <- H_inv %*% t(Delta_til * (1 / pi_tilde)) %*% B_mat
 
   # Omega_2 matrix
   Omega2 <- Sigma2 -
@@ -883,18 +465,15 @@ calc_test_stuff <- function(lavobject, svy_design = NULL, .H_inv = NULL,
     Sigma2    = Sigma2,
     H_inv     = H_inv,
     B2        = B2,
-    Delta2    = Delta2,
-
-    # Asparouhov Muthen approx delta
-    approx_delta = get_w_for_delta(lavobject, svy_design)
+    Delta2    = Delta2
   )
   attr(res, "bingof_calc_test_stuff") <- TRUE
   res
 }
 
-test_begin <- function(.lavobject, .approx_Omega2, .svy_design = NULL) {
+test_begin <- function(.lavobject, .Sigma2, .approx_Omega2) {
   if (is(.lavobject, "lavaan")) {
-    the_test_stuff <- calc_test_stuff(.lavobject, .svy_design)
+    the_test_stuff <- calc_test_stuff(.lavobject, .Sigma2 = .Sigma2)
   } else {
     the_test_stuff <- .lavobject
   }
@@ -956,11 +535,11 @@ moment_match <- function(X2, Xi, Omega2, df = NULL, order) {
 #'
 #' @name ligof-test-stats
 #' @rdname ligof-test-stats
+#' @inheritParams all_tests
 #'
 #' @param object A [lavaan::lavaan()] fit object.
 #' @param approx_Omega2 `r lifecycle::badge('experimental')` (logical)  Should an approximate
 #'   residual covariance matrix \eqn{\Omega_2} be used? Defaults to `FALSE`.
-#' @param svy_design (optional) A [survey::svydesign()] object.
 #' @param .order (integer) Either the number of moments to match for the
 #'   chi-square test statistic matching procedure (choose from 1--3), or the
 #'   Rao-Scott type adjustment order (choose from 1 or 2).
@@ -977,8 +556,8 @@ NULL
 
 #' @describeIn ligof-test-stats The Wald test statistic.
 #' @export
-Wald_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL) {
-  list2env(test_begin(object, approx_Omega2, svy_design), environment())
+Wald_test <- function(object, Sigma2 = NULL, approx_Omega2 = FALSE) {
+  list2env(test_begin(object, Sigma2, approx_Omega2), environment())
 
   Xi <- MASS::ginv(Omega2)
   X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
@@ -986,9 +565,9 @@ Wald_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL) {
     after_test(., Xi, S)
 }
 
-Wald_test_v2 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
+Wald_test_v2 <- function(object, Sigma2 = NULL, approx_Omega2 = FALSE,
                          .order = 3) {
-  list2env(test_begin(object, approx_Omega2, svy_design), environment())
+  list2env(test_begin(object, Sigma2, approx_Omega2), environment())
 
   Xi <- diag(1 / diag(Omega2))
   # X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
@@ -1003,10 +582,10 @@ Wald_test_v2 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
 #' @export
 Wald_diag_test <- Wald_test_v2
 
-Wald_diag_RS_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
+Wald_diag_RS_test <- function(object, Sigma2 = NULL, approx_Omega2 = FALSE,
                               .order = 2) {
   .order <- match.arg(as.character(.order), c("1", "2"))
-  list2env(test_begin(object, approx_Omega2, svy_design), environment())
+  list2env(test_begin(object, Sigma2, approx_Omega2), environment())
 
   omega_diag <- diag(Omega2)
   Xi <- diag(1 / omega_diag)
@@ -1029,10 +608,10 @@ Wald_diag_RS_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
     after_test(., Xi, S)
 }
 
-Wald_diag_RS_approx_test <- function(object, approx_Omega2 = FALSE,
-                                     svy_design = NULL, .order = 2) {
+Wald_diag_RS_approx_test <- function(object, Sigma2 = NULL,
+                                     approx_Omega2 = FALSE,  .order = 2) {
   .order <- match.arg(as.character(.order), c("1", "2"))
-  list2env(test_begin(object, approx_Omega2, svy_design), environment())
+  list2env(test_begin(object, Sigma2, approx_Omega2), environment())
 
   omega_diag <- diag(Omega2)
   Xi <- diag(1 / omega_diag)
@@ -1052,9 +631,8 @@ Wald_diag_RS_approx_test <- function(object, approx_Omega2 = FALSE,
     after_test(., Xi, S)
 }
 
-Wald_test_v3 <- function(object, svy_design = NULL) {
-  list2env(test_begin(object, .approx_Omega2 = FALSE, svy_design),
-           environment())
+Wald_test_v3 <- function(object, Sigma2 = NULL) {
+  list2env(test_begin(object, Sigma2, .approx_Omega2 = FALSE), environment())
 
   Delta2comp <- mcompanion::null_complement(Delta2)
   Xi <- Delta2comp %*% MASS::ginv(
@@ -1070,10 +648,10 @@ Wald_test_v3 <- function(object, svy_design = NULL) {
 #' @export
 Wald_vcovf_test <- Wald_test_v3
 
-Pearson_test_v1 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
+Pearson_test_v1 <- function(object, Sigma2 = NULL, approx_Omega2 = FALSE,
                             .order = 2) {
   .order <- match.arg(as.character(.order), c("1", "2"))
-  list2env(test_begin(object, approx_Omega2, svy_design), environment())
+  list2env(test_begin(object, Sigma2, approx_Omega2), environment())
 
   Xi <- diag(1 / pi2_hat)
   X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
@@ -1099,10 +677,10 @@ Pearson_test_v1 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
 #' @export
 Pearson_RS_test <- Pearson_test_v1
 
-Pearson_RS_approx_test <- function(object, approx_Omega2 = FALSE,
-                                   svy_design = NULL, .order = 2) {
+Pearson_RS_approx_test <- function(object, Sigma2 = NULL, approx_Omega2 = FALSE,
+                                   .order = 2) {
   .order <- match.arg(as.character(.order), c("1", "2"))
-  list2env(test_begin(object, approx_Omega2, svy_design), environment())
+  list2env(test_begin(object, Sigma2, approx_Omega2), environment())
 
   Xi <- diag(1 / pi2_hat)
   X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
@@ -1121,40 +699,9 @@ Pearson_RS_approx_test <- function(object, approx_Omega2 = FALSE,
     after_test(., Xi, S)
 }
 
-# Pearson_test_v3 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
-#                             .order = 2) {
-#   .order <- match.arg(as.character(.order), c("1", "2"))
-#   list2env(test_begin(object, approx_Omega2, svy_design), environment())
-#
-#   Xi <- diag(1 / pi2_hat)
-#   X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
-#
-#   # Rao-Scott adjustment
-#   tmp <- eigen(Omega2)
-#   U <- diag(tmp$val)
-#   V <- tmp$vec
-#   Omegahalf <- V %*% sqrt(U) %*% t(V)
-#   # same as below
-#   Omegahalf <- t(chol(Omega2))
-#   mat <- t(Omegahalf) %*% Xi %*% (Omegahalf)
-#   delta <- eigen(mat)$values
-#
-#   X2 <- X2 / mean(delta)
-#   df <- S
-#   if (.order == "2") {
-#     a_sq <- mean((delta - mean(delta)) ^ 2) / mean(delta) ^ 2
-#     # a_sq <- (sd(delta) / mean(delta)) ^ 2
-#     X2 <- X2 / (1 + a_sq)
-#     df <- S / (1 + a_sq)
-#   }
-#
-#   data.frame(X2 = X2, df = df, name = "PearsonRS") %>%
-#     after_test(., Xi, S)
-# }
-
-Pearson_test_v2 <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
+Pearson_test_v2 <- function(object, Sigma2 = NULL, approx_Omega2 = FALSE,
                             .order = "3") {
-  list2env(test_begin(object, approx_Omega2, svy_design), environment())
+  list2env(test_begin(object, Sigma2, approx_Omega2), environment())
 
   Xi <- diag(1 / pi2_hat)
   X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
@@ -1169,9 +716,9 @@ Pearson_test <- Pearson_test_v2
 
 #' @describeIn ligof-test-stats The residual sum of squares (RSS) test. Uses moment-matching for \eqn{p}-value calculations.
 #' @export
-RSS_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
+RSS_test <- function(object, Sigma2 = NULL, approx_Omega2 = FALSE,
                      .order = "3") {
-  list2env(test_begin(object, approx_Omega2, svy_design), environment())
+  list2env(test_begin(object, Sigma2, approx_Omega2), environment())
 
   Xi <- diag(S)
   # X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
@@ -1183,9 +730,9 @@ RSS_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
 
 #' @describeIn ligof-test-stats The multinomial test. Uses moment-matching for \eqn{p}-value calculations.
 #' @export
-Multn_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
+Multn_test <- function(object, Sigma2 = NULL, approx_Omega2 = FALSE,
                        .order = "3") {
-  list2env(test_begin(object, approx_Omega2, svy_design), environment())
+  list2env(test_begin(object, Sigma2, approx_Omega2), environment())
 
   Xi <- MASS::ginv(Sigma2)
   X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
@@ -1198,13 +745,9 @@ Multn_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
 #'
 #' @inherit ligof-test-stats params return
 #' @param sim (integer) Optional and used for large-scale simulations.
-#' @param bootstrap (boolean) Use the `svyrep` package to compute bootstrap
-#'   variance estimator?
-#' @param nboot (integer) Optional if `bootstrap = TRUE` then how many bootstrap
-#'   replications?
-#' @param Sigma2 (for internal testing only)
+#' @param Sigma2 (for internal testing only) by default calculates (weighted)
+#'   sample covariance
 #' @param Hinv (for internal testing only)
-#' @param wstar (for internal testing only)
 #'
 #' @returns Additionally, if `sim` argument is provided, two columns are
 #'   appended: Whether the [lavaan::lavaan()]  fit has `converged` and the
@@ -1216,14 +759,11 @@ Multn_test <- function(object, approx_Omega2 = FALSE, svy_design = NULL,
 #' fit <- lavaan::sem(txt_mod(1), gen_data_bin(1, n = 500), std.lv = TRUE,
 #'                    estimator = "PML")
 #' all_tests(fit)
-all_tests <- function(object, svy_design = NULL, sim = NULL, Sigma2 = NULL,
-                      wstar = 1, bootstrap = FALSE, nboot = 100, Hinv = NULL) {
+all_tests <- function(object, sim = NULL, Sigma2 = NULL, Hinv = NULL) {
   if (isTRUE(attr(object, "bingof_calc_test_stuff"))) {
     test_stuff <- object
   } else {
-    test_stuff <- calc_test_stuff(object, svy_design, .Sigma2 = Sigma2,
-                                  .wstar = wstar, bootstrap = bootstrap,
-                                  nboot = nboot, .H_inv = Hinv)
+    test_stuff <- calc_test_stuff(object, .Sigma2 = Sigma2, .H_inv = Hinv)
   }
 
   res <- bind_rows(

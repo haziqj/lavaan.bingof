@@ -1,7 +1,7 @@
 test_that("Wald test (SRS)", {
   fit <- fit_facmod_pml(1)$fit
   res1 <- Wald_Pearson_test_function(fit)  # legacy code
-  res2 <- Wald_test(fit)
+  res2 <- Wald_test(fit, Sigma2 = "theoretical")
 
   expect_equal(res2$X2, res1$Wald_test)
 })
@@ -9,7 +9,8 @@ test_that("Wald test (SRS)", {
 test_that("Wald test V2 (SRS)", {
   fit <- fit_facmod_pml(1)$fit
   res1 <- Wald_Pearson_test_function(fit)  # legacy code
-  res2 <- Wald_test_v2(fit, .order = 0) %>% suppressWarnings()
+  res2 <- Wald_test_v2(fit, Sigma2 = "theoretical", .order = 0) |>
+    suppressWarnings()
 
   expect_equal(res2$X2, res1$Wald_test_v2)
 })
@@ -17,7 +18,8 @@ test_that("Wald test V2 (SRS)", {
 test_that("Pearson test [MM0] (SRS)", {
   fit <- fit_facmod_pml(1)$fit
   res1 <- Wald_Pearson_test_function(fit)  # legacy code
-  res2 <- Pearson_test_v2(fit, .order = 0) %>% suppressWarnings()
+  res2 <- Pearson_test_v2(fit, Sigma2 = "theoretical", .order = 0) |>
+    suppressWarnings()
 
   expect_equal(res2$X2, c(res1$Pearson_test))
 })
@@ -25,7 +27,7 @@ test_that("Pearson test [MM0] (SRS)", {
 test_that("Pearson V2 test [MM2] (SRS)", {
   fit <- fit_facmod_pml(1)$fit
   res1 <- Wald_Pearson_test_function(fit)  # legacy code
-  res2 <- Pearson_test_v2(fit, .order = 2)
+  res2 <- Pearson_test_v2(fit, Sigma2 = "theoretical", .order = 2)
 
   expect_equal(res2$X2, c(res1$FSMadj_Pearson))
   expect_equal(res2$df, c(res1$FSMadj_df_Pearson))
@@ -36,7 +38,7 @@ test_that("Pearson V2 test [MM2] (SRS)", {
 test_that("Wald test (SRS) Model 1", {
   fit <- fit_facmod_pml(1)$fit
   res1 <- Wald_Pearson_test_function(fit)  # legacy code
-  res2 <- Wald_test(fit)
+  res2 <- Wald_test(fit, Sigma2 = "theoretical")
 
   expect_equal(res2$X2, res1$Wald_test)
 })
@@ -44,7 +46,7 @@ test_that("Wald test (SRS) Model 1", {
 test_that("Wald test (SRS) Model 2", {
   fit <- fit_facmod_pml(2)$fit
   res1 <- Wald_Pearson_test_function(fit)  # legacy code
-  res2 <- Wald_test(fit)
+  res2 <- Wald_test(fit, Sigma2 = "theoretical")
 
   expect_equal(res2$X2, res1$Wald_test)
 })
@@ -70,7 +72,7 @@ test_that("Wald test (SRS) Model 2", {
 test_that("Wald test (SRS) Model 4", {
   fit <- fit_facmod_pml(4)$fit
   res1 <- Wald_Pearson_test_function(fit)  # legacy code
-  res2 <- Wald_test(fit)
+  res2 <- Wald_test(fit, Sigma2 = "theoretical")
 
   expect_equal(res2$X2, res1$Wald_test)
 })

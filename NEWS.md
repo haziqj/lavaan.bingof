@@ -1,5 +1,11 @@
 # lavaan.bingof (development version)
 
+## 2023-09-10
+
+- Just as a sanity check, I coded my own pairwise likelihood function to see if the weighted PML in `{lavaan}` is doing what is expected. Short answer is yes--no issues there, including the $H^{-1}$ matrix. However no improvement to test statistics.
+- Another idea was to fix the parameter values in `{lavaan}`. Unfortunately the fact that the model has no free parameters means that no Hessian and derivatives are calculated.
+- Tested whether the option `sampling.weights.normalization = "none"` had any effect on test statistics. The answer is no. Exact same values are obtained.
+
 ## 2023-06-04
 
 - Rewrote the function for estimating complex multinomial matrix $\boldsymbol\Sigma$ which uses the method from the `{survey}` package. (Although the one from that package does not work well when $p=15$ and $S=120$).

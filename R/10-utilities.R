@@ -154,56 +154,149 @@ get_true_values <- function(model_no, arrange = c("lambda", "rho", "tau")) {
 
 }
 
-fit_facmod_pml <- function(model_no, samp = c("srs", "strat", "clust",
-                                              "strcl",  "strat2", "wtd"),
-                           n = 1000, seed = NULL, H1 = FALSE) {
+#' @rdname get_true_values
+#' @param collapse (logical) Should a vector be returned instead of a list
+#'   separating the univariate and bivariate quantities?
+#' @inherit get_uni_bi_moments return
+#' @export
+#' @examples
+#' get_theoretical_uni_bi_moments(1)
+get_theoretical_uni_bi_moments <- function(model_no, collapse = FALSE) {
+  Var_ystar <- get_Sigmay(model_no)
+  mu_ystar <- rep(0, nrow(Var_ystar))
+  TH <- get_tau(model_no)
+  p <- nrow(get_Lambda(model_no))
+
+  # Univariate -----------------------------------------------------------------
+  pidot1 <- rep(NA, p)
+  for (i in seq_along(pidot1)) {
+    pidot1[i] <- pnorm(TH[i], mean = mu_ystar[i], sd = sqrt(Var_ystar[i, i]),
+                       lower.tail = FALSE)
+  }
+
+  # Bivariate ------------------------------------------------------------------
+  id <- combn(p, 2)
+  pidot2 <- rep(NA, ncol(id))
+  for (k in seq_along(pidot2)) {
+    i <- id[1, k]  # var1
+    j <- id[2, k]  # var2
+    pidot2[k] <- mnormt::sadmvn(lower = c(TH[i], TH[j]), upper = c(Inf, Inf),
+                                mean = mu_ystar[c(i, j)],
+                                varcov = Var_ystar[c(i, j), c(i, j)])
+  }
+
+  if (isTRUE(collapse)) {
+    c(pidot1, pidot2)
+  } else {
+    list(pidot1 = pidot1, pidot2 = pidot2)
+  }
+}
+
+#' Get univariate and bivariate moments
+#'
+#' @description Returns univariate and bivariate moments (i.e. positive
+#'   probabilities only) based on model i.e. `pidot1` and `pidot2` and
+#'   (weighted) sample i.e. `pdot1` and `pdot2`.
+#'
+#'
+#' @param .lavobject A [lavaan::lavaan()] fit object.
+#' @param wtd (logical) Should the weighted proportions be used?
+#'
+#' @returns A list of univariate and bivariate moments.
+#' @export
+#'
+#' @seealso [get_theoretical_uni_bi_moments()]
+#'
+#' @examples
+#' fit <- lavaan::sem(txt_mod(1), gen_data_bin(1, n = 500), std.lv = TRUE,
+#'                    estimator = "PML")
+#' get_uni_bi_moments(fit)
+get_uni_bi_moments <- function(.lavobject, wtd = TRUE) {
+  list2env(extract_lavaan_info(.lavobject), environment())
+  if (!isTRUE(wtd)) wt <- 1
+  N <- sum(wt)
+
+  # Univariate -----------------------------------------------------------------
+  pdot1 <- pidot1 <- rep(NA, p)
+  for (i in seq_along(pidot1)) {
+    pdot1[i] <- sum(wt[dat[, i] == 2]) / N
+    pidot1[i] <- pnorm(TH[i], mean = mu_ystar[i], sd = sqrt(Var_ystar[i, i]),
+                       lower.tail = FALSE)
+  }
+
+  # Bivariate ------------------------------------------------------------------
+  id <- combn(p, 2)
+  pdot2 <- pidot2 <- rep(NA, ncol(id))
+  for (k in seq_along(pidot2)) {
+    i <- id[1, k]  # var1
+    j <- id[2, k]  # var2
+    pdot2[k] <- sum(wt[dat[, i] == 2 & dat[, j] == 2]) / N
+    pidot2[k] <- mnormt::sadmvn(lower = c(TH[i], TH[j]), upper = c(Inf, Inf),
+                                mean = mu_ystar[c(i, j)],
+                                varcov = Var_ystar[c(i, j), c(i, j)])
+  }
+
+  list(
+    # Univariate moments
+    pdot1  = pdot1,   # sample
+    pidot1 = pidot1,  # model
+
+    # Bivariate moments
+    pdot2 = pdot2,    # sample
+    pidot2 = pidot2   # model
+  )
+}
+
+# Useful function to help fit any of the models we want to analyse -------------
+fit_facmod_pml <- function(model_no, samp = c("srs", "wtd", "strat", "clust",
+                                              "strcl", "strat2"),
+                           n = 1000, seed = NULL, H1 = FALSE,
+                           ignore_weights = FALSE) {
   # Convenience function to fit one of our 5 models using lavaan's PML estimator
   # (with weights if necessary) just by specifying the model number. Mostly used
   # for testing so will suppress warning messages.
-  samp <- match.arg(samp, c("srs", "strat", "clust", "strcl", "strat2", "wtd"))
+  samp <- match.arg(samp, c("srs", "wtd", "strat", "clust", "strcl", "strat2"))
   seed_used <- seed
   the_wt <- NULL
   if (samp == "srs") {
     # Simple random sampling ---------------------------------------------------
     dat <- gen_data_bin(model_no = model_no, n = n, seed = seed_used, H1 = H1)
-    svy <- NULL
   } else if (samp == "wtd") {
     # Informative sampling -----------------------------------------------------
     dat <- gen_data_bin_wt(model_no = model_no, n = n, seed = seed_used,
                            H1 = H1)
-    svy <- svydesign(ids = ~ 1, weights = ~ wt, data = dat)
   } else {
     the_wt <- "wt"
     if (samp == "strat2") {
-      pop <- make_population2(model_no, seed = seed, H1 = H1)
       # Stratified sampling v2 -------------------------------------------------
-      dat <- gen_data_bin_strat2(population = pop, n = n, seed = seed_used)
-      svy <- svydesign(ids = ~ 0, strata = ~ type, weights = ~ wt, data = dat)
+      dat <- gen_data_bin_strat2(model_no, n = n, seed = seed_used, H1 = H1)
     } else {
       pop <- make_population(model_no, seed = seed, H1 = H1)
       if (samp == "strat") {
         # Stratified sampling --------------------------------------------------
         dat <- gen_data_bin_strat(population = pop, n = n, seed = seed_used)
-        svy <- svydesign(ids = ~ 1, strata = ~ type, weights = ~ wt, data = dat)
       }
       if (samp == "clust") {
         # Cluster sampling -----------------------------------------------------
         dat <- gen_data_bin_clust(population = pop, n = n, seed = seed_used)
-        svy <- svydesign(ids = ~ school + class, weights = ~ wt, data = dat)
       }
       if (samp == "strcl") {
         # Stratified-cluster sampling ------------------------------------------
         dat <- gen_data_bin_strcl(population = pop, n = n, seed = seed_used)
-        svy <- svydesign(ids = ~ school + class, strata = ~ type,
-                         weights = ~ wt, data = dat, nest = TRUE)
       }
     }
   }
+  if (isTRUE(ignore_weights)) the_wt <- NULL
 
   suppressWarnings(
     fit <- lavaan::sem(model = txt_mod(model_no), data = dat, estimator = "PML",
-                       std.lv = TRUE, sampling.weights = the_wt)
+                       std.lv = TRUE, sampling.weights = the_wt, do.fit = TRUE)
   )
 
-  list(dat = dat, fit = fit, svy = svy)
+  list(dat = dat, fit = fit)
+}
+
+neff <- function(x) {
+  ntilde <- sum(x) ^ 2 / sum(x ^ 2)
+  cli::cli_alert("Effective sample size: {round(ntilde, 2)} / {length(x)} ({round(100 * ntilde/length(x), 2)}%)")
 }

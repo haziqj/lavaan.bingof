@@ -44,10 +44,7 @@ Imports:
     mnormt,
     mvnfast,
     parallel,
-    srvyr,
     stats,
-    survey,
-    svrep,
     tibble,
     tidyr,
     utils

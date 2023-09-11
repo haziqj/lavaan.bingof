@@ -8,47 +8,138 @@ library(survey)
 library(lavaan.bingof)
 library(furrr)
 library(kableExtra)
+library(progressr)
 
-# Single runs ------------------------------------------------------------------
+# Informative sample -----------------------------------------------------------
 model_no <- 1
-dat <- gen_data_bin_wt(model_no = model_no, n = 2000, seed = NULL)
+dat <- gen_data_bin_wt(model_no = model_no, n = 1000, seed = NULL)
 fit <- sem(model = txt_mod(model_no), data = dat, estimator = "PML",
            std.lv = TRUE, sampling.weights = "wt")
-svy <- svydesign(ids = ~ 1, weights = ~ wt, data = dat)
 true_vals <- get_true_values(model_no, arrange = c("lambda", "tau", "rho"))
 (bias <- coef(fit) - true_vals)
-all_tests(fit, svy)
+all_tests(fit)
 
-# Looking at residuals
-dat <- gen_data_bin(model_no, n = 10000)
-fit <- sem(model = txt_mod(model_no), data = dat, estimator = "PML",
-           std.lv = TRUE, sampling.weights = NULL)
-e2 <- calc_test_stuff(fit)$e2
-
-dat <- gen_data_bin_wt(model_no = model_no, n = 10000, seed = NULL)
-fit <- sem(model = txt_mod(model_no), data = dat, estimator = "PML",
-           std.lv = TRUE, sampling.weights = "wt")
-svy <- svydesign(ids = ~ 1, weights = ~ wt, data = dat)
-e2wt <- calc_test_stuff(fit, svy)$e2
-
-mean(abs(e2wt / e2))
-
-######
-# also inspect the bias of the fitted probabilities!
-######
-
-# Function for sims ------------------------------------------------------------
-make_test_stats <- function(n = 1000) {
-  dat <- gen_data_bin_wt(model_no = model_no, n = n, seed = NULL)
+make_test_stats <- function(model_no = 1, n = 1000, Sigma2_method = NULL) {
+  dat <- gen_data_bin_wt(model_no, n = n, seed = NULL)
   fit <- sem(model = txt_mod(model_no), data = dat, estimator = "PML",
              std.lv = TRUE, sampling.weights = "wt") %>%
     suppressWarnings()
-  svy <- svydesign(ids = ~ 1, weights = ~ wt, data = dat)
-  true_vals <- get_true_values(model_no, arrange = c("lambda", "tau", "rho"))
-  bias <- sqrt(mean((coef(fit) - true_vals) ^ 2))
-  all_tests(fit, svy) %>%
-    bind_cols(bias = bias)
+
+  bind_rows(
+    bind_cols(all_tests(fit, Sigma2 = "theoretical"), Sigma2 = "theoretical"),
+    bind_cols(all_tests(fit, Sigma2 = "weighted"), Sigma2 = "weighted"),
+    bind_cols(all_tests(fit, Sigma2 = "force_unweighted"), Sigma2 = "unweighted")
+  )
 }
+
+plan(multisession, workers = 30)
+nsims <- 250
+res <- list()
+for (model_no in 5) {
+  cat(paste("\nRunning model", model_no, "\n"))
+  possfn <- possibly(make_test_stats, NA)
+
+  out <-
+    future_map(seq_len(nsims), \(x) {
+      possfn(model_no, n = 5000)
+    }, .progress = TRUE, .options = furrr_options(seed = NULL))
+
+  out <-
+    out[sapply(out, is_tibble)] %>%
+    do.call(rbind, .) %>%
+    mutate(model_no = model_no)
+
+  res <- c(res, list(out))
+  cat("\n")
+}
+res_df <- do.call(rbind, res)
+res_df %>%
+  group_by(model_no, name, Sigma2) %>%
+  summarise(rej_rate = mean(pval < 0.05), .groups = "drop") %>%
+  pivot_wider(id_cols = c(model_no, name), names_from = Sigma2,
+              values_from = rej_rate) %>%
+  print(n = 100)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Stratified sample ------------------------------------------------------------
+model_no <- 1
+pop <- make_population(model_no)
+dat <- gen_data_bin_strat(pop, n = 1000, seed = NULL)
+fit <- sem(model = txt_mod(model_no), data = dat, estimator = "PML",
+           std.lv = TRUE, sampling.weights = "wt")
+all_tests(fit)
+all_tests(fit, Sigma2 = lavaan.bingof:::create_Sigma2_matrix_complex_x(fit))
+all_tests(fit, Sigma2 = lavaan.bingof:::create_Sigma2_matrix_complex_x(fit, "strat"))
+
+# Testing Type I error for weighted samples ------------------------------------
+make_test_stats <- function(model_no = 1, n = 1000, pop) {
+  if(missing(pop)) pop <- make_population(model_no, seed = NULL)
+  dat <- gen_data_bin_strat(pop, n = n, seed = NULL)
+  fit <- sem(model = txt_mod(model_no), data = dat, estimator = "PML",
+             std.lv = TRUE, sampling.weights = "wt") %>%
+    suppressWarnings()
+
+  all_tests(fit, Sigma2 = lavaan.bingof:::create_Sigma2_matrix_complex_x(fit, "strat"))
+}
+
+plan(multisession, workers = 30)
+nsims <- 100
+res <- list()
+for (model_no in 1:5) {
+  cat(paste("\nRunning model", model_no, "\n"))
+  pop <- make_population(model_no)
+  possfn <- possibly(make_test_stats, NA)
+
+  out <-
+    future_map(seq_len(nsims), \(x) {
+      possfn(model_no, n = 10000)
+    }, .progress = TRUE, .options = furrr_options(seed = NULL))
+
+  out <-
+    out[sapply(out, is_tibble)] %>%
+    do.call(rbind, .) %>%
+    mutate(model_no = model_no)
+
+  res <- c(res, list(out))
+}
+res_df <- do.call(rbind, res)
+res_df %>%
+  group_by(model_no, name) %>%
+  summarise(rej_rate = mean(pval < 0.05), .groups = "drop") %>%
+  pivot_wider(id_cols = name, names_from = model_no, values_from = rej_rate)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 make_bias_table <- function(n = 1000, .pop = pop, samp = "wtd") {
   samp <- match.arg(samp, c("strat", "clust", "strcl", "wtd"))
@@ -84,31 +175,6 @@ make_bias_table <- function(n = 1000, .pop = pop, samp = "wtd") {
     # Get absolute bias
     mutate(across(all_of(c("ml", "pl", "mlw", "plw")), \(x) sqrt((x - truth) ^ 2)))
 }
-
-
-
-
-
-res <- list()
-for (model_no in 1:5) {
-  cat(paste("\nRunning model", model_no, "\n"))
-  for (samp in "wtd") {
-    pop <- make_population(model_no)
-    plan(multisession, workers = 25)
-
-    out <-
-      future_map(1:25,
-                 ~make_bias_table(n = 100000, .pop = pop, samp = samp),
-                 #~make_test_stats(n = 100000),
-                 .progress = TRUE, .options = furrr_options(seed = NULL)) %>%
-      do.call(rbind, .) %>%
-      mutate(model_no = model_no, samp = samp)
-
-    res <- c(res, list(out))
-  }
-}
-res_df <- do.call(rbind, res)
-# save(res_df, file = "vignettes/articles/check_complex_bias3.RData")
 
 
 new_levels <- c(paste0("eta2=~y", 6:10), paste0("eta3=~y", 11:15))

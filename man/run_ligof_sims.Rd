@@ -8,13 +8,12 @@ run_ligof_sims(
   model_no = 1,
   nsim = 1000,
   samp_size = 1000,
-  samp = c("srs", "strat", "clust", "strcl", "strat2", "uneqpr"),
+  samp = c("srs", "wtd", "strat", "clust", "strcl"),
   simtype = c("type1", "power"),
-  starting_seed = 16423,
+  starting_seed = 29923,
   ncores = parallel::detectCores() - 2,
   pop_Sigma = FALSE,
-  bootstrap = FALSE,
-  nboot = 1000
+  Sigma2_method = "weighted"
 )
 }
 \arguments{
@@ -27,7 +26,7 @@ stratified sampling; otherwise the \emph{average} sample size for the other
 complex sampling methods.}
 
 \item{samp}{(character) Choose the sampling method for the simulated data.
-One of \code{srs}, \code{strat}, \code{clust} or \code{strcl}.}
+One of \code{srs}, \code{wtd}, \code{strat}, \code{clust} or \code{strcl}.}
 
 \item{simtype}{(character) Whether this is a \code{type1} simulation or \code{power}
 simulation.}
@@ -37,12 +36,6 @@ simulation.}
 \item{ncores}{(integer) The number of cores to use for parallelisation.}
 
 \item{pop_Sigma}{(boolean) Should the population value for the multinomial covariance matrix be used, and not estimated?}
-
-\item{bootstrap}{(boolean) Use the \code{svyrep} package to compute bootstrap
-variance estimator?}
-
-\item{nboot}{(integer) Optional if \code{bootstrap = TRUE} then how many bootstrap
-replications?}
 }
 \value{
 A list of \code{\link[=tibble]{tibble()}}s with the output from \code{\link[=all_tests]{all_tests()}}.

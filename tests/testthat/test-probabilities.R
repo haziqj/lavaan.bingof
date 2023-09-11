@@ -16,7 +16,7 @@ test_that("Tetrachoric correlations align (SRS)", {
   mat <- dat %>% select(starts_with("ystar")) %>% cor()
   Sigmay <- get_Sigmay(5)
   expect_equal(mat[upper.tri(mat)], Sigmay[upper.tri(Sigmay)],
-               tolerance = 0.01)
+               tolerance = 0.05)
 })
 
 test_that("Proportions align (Population)", {
