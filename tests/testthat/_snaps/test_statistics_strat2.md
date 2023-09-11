@@ -6,10 +6,10 @@
       # A tibble: 6 x 6
            X2    df name          pval Xi_rank     S
         <dbl> <dbl> <chr>        <dbl>   <int> <int>
-      1  6.09  5    Wald         0.298      12    15
-      2  5.73  5    WaldVCF      0.333       5    15
-      3  2.26  2.88 WaldDiag,MM3 0.498      15    15
-      4  5.65  3.17 Pearson,MM3  0.145      15    15
-      5  5.94  3.68 RSS,MM3      0.173      15    15
-      6  5.68  4.98 Multn,MM3    0.335      15    15
+      1  7.48  5    Wald         0.187      13    15
+      2  7.18  5    WaldVCF      0.208       5    15
+      3  5.70  3.96 WaldDiag,MM3 0.218      15    15
+      4  4.95  3.17 Pearson,MM3  0.193      15    15
+      5  5.67  3.81 RSS,MM3      0.204      15    15
+      6  7.13  5.00 Multn,MM3    0.212      15    15
 

@@ -304,5 +304,6 @@ fit_facmod_pml <- function(model_no, samp = c("srs", "wtd", "strat", "clust",
 
 neff <- function(x) {
   ntilde <- sum(x) ^ 2 / sum(x ^ 2)
-  cli::cli_alert("Effective sample size: {round(ntilde, 2)} / {length(x)} ({round(100 * ntilde/length(x), 2)}%)")
+  ntilde
+  # cli::cli_alert("Effective sample size: {round(ntilde, 2)} / {length(x)} ({round(100 * ntilde/length(x), 2)}%)")
 }
