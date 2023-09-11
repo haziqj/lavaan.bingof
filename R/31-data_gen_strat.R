@@ -89,24 +89,28 @@
 
 gen_data_bin_strat2 <- function(model_no = 1, seed = NULL, H1 = FALSE,
                                 return_all = FALSE, n = 1000) {
-
   set.seed(123)
   N <- 1e6
   Nstr <- 50
   Nh <- abs(rnorm(Nstr, mean = N / Nstr, sd = N / Nstr))
   Nh <- round(N * Nh / sum(Nh), 0)
   Nh[length(Nh)] <- N - sum(Nh[-length(Nh)])
-  set.seed(seed)
-
   npsu <- floor(n / Nstr)
+
+  seeds <- Nh + seed
+  if (is.null(seed)) {
+    dats <- purrr::map(Nh, \(x) gen_data_bin(model_no, n = npsu, seed = NULL))
+  } else {
+    dats <- purrr::map2(Nh, seeds,
+                        \(x, y) gen_data_bin(model_no, n = npsu, seed = y))
+  }
+
   tibble(
     stratum = seq_len(Nstr),
     wt = Nh / npsu,
+    dat = dats
   ) %>%
-    mutate(dat = purrr::map(.data$stratum,
-                            \(x) gen_data_bin(model_no, n = npsu))) %>%
     tidyr::unnest_wider(dat) %>%
     tidyr::unnest_longer(starts_with("y")) %>%
     mutate(wt = wt / sum(wt) * dplyr::n())
-
 }

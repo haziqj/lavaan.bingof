@@ -16,7 +16,7 @@ dat <- gen_data_bin_wt(model_no = model_no, n = 1000, seed = NULL)
 fit <- sem(model = txt_mod(model_no), data = dat, estimator = "PML",
            std.lv = TRUE, sampling.weights = "wt")
 true_vals <- get_true_values(model_no, arrange = c("lambda", "tau", "rho"))
-(bias <- coef(fit) - true_vals)
+(bias <- lavaan:::coef(fit) - true_vals)
 all_tests(fit)
 
 make_test_stats <- function(model_no = 1, n = 1000, Sigma2_method = NULL) {

@@ -4,12 +4,12 @@
       res
     Output
       # A tibble: 6 x 6
-            X2    df name          pval Xi_rank     S
-         <dbl> <dbl> <chr>        <dbl>   <int> <int>
-      1  0.332  5    Wald         0.997      12    15
-      2  0.325  5    WaldVCF      0.997       5    15
-      3 -0.101  3.31 WaldDiag,MM3 1          15    15
-      4  0.379  4.24 WaldDiag,RS2 0.988      15    15
-      5 -0.104  3.25 Pearson,MM3  1          15    15
-      6  0.396  4.21 Pearson,RS2  0.987      15    15
+           X2    df name          pval Xi_rank     S
+        <dbl> <dbl> <chr>        <dbl>   <int> <int>
+      1  7.48  5    Wald         0.187      13    15
+      2  7.18  5    WaldVCF      0.208       5    15
+      3  5.70  3.96 WaldDiag,MM3 0.218      15    15
+      4  4.95  3.17 Pearson,MM3  0.193      15    15
+      5  5.67  3.81 RSS,MM3      0.204      15    15
+      6  7.13  5.00 Multn,MM3    0.212      15    15
 

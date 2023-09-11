@@ -773,22 +773,22 @@ all_tests <- function(object, sim = NULL, Sigma2 = NULL, Hinv = NULL) {
     # Wald_diag_test(test_stuff, .order = 2),
     Wald_diag_test(test_stuff, .order = 3),
     # Wald_diag_RS_test(test_stuff, .order = 1),
-    Wald_diag_RS_test(test_stuff, .order = 2),
+    # Wald_diag_RS_test(test_stuff, .order = 2),
     # Wald_diag_RS_approx_test(test_stuff, .order = 2),
 
     # Pearson_test(test_stuff, .order = 1),
     # Pearson_test(test_stuff, .order = 2),
     Pearson_test(test_stuff, .order = 3),
     # Pearson_RS_test(test_stuff, .order = 1),
-    Pearson_RS_test(test_stuff, .order = 2)
+    # Pearson_RS_test(test_stuff, .order = 2)
     # Pearson_RS_approx_test(test_stuff, .order = 2)
 
     # RSS_test(test_stuff, .order = 1),
     # RSS_test(test_stuff, .order = 2),
-    # RSS_test(test_stuff, .order = 3),
+    RSS_test(test_stuff, .order = 3),
     # Multn_test(test_stuff, .order = 1),
     # Multn_test(test_stuff, .order = 2),
-    # Multn_test(test_stuff, .order = 3)
+    Multn_test(test_stuff, .order = 3)
   ) %>%
     as_tibble()
   if (!is.null(sim)) {

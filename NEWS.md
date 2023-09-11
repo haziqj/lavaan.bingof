@@ -1,6 +1,11 @@
 # lavaan.bingof (development version)
 
-## 2023-09-10
+## 2023-09-11
+
+- Added some functionality to investigate informative sampling a la Muthen (2005). Functions involved: `gen_data_bin_wt()` and also in the `run_ligof_sims()` wrapper.
+- There's a secret stratified sampling option via `gen_data_bin_strat2()`. In case this needs further exploration.
+
+## 2023-09-01
 
 - Just as a sanity check, I coded my own pairwise likelihood function to see if the weighted PML in `{lavaan}` is doing what is expected. Short answer is yes--no issues there, including the $H^{-1}$ matrix. However no improvement to test statistics.
 - Another idea was to fix the parameter values in `{lavaan}`. Unfortunately the fact that the model has no free parameters means that no Hessian and derivatives are calculated.

@@ -9,8 +9,9 @@
 #' gen_data_bin_wt(1)
 gen_data_bin_wt <- function(model_no = 1, seed = NULL, H1 = FALSE,
                             return_all = FALSE, n = 1000) {
+
   population <-
-    gen_data_bin(model_no = model_no, n = n * 25, seed = NULL, H1 = H1,
+    gen_data_bin(model_no = model_no, n = n * 25, seed = 123, H1 = H1,
                  return_all = TRUE)
 
   set.seed(seed)
