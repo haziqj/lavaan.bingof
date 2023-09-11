@@ -109,6 +109,22 @@ res_df <-
   res[sapply(res, is_tibble)] %>%
   do.call(rbind, .)
 
+res <- list()
+for (n in c(500, 1000)) {  #, 2500, 5000, 10000
+  cat(paste("\nRunning with sample size n =", n, "\n"))
 
+  out <-
+    future_map(seq_len(nsims), \(x) {
+      possfn(samp_size = n, type = "test_stats")
+    }, .progress = TRUE, .options = furrr_options(seed = NULL))
+
+  out <-
+    out[sapply(out, is_tibble)] %>%
+    do.call(rbind, .) %>%
+    mutate(n = n)
+
+  res <- c(res, list(out))
+  cat("\n")
+}
 
 

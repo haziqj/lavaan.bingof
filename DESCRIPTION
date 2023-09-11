@@ -44,6 +44,7 @@ Imports:
     mnormt,
     mvnfast,
     parallel,
+    purrr,
     stats,
     tibble,
     tidyr,
