@@ -19,27 +19,20 @@ gen_data_bin_wt <- function(model_no = 1, seed = NULL, H1 = FALSE,
     population %>%
     # mutate(prob = 2 * rowSums(across(starts_with("eta"))),
     #        prob = exp(prob) / (1 + exp(prob)))
-    mutate(prob = 1 / (1 + exp(ystar1))) %>%
+    mutate(prob = 1 / (1 + exp(.data$ystar1))) %>%
     select(-dplyr::contains("ystar"))
-
-  wstar <- 1 / mean(population$prob)
 
   sampled <-
     population %>%
-    slice_sample(n = n, weight_by = prob, replace = FALSE)
+    slice_sample(n = n, weight_by = prob, replace = FALSE) %>%
     # NOTE TO SELF: weight_by is actually probability of selection (sums to 1)
-
-  out <-
-    sampled %>%
     mutate(wt = 1 / prob,
            wt = dplyr::n() * wt / sum(wt))
 
-  attr(out, "wstar") <- wstar / sum(out$wt) * nrow(sampled)
-
   if (isTRUE(return_all)) {
-    out
+    sampled
   } else {
-    out %>%
+    sampled %>%
       select(wt, starts_with("y"))
   }
 }

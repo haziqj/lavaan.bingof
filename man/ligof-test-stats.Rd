@@ -11,22 +11,25 @@
 \alias{Multn_test}
 \title{Limited information goodness-of-fit tests}
 \usage{
-Wald_test(object, approx_Omega2 = FALSE)
+Wald_test(object, Sigma2 = NULL, approx_Omega2 = FALSE)
 
-Wald_diag_test(object, approx_Omega2 = FALSE, .order = 3)
+Wald_diag_test(object, Sigma2 = NULL, approx_Omega2 = FALSE, .order = 3)
 
-Wald_vcovf_test(object)
+Wald_vcovf_test(object, Sigma2 = NULL)
 
-Pearson_RS_test(object, approx_Omega2 = FALSE, .order = 2)
+Pearson_RS_test(object, Sigma2 = NULL, approx_Omega2 = FALSE, .order = 2)
 
-Pearson_test(object, approx_Omega2 = FALSE, .order = "3")
+Pearson_test(object, Sigma2 = NULL, approx_Omega2 = FALSE, .order = "3")
 
-RSS_test(object, approx_Omega2 = FALSE, .order = "3")
+RSS_test(object, Sigma2 = NULL, approx_Omega2 = FALSE, .order = "3")
 
-Multn_test(object, approx_Omega2 = FALSE, .order = "3")
+Multn_test(object, Sigma2 = NULL, approx_Omega2 = FALSE, .order = "3")
 }
 \arguments{
 \item{object}{A \code{\link[lavaan:lavaan]{lavaan::lavaan()}} fit object.}
+
+\item{Sigma2}{(for internal testing only) by default calculates (weighted)
+sample covariance}
 
 \item{approx_Omega2}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} (logical)  Should an approximate
 residual covariance matrix \eqn{\Omega_2} be used? Defaults to \code{FALSE}.}

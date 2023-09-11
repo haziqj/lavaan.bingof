@@ -210,8 +210,6 @@ gen_data_bin_complex1 <- function(population = make_population(1, seed = NULL),
   population <-
     population %>%
     left_join(school_info, by = c("type"))
-  wstar <- 1 / mean(population$prob)
-  # wstar <- mean(population$wt)
 
   # Sampling of PSUs
   sampled <- population %>%
@@ -219,15 +217,12 @@ gen_data_bin_complex1 <- function(population = make_population(1, seed = NULL),
     slice_sample(n = npsu, replace = FALSE) %>%
     ungroup() %>%
     select(-starts_with("ystar")) %>%
-    select(type, school, class, wt, starts_with("y"))
-
-  out <- sampled %>%
+    select(type, school, class, wt, starts_with("y")) %>%
     mutate(wt = wt / sum(wt) * dplyr::n(),
            across(starts_with("y"), ordered)) %>%
     arrange(type, school, class)
 
-  attr(out, "wstar") <- wstar / sum(sampled$wt) * nrow(sampled)
-  out
+  sampled
 }
 
 #' @rdname gen_data_bin_complex
@@ -262,12 +257,6 @@ gen_data_bin_complex2 <- function(population = make_population(1, seed = NULL),
     slice_sample(n = npsu, weight_by = nstudents, replace = FALSE) %>%
     arrange(type, school)
 
-  wstar <-
-    pop2 %>%
-    pull(prob) %>%
-    mean()
-  wstar <- 1 / wstar
-
   # Sampling of classes within PSUs (using SRS)
   classes_sampled <-
     inner_join(population, psu_sampled, by = c("type", "school")) %>%
@@ -280,16 +269,12 @@ gen_data_bin_complex2 <- function(population = make_population(1, seed = NULL),
     inner_join(population, classes_sampled,
                by = c("type", "school", "class")) %>%
     left_join(psu_sampled, by = c("type", "school")) %>%
-    select(type, school, class, wt, starts_with("y"))
-
-  out <-
-    sampled %>%
+    select(type, school, class, wt, starts_with("y")) %>%
     mutate(wt = wt / sum(wt) * dplyr::n(),
            across(starts_with("y"), ordered)) %>%
     arrange(type, school, class)
 
-  attr(out, "wstar") <- wstar / sum(sampled$wt) * nrow(sampled)
-  out
+  sampled
 }
 
 #' @rdname gen_data_bin_complex
@@ -316,13 +301,6 @@ gen_data_bin_complex3 <- function(population = make_population(1, seed = NULL),
            prob = pr_school_selected * pr_class_selected,
            wt = 1 / prob)
 
-  wstar <-
-    population %>%
-    left_join(school_info, by = c("type", "school")) %>%
-    pull(prob) %>%
-    mean()
-  wstar <- 1 / wstar
-
   # Sampling of PSUs
   psu_sampled <- population %>%
     distinct(type, school) %>%
@@ -341,16 +319,12 @@ gen_data_bin_complex3 <- function(population = make_population(1, seed = NULL),
     inner_join(population, classes_sampled,
                by = c("type", "school", "class")) %>%
     left_join(school_info, by = c("type", "school")) %>%
-    select(type, school, class, wt, starts_with("y"))
-
-  out <-
-    sampled %>%
+    select(type, school, class, wt, starts_with("y")) %>%
     mutate(wt = wt / sum(wt) * dplyr::n(),
            across(starts_with("y"), ordered)) %>%
     arrange(type, school, class)
 
-  attr(out, "wstar") <- wstar / sum(sampled$wt) * nrow(sampled)
-  out
+  sampled
 }
 
 #' @rdname gen_data_bin_complex

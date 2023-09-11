@@ -8,12 +8,12 @@ run_ligof_sims(
   model_no = 1,
   nsim = 1000,
   samp_size = 1000,
-  samp = c("srs", "wtd", "strat", "clust", "strcl"),
+  samp = c("srs", "wtd", "strat", "clust", "strcl", "strat2"),
   simtype = c("type1", "power"),
   starting_seed = 29923,
   ncores = parallel::detectCores() - 2,
   pop_Sigma = FALSE,
-  Sigma2_method = "weighted"
+  Sigma2 = NULL
 )
 }
 \arguments{
@@ -35,7 +35,11 @@ simulation.}
 
 \item{ncores}{(integer) The number of cores to use for parallelisation.}
 
-\item{pop_Sigma}{(boolean) Should the population value for the multinomial covariance matrix be used, and not estimated?}
+\item{pop_Sigma}{(boolean) Should the population value for the multinomial
+covariance matrix be used, and not estimated?}
+
+\item{Sigma2}{(for internal testing only) by default calculates (weighted)
+sample covariance}
 }
 \value{
 A list of \code{\link[=tibble]{tibble()}}s with the output from \code{\link[=all_tests]{all_tests()}}.
@@ -47,7 +51,6 @@ Wrapper function for Type 1 and Power simulations
 \dontrun{
 library(tidyverse)
 library(lavaan.bingof)
-library(survey)
 analysis_path <- dirname(rstudioapi::getSourceEditorContext()$path)
 
 # Run all scenarios described in manuscript

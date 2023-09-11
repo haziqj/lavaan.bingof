@@ -35,7 +35,7 @@ make_test_stats <- function(model_no = 1, n = 1000, Sigma2_method = NULL) {
 plan(multisession, workers = 30)
 nsims <- 250
 res <- list()
-for (model_no in 5) {
+for (model_no in 1) {
   cat(paste("\nRunning model", model_no, "\n"))
   possfn <- possibly(make_test_stats, NA)
 

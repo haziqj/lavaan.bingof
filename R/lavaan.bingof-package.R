@@ -44,7 +44,6 @@
 #' @importFrom stats pchisq
 #' @importFrom stats pnorm
 #' @importFrom stats rnorm
-#' @importFrom survey svydesign
 #' @importFrom tibble as_tibble tibble
 #' @importFrom tibble is_tibble
 #' @importFrom tidyr unite

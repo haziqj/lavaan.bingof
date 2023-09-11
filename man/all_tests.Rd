@@ -11,7 +11,8 @@ all_tests(object, sim = NULL, Sigma2 = NULL, Hinv = NULL)
 
 \item{sim}{(integer) Optional and used for large-scale simulations.}
 
-\item{Sigma2}{(for internal testing only)}
+\item{Sigma2}{(for internal testing only) by default calculates (weighted)
+sample covariance}
 
 \item{Hinv}{(for internal testing only)}
 }

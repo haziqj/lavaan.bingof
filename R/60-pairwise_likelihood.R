@@ -160,6 +160,7 @@ pl_fn <- function(theta, model_no, data, wt = NULL) {
     list(lambdas = lambdas, rhos = rhos, taus = taus)
   }
 
+  lambdas <- taus <- NULL  # to be overwritten by next line
   list2env(convert_theta(theta), environment())
 
   # Assign the parameters ------------------------------------------------------

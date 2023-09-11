@@ -103,7 +103,8 @@ gen_data_bin_strat2 <- function(model_no = 1, seed = NULL, H1 = FALSE,
     stratum = seq_len(Nstr),
     wt = Nh / npsu,
   ) %>%
-    mutate(dat = map(stratum, \(x) gen_data_bin(model_no, n = npsu))) %>%
+    mutate(dat = purrr::map(.data$stratum,
+                            \(x) gen_data_bin(model_no, n = npsu))) %>%
     tidyr::unnest_wider(dat) %>%
     tidyr::unnest_longer(starts_with("y")) %>%
     mutate(wt = wt / sum(wt) * dplyr::n())

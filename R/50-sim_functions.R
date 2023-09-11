@@ -14,7 +14,8 @@ globalVariables(c("i"))
 #'   simulation.
 #' @param starting_seed (integer) The starting random seed.
 #' @param ncores (integer) The number of cores to use for parallelisation.
-#' @param pop_Sigma (boolean) Should the population value for the multinomial covariance matrix be used, and not estimated?
+#' @param pop_Sigma (boolean) Should the population value for the multinomial
+#'   covariance matrix be used, and not estimated?
 #'
 #'
 #' @return A list of [tibble()]s with the output from [all_tests()].
@@ -24,7 +25,6 @@ globalVariables(c("i"))
 #' \dontrun{
 #' library(tidyverse)
 #' library(lavaan.bingof)
-#' library(survey)
 #' analysis_path <- dirname(rstudioapi::getSourceEditorContext()$path)
 #'
 #' # Run all scenarios described in manuscript
