@@ -28,17 +28,17 @@ txt_mod <- function(model_no = 1L) {
 }
 
 ## ---- Loading matrix ---------------------------------------------------------
-pkg.env <- new.env()
-pkg.env$theta <- "original"
+# pkg.env <- new.env()
+# pkg.env$theta <- "original"
 
 loading_mat <- function(model_no) {
-  if (pkg.env$theta == "new") {
-    lam_entries <- c(0.80, 0.70, 0.60, 0.50, 0.40,
-                     0.85, 0.75, 0.65, 0.55, 0.45,
-                     0.87, 0.77, 0.67, 0.57, 0.47)
-  } else {
+  # if (pkg.env$theta == "new") {
+  #   lam_entries <- c(0.80, 0.70, 0.60, 0.50, 0.40,
+  #                    0.85, 0.75, 0.65, 0.55, 0.45,
+  #                    0.87, 0.77, 0.67, 0.57, 0.47)
+  # } else {
     lam_entries <- rep(c(0.80, 0.70, 0.47, 0.38, 0.34), 3)
-  }
+  # }
 
   if (model_no == 1) { nitems <- 5;  neta <- 1 }
   if (model_no == 2) { nitems <- 8;  neta <- 1 }
