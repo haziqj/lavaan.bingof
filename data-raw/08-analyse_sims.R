@@ -5,7 +5,7 @@ library(lavaan.bingof)  # needs all_res data. be sure to build pkg
 # data(all_res, package = "lavaan.bingof")
 
 grab_sims <- function(x = all_res, samp = "srs", type = "type1",
-                      the_n = c(500, 1000, 2000, 3000, 5000, 10000)) {
+                      the_n = c(500, 1000, 2500, 5000, 10000)) {
   mod_names <- c("1F 5V", "1F 8V", "1F 15V", "2F 10V", "3F 15V")
 
   type_of_sampling <- grepl(samp, names(x))
@@ -32,6 +32,7 @@ grab_sims <- function(x = all_res, samp = "srs", type = "type1",
 
 summarise_sims <- function(samp = "srs", type = "type1") {
   grab_sims(samp = samp, type = type) %>%
+    drop_na(sim) %>%
     group_by(name, sim, n) %>%
     summarise(n_sims = n(),
               n_converged = sum(converged),
@@ -120,19 +121,19 @@ srs_plot2 <- function(x = res_srs_type1, alpha = 5, dashed_line = TRUE,
   p
 }
 
-p_srs_a <- srs_plot2(res_srs_type1, alpha = 10)
-p_srs_b <- srs_plot2(res_srs_type1, alpha = 5)
-p_srs_c <- srs_plot2(res_srs_type1, alpha = 1)
+p_srs_a <- srs_plot2(res_srs_type1, alpha = 10, exclude_tests = NA)
+p_srs_b <- srs_plot2(res_srs_type1, alpha = 5, exclude_tests = NA)
+p_srs_c <- srs_plot2(res_srs_type1, alpha = 1, exclude_tests = NA)
 p_srs_d <- srs_plot(res_srs_power, alpha = 10, dashed_line = FALSE,
-                    plot_title = "Power") +
+                    plot_title = "Power", exclude_tests = NA) +
   scale_colour_viridis_d(option = "turbo", direction = -1) +
   scale_fill_viridis_d(option = "turbo", direction = -1)
 p_srs_e <- srs_plot(res_srs_power, alpha = 5, dashed_line = FALSE,
-                    plot_title = "Power") +
+                    plot_title = "Power", exclude_tests = NA) +
   scale_colour_viridis_d(option = "turbo", direction = -1) +
   scale_fill_viridis_d(option = "turbo", direction = -1)
 p_srs_f <- srs_plot(res_srs_power, alpha = 1, dashed_line = FALSE,
-                    plot_title = "Power") +
+                    plot_title = "Power", exclude_tests = NA) +
   scale_colour_viridis_d(option = "turbo", direction = -1) +
   scale_fill_viridis_d(option = "turbo", direction = -1)
 
@@ -201,18 +202,18 @@ complex_plot <- function(x = res_complex_type1, alpha = 10, dashed_line = TRUE,
     facet_grid(sim ~ sampling)
 }
 
-p_complex_a <- complex_plot(res_complex_type1, alpha = 10) +
+p_complex_a <- complex_plot(res_complex_type1, alpha = 10, exclude_tests = NA) +
   coord_cartesian(ylim = c(0, 0.2))
-p_complex_b <- complex_plot(res_complex_type1, alpha = 5) +
+p_complex_b <- complex_plot(res_complex_type1, alpha = 5, exclude_tests = NA) +
   coord_cartesian(ylim = c(0, 0.2))
-p_complex_c <- complex_plot(res_complex_type1, alpha = 1) +
+p_complex_c <- complex_plot(res_complex_type1, alpha = 1, exclude_tests = NA) +
   coord_cartesian(ylim = c(0, 0.05))
 p_complex_d <- complex_plot(res_complex_power, alpha = 10, dashed_line = FALSE,
-                            plot_title = "Power")
+                            plot_title = "Power", exclude_tests = NA)
 p_complex_e <- complex_plot(res_complex_power, alpha = 5, dashed_line = FALSE,
-                            plot_title = "Power")
+                            plot_title = "Power", exclude_tests = NA)
 p_complex_f <- complex_plot(res_complex_power, alpha = 1, dashed_line = FALSE,
-                            plot_title = "Power")
+                            plot_title = "Power", exclude_tests = NA)
 
 usethis::use_data(res_complex_type1, overwrite = TRUE)
 usethis::use_data(res_complex_power, overwrite = TRUE)
@@ -237,7 +238,7 @@ plot_X2_dens <- function(samp = "strcl") {
 
   dat %>%
     mutate(n = paste0("n = ", n),
-           n = factor(n, levels = paste0("n = ", c(500, 1000, 2000, 3000, 5000,
+           n = factor(n, levels = paste0("n = ", c(500, 1000, 2500, 3000, 5000,
                                                    10000)))) %>%
     ggplot(aes(X2, y = stat(density), group = n, fill = n)) +
     geom_histogram(position = "identity", alpha = 0.5, col = NA, bins = 30) +

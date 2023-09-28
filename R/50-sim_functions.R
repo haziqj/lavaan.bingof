@@ -49,7 +49,7 @@ globalVariables(c("i"))
 run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
                            samp = c("srs", "wtd", "strat", "clust", "strcl",
                                     "strat2"),
-                           simtype = c("type1", "power"), starting_seed = 29923,
+                           simtype = c("type1", "power"), starting_seed = 16423,
                            ncores = parallel::detectCores() - 2,
                            pop_Sigma = FALSE, Sigma2 = NULL) {
 
@@ -73,9 +73,13 @@ run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
 
   # Random seeds for replication -----------------------------------------------
   set.seed(starting_seed)
-  the_seeds <- 2 ^ (simtype == "power") * model_no * matrix(
-    sample(seq_len(100 + nsim ^ 2), size = nsim * 5), ncol = 5
-  ) + samp_size
+  if (is.null(starting_seed)) {
+    the_seeds <- NULL
+  } else {
+    the_seeds <- 2 ^ (simtype == "power") * model_no * matrix(
+      sample(seq_len(100 + nsim ^ 2), size = nsim * 5), ncol = 5
+    ) + samp_size
+  }
 
   # Initialise parallel stuff --------------------------------------------------
   pb <- txtProgressBar(min = 0, max = nsim, style = 3)

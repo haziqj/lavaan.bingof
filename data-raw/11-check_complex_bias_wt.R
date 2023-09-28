@@ -21,8 +21,8 @@ all_tests(fit)
 
 make_test_stats <- function(model_no = 1, n = 1000, Sigma2_method = NULL) {
   dat <- gen_data_bin_wt(model_no, n = n, seed = NULL)
-  fit <- sem(model = txt_mod(model_no), data = dat, estimator = "PML",
-             std.lv = TRUE, sampling.weights = "wt") %>%
+  fit <- sem(model = txt_mod(model_no), data = select(dat, -wt), estimator = "PML",
+             std.lv = TRUE, sampling.weights = NULL) %>%
     suppressWarnings()
 
   bind_rows(

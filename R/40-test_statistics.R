@@ -52,7 +52,12 @@ extract_lavaan_info <- function(lavobject) {
   dat <- as.data.frame(lavdata@X) %>% as_tibble()
   colnames(dat) <- lavdata@ov.names[[1]]
   wt <- lavdata@weights[[1]]
-  if (is.null(wt)) wt <- rep(1, nsize)
+  if (is.null(wt)) {
+    wt <- rep(1, nsize)
+    nullwt <- TRUE
+  } else {
+    nullwt <- FALSE
+  }
 
   list(
     lavdata        = lavdata,  # data saved in lavaan object
@@ -67,6 +72,7 @@ extract_lavaan_info <- function(lavobject) {
     N              = nsize,
     dat            = dat,
     wt             = wt,
+    nullwt         = nullwt,
     Var_ystar      = Sigmahat,  # varcov matrix of underlying MVN dist
     mu_ystar       = Meanhat  # mean vector of underlying MVN dist
   )
@@ -400,8 +406,13 @@ calc_test_stuff <- function(lavobject, .H_inv = NULL, .Sigma2  = NULL,
     Delta_mat_list <- .Delta_mat_list
   }
   if (is.null(.Sigma2)) {
-    # Default is to use weights (SRS means all weights are 1)
-    Sigma2 <- create_Sigma2_matrix(.lavobject = lavobject, method = "weighted")
+    if (isTRUE(nullwt)) {
+      # SRS
+      Sigma2 <- create_Sigma2_matrix(.lavobject = lavobject, method = "theoretical")
+    } else {
+      # Complex
+      Sigma2 <- create_Sigma2_matrix(.lavobject = lavobject, method = "weighted")
+    }
   } else {
     if (is.character(.Sigma2)) {
       Sigma2 <- create_Sigma2_matrix(.lavobject = lavobject, method = .Sigma2)
