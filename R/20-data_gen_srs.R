@@ -46,8 +46,8 @@ gen_data_bin <- function(model_no = 1, n = 1000, seed = NULL, H1 = FALSE,
   }
 
   y <-
-    t(apply(ystar, 1, function(x) as.numeric(x > tau))) %>%
-    as.data.frame() %>%
+    {1 * (ystar > matrix(tau, nrow = n, ncol = nitems, byrow = TRUE))} |>
+    as.data.frame() |>
     mutate(across(everything(), \(x) ordered(x, levels = c(0, 1))))
   colnames(y) <- paste0("y", seq_len(nitems))
 

@@ -134,7 +134,6 @@ create_pairwise_table_baseRv2 <- function(data, wt = NULL) {
   out
 }
 
-
 # library(microbenchmark)
 # microbenchmark(
 #   create_pairwise_table_tidyverse(dat),

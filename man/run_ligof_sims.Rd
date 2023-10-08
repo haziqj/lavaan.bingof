@@ -10,7 +10,7 @@ run_ligof_sims(
   samp_size = 1000,
   samp = c("srs", "wtd", "strat", "clust", "strcl", "strat2"),
   simtype = c("type1", "power"),
-  starting_seed = 29923,
+  starting_seed = 16423,
   ncores = parallel::detectCores() - 2,
   pop_Sigma = FALSE,
   Sigma2 = NULL

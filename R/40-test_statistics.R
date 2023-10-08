@@ -23,7 +23,7 @@ globalVariables(c(".",".data", "Delta2", "N", "Omega2", "S", "Sigma2", "TH",
                   "rn", "rn2", "school", "students_in_school_type", "th.idx",
                   "type", "var1", "var2", "wt", "z", "Omega2_rank", "Sigmahat",
                   "alpha_", "converged", "fit", "mean_X2", "mean_df", "name",
-                  "pval", "rej_rate", "approx_delta"))
+                  "pval", "rej_rate", "approx_delta", "nullwt"))
 
 ## ---- Utilities --------------------------------------------------------------
 extract_lavaan_info <- function(lavobject) {
