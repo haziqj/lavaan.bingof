@@ -219,10 +219,11 @@ pl_fn <- function(theta, model_no, data, wt = NULL) {
 
 }
 
-get_Hinv_mat <- function(.data, .model_no, .wt = NULL, .fit = NULL) {
+get_Hinv_mat <- function(.data, .model_no, .wt = NULL, .fit = NULL,
+                         .trace = 10) {
   theta0 <- get_true_values(.model_no)
   if (!is.null(.fit)) theta0[] <- coef(.fit)
-  res <- optim(theta0, pl_fn, method = "BFGS", control = list(trace = 10),
+  res <- optim(theta0, pl_fn, method = "BFGS", control = list(trace = .trace),
                hessian = TRUE, model_no = .model_no, data = .data, wt = .wt)
   out <- nrow(.data)  * solve(res$hessian)
   attr(out, "coef") <- res$par
@@ -288,11 +289,3 @@ get_Hinv_mat <- function(.data, .model_no, .wt = NULL, .fit = NULL) {
 #   group_by(model_no, name) %>%
 #   summarise(rej_rate = mean(pval < 0.05)) %>%
 #   pivot_wider(id_cols = name, names_from = model_no, values_from = rej_rate)
-
-
-
-
-
-
-
-
