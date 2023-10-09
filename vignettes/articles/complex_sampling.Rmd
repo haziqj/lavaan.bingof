@@ -506,17 +506,17 @@ attr(pop, "Sigma2") |>
            number.cex = 0.5)
 ```
 
-```{r, include = FALSE}
-svy1 <- svydesign(ids = ~ 1, strata = ~ type, weights = ~ wt, data = samp1)
-svy2 <- svydesign(ids = ~ school + class, weights = ~ wt, data = samp2)
-svy3 <- svydesign(ids = ~ school + class, strata = ~ type, weights = ~ wt, 
-                  data = samp3, nest = TRUE)
-```
+<!-- ```{r, include = FALSE} -->
+<!-- svy1 <- svydesign(ids = ~ 1, strata = ~ type, weights = ~ wt, data = samp1) -->
+<!-- svy2 <- svydesign(ids = ~ school + class, weights = ~ wt, data = samp2) -->
+<!-- svy3 <- svydesign(ids = ~ school + class, strata = ~ type, weights = ~ wt,  -->
+<!--                   data = samp3, nest = TRUE) -->
+<!-- ``` -->
 
 #### Stratified sample
 
 ```{r strat_Sigma}
-lavaan.bingof:::create_Sigma2_matrix_complex(fit21, svy1) |>
+lavaan.bingof:::create_Sigma2_matrix(fit21, method = "weighted") |>
   corrplot(is.corr = FALSE, method = "color", tl.col = "black", 
            col = viridis::viridis(100), addCoef.col = "grey50", 
            number.cex = 0.5)
@@ -525,7 +525,7 @@ lavaan.bingof:::create_Sigma2_matrix_complex(fit21, svy1) |>
 #### Cluster sample
 
 ```{r clust_Sigma}
-lavaan.bingof:::create_Sigma2_matrix_complex(fit22, svy2) |>
+lavaan.bingof:::create_Sigma2_matrix(fit22, method = "weighted") |>
   corrplot(is.corr = FALSE, method = "color", tl.col = "black", 
            col = viridis::viridis(100), addCoef.col = "grey50", 
            number.cex = 0.5)
@@ -534,7 +534,7 @@ lavaan.bingof:::create_Sigma2_matrix_complex(fit22, svy2) |>
 #### Stratified cluster sample
 
 ```{r strcl_Sigma}
-lavaan.bingof:::create_Sigma2_matrix_complex(fit23, svy3) |>
+lavaan.bingof:::create_Sigma2_matrix(fit23, method = "weighted") |>
   corrplot(is.corr = FALSE, method = "color", tl.col = "black", 
            col = viridis::viridis(100), addCoef.col = "grey50", 
            number.cex = 0.5)
