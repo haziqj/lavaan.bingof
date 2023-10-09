@@ -42,7 +42,7 @@ for (let popover of popovers) {
     
     <a class="navbar-brand me-2" href="../index.html">lavaan.bingof</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9003</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9004</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,13 +104,12 @@ for (let popover of popovers) {
 <span>  model_no <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  nsim <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>  samp_size <span class="op">=</span> <span class="fl">1000</span>,</span>
-<span>  samp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"srs"</span>, <span class="st">"strat"</span>, <span class="st">"clust"</span>, <span class="st">"strcl"</span>, <span class="st">"strat2"</span>, <span class="st">"uneqpr"</span><span class="op">)</span>,</span>
+<span>  samp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"srs"</span>, <span class="st">"wtd"</span>, <span class="st">"strat"</span>, <span class="st">"clust"</span>, <span class="st">"strcl"</span>, <span class="st">"strat2"</span><span class="op">)</span>,</span>
 <span>  simtype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"type1"</span>, <span class="st">"power"</span><span class="op">)</span>,</span>
 <span>  starting_seed <span class="op">=</span> <span class="fl">16423</span>,</span>
 <span>  ncores <span class="op">=</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">2</span>,</span>
 <span>  pop_Sigma <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  bootstrap <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  nboot <span class="op">=</span> <span class="fl">1000</span></span>
+<span>  Sigma2 <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -132,7 +131,7 @@ complex sampling methods.</p></dd>
 
 <dt>samp</dt>
 <dd><p>(character) Choose the sampling method for the simulated data.
-One of <code>srs</code>, <code>strat</code>, <code>clust</code> or <code>strcl</code>.</p></dd>
+One of <code>srs</code>, <code>wtd</code>, <code>strat</code>, <code>clust</code> or <code>strcl</code>.</p></dd>
 
 
 <dt>simtype</dt>
@@ -149,17 +148,13 @@ simulation.</p></dd>
 
 
 <dt>pop_Sigma</dt>
-<dd><p>(boolean) Should the population value for the multinomial covariance matrix be used, and not estimated?</p></dd>
+<dd><p>(boolean) Should the population value for the multinomial
+covariance matrix be used, and not estimated?</p></dd>
 
 
-<dt>bootstrap</dt>
-<dd><p>(boolean) Use the <code>svyrep</code> package to compute bootstrap
-variance estimator?</p></dd>
-
-
-<dt>nboot</dt>
-<dd><p>(integer) Optional if <code>bootstrap = TRUE</code> then how many bootstrap
-replications?</p></dd>
+<dt>Sigma2</dt>
+<dd><p>(for internal testing only) by default calculates (weighted)
+sample covariance</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -174,7 +169,6 @@ replications?</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/haziqj/lavaan.bingof" class="external-link">lavaan.bingof</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://r-survey.r-forge.r-project.org/survey/" class="external-link">survey</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">analysis_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="fu">rstudioapi</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/rstudioapi/reference/rstudio-editors.html" class="external-link">getSourceEditorContext</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">path</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Run all scenarios described in manuscript</span></span></span>

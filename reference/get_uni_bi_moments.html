@@ -46,7 +46,7 @@ for (let popover of popovers) {
     
     <a class="navbar-brand me-2" href="../index.html">lavaan.bingof</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9003</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9004</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,7 +94,7 @@ for (let popover of popovers) {
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Get univariate and bivariate moments</h1>
-      <small class="dont-index">Source: <a href="https://github.com/haziqj/lavaan.bingof/blob/HEAD/R/40-test_statistics.R" class="external-link"><code>R/40-test_statistics.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/haziqj/lavaan.bingof/blob/HEAD/R/10-utilities.R" class="external-link"><code>R/10-utilities.R</code></a></small>
       <div class="d-none name"><code>get_uni_bi_moments.Rd</code></div>
     </div>
 
@@ -106,13 +106,17 @@ probabilities only) based on model i.e. <code>pidot1</code> and <code>pidot2</co
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_uni_bi_moments</span><span class="op">(</span><span class="va">.lavobject</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_uni_bi_moments</span><span class="op">(</span><span class="va">.lavobject</span>, wtd <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>.lavobject</dt>
 <dd><p>A <code><a href="https://rdrr.io/pkg/lavaan/man/lavaan.html" class="external-link">lavaan::lavaan()</a></code> fit object.</p></dd>
+
+
+<dt>wtd</dt>
+<dd><p>(logical) Should the weighted proportions be used?</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -132,17 +136,17 @@ probabilities only) based on model i.e. <code>pidot1</code> and <code>pidot2</co
 <span class="r-in"><span>                   estimator <span class="op">=</span> <span class="st">"PML"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">get_uni_bi_moments</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pdot1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.932 0.730 0.554 0.774 0.880</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.920 0.748 0.588 0.784 0.852</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pidot1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9320206 0.7301556 0.5540096 0.7739507 0.8799956</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9200249 0.7480302 0.5879034 0.7839899 0.8520444</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pdot2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.712 0.536 0.738 0.832 0.450 0.590 0.658 0.432 0.504 0.682</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.724 0.570 0.734 0.798 0.472 0.614 0.662 0.466 0.524 0.670</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pidot2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.7135374 0.5368218 0.7331201 0.8306768 0.4457047 0.5865479 0.6601311</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.4444884 0.5000160 0.6876279</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.7247589 0.5666745 0.7338478 0.8008378 0.4783250 0.6038420 0.6589481</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.4754106 0.5183133 0.6758989</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
