@@ -30,7 +30,7 @@ load("check_complex_bias2.RData")
 stuff <- c("ml", "pl", "mlw", "plw")
 plot_bias <- function(mn) {
   res %>%
-  filter(model_no == mn) %>%
+  filter(model_no == mn, samp %in% c("strat", "clust", "strcl")) %>%
   mutate(across(all_of(stuff), \(x) abs(x - truth) ^ 1)) %>%
   mutate(samp = factor(samp, levels = c("strat", "clust", "strcl"))) %>%
   pivot_longer(cols = stuff, names_to = "type",
@@ -94,32 +94,32 @@ bind_rows(dat1, dat2, dat3) %>%
 plot_bias(1)
 ```
 
-### Model 2
+<!-- ### Model 2 -->
 
 
-```{r, fig.height = 8}
-plot_bias(2)
-```
+<!-- ```{r, fig.height = 8} -->
+<!-- plot_bias(2) -->
+<!-- ``` -->
 
-### Model 3
-
-
-```{r, fig.height = 8}
-plot_bias(3)
-```
-
-### Model 4
+<!-- ### Model 3 -->
 
 
-```{r, fig.height = 8}
-plot_bias(4)
-```
+<!-- ```{r, fig.height = 8} -->
+<!-- plot_bias(3) -->
+<!-- ``` -->
 
-### Model 5
+<!-- ### Model 4 -->
 
 
-```{r, fig.height = 8}
-plot_bias(5)
-```
+<!-- ```{r, fig.height = 8} -->
+<!-- plot_bias(4) -->
+<!-- ``` -->
+
+<!-- ### Model 5 -->
+
+
+<!-- ```{r, fig.height = 8} -->
+<!-- plot_bias(5) -->
+<!-- ``` -->
 
 
