@@ -117,7 +117,3 @@ res <- run_ligof_sims(model_no = 1, nsim = pc, ncores = pc - 2, samp = "strat",
 ```{r}
 res
 ```
-
-```{r}
-summary(res)
-```
