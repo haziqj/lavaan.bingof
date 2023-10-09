@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Lifecycle:
-stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/haziqj/lavaan.bingof/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/haziqj/lavaan.bingof/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/haziqj/lavaan.bingof/branch/main/graph/badge.svg)](https://app.codecov.io/gh/haziqj/lavaan.bingof?branch=main)
@@ -48,7 +48,7 @@ library(lavaan.bingof)  # load package
 ```
 
 Note: This package depends on the modified `{lavaan}` package version
-0.6-14.9001, which can be installed from the GitHub repository at
+0.6-14.9002, which can be installed from the GitHub repository at
 [`haziqj/lavaan`](https://github.com/haziqj/lavaan).
 
 ## Usage
@@ -95,16 +95,15 @@ fit <- lavaan::sem(mod, dat, std.lv = TRUE, estimator = "PML")
 
 # Test statistics
 all_tests(fit)
-#> # A tibble: 7 × 6
-#>      X2    df name          pval W_rank     S
-#>   <dbl> <dbl> <chr>        <dbl>  <int> <int>
-#> 1 2.81   5    Wald         0.730     14    15
-#> 2 0.862  3.31 WaldDiag,MM3 0.872     15    15
-#> 3 2.80   5    WaldVCF      0.730      5    15
-#> 4 2.46   4.41 PearsonRS    0.710     15    15
-#> 5 1.86   3.63 Pearson,MM3  0.709     15    15
-#> 6 2.30   4.18 RSS,MM3      0.707     15    15
-#> 7 2.79   5.00 Multn,MM3    0.732     15    15
+#> # A tibble: 6 × 6
+#>      X2    df name          pval Xi_rank     S
+#>   <dbl> <dbl> <chr>        <dbl>   <int> <int>
+#> 1 2.81   5    Wald         0.730      14    15
+#> 2 2.80   5    WaldVCF      0.730       5    15
+#> 3 0.862  3.31 WaldDiag,MM3 0.872      15    15
+#> 4 1.86   3.63 Pearson,MM3  0.709      15    15
+#> 5 2.30   4.18 RSS,MM3      0.707      15    15
+#> 6 2.79   5.00 Multn,MM3    0.732      15    15
 ```
 
 ### Test statistics under a complex sampling scheme
@@ -133,16 +132,14 @@ all_tests(fit)
 fit0 <- lavaan::sem(mod, dat, std.lv = TRUE, estimator = "PML")  # ignore wt
 fit1 <- lavaan::sem(mod, dat, std.lv = TRUE, estimator = "PML",
                     sampling.weights = "wt")
-svy <- survey::svydesign(ids = ~ school + class, strata = ~ type,
-                         weights = ~ wt, data = dat, nest = TRUE)
 
 # Compare with and without sampling weights
 Wald_test(fit0)
-#>         X2 df name      pval W_rank  S
-#> 1 4.561825  5 Wald 0.4716543     13 15
-Wald_test(fit1, svy_design = svy)
-#>         X2 df name      pval W_rank  S
-#> 1 4.633965  5 Wald 0.4621618     13 15
+#>         X2 df name      pval Xi_rank  S
+#> 1 4.561825  5 Wald 0.4716543      13 15
+Wald_test(fit1)  # with sampling weights
+#>         X2 df name      pval Xi_rank  S
+#> 1 3.859095  5 Wald 0.5698761      13 15
 ```
 
 ### Simulation wrapper
@@ -163,15 +160,24 @@ res <- run_ligof_sims(model_no = 1, nsim = pc, ncores = pc - 2, samp = "strat",
 ``` r
 res
 #> 
-#> ── LIGOF simulations ───────────────────────────────────────────────────────────
+#> ── LIGOF simulations summary ───────────────────────────────────────────────────
 #> 
-#> Settings
-#> Number of replications: 32
-#> Model: 1 (1F 5V)
-#> Sampling design: Stratified sampling
-#> Sample size: 1000
+#> Model 1 (1F 5V) using stratified sampling design (n = 1000)
+#> • Converged: 32 / 32
+#> • Rank deficient: 0 / 32
+#> • Significance level: 0.05
 #> 
-#> Simulations completed in 23.2 secs
+#> 
+#> ============  ==============  =============  =========
+#> Test name     Rejection rate  Mean X2 value  Mean d.f.
+#> ============  ==============  =============  =========
+#> Wald                   0.156           6.51       5.00
+#> WaldVCF                0.094           6.24       5.00
+#> WaldDiag,MM3           0.031           3.84       3.39
+#> Pearson,MM3            0.062           3.73       3.19
+#> RSS,MM3                0.125           4.53       3.83
+#> Multn,MM3              0.094           6.31       5.00
+#> ============  ==============  =============  =========
 ```
 
 ``` r
@@ -188,12 +194,11 @@ summary(res)
 #> ============  ==============  =============  =========
 #> Test name     Rejection rate  Mean X2 value  Mean d.f.
 #> ============  ==============  =============  =========
-#> Wald                   0.062           5.11       5.00
-#> WaldDiag,MM3           0.000           2.99       3.44
-#> WaldVCF                0.062           4.89       5.00
-#> PearsonRS              0.062           3.75       4.15
-#> Pearson,MM3            0.031           2.67       3.04
-#> RSS,MM3                0.031           3.30       3.62
-#> Multn,MM3              0.062           4.92       4.99
+#> Wald                   0.156           6.51       5.00
+#> WaldVCF                0.094           6.24       5.00
+#> WaldDiag,MM3           0.031           3.84       3.39
+#> Pearson,MM3            0.062           3.73       3.19
+#> RSS,MM3                0.125           4.53       3.83
+#> Multn,MM3              0.094           6.31       5.00
 #> ============  ==============  =============  =========
 ```

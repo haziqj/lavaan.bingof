@@ -18,7 +18,7 @@ library(tidyverse)
 # lavaan.bingof
 
 <!-- badges: start -->
-[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/haziqj/lavaan.bingof/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/haziqj/lavaan.bingof/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/haziqj/lavaan.bingof/branch/main/graph/badge.svg)](https://app.codecov.io/gh/haziqj/lavaan.bingof?branch=main)
 <!-- badges: end -->
@@ -54,7 +54,7 @@ pak::pkg_install("haziqj/lavaan.bingof")
 library(lavaan.bingof)  # load package
 ```
 
-Note: This package depends on the modified `{lavaan}` package version 0.6-14.9001, which can be installed from the GitHub repository at [`haziqj/lavaan`](https://github.com/haziqj/lavaan).
+Note: This package depends on the modified `{lavaan}` package version 0.6-14.9002, which can be installed from the GitHub repository at [`haziqj/lavaan`](https://github.com/haziqj/lavaan).
 
 ## Usage
 
@@ -95,12 +95,10 @@ all_tests(fit)
 fit0 <- lavaan::sem(mod, dat, std.lv = TRUE, estimator = "PML")  # ignore wt
 fit1 <- lavaan::sem(mod, dat, std.lv = TRUE, estimator = "PML",
                     sampling.weights = "wt")
-svy <- survey::svydesign(ids = ~ school + class, strata = ~ type,
-                         weights = ~ wt, data = dat, nest = TRUE)
 
 # Compare with and without sampling weights
 Wald_test(fit0)
-Wald_test(fit1, svy_design = svy)
+Wald_test(fit1)  # with sampling weights
 ```
 
 ### Simulation wrapper
