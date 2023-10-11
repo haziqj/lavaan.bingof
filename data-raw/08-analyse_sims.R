@@ -13,7 +13,7 @@ grab_sims <- function(x = all_res, samp = "srs", type = "type1",
   res <- list(NULL)
 
   for (n in the_n) {
-    type_of_n <- grepl(paste0(n, "_"), names(x))
+    type_of_n <- grepl(paste0("n", n, "_"), names(x))
     ind <- which(type_of_sampling & type_of_analysis & type_of_n)
     tmp <- NULL
     for (i in seq_along(ind)) {
