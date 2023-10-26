@@ -1,6 +1,7 @@
 #' Generate an informative (weighted) data sample according to `model_no`
 #'
 #' @inheritParams gen_data_bin
+#' @param popfac The multiplier for the population size. That is, the population size will be set to `popfac * n`.
 #'
 #' @return A [tibble()] containing ordinal binary values (0/1) for the items.
 #' @export
@@ -8,10 +9,10 @@
 #' @examples
 #' gen_data_bin_wt(1)
 gen_data_bin_wt <- function(model_no = 1, seed = NULL, H1 = FALSE,
-                            return_all = FALSE, n = 1000) {
+                            return_all = FALSE, n = 1000, popfac = 10) {
 
   population <-
-    gen_data_bin(model_no = model_no, n = n * 25, seed = 123, H1 = H1,
+    gen_data_bin(model_no = model_no, n = n * popfac, seed = 123, H1 = H1,
                  return_all = TRUE)
 
   set.seed(seed)

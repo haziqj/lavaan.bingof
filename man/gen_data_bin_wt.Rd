@@ -9,7 +9,8 @@ gen_data_bin_wt(
   seed = NULL,
   H1 = FALSE,
   return_all = FALSE,
-  n = 1000
+  n = 1000,
+  popfac = 10
 )
 }
 \arguments{
@@ -24,6 +25,8 @@ For power simulations.}
 well?}
 
 \item{n}{(numeric > 0) Sample size.}
+
+\item{popfac}{The multiplier for the population size. That is, the population size will be set to \code{popfac * n}.}
 }
 \value{
 A \code{\link[=tibble]{tibble()}} containing ordinal binary values (0/1) for the items.
