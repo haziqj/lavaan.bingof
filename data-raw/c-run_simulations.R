@@ -3,7 +3,7 @@ library(lavaan.bingof)
 analysis_path <- dirname(rstudioapi::getSourceEditorContext()$path)
 
 # All simulations --------------------------------------------------------------
-for (sim_type in c("type1")) {
+for (sim_type in c("power")) {
   for (samp_method in c("strat", "clust", "strcl")) {
     for (the_samp_size in c(500, 1000, 2500, 5000, 10000)) {
       for (mod_no in 1:5) {
