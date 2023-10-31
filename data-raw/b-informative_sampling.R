@@ -18,7 +18,7 @@ library(furrr)
 library(kableExtra)
 
 plan(multisession, workers = 8)
-nsims <- 1000
+nsims <- 100
 
 calc_X2 <- function(fit) {
   tab <- lavaan::lavTables(fit, dimension = 0L) |>
@@ -98,7 +98,7 @@ make_wt_res <- function(samp_size = 5000, type = "bias_se", .popfac = 1 / 0.01) 
     # PML
     tmp <- lavaan::fitMeasures(fit0)
     tab0 <-
-      Pearson_test(fit0, Sigma2 = "force_unweighted") %>%
+      Pearson_test(fit0, Sigma2 = "theoretical") %>%
       mutate(chisq = calc_X2(fit0)$X2, #tmp["chisq"],
              df2 =  calc_X2(fit0)$df, #tmp["df"],
              pval2 = pchisq(chisq, df, lower.tail = FALSE))
@@ -188,7 +188,7 @@ res_df_biasse %>%
 # Test statistics sims ---------------------------------------------------------
 
 res <- list()
-for (n in c(2500)) {  #
+for (n in c(500, 1000, 2500, 5000, 10000)) {  #
   cat(paste("\nRunning with sample size n =", n, "\n"))
 
   out <-
@@ -218,6 +218,8 @@ res_df %>%
   mutate(X2df = paste0(X2, " (", df, ")"),
          chi2df = paste0(chisq, " (", df2, ")")) %>%
   pivot_wider(id_cols = n, names_from = method,
-              values_from = c(rej_rate2, chi2df)) %>%
+              # values_from = c(rej_rate2, chi2df)) %>%
+              values_from = c(rej_rate, X2df))
+
   kbl(format = "latex", digits = 2, booktabs = TRUE) %>%
   add_header_above(c(" " = 1, "Rejection rate" = 2, "X2 (df)" = 2))

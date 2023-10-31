@@ -221,6 +221,10 @@ usethis::use_data(res_complex_power, overwrite = TRUE)
 # Distribution of test statistics ----------------------------------------------
 plot_X2_dens <- function(samp = "strcl") {
   dat <- grab_sims(samp = samp)
+  ori_levs <- levels(dat$name)
+  mod_levs <- gsub(",MM3", "", ori_levs)
+  levels(dat$name) <- mod_levs
+
   plot_df2 <-
     dat %>%
     group_by(name, sim) %>%
@@ -234,6 +238,7 @@ plot_X2_dens <- function(samp = "strcl") {
     mutate(xx = list(seq(minx, maxx, length = 200)),
            yy = list(dchisq(xx, df = df))) %>%
     unnest_longer(col = c(xx, yy))
+
 
 
   dat %>%

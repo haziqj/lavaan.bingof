@@ -1,0 +1,45 @@
+
+\section{Some notes -- to be removed later}
+
+\hl{HJ: Some notes}
+
+What does $\nabla\pl(\btheta)$ converge to as $n\to\infty$?
+Well $\nabla\pl(\btheta)= \sum_{h=1}^n w_h \nabla\tildepl(\btheta;\by_h)$.
+It depends on whether $w_h$ are known weights or random variables.
+Suppose they are known weights.
+Then there is a form of the CLT (Lyapunov CLT) which does not require identically distributed sequence of rvs (but they do have to be independent! which in the case of complex sampling is arguable):
+Let $X_i$ be an independent sequence of rvs each with mean $\mu_i$ and variance $\sigma^2_i$. Then (assuming some condition is satisfied)
+$$
+\frac{1}{s_n} \sum_{i=1}^n (X_i -\mu_i) \xrightarrow{\text d} \N(0,1),
+$$
+where $s_n = \sum_{i=1}^n \sigma_i^2$.
+Apply this to $X_h := w_h \tildepl(\btheta;\by_h)$; $\mu_h = 0$ and $s_n=\sum_{h=1}^n \Var(X_h)$ $ = (\sum_{h=1}^n w_h^2 )\bJ(\btheta)$.
+So overall we have
+$$
+\frac{1}{\sqrt{\textstyle\sum_{h=1}^n w_h^2 }} \nabla\pl(\btheta) \xrightarrow{\text d} \N\big(\bzero, \bJ(\btheta)\big)
+% \Leftrightarrow
+% \frac{1}{\textstyle\sum_{h=1}^n w_h^2 }\nabla\pl(\btheta) \xrightarrow{\text D} \N\big(\bzero, \bJ(\btheta)\big)
+$$
+By the way this makes sense when all weights are equal to 1, then we get the usual result.
+
+What does $\nabla^2\pl(\btheta) = \sum_{h=1}^n w_h \nabla^2\tildepl(\btheta; \by_h)$ converge to?
+Well 
+$$
+\frac{\sum_{h=1}^n w_h \nabla^2\tildepl(\btheta; \by_h)}{\sum_{h=1}^n w_h} \xrightarrow{\text P} \E(\nabla^2\tildepl(\btheta; \by) = \bH(\btheta)
+$$
+
+Combining the two, we get
+\begin{align*}
+\{\nabla^2 \pl(\btheta)\}^{-1} \nabla\pl(\btheta) 
+&= \frac{\sqrt{\textstyle\sum_{h=1}^n w_h^2 }}{\sum_{h=1}^n w_h} \cdot \left(\frac{\nabla^2 \pl(\btheta)}{\sum_{h=1}^n w_h} \right)^{-1} \cdot \frac{\nabla \pl(\btheta)}{ \sqrt{\textstyle\sum_{h=1}^n w_h^2 }} \\
+&\xrightarrow{\text d} \N(\bzero, \bH^{-1}\bJ\bH^{-1})
+\end{align*}
+The inverse of the extra term is then required to be put in front of $(\mlepl - \btheta)$ (instead of the traditional $\sqrt n$) to ensure convergence.
+
+$$
+\frac{\sum_{h=1}^n w_h}{\sqrt{\textstyle\sum_{h=1}^n w_h^2 }}
+= \sqrt{ \frac{(\sum_{h=1}^n w_h)^2}{\sum_{h=1}^n w_h^2} } 
+= \sqrt{\tilde n}
+$$
+
+More importantly, the Godambe needs to be multiplied by this quantity $\tilde n$ (is this some kind of ``effective sample size''?) when computing standard errors.
