@@ -36,7 +36,7 @@ bind_rows(
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         panel.grid = element_blank())
 
-# ggsave("srs_type1_bw.pdf", width = 7, height = 9)
+ggsave("srs_type1_bw.pdf", width = 7, height = 9)
 
 bind_rows(
   select(res_srs_power, name, sim, n, rej_rate = rej_rate10, crit = crit10) %>%
@@ -73,7 +73,7 @@ bind_rows(
         legend.key.width = unit(1.5,"cm"))
 
 
-# ggsave("srs_power_bw.pdf", width = 7, height = 9)
+ggsave("srs_power_bw.pdf", width = 7, height = 9)
 
 # Complex plots
 alpha <- 5
@@ -137,13 +137,25 @@ res_complex_power %>%
   coord_cartesian(ylim = c(0, 1)) -> p2; p2
 
 cowplot::plot_grid(p1, p2, ncol = 1, rel_heights = c(0.8, 1))
-ggsave("complex_plot.pdf", width = 7, height = 9)
+ggsave("complex_plot_bw.pdf", width = 7, height = 9)
 
 load("vignettes/articles/simplots.RData")
-ggsave("hist_1_srs.pdf", p_hist_a, width = 7, height = 9)
-ggsave("hist_1_strat.pdf", p_hist_b, width = 7, height = 9)
-ggsave("hist_1_clust.pdf", p_hist_c, width = 7, height = 9)
-ggsave("hist_1_strcl.pdf", p_hist_d, width = 7, height = 9)
+ggsave("hist_1_srs.pdf", p_hist_a + theme(panel.grid = element_blank()),
+       width = 7, height = 9)
+ggsave("hist_1_strat.pdf", p_hist_b + theme(panel.grid = element_blank()),
+       width = 7, height = 9)
+ggsave("hist_1_clust.pdf", p_hist_c + theme(panel.grid = element_blank()),
+       width = 7, height = 9)
+ggsave("hist_1_strcl.pdf", p_hist_d + theme(panel.grid = element_blank()),
+       width = 7, height = 9)
+
+
+
+
+
+
+
+
 
 
 
