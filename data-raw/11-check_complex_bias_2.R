@@ -45,13 +45,13 @@ make_bias_table <- function(n = 10000, .pop = pop, samp) {
 }
 
 res <- list()
-for (model_no in 1) {
+for (model_no in 3) {
   for (samp in c("srs", "strat", "clust", "strcl", "wt")) {
     pop <- make_population(model_no)
     plan(multisession, workers = 30)
 
     out <-
-      future_map(1:250, ~make_bias_table(samp = samp), .progress = TRUE,
+      future_map(1:100, ~make_bias_table(samp = samp), .progress = TRUE,
                  .options = furrr_options(seed = NULL)) %>%
       do.call(rbind, .) %>%
       mutate(model_no = model_no, samp = samp)
@@ -63,8 +63,10 @@ res <- do.call(rbind, res)
 # save(res, file = "vignettes/articles/check_complex_bias2.RData")
 
 stuff <- c("ml", "pl", "mlw", "plw")
+stuff <- c("pl", "plw")
 res %>%
-  filter(model_no == 1) %>%
+  filter(model_no == 3, samp != "wt") %>%
+  select(-ml, -mlw) %>%
   mutate(across(all_of(stuff), \(x) abs(x - truth) ^ 1)) %>%
   pivot_longer(cols = stuff, names_to = "type",
                values_to = "bias") %>%
@@ -73,5 +75,5 @@ res %>%
   ggplot(aes(name, bias, fill = type)) +
   # geom_point(position = position_dodge(width = 0.5)) +
   geom_boxplot(outlier.shape = NA) +
-  facet_grid(samp ~ ., scale = "free") +
+  facet_grid(samp ~ .) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
