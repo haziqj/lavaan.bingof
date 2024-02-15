@@ -572,7 +572,11 @@ Wald_test <- function(object, Sigma2 = NULL, approx_Omega2 = FALSE) {
 
   Xi <- MASS::ginv(Omega2)
   X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
-  data.frame(X2 = X2, df = Matrix::rankMatrix(Omega2) - q, name = "Wald") %>%
+  # data.frame(X2 = X2, df = Matrix::rankMatrix(Omega2) - q, name = "Wald") %>%
+  #   after_test(., Xi, S)
+  out <- moment_match(X2, Xi, Omega2, df = Matrix::rankMatrix(Omega2) - q,
+                      order = 3)
+  cbind(out, name = paste0("Wald,MM", 3)) %>%
     after_test(., Xi, S)
 }
 
@@ -652,6 +656,10 @@ Wald_test_v3 <- function(object, Sigma2 = NULL) {
   X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
   data.frame(X2 = X2, df = S - q, name = "WaldVCF") %>%
     after_test(., Xi, S)
+
+  # out <- moment_match(X2, Xi, Omega2, df = S - q, order = 3)
+  # cbind(out, name = paste0("WaldVCF,MM", 3)) %>%
+  #   after_test(., Xi, S)
 }
 
 #' @describeIn ligof-test-stats The Wald test statistic bypassing the
