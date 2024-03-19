@@ -369,17 +369,20 @@ create_Sigma2_matrix <- function(.lavobject, method = c("theoretical",
       strat_wt <- unique(wt)
       nstrat <- length(strat_wt)
 
-      res_strat <- list()
+      Eysq_strat <- Esqy_strat <- list()
       for (k in seq_along(strat_wt)) {
         idxl <- wt == strat_wt[k]
         dats <- dat[idxl, ]
         wts <- wt[idxl]
-        ymeans <- apply(dats, 2, mean)
-        res_strat[[k]] <- strat_wt[k] * (
-          cov.wt(dats, wts, center = ymean)$cov + tcrossprod(ymeans - ymean)
+        Esqy_strat[[k]] <- (strat_wt[k] / sum(strat_wt)) * apply(dats, 2, mean)
+        Eysq_strat[[k]] <- (strat_wt[k] / sum(strat_wt)) * (
+          cov.wt(dats, center = FALSE, method = "ML")$cov
         )
       }
-      res <- Reduce("+", res_strat)
+
+      Eysq <- Reduce("+", Eysq_strat)
+      Esqy <- tcrossprod(Reduce("+", Esqy_strat))
+      res <- Eysq - Esqy
     } else {
       if (method == "force_unweighted") wt[] <- 1
       res <- cov.wt(dat, wt, center = ymean)$cov
