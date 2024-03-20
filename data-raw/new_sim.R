@@ -42,7 +42,13 @@ res <-
     myfun
   ))
 
-res |>
+save(res, file = "new_sims.RData")
+
+# tmp <- myfun("strcl", "wt", FALSE, "weighted")
+# res$sim[[20]] <- tmp
+
+p_compare_sigma2 <-
+  res |>
   mutate(
     sim = map(sim, ~ .x$tab)
   ) |>
@@ -63,15 +69,20 @@ res |>
     samp = case_when(
       samp == "wtd" ~ "Informative",
       samp == "strat" ~ "Stratified",
-      samp == "clust" ~ "Clustered",
+      samp == "clust" ~ "Cluster",
       samp == "strcl" ~ "Strat. + Clust."
-    )
+    ),
+    samp = factor(samp, levels = c("Informative", "Stratified", "Cluster", "Strat. + Clust."))
   ) |>
-  ggplot(aes(name, rej_rate)) +
-  geom_bar(stat = "identity") +
-  geom_hline(yintercept = 0.05, linetype = "dashed", col = "blue") +
+  ggplot(aes(name, rej_rate, fill = name)) +
+  geom_bar(stat = "identity", alpha = 0.8) +
+  geom_hline(yintercept = 0.05, linetype = "dashed", col = "black", linewidth = 0.8) +
   facet_grid(samp * wt ~ Sigma2est) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   coord_cartesian(ylim = c(0, 0.2)) +
-  labs(x = NULL, y = "Rejection rate", title = "Scenario 3F15V (n=1000): Rejection rates by simulation conditions", caption = "Total replications: 1000")
+  labs(x = NULL, y = "Rejection rate", title = "Scenario 3F15V (n=1000): Rejection rates by simulation conditions", caption = "Total replications: 1000") +
+  guides(fill = "none") +
+  ggsci::scale_fill_jama()
+
+save(p_compare_sigma2, file = "p_compare_sigma2.RData")
