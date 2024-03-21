@@ -82,35 +82,17 @@ make_population <- function(model_no = 1, seed = 123, H1 = FALSE,
   epsilon <- mvnfast::rmvn(n = N, mu = rep(0, nitems), sigma = Theta)
   # eta     <- mnormt::rmnorm(n = N, mean = rep(0, neta), varcov = Psi)
   # epsilon <- mnormt::rmnorm(n = N, mean = rep(0, nitems), varcov = Theta)
-  extra <- 0
+  ystar   <- tcrossprod(eta, Lambda) + epsilon
 
   if (isTRUE(H1)) {
     # Add an extra factor to misspecify the model fit (for power simulations)
-    extra <- rnorm(N)
-    Lambda <- cbind(Lambda, apply(Lambda, 1, sum))
-    if (model_no %in% c(1, 2)) {
-      rem <- c(4, 5)
-      Lambda[rem, 1] <- Lambda[-rem, 2] <- 0
-    }
-    if (model_no == 3) {
-      rem <- c(3, 4, 5)
-      Lambda[rem, 1] <- Lambda[-rem, 2] <- 0
-    }
-    if (model_no == 4) {
-      Lambda[1, 1] <- 0
-      Lambda[nitems, 2] <- 0
-      Lambda[-c(1, nitems), 3] <- 0
-    }
-    if (model_no == 5) {
-      rem <- c(3, 8)
-      Lambda[rem[1], 1] <- 0
-      Lambda[rem[2], 2] <- 0
-      # Lambda[rem[3], 3] <- 0
-      Lambda[-rem, 4] <- 0
-    }
+    extra_Lambda <- Lambda[, 1, drop = FALSE] + rnorm(nitems, sd = 0.1)
+    if (model_no == 1) { extra_Lambda[seq(2, nitems, by = 2), 1] <- 0 }
+    if (model_no == 2) { extra_Lambda[seq(2, nitems, by = 4), 1] <- 0 }
+    if (model_no == 3) { extra_Lambda[seq(2, nitems, by = 6), 1] <- 0 }
+    ystar <- ystar + t(extra_Lambda %*% rnorm(N))
+    ystar <- scale(ystar)
   }
-
-  ystar <- tcrossprod(cbind(eta, extra), Lambda) + epsilon
 
   # repair eta
   eta <- as.data.frame(eta)
@@ -132,7 +114,7 @@ make_population <- function(model_no = 1, seed = 123, H1 = FALSE,
 
   # Get the response patterns --------------------------------------------------
   y <-
-  #   # t(apply(ystar, 1, function(x) as.numeric(x > tau))) %>%
+    #   # t(apply(ystar, 1, function(x) as.numeric(x > tau))) %>%
     1 * (ystar > matrix(tau, nrow = N, ncol = nitems, byrow = TRUE)) %>%
     as.data.frame()
   colnames(y) <- paste0("y", seq_len(nitems))
@@ -218,12 +200,10 @@ gen_data_bin_complex1 <- function(population = make_population(1, seed = NULL),
     group_by(type) %>%
     summarise(
       students_in_school_type = dplyr::n(),
-      N = dplyr::n()
     ) %>%
     mutate(
       prob = npsu / students_in_school_type,
-      wt = 1 / prob,
-      strat_wt = N / sum(N)
+      wt = 1 / prob
     )
 
   # Add back the school_info to the population
@@ -237,7 +217,7 @@ gen_data_bin_complex1 <- function(population = make_population(1, seed = NULL),
     slice_sample(n = npsu, replace = FALSE) %>%
     ungroup() %>%
     select(-starts_with("ystar")) %>%
-    select(type, school, class, wt, strat_wt, starts_with("y")) %>%
+    select(type, school, class, wt, starts_with("y")) %>%
     mutate(wt = wt / sum(wt) * dplyr::n(),
            across(starts_with("y"), ordered)) %>%
     arrange(type, school, class)
@@ -270,7 +250,7 @@ gen_data_bin_complex2 <- function(population = make_population(1, seed = NULL),
       prob = pr_school_selected * pr_class_selected,
       wt = 1 / prob
     )
-    # mutate(pr_school_selected = npsu / dplyr::n()) %>%
+  # mutate(pr_school_selected = npsu / dplyr::n()) %>%
 
   psu_sampled <-
     pop2 %>%

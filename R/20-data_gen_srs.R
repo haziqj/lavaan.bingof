@@ -33,35 +33,18 @@ gen_data_bin <- function(model_no = 1, n = 1000, seed = NULL, H1 = FALSE,
   epsilon <- mvnfast::rmvn(n = n, mu = rep(0, nitems), sigma = Theta)
   # eta   <- mnormt::rmnorm(n = n, mean = rep(0, neta), varcov = Psi)
   # delta <- mnormt::rmnorm(n = n, mean = rep(0, nitems), varcov = Theta)
-  extra <- 0
+  ystar <- tcrossprod(eta, Lambda) + epsilon
 
   if (isTRUE(H1)) {
     # Add an extra factor to misspecify the model fit (for power simulations)
-    extra <- rnorm(n)
-    Lambda <- cbind(Lambda, apply(Lambda, 1, sum))
-    if (model_no %in% c(1, 2)) {
-      rem <- c(4, 5)
-      Lambda[rem, 1] <- Lambda[-rem, 2] <- 0
-    }
-    if (model_no == 3) {
-      rem <- c(3, 4, 5)
-      Lambda[rem, 1] <- Lambda[-rem, 2] <- 0
-    }
-    if (model_no == 4) {
-      Lambda[1, 1] <- 0
-      Lambda[nitems, 2] <- 0
-      Lambda[-c(1, nitems), 3] <- 0
-    }
-    if (model_no == 5) {
-      rem <- c(3, 8)
-      Lambda[rem[1], 1] <- 0
-      Lambda[rem[2], 2] <- 0
-      # Lambda[rem[3], 3] <- 0
-      Lambda[-rem, 4] <- 0
-    }
+    extra_Lambda <- Lambda[, 1, drop = FALSE] + rnorm(nitems, sd = 0.1)
+    if (model_no == 1) { extra_Lambda[seq(2, nitems, by = 2), 1] <- 0 }
+    if (model_no == 2) { extra_Lambda[seq(2, nitems, by = 4), 1] <- 0 }
+    if (model_no == 3) { extra_Lambda[seq(2, nitems, by = 6), 1] <- 0 }
+    ystar <- ystar + t(extra_Lambda %*% rnorm(n))
+    ystar <- scale(ystar)
   }
 
-  ystar <- tcrossprod(cbind(eta, extra), Lambda) + epsilon
   y <-
     {1 * (ystar > matrix(tau, nrow = n, ncol = nitems, byrow = TRUE))} |>
     as.data.frame() |>
