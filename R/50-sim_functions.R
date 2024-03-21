@@ -229,9 +229,9 @@ summary.ligof_sims <- function(object, alpha = 0.05, ...) {
     summarise(n_sims = dplyr::n(),
               n_converged = sum(converged),
               n_rank_def = sum(Omega2_rank < S),
-              rej_rate = mean(alpha_[converged], na.rm = TRUE),
-              mean_X2 = mean(X2[converged], na.rm = TRUE),
-              mean_df = mean(df[converged], na.rm = TRUE),
+              rej_rate = mean(alpha_[converged & Omega2_rank >= S], na.rm = TRUE),
+              mean_X2 = mean(X2[converged & Omega2_rank >= S], na.rm = TRUE),
+              mean_df = mean(df[converged & Omega2_rank >= S], na.rm = TRUE),
               .groups = "drop")
 
   res <- list(

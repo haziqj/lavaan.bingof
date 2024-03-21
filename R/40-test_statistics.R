@@ -35,6 +35,9 @@ extract_lavaan_info <- function(lavobject) {
   lavpartable    <- lavobject@ParTable
   # lavtable       <- suppressWarnings(lavaan::lavTables(lavobject, dimension = 0))
 
+  # In lavaan 0.6-18.2002, the names have been lowercased!
+  lavcache[[1]]$LONG <- lavcache[[1]]$long
+
   TH      <- lavobject@Fit@TH[[1]]
   th.idx  <- lavobject@Model@th.idx[[1]]
   if(lavobject@Model@nexo == 0) {
@@ -317,8 +320,8 @@ create_Sigma2_matrix <- function(.lavobject, method = c("theoretical",
                                                         "strat")) {
   list2env(extract_lavaan_info(.lavobject), environment())
   list2env(get_uni_bi_moments(.lavobject), environment())
-  ymean <- c(pidot1, pidot2)  # uni and bivariate moments (model implied)
-  # ymean <- c(pdot1, pdot2)  # or the proportions?
+  p2_hat <- c(pdot1, pdot2)     # uni and bivariate moments (model implied)
+  pi2_hat <- c(pidot1, pidot2)  # or the proportions?
 
   method <- match.arg(method, c("theoretical", "weighted", "force_unweighted",
                                 "strat"))
@@ -346,7 +349,7 @@ create_Sigma2_matrix <- function(.lavobject, method = c("theoretical",
 
     }
     Eysq[lower.tri(Eysq)] <- t(Eysq)[lower.tri(Eysq)]
-    res <- Eysq - tcrossprod(c(pidot1, pidot2))
+    res <- Eysq - tcrossprod(pi2_hat)
   } else {
     # Prepare the sample data --------------------------------------------------
     dat <-
@@ -376,7 +379,7 @@ create_Sigma2_matrix <- function(.lavobject, method = c("theoretical",
         wts <- wt[idxl]
         Esqy_strat[[k]] <- (strat_wt[k] / sum(strat_wt)) * apply(dats, 2, mean)
         Eysq_strat[[k]] <- (strat_wt[k] / sum(strat_wt)) * (
-          cov.wt(dats, center = FALSE, method = "ML")$cov
+          cov.wt(dats, center = FALSE)$cov
         )
       }
 
@@ -385,7 +388,8 @@ create_Sigma2_matrix <- function(.lavobject, method = c("theoretical",
       res <- Eysq - Esqy
     } else {
       if (method == "force_unweighted") wt[] <- 1
-      res <- cov.wt(dat, wt, center = ymean)$cov
+      # res <- cov.wt(dat, wt, center = pi2_hat)$cov
+      res <- cov.wt(dat, wt)$cov
     }
   }
 
