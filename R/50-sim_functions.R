@@ -51,7 +51,7 @@ run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
                                     "strat2"),
                            simtype = c("type1", "power"), starting_seed = 16423,
                            ncores = parallel::detectCores() - 2,
-                           pop_Sigma = FALSE, Sigma2 = NULL, the_wt = NULL) {
+                           pop_Sigma = FALSE, Sigma2 = NULL) {
 
   # Model setup ----------------------------------------------------------------
   mod <- txt_mod(model_no)
@@ -59,8 +59,10 @@ run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
   if (simtype == "type1") H1 <- FALSE
   if (simtype == "power") H1 <- TRUE
   samp <- match.arg(samp, c("srs", "wtd", "strat", "clust", "strcl", "strat2"))
+
+  the_wt <- NULL
   if (samp != "srs") {
-    # the_wt <- "wt"
+    the_wt <- "wt"
     pop <- make_population(model_no, seed = starting_seed, H1 = H1,
                            Sigma2_attr = isTRUE(pop_Sigma))
     Sigma2pop <- attr(pop, "Sigma2")

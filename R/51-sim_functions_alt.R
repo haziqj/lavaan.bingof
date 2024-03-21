@@ -48,7 +48,7 @@ run_ligof_sims_alt <- function(model_no = 1, nsim = 1000, Sigma2 = NULL,
     .errorhandling = "pass",
     .options.snow = list(progress = progress)
   ) %dopar% {
-    dat <- lavaan.bingof:::get_samp(pop = pop)
+    dat <- get_samp(pop = pop)
     fit <- lavaan::sem(model = txt_mod(model_no), data = dat, estimator = "PML",
                        std.lv = TRUE, sampling.weights = the_wt)
     all_tests(fit, sim = i, Sigma2 = Sigma2)
