@@ -1,7 +1,7 @@
 Package: lavaan.bingof
 Type: Package
 Title: Limited Information Goodness of Fit Tests for Binary Factor Models
-Version: 0.1.1.9005
+Version: 0.1.1.9006
 Authors@R: 
     c(person("Haziq", "Jamil", 
              email = "haziq.jamil@gmail.com",
