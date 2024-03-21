@@ -51,7 +51,7 @@ run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
                                     "strat2"),
                            simtype = c("type1", "power"), starting_seed = 16423,
                            ncores = parallel::detectCores() - 2,
-                           pop_Sigma = FALSE, Sigma2 = NULL) {
+                           pop_Sigma = FALSE, Sigma2 = NULL, the_wt = NULL) {
 
   # Model setup ----------------------------------------------------------------
   mod <- txt_mod(model_no)
@@ -59,9 +59,8 @@ run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
   if (simtype == "type1") H1 <- FALSE
   if (simtype == "power") H1 <- TRUE
   samp <- match.arg(samp, c("srs", "wtd", "strat", "clust", "strcl", "strat2"))
-  the_wt <- NULL
   if (samp != "srs") {
-    the_wt <- "wt"
+    # the_wt <- "wt"
     pop <- make_population(model_no, seed = starting_seed, H1 = H1,
                            Sigma2_attr = isTRUE(pop_Sigma))
     Sigma2pop <- attr(pop, "Sigma2")
@@ -126,8 +125,8 @@ run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
         dat <- gen_data_bin_complex3(population = pop, n = samp_size,
                                      seed = seed_used)
       }
-      if (samp == "uneqpr") {
-        # Stratified-cluster sampling ------------------------------------------
+      if (samp == "wtd") {
+        # Informative sampling -------------------------------------------------
         seed_used <- the_seeds[i, 5]
         dat <- gen_data_bin_wt(model_no = model_no, n = samp_size,
                                seed = seed_used, H1 = H1)
@@ -230,9 +229,9 @@ summary.ligof_sims <- function(object, alpha = 0.05, ...) {
     summarise(n_sims = dplyr::n(),
               n_converged = sum(converged),
               n_rank_def = sum(Omega2_rank < S),
-              rej_rate = mean(alpha_[converged], na.rm = TRUE),
-              mean_X2 = mean(X2[converged], na.rm = TRUE),
-              mean_df = mean(df[converged], na.rm = TRUE),
+              rej_rate = mean(alpha_[converged & Omega2_rank >= S], na.rm = TRUE),
+              mean_X2 = mean(X2[converged & Omega2_rank >= S], na.rm = TRUE),
+              mean_df = mean(df[converged & Omega2_rank >= S], na.rm = TRUE),
               .groups = "drop")
 
   res <- list(

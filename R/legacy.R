@@ -9,6 +9,9 @@
 #                           der.pi.xixj.ab.to.tau.xi %*% der.Tau.to.Theta +
 #                           der.pi.xixj.ab.to.tau.xj %*% der.Tau.to.Theta +
 
+# NOTE: in lavaan 0.6-18.2002 the names of the lavcache have been lowercased!
+# Convert $long -> $long
+
 derModelUnivBivProbToTheta <- function(nvar = nvar,
                                          TH = TH,
                                      th.idx = th.idx,
@@ -16,16 +19,16 @@ derModelUnivBivProbToTheta <- function(nvar = nvar,
                                    lavcache = lavcache,
                                    lavmodel = lavmodel){
 
-  idxTH_var1 <- lavcache$LONG$index.thres.var1.of.pair
-  idxTH_var2 <- lavcache$LONG$index.thres.var2.of.pair
-  idxLastTH_var1 <- lavcache$LONG$last.thres.var1.of.pair
-  idxLastTH_var2 <- lavcache$LONG$last.thres.var2.of.pair
+  idxTH_var1 <- lavcache$long$index.thres.var1.of.pair
+  idxTH_var2 <- lavcache$long$index.thres.var2.of.pair
+  idxLastTH_var1 <- lavcache$long$last.thres.var1.of.pair
+  idxLastTH_var2 <- lavcache$long$last.thres.var2.of.pair
 
-  idx_pairs_ext <- lavcache$LONG$index.pairs.extended
+  idx_pairs_ext <- lavcache$long$index.pairs.extended
   cdtn <- (idxTH_var1!=0) & (idxTH_var2!=0)
   idx_pairs_S <- idx_pairs_ext[cdtn]
-  idxVar1_S   <- lavcache$LONG$index.var1.of.pair[cdtn]
-  idxVar2_S   <- lavcache$LONG$index.var2.of.pair[cdtn]
+  idxVar1_S   <- lavcache$long$index.var1.of.pair[cdtn]
+  idxVar2_S   <- lavcache$long$index.var2.of.pair[cdtn]
   idxCat_var1 <- idxTH_var1[cdtn]
   idxCat_var2 <- idxTH_var2[cdtn]
 
@@ -91,7 +94,7 @@ derModelUnivBivProbToTheta <- function(nvar = nvar,
   #category "a" corresponds to a threshold that is free to be estimated.
   #In the case of binary data it means the derivatives of pi.xixj.1b.
   #The derivatives of pi.xixj.2b are (-1)*der.pi.xixj.1b.
-  xi <- lapply( lavcache$LONG[c("index.thres.var2.of.pair",
+  xi <- lapply( lavcache$long[c("index.thres.var2.of.pair",
                                             "last.thres.var2.of.pair")],
                 function(y){ y[!(idxTH_var1==0 | idxLastTH_var1)] } )
 
@@ -132,7 +135,7 @@ derModelUnivBivProbToTheta <- function(nvar = nvar,
   ################### SECTION 3: der.pi.xixj.ab.to.tau.xj %*% der.Tau.to.Theta
   ##########################################################################
   # to compute der.pi.xixj.to.tau.xj
-  xj <- lapply(lavcache$LONG[c("index.thres.var1.of.pair",
+  xj <- lapply(lavcache$long[c("index.thres.var1.of.pair",
                                            "last.thres.var1.of.pair")],
                 function(y){ y[!(idxTH_var2==0 | idxLastTH_var2)] } )
 
