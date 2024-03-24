@@ -1,7 +1,6 @@
 library(tidyverse)
 library(lavaan.bingof)
 
-
 myfun <-     \(x, y, z, w) {
 
   cli::cli_alert_info("Now running {x} / {y} / pop_Sigma = {z} / Sigma2 = {w}")
