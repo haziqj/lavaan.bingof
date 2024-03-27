@@ -317,14 +317,14 @@ get_Delta_mats <- function(.lavobject) {
 create_Sigma2_matrix <- function(.lavobject, method = c("theoretical",
                                                         "weighted",
                                                         "force_unweighted",
-                                                        "strat")) {
+                                                        "strat", "strat2")) {
   list2env(extract_lavaan_info(.lavobject), environment())
   list2env(get_uni_bi_moments(.lavobject), environment())
   p2_hat <- c(pdot1, pdot2)     # uni and bivariate moments (model implied)
   pi2_hat <- c(pidot1, pidot2)  # or the proportions?
 
   method <- match.arg(method, c("theoretical", "weighted", "force_unweighted",
-                                "strat"))
+                                "strat", "strat2"))
 
   if (method == "theoretical") {
     S <- p * (p + 1) / 2
@@ -386,6 +386,20 @@ create_Sigma2_matrix <- function(.lavobject, method = c("theoretical",
       Eysq <- Reduce("+", Eysq_strat)
       Esqy <- tcrossprod(Reduce("+", Esqy_strat))
       res <- Eysq - Esqy
+    } else if (method == "strat2") {
+      strat_wt <- unique(wt)
+      nstrat <- length(strat_wt)
+
+      res <- list()
+      for (k in seq_along(strat_wt)) {
+        idxl <- wt == strat_wt[k]
+        dats <- dat[idxl, ]
+        wts <- wt[idxl]
+        dats <- scale(dats, center = pi2_hat, scale = FALSE)
+        na <- length(wts)
+        res[[k]] <-  cov.wt(dats, wt = wts / sum(wt))$cov / ((na - 1)) * na^2
+      }
+      res <- Reduce("+", res) * nrow(dat)
     } else {
       if (method == "force_unweighted") wt[] <- 1
       # res <- cov.wt(dat, wt, center = pi2_hat)$cov

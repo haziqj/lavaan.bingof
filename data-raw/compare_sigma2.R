@@ -17,7 +17,7 @@ plan(multisession, workers = parallel::detectCores() - 2)
 
 model_no <- 5
 samp_size <- 1000
-no_sims <- 250
+no_sims <- 500
 pop <- make_population(model_no, seed = 21324, Sigma2_attr = TRUE, H1 = TRUE)
 
 run_compare_sigma2_sims <- function(
@@ -258,23 +258,24 @@ sim_strcl <- function(i) {
 
 res <-
   tibble(samp = c("wtd", "srs", "strat", "clust", "strcl")) |>
+  # tibble(samp = c("strcl")) |>
   mutate(res = purrr::map(
     .x = samp,
     .f = \(x) run_compare_sigma2_sims(x, B = no_sims)
   ))
 # save(res, file = "compare_sigma2.RData")
 
-res |>
-  unnest(res) |>
-  unnest(res) |>
-  unnest(res) |>
-  filter(
-    samp == "wtd",
-    # name %in% c("Wald", "Pearson,MM3")
-  ) |>
-  ggplot(aes(X2, y = name, fill = wt)) +
-  geom_violin(draw_quantiles = c(0.5)) +
-  facet_grid(. ~ sigma2)
+# res |>
+#   unnest(res) |>
+#   unnest(res) |>
+#   unnest(res) |>
+#   filter(
+#     samp == "strcl",
+#     # name %in% c("Wald", "Pearson,MM3")
+#   ) |>
+#   ggplot(aes(X2, y = name, fill = wt)) +
+#   geom_violin(draw_quantiles = c(0.5)) +
+#   facet_grid(. ~ sigma2)
 
 res |>
   unnest(res) |>

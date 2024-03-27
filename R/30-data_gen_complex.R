@@ -296,10 +296,12 @@ gen_data_bin_complex3 <- function(population = make_population(1, seed = NULL),
       pr_class_selected = 1 / length(unique(class)),
       .groups = "drop"
     ) %>%
+    mutate(total_type = dplyr::n()) %>%
     group_by(type) %>%
     mutate(pr_school_selected = npsu / dplyr::n(),
            prob = pr_school_selected * pr_class_selected,
-           wt = 1 / prob)
+           stratum_wt = dplyr::n() / total_type,
+           wt = 1 / (prob * stratum_wt))
 
   # Sampling of PSUs
   psu_sampled <- population %>%
