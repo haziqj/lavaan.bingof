@@ -18,7 +18,8 @@ plan(multisession, workers = parallel::detectCores() - 2)
 model_no <- 5
 samp_size <- 1000
 no_sims <- 500
-pop <- make_population(model_no, seed = 21324, Sigma2_attr = TRUE, H1 = TRUE)
+alt_hyp <- FALSE
+pop <- make_population(model_no, seed = 21324, Sigma2_attr = TRUE, H1 = alt_hyp)
 
 run_compare_sigma2_sims <- function(
     samp = c("wtd", "srs", "strat", "clust", "strcl"),
@@ -55,7 +56,7 @@ run_compare_sigma2_sims <- function(
 }
 
 sim_wtd <- function(i) {
-  dat <- gen_data_bin_wt(model_no, n = samp_size, H1 = TRUE)
+  dat <- gen_data_bin_wt(model_no, n = samp_size, H1 = alt_hyp)
 
   # Unweighted results ---------------------------------------------------------
   fit0 <- lavaan::sem(
@@ -67,6 +68,7 @@ sim_wtd <- function(i) {
     tribble(
       ~sigma2, ~res,
       "theoretical", all_tests(fit0, sim = i, Sigma2 = "theoretical"),
+      "multinomial", all_tests(fit0, sim = i, Sigma2 = "multinomial"),
       # "weighted"        , NA,
       # "strat"           , NA,
       "force_unweighted", all_tests(fit0, sim = i, Sigma2 = "force_unweighted")
@@ -82,6 +84,7 @@ sim_wtd <- function(i) {
     tribble(
       ~sigma2, ~res,
       "theoretical", all_tests(fit1, sim = i, Sigma2 = "theoretical"),
+      "multinomial", all_tests(fit1, sim = i, Sigma2 = "multinomial"),
       "weighted", all_tests(fit1, sim = i, Sigma2 = "weighted"),
       # "strat"           , NA,
       "force_unweighted", all_tests(fit1, sim = i, Sigma2 = "force_unweighted")
@@ -106,6 +109,7 @@ sim_srs <- function(i) {
     tribble(
       ~sigma2, ~res,
       "theoretical", all_tests(fit0, sim = i, Sigma2 = "theoretical"),
+      "multinomial", all_tests(fit0, sim = i, Sigma2 = "multinomial"),
       # "weighted"        , all_tests(fit0, sim = i, Sigma2 = "weighted"),
       # "strat"           , all_tests(fit0, sim = i, Sigma2 = "strat"),
       "force_unweighted", all_tests(fit0, sim = i, Sigma2 = "force_unweighted"),
@@ -145,6 +149,7 @@ sim_strat <- function(i) {
     tribble(
       ~sigma2, ~res,
       "theoretical", all_tests(fit0, sim = i, Sigma2 = "theoretical"),
+      "multinomial", all_tests(fit0, sim = i, Sigma2 = "multinomial"),
       # "weighted"        , all_tests(fit0, sim = i, Sigma2 = "weighted"),
       # "strat"           , all_tests(fit0, sim = i, Sigma2 = "strat"),
       "force_unweighted", all_tests(fit0, sim = i, Sigma2 = "force_unweighted"),
@@ -161,6 +166,7 @@ sim_strat <- function(i) {
     tribble(
       ~sigma2, ~res,
       "theoretical", all_tests(fit1, sim = i, Sigma2 = "theoretical"),
+      "multinomial", all_tests(fit1, sim = i, Sigma2 = "multinomial"),
       "weighted", all_tests(fit1, sim = i, Sigma2 = "weighted"),
       "strat", all_tests(fit1, sim = i, Sigma2 = "strat"),
       "force_unweighted", all_tests(fit1, sim = i, Sigma2 = "force_unweighted"),
@@ -186,6 +192,7 @@ sim_clust <- function(i) {
     tribble(
       ~sigma2, ~res,
       "theoretical", all_tests(fit0, sim = i, Sigma2 = "theoretical"),
+      "multinomial", all_tests(fit0, sim = i, Sigma2 = "multinomial"),
       # "weighted"        , all_tests(fit0, sim = i, Sigma2 = "weighted"),
       # "strat"           , all_tests(fit0, sim = i, Sigma2 = "strat"),
       "force_unweighted", all_tests(fit0, sim = i, Sigma2 = "force_unweighted"),
@@ -202,6 +209,7 @@ sim_clust <- function(i) {
     tribble(
       ~sigma2, ~res,
       "theoretical", all_tests(fit1, sim = i, Sigma2 = "theoretical"),
+      "multinomial", all_tests(fit1, sim = i, Sigma2 = "multinomial"),
       "weighted", all_tests(fit1, sim = i, Sigma2 = "weighted"),
       # "strat"           , all_tests(fit1, sim = i, Sigma2 = "strat"),
       "force_unweighted", all_tests(fit1, sim = i, Sigma2 = "force_unweighted"),
@@ -227,6 +235,7 @@ sim_strcl <- function(i) {
     tribble(
       ~sigma2, ~res,
       "theoretical", all_tests(fit0, sim = i, Sigma2 = "theoretical"),
+      "multinomial", all_tests(fit0, sim = i, Sigma2 = "multinomial"),
       # "weighted"        , all_tests(fit0, sim = i, Sigma2 = "weighted"),
       # "strat"           , all_tests(fit0, sim = i, Sigma2 = "strat"),
       "force_unweighted", all_tests(fit0, sim = i, Sigma2 = "force_unweighted"),
@@ -243,6 +252,7 @@ sim_strcl <- function(i) {
     tribble(
       ~sigma2, ~res,
       "theoretical", all_tests(fit1, sim = i, Sigma2 = "theoretical"),
+      "multinomial", all_tests(fit1, sim = i, Sigma2 = "multinomial"),
       "weighted", all_tests(fit1, sim = i, Sigma2 = "weighted"),
       # "strat"           , all_tests(fit1, sim = i, Sigma2 = "strat"),
       "force_unweighted", all_tests(fit1, sim = i, Sigma2 = "force_unweighted"),
@@ -258,7 +268,6 @@ sim_strcl <- function(i) {
 
 res <-
   tibble(samp = c("wtd", "srs", "strat", "clust", "strcl")) |>
-  # tibble(samp = c("strcl")) |>
   mutate(res = purrr::map(
     .x = samp,
     .f = \(x) run_compare_sigma2_sims(x, B = no_sims)
@@ -293,11 +302,12 @@ res |>
     sigma2 = case_when(
       sigma2 == "population" ~ "Sigma2 = Pop.",
       sigma2 == "theoretical" ~ "Sigma2 = Theor.",
+      sigma2 == "multinomial" ~ "Sigma2 = Multn.",
       sigma2 == "weighted" ~ "Sigma2 = Wtd.",
       sigma2 == "strat" ~ "Sigma2 = Strat.",
       sigma2 == "force_unweighted" ~ "Sigma2 = Unwtd."
     ),
-    sigma2 = factor(sigma2, levels = c("Sigma2 = Theor.", "Sigma2 = Unwtd.", "Sigma2 = Wtd.", "Sigma2 = Strat.", "Sigma2 = Pop.")),
+    sigma2 = factor(sigma2, levels = c("Sigma2 = Theor.", "Sigma2 = Multn.", "Sigma2 = Unwtd.", "Sigma2 = Wtd.", "Sigma2 = Strat.", "Sigma2 = Pop.")),
     wt = case_when(
       wt == "wt" ~ "Weighted",
       wt == "nowt" ~ "Ignore wt."
@@ -312,13 +322,14 @@ res |>
     samp = factor(samp, levels = c("Informative", "SRS", "Stratified", "Cluster", "Strat. + Clust.")),
     name = factor(name, levels = c("Wald", "WaldVCF", "WaldDiag,MM3", "Pearson,MM3", "RSS,MM3", "Multn,MM3"))
   ) |>
+  filter(sigma2 != "Sigma2 = Multn.") |>
   ggplot(aes(name, rej_rate, fill = name)) +
   geom_bar(stat = "identity", alpha = 0.8) +
   geom_hline(yintercept = 0.05, linetype = "dashed", col = "black", linewidth = 0.8) +
   facet_grid(samp * wt ~ sigma2) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  # coord_cartesian(ylim = c(0, 0.2)) +
+  coord_cartesian(ylim = c(0, 0.2)) +
   labs(
     x = NULL,
     y = "Rejection rate",

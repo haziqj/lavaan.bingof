@@ -317,14 +317,15 @@ get_Delta_mats <- function(.lavobject) {
 create_Sigma2_matrix <- function(.lavobject, method = c("theoretical",
                                                         "weighted",
                                                         "force_unweighted",
-                                                        "strat", "strat2")) {
+                                                        "strat", "strat2",
+                                                        "multinomial")) {
   list2env(extract_lavaan_info(.lavobject), environment())
   list2env(get_uni_bi_moments(.lavobject), environment())
   p2_hat <- c(pdot1, pdot2)     # uni and bivariate moments (model implied)
   pi2_hat <- c(pidot1, pidot2)  # or the proportions?
 
   method <- match.arg(method, c("theoretical", "weighted", "force_unweighted",
-                                "strat", "strat2"))
+                                "strat", "strat2", "multinomial"))
 
   if (method == "theoretical") {
     S <- p * (p + 1) / 2
@@ -350,6 +351,8 @@ create_Sigma2_matrix <- function(.lavobject, method = c("theoretical",
     }
     Eysq[lower.tri(Eysq)] <- t(Eysq)[lower.tri(Eysq)]
     res <- Eysq - tcrossprod(pi2_hat)
+  } else if (method == "multinomial") {
+    res <- diag(pi2_hat) - tcrossprod(pi2_hat)
   } else {
     # Prepare the sample data --------------------------------------------------
     dat <-
