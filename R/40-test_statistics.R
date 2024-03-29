@@ -769,7 +769,8 @@ Multn_test <- function(object, Sigma2 = NULL, approx_Omega2 = FALSE,
                        .order = "3") {
   list2env(test_begin(object, Sigma2, approx_Omega2), environment())
 
-  Xi <- MASS::ginv(Sigma2)
+  # Xi <- MASS::ginv(Sigma2)
+  Xi <- MASS::ginv(diag(pi2_hat) - tcrossprod(pi2_hat))
   X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
   out <- moment_match(X2, Xi, Omega2, df = S - q, order = .order)
   cbind(out, name = paste0("Multn,MM", .order)) %>%

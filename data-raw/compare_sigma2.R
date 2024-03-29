@@ -15,9 +15,9 @@ plan(multisession, workers = parallel::detectCores() - 2)
 # d. strat
 # e. population
 
-model_no <- 5
+model_no <- 3
 samp_size <- 1000
-no_sims <- 500
+no_sims <- 1000
 alt_hyp <- FALSE
 pop <- make_population(model_no, seed = 21324, Sigma2_attr = TRUE, H1 = alt_hyp)
 
@@ -267,7 +267,8 @@ sim_strcl <- function(i) {
 }
 
 res <-
-  tibble(samp = c("wtd", "srs", "strat", "clust", "strcl")) |>
+  # tibble(samp = c("wtd", "srs", "strat", "clust", "strcl")) |>
+  tibble(samp = c("strcl")) |>
   mutate(res = purrr::map(
     .x = samp,
     .f = \(x) run_compare_sigma2_sims(x, B = no_sims)
