@@ -100,7 +100,7 @@ make_population <- function(model_no = 1, seed = 123, H1 = FALSE,
 
   # Stratify according to latent variable --------------------------------------
   abil_order <-
-    as_tibble(eta) %>%
+    as_tibble(eta[, 1]) %>%
     mutate(z = rowSums(across(everything())),
            rn = row_number()) %>%
     select(z, rn) %>%
@@ -300,7 +300,7 @@ gen_data_bin_complex3 <- function(population = make_population(1, seed = NULL),
     group_by(type) %>%
     mutate(pr_school_selected = npsu / dplyr::n(),
            prob = pr_school_selected * pr_class_selected,
-           stratum_wt = dplyr::n() / total_type,
+           stratum_wt = 1,  # dplyr::n() / total_type,
            wt = 1 / (prob * stratum_wt))
 
   # Sampling of PSUs
