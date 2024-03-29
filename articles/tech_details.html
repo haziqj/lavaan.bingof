@@ -58,7 +58,7 @@ for (let popover of popovers) {
     
     <a class="navbar-brand me-2" href="../index.html">lavaan.bingof</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9006</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -291,16 +291,16 @@ where</p>
 <h2 id="goodness-of-fit">Goodness-of-fit<a class="anchor" aria-label="anchor" href="#goodness-of-fit"></a>
 </h2>
 <p>Collect all the sample proportions <span class="math inline">\(p_r = \hat n_r/n\)</span>, <span class="math inline">\(r=1,\dots,R\)</span> to form an <span class="math inline">\(R\)</span>-vector of proportions <span class="math inline">\({\mathbf p}\)</span>.
-For independent samples, it is widely known <span class="citation">(<a href="#ref-agresti2012categorical" role="doc-biblioref">Agresti 2012</a>)</span> that
+For independent samples, it is widely known <span class="citation">(<a href="#ref-agresti2012categorical">Agresti 2012</a>)</span> that
 <span class="math display" id="eq:propclt">\[\begin{equation}
 \sqrt N ({\mathbf p}- {\boldsymbol\pi}) \xrightarrow{\text D} {\mathop{\mathrm{N}}}_R ({\mathbf 0}, {\boldsymbol\Sigma}),
 \tag{4}
 \end{equation}\]</span>
 where <span class="math inline">\({\boldsymbol\Sigma}= {\mathbf D}- {\boldsymbol\pi}{\boldsymbol\pi}^\top\)</span>, with <span class="math inline">\({\mathbf D}:= \mathop{\mathrm{diag}}({\boldsymbol\pi})\)</span>.
 Considering a parametric model, the proportion vector in <a href="#eq:propclt">(4)</a> reads <span class="math inline">\({\boldsymbol\pi}= {\boldsymbol\pi}({\boldsymbol\theta})\)</span>.
-An analogous result for the complex sampling design case exists as well <span class="citation">(<a href="#ref-fuller2009introduction" role="doc-biblioref">Fuller 2009</a>)</span>; however the covariance matrix <span class="math inline">\({\boldsymbol\Sigma}\)</span> need not take a multinomial form, and the true proportions <span class="math inline">\({\boldsymbol\pi}\)</span> may either be a finite population or a superpopulation quantity.</p>
+An analogous result for the complex sampling design case exists as well <span class="citation">(<a href="#ref-fuller2009introduction">Fuller 2009</a>)</span>; however the covariance matrix <span class="math inline">\({\boldsymbol\Sigma}\)</span> need not take a multinomial form, and the true proportions <span class="math inline">\({\boldsymbol\pi}\)</span> may either be a finite population or a superpopulation quantity.</p>
 <p>Suppose we denote by <span class="math inline">\({\boldsymbol\pi}(\hat{\boldsymbol\theta})\)</span> the <em>estimated</em> proportions under a parametric model.
-For estimators <span class="math inline">\(\hat{\boldsymbol\theta}\)</span> satisfying <a href="#eq:ban">(3)</a>, <span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2005limited" role="doc-biblioref">2005</a>)</span> show that the distribution of the residuals <span class="math inline">\(\hat{\mathbf e}= {\mathbf p}- {\boldsymbol\pi}(\hat{\boldsymbol\theta})\)</span> is asymptotically normal:
+For estimators <span class="math inline">\(\hat{\boldsymbol\theta}\)</span> satisfying <a href="#eq:ban">(3)</a>, <span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2005limited">2005</a>)</span> show that the distribution of the residuals <span class="math inline">\(\hat{\mathbf e}= {\mathbf p}- {\boldsymbol\pi}(\hat{\boldsymbol\theta})\)</span> is asymptotically normal:
 <span class="math display">\[\begin{equation}
 \sqrt n \hat{\mathbf e}= \sqrt n \big( {\mathbf p}- {\boldsymbol\pi}(\hat{\boldsymbol\theta}) \big) \xrightarrow{\text D} {\mathop{\mathrm{N}}}_R ({\mathbf 0}, {\boldsymbol\Omega})
 \end{equation}\]</span>
@@ -311,7 +311,7 @@ where
 &amp;= {\boldsymbol\Sigma}- {\boldsymbol\Sigma}{\mathbf B}^\top{\boldsymbol\Delta}^\top - {\boldsymbol\Delta}{\mathbf B}{\boldsymbol\Sigma}+ {\boldsymbol\Delta}{\mathbf B}{\boldsymbol\Sigma}{\mathbf B}^\top {\boldsymbol\Delta}^\top,
 \end{align}\]</span>
 with <span class="math inline">\({\mathbf B}\)</span> being the transformation matrix and <span class="math inline">\({\boldsymbol\Delta}\)</span> the matrix of partial derivatives of <span class="math inline">\({\boldsymbol\pi}({\boldsymbol\theta})\)</span> (both described previously).
-<span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2005limited" role="doc-biblioref">2005</a>)</span> remarks that for maximum likelihood estimators, the residual covariance matrix simplifies to <span class="math inline">\({\boldsymbol\Omega}= {\boldsymbol\Sigma}- {\boldsymbol\Delta}{\mathcal I}^{-1}_1{\boldsymbol\Delta}^\top\)</span>.
+<span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2005limited">2005</a>)</span> remarks that for maximum likelihood estimators, the residual covariance matrix simplifies to <span class="math inline">\({\boldsymbol\Omega}= {\boldsymbol\Sigma}- {\boldsymbol\Delta}{\mathcal I}^{-1}_1{\boldsymbol\Delta}^\top\)</span>.
 We do not think such a simplification exists for the pairwise likelihood case <strong>[Hold that thought. Maybe it’s possible. Still investigating.]</strong>.</p>
 <div class="section level3">
 <h3 id="lower-order-residuals">Lower-order residuals<a class="anchor" aria-label="anchor" href="#lower-order-residuals"></a>
@@ -329,7 +329,7 @@ Namely, we would like to get</p>
 \]</span></p></li>
 </ol>
 <p>The bivariate moments in particular will be especially relevant when considering a pairwise likelihood estimation of the parametric model.
-Denote <span class="math inline">\({\boldsymbol\pi}_2 = \begin{pmatrix}\dot{{\boldsymbol\pi}}_1\\ \dot{{\boldsymbol\pi}}_2 \end{pmatrix}\)</span> as the <span class="math inline">\(S:=p(p+1)/2\)</span> vector of univariate and bivariate moments.
+Denote <span class="math inline">\({\boldsymbol\pi}_2 = \begin{pmatrix}\dot{{\boldsymbol\pi}}_1\\ \dot{{\boldsymbol\pi}}_2  \end{pmatrix}\)</span> as the <span class="math inline">\(S:=p(p+1)/2\)</span> vector of univariate and bivariate moments.
 Correspondinly, let <span class="math inline">\({\mathbf p}_2\)</span> be the <span class="math inline">\(S\)</span>-vector of univariate and bivariate sample moments.
 It is possible to obtain <span class="math inline">\({\boldsymbol\pi}_2\)</span> (as well as <span class="math inline">\({\mathbf p}_2\)</span>) via a transformation of the full vector of probabilities <span class="math inline">\({\boldsymbol\pi}\)</span> (c.f. <span class="math inline">\({\mathbf p}\)</span>):
 <span class="math display">\[\begin{equation}
@@ -469,7 +469,7 @@ For this purpose, we use the sample versions of the relevant quantities, mostly 
 </ul>
 <p>In general, all of these test statistics are chi square variates.
 However, for some of these tests, the degrees of freedom are not known a priori and have to be estimated.
-There are two methods that we consider: 1) A Rao-Scott type adjustment <span class="citation">(<a href="#ref-rao1979chi" role="doc-biblioref">Rao and Scott 1979</a>; <a href="#ref-rao1981analysis" role="doc-biblioref">Rao and Scott 1981</a>; <a href="#ref-rao1984chi" role="doc-biblioref">Rao and Scott 1984</a>)</span>; and 2) a moment matching procedure <span class="citation">(<a href="#ref-bartholomew2002goodness" role="doc-biblioref">Bartholomew and Leung 2002</a>)</span>.
+There are two methods that we consider: 1) A Rao-Scott type adjustment <span class="citation">(<a href="#ref-rao1979chi">Rao and Scott 1979</a>; <a href="#ref-rao1981analysis">Rao and Scott 1981</a>; <a href="#ref-rao1984chi">Rao and Scott 1984</a>)</span>; and 2) a moment matching procedure <span class="citation">(<a href="#ref-bartholomew2002goodness">Bartholomew and Leung 2002</a>)</span>.
 While in theory each test may be subjected to either a Rao-Scott type adjustment or a moment matching procedure, we only consider the Rao-Scott adjustment for the Pearson test.</p>
 </div>
 </div>
@@ -481,7 +481,7 @@ While in theory each test may be subjected to either a Rao-Scott type adjustment
 <h3 id="wald-test">Wald test<a class="anchor" aria-label="anchor" href="#wald-test"></a>
 </h3>
 <p>One strategy is to choose <span class="math inline">\({\boldsymbol\Xi}\)</span> so that the resulting quadratic form <span class="math inline">\(X^2\)</span> in <a href="#eq:quadform">(8)</a> is asymptotically chi-square.
-This strategy is followed by <span class="citation">Reiser (<a href="#ref-reiser1996analysis" role="doc-biblioref">1996</a>)</span>, <span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2005limited" role="doc-biblioref">2005</a>)</span>, and <span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2006limited" role="doc-biblioref">2006</a>)</span>.
+This strategy is followed by <span class="citation">Reiser (<a href="#ref-reiser1996analysis">1996</a>)</span>, <span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2005limited">2005</a>)</span>, and <span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2006limited">2006</a>)</span>.
 Choosing</p>
 <ul>
 <li>
@@ -492,7 +492,7 @@ Choosing</p>
 <p>ensures that <span class="math inline">\(X^2 \xrightarrow{\text D} \chi^2_k\)</span> where <span class="math inline">\(k\)</span> equals the rank of <span class="math inline">\({\boldsymbol\Omega}_2\)</span>.
 The pseudoinverse needs to be employed because <span class="math inline">\({\boldsymbol\Omega}_2\)</span> may be of deficient rank.
 When <span class="math inline">\({\boldsymbol\Omega}_2\)</span> is full rank (rank = <span class="math inline">\(S\)</span>), then <span class="math inline">\({\boldsymbol\Xi}\)</span> is equal to the usual matrix inverse.
-For our implementation, and similar to <span class="citation">Reiser (<a href="#ref-reiser1996analysis" role="doc-biblioref">1996</a>)</span>, we will be using the Moore-Penrose inverse.
+For our implementation, and similar to <span class="citation">Reiser (<a href="#ref-reiser1996analysis">1996</a>)</span>, we will be using the Moore-Penrose inverse.
 Finally, the degrees of freedom will be (at most) <span class="math inline">\(S-m\)</span>, i.e. <span class="math inline">\(S\)</span> minus the number of free model parameters that need to be estimated.</p>
 </div>
 <div class="section level3">
@@ -501,7 +501,7 @@ Finally, the degrees of freedom will be (at most) <span class="math inline">\(S-
 <p>An alternative Wald test is studied where <span class="math inline">\(\hat{\boldsymbol\Xi}= \mathop{\mathrm{diag}}(\hat{\boldsymbol\Omega}_2)^{-1}\)</span> is used instead of the pseudoinverse of <span class="math inline">\({\boldsymbol\Omega}_2\)</span>.
 We refer to this as the <em>Diagonal Wald test</em>.
 The motivation here is stability and ease of computation because it is straightforward to inverse a diagonal matrix rather than a full matrix which grows rapidly with the number of items <span class="math inline">\(p\)</span>.
-However, it does not follow the same chi-square distribution as the original Wald test, and its distribution needs to be determined <span class="citation">(<a href="#ref-bartholomew2002goodness" role="doc-biblioref">Bartholomew and Leung 2002</a>)</span>.
+However, it does not follow the same chi-square distribution as the original Wald test, and its distribution needs to be determined <span class="citation">(<a href="#ref-bartholomew2002goodness">Bartholomew and Leung 2002</a>)</span>.
 We use the moment-matching procedure for this, which we briefly explain below.</p>
 <p>Suppose that <span class="math inline">\(Y\sim \chi^2_c\)</span>.
 Then we assume that the test statistic <span class="math inline">\(X^2 = n\hat{\mathbf e}_2 \hat{\boldsymbol\Xi}\hat{\mathbf e}_2\)</span> can be approximated by a linear transformation of this chi square random variate, i.e.
@@ -509,7 +509,7 @@ Then we assume that the test statistic <span class="math inline">\(X^2 = n\hat{\
 X^2 \approx a + bY
 \]</span>
 Let <span class="math inline">\(\mu_k(X)=\mathop{\mathrm{E}}[(X - \mathop{\mathrm{E}}X)^k]\)</span> represent the <span class="math inline">\(k\)</span>th central moment for a random variable <span class="math inline">\(X\)</span>.
-The first three asymptotic central moments of <span class="math inline">\(X^2\)</span> are <span class="citation">(<a href="#ref-mathai1992quadratic" role="doc-biblioref">Mathai and Provost 1992</a> Theorem 3.2b.2, p.53)</span>
+The first three asymptotic central moments of <span class="math inline">\(X^2\)</span> are <span class="citation">(<a href="#ref-mathai1992quadratic">Mathai and Provost 1992</a> Theorem 3.2b.2, p.53)</span>
 <span class="math display" id="eq:moment1">\[\begin{equation}
 \mu_1(X^2) = \operatorname{tr}(\hat{\boldsymbol\Xi}{\boldsymbol\Omega}_2), \hspace{1em}
 \mu_2(X^2) = 2\operatorname{tr}\big((\hat{\boldsymbol\Xi}{\boldsymbol\Omega}_2)^2\big), \hspace{1em}
@@ -550,13 +550,13 @@ In both cases, tail probabilities are calculated as
 <span class="math display">\[\begin{equation}
 \Pr(X^2 &gt; x) \approx \Pr\left(Y &gt; \frac{x}{b} \ \Big| \ Y \sim \chi^2_c\right).
 \end{equation}\]</span>
-<span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2008overview" role="doc-biblioref">2008</a>)</span> advises that one-moment matching results in inaccurate <span class="math inline">\(p\)</span>-values.</p>
+<span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2008overview">2008</a>)</span> advises that one-moment matching results in inaccurate <span class="math inline">\(p\)</span>-values.</p>
 </div>
 <div class="section level3">
 <h3 id="variance-covariance-free-wald-test">Variance-covariance free Wald test<a class="anchor" aria-label="anchor" href="#variance-covariance-free-wald-test"></a>
 </h3>
 <p>The drawbacks of using <span class="math inline">\(\hat{\boldsymbol\Omega}_2^+\)</span> as a weight matrix in the quadratic form is that 1) <span class="math inline">\({\boldsymbol\Omega}_2\)</span> needs to be estimated; and 2) the degrees of freedom <span class="math inline">\(k\)</span> cannot be determined a priori and can be tricky (if done by looking at small eigenvalues, it can be tricky to judge wchih are actually zero).</p>
-<p>To overcome this, <span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2005limited" role="doc-biblioref">2005</a>)</span> and <span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2006limited" role="doc-biblioref">2006</a>)</span> suggested using a weight matrix <span class="math inline">\({\boldsymbol\Xi}\)</span> such that <span class="math inline">\({\boldsymbol\Omega}_2\)</span> is a g-inverse of <span class="math inline">\({\boldsymbol\Xi}\)</span>, i.e. <span class="math inline">\({\boldsymbol\Xi}= {\boldsymbol\Xi}{\boldsymbol\Omega}_2{\boldsymbol\Xi}\)</span>.
+<p>To overcome this, <span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2005limited">2005</a>)</span> and <span class="citation">Maydeu-Olivares and Joe (<a href="#ref-maydeu2006limited">2006</a>)</span> suggested using a weight matrix <span class="math inline">\({\boldsymbol\Xi}\)</span> such that <span class="math inline">\({\boldsymbol\Omega}_2\)</span> is a g-inverse of <span class="math inline">\({\boldsymbol\Xi}\)</span>, i.e. <span class="math inline">\({\boldsymbol\Xi}= {\boldsymbol\Xi}{\boldsymbol\Omega}_2{\boldsymbol\Xi}\)</span>.
 <!-- Specifically, they proposed using -->
 <!-- \begin{align} -->
 <!-- \bXi  -->
@@ -605,7 +605,7 @@ Note that
 <span class="math display">\[\begin{equation}
 \sqrt n \hat{\mathbf D}_2^{-1/2}\hat{\mathbf e}_2 \xrightarrow{\text D} \mathop{\mathrm{N}}({\mathbf 0}, {\mathbf D}_2^{-1/2}{\boldsymbol\Omega}_2 {\mathbf D}_2^{-1/2})
 \end{equation}\]</span>
-as <span class="math inline">\(N\to\infty\)</span>, and therefore <span class="math inline">\(X^2\)</span> has the limiting distribution of <span class="math inline">\(\sum_{s=1}^S \delta_s X_s\)</span>, where <span class="math inline">\(\delta_s\)</span> are eigenvalues of <span class="math inline">\(n^{-1} {\mathbf D}_2^{-1/2}{\boldsymbol\Omega}_2 {\mathbf D}_2^{-1/2}\)</span> and <span class="math inline">\(X_s\,\overset{\text{iid}}{\sim}\,\chi^2_1\)</span> <span class="citation">(<a href="#ref-mathai1992quadratic" role="doc-biblioref">Mathai and Provost 1992</a>, Representation 3.1a.1, p.29)</span>.
+as <span class="math inline">\(N\to\infty\)</span>, and therefore <span class="math inline">\(X^2\)</span> has the limiting distribution of <span class="math inline">\(\sum_{s=1}^S \delta_s X_s\)</span>, where <span class="math inline">\(\delta_s\)</span> are eigenvalues of <span class="math inline">\(n^{-1} {\mathbf D}_2^{-1/2}{\boldsymbol\Omega}_2 {\mathbf D}_2^{-1/2}\)</span> and <span class="math inline">\(X_s\,\overset{\text{iid}}{\sim}\,\chi^2_1\)</span> <span class="citation">(<a href="#ref-mathai1992quadratic">Mathai and Provost 1992</a>, Representation 3.1a.1, p.29)</span>.
 These eigenvalues can be estimated by the eigenvalues of <span class="math inline">\(n^{-1} \hat{\mathbf D}_2^{-1/2}\hat{\boldsymbol\Omega}_2 \hat {\mathbf D}_2^{-1/2}\)</span>.
 In principle, this method can be applied more generally by considering a Choleski decomposition <span class="math inline">\({\boldsymbol\Xi}= {\mathbf L}{\mathbf L}^\top\)</span> instead of matrix square roots.
 Of course, this only works if the matrix <span class="math inline">\({\boldsymbol\Xi}\)</span> is of full rank, which rules out the Wald test statistic above.</p>
@@ -615,8 +615,8 @@ The asymptotic mean and variance of <span class="math inline">\(X^2\)</span> are
 \mathop{\mathrm{E}}X^2 &amp;= \mathop{\mathrm{E}}\sum_{s=1}^S \delta_s X_s = \sum_{s=1}^S \delta_s = S\bar\delta = \operatorname{tr}(n^{-1} {\mathbf D}_2^{-1/2}{\boldsymbol\Omega}_2 {\mathbf D}_2^{-1/2}) \\
 \mathop{\mathrm{Var}}X^2 &amp;= \mathop{\mathrm{Var}}\sum_{s=1}^S \delta_s X_s = 2\sum_{s=1}^S\delta_s^2 = 2\sum_{s=1}^S (\delta_s - \bar\delta)^2 + 2S\bar\delta^2,
 \end{align}\]</span>
-So it seems that the power of the test is affected by the size and dispersion of the eigenvalues <span class="citation">(<a href="#ref-heo2014empirical" role="doc-biblioref">Heo 2014</a>)</span>.
-<span class="citation">Rao and Scott (<a href="#ref-rao1979chi" role="doc-biblioref">1979</a>)</span>;<span class="citation">Rao and Scott (<a href="#ref-rao1981analysis" role="doc-biblioref">1981</a>)</span>;<span class="citation">Rao and Scott (<a href="#ref-rao1984chi" role="doc-biblioref">1984</a>)</span> suggested adjustments to the Pearson test as follows.</p>
+So it seems that the power of the test is affected by the size and dispersion of the eigenvalues <span class="citation">(<a href="#ref-heo2014empirical">Heo 2014</a>)</span>.
+<span class="citation">Rao and Scott (<a href="#ref-rao1979chi">1979</a>)</span>;<span class="citation">Rao and Scott (<a href="#ref-rao1981analysis">1981</a>)</span>;<span class="citation">Rao and Scott (<a href="#ref-rao1984chi">1984</a>)</span> suggested adjustments to the Pearson test as follows.</p>
 <ol style="list-style-type: decimal">
 <li><p>First-order Rao-Scott type test is obtained by dividing <span class="math inline">\(X^2\)</span> by <span class="math inline">\(\bar \delta\)</span>. This statistic is distributed as <span class="math inline">\(\chi^2_S\)</span>.</p></li>
 <li><p>Second-order Rao-Scott type test is obtained by dividing <span class="math inline">\(X^2/\bar\delta\)</span> by <span class="math inline">\(1+\hat a^2\)</span>, where <span class="math inline">\(\hat a=\sqrt{S^{-1}\sum_{s=1}^S (\delta_s - \bar\delta)}\big/\bar\delta\)</span> is the coefficient of variation of the eigenvalues. Hence, <span class="math inline">\(1+\hat a^2= (S\bar\delta ^2)^{-1}\sum_{s=1}^s \delta_s^2\)</span>. This statistic is distributed as <span class="math inline">\(\chi^2_k\)</span> where <span class="math inline">\(k=S(1+\hat a^2)^{-1}\)</span>.</p></li>
@@ -627,7 +627,7 @@ So it seems that the power of the test is affected by the size and dispersion of
 <div class="section level2 unnumbered">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-agresti2012categorical" class="csl-entry">
 Agresti, Alan. 2012. <em>Categorical Data Analysis</em>. Vol. 792. John Wiley &amp; Sons.
 </div>
