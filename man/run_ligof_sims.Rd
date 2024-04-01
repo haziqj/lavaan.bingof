@@ -13,7 +13,8 @@ run_ligof_sims(
   starting_seed = 16423,
   ncores = parallel::detectCores() - 2,
   pop_Sigma = FALSE,
-  Sigma2 = NULL
+  Sigma2 = NULL,
+  wt = NULL
 )
 }
 \arguments{
@@ -40,6 +41,9 @@ covariance matrix be used, and not estimated?}
 
 \item{Sigma2}{(for internal testing only) by default calculates (weighted)
 sample covariance}
+
+\item{wt}{(character) Character vector indicating the column name of the
+sampling weights to use. Defaults to \code{NULL}.}
 }
 \value{
 A list of \code{\link[=tibble]{tibble()}}s with the output from \code{\link[=all_tests]{all_tests()}}.
