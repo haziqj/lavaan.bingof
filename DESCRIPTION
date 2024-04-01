@@ -34,7 +34,7 @@ Imports:
     foreach,
     gtools,
     kableExtra,
-    lavaan (>= 0.6-17.1946),
+    lavaan (>= 0.6-18),
     lifecycle,
     magrittr,
     MASS,
