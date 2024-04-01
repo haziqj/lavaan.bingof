@@ -49,6 +49,7 @@ Imports:
     tibble,
     tidyr,
     utils
+Remotes: yrosseel/lavaan
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Depends: 
