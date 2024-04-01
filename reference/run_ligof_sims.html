@@ -109,7 +109,8 @@ for (let popover of popovers) {
 <span>  starting_seed <span class="op">=</span> <span class="fl">16423</span>,</span>
 <span>  ncores <span class="op">=</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">2</span>,</span>
 <span>  pop_Sigma <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  Sigma2 <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  Sigma2 <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  wt <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -155,6 +156,11 @@ covariance matrix be used, and not estimated?</p></dd>
 <dt>Sigma2</dt>
 <dd><p>(for internal testing only) by default calculates (weighted)
 sample covariance</p></dd>
+
+
+<dt>wt</dt>
+<dd><p>(character) Character vector indicating the column name of the
+sampling weights to use. Defaults to <code>NULL</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
