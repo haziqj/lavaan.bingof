@@ -16,7 +16,8 @@ globalVariables(c("i"))
 #' @param ncores (integer) The number of cores to use for parallelisation.
 #' @param pop_Sigma (boolean) Should the population value for the multinomial
 #'   covariance matrix be used, and not estimated?
-#'
+#' @param wt (character) Character vector indicating the column name of the
+#'   sampling weights to use. Defaults to `NULL`.
 #'
 #' @return A list of [tibble()]s with the output from [all_tests()].
 #' @export
@@ -51,7 +52,7 @@ run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
                                     "strat2"),
                            simtype = c("type1", "power"), starting_seed = 16423,
                            ncores = parallel::detectCores() - 2,
-                           pop_Sigma = FALSE, Sigma2 = NULL, the_wt = NULL) {
+                           pop_Sigma = FALSE, Sigma2 = NULL, wt = NULL) {
 
   # Model setup ----------------------------------------------------------------
   mod <- txt_mod(model_no)
@@ -60,7 +61,7 @@ run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
   if (simtype == "power") H1 <- TRUE
   samp <- match.arg(samp, c("srs", "wtd", "strat", "clust", "strcl", "strat2"))
 
-  # the_wt <- NULL
+  the_wt <- wt
   if (samp != "srs") {
     # the_wt <- "wt"
     pop <- make_population(model_no, seed = 27324, H1 = H1,
