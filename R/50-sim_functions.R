@@ -138,6 +138,18 @@ run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
 
     fit <- lavaan::sem(model = txt_mod(model_no), data = dat, estimator = "PML",
                        std.lv = TRUE, sampling.weights = the_wt)
+
+    # if (samp == "strat") {
+    #   Sigma2 <- create_Sigma2_matrix_complex(fit, strat = dat$type)
+    # }
+    # if (samp == "clust") {
+    #   Sigma2 <- create_Sigma2_matrix_complex(fit, clust = dat$school)
+    # }
+    # if (samp == "strcl") {
+    #   Sigma2 <- create_Sigma2_matrix_complex(fit, strat = dat$type,
+    #                                          clust = dat$school)
+    # }
+
     bind_cols(all_tests(fit, sim = i, Sigma2 = Sigma2), seed = seed_used)
   }
 

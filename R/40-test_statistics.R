@@ -313,7 +313,6 @@ get_Delta_mats <- function(.lavobject) {
 #   - weighted
 #   - force unweighted
 #   - stratified
-
 create_Sigma2_matrix <- function(.lavobject, method = c("theoretical",
                                                         "weighted",
                                                         "force_unweighted",
