@@ -88,7 +88,7 @@ res_complex_type1 %>%
   ggplot(aes(n, rej_rate5, fill = name,
              # alpha = n_rank_def / .data$n_sims[1] * 100
              )) +
-  geom_bar(stat = "identity", position = "dodge", width = 0.9) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.9, alpha = 0.8) +
   geom_errorbar(aes(ymin = .data[[var_name]] - .data[[crit_name]],
                     ymax = .data[[var_name]] + .data[[crit_name]]),
                 col = "black", width = 0.2, alpha = 1,
@@ -101,8 +101,8 @@ res_complex_type1 %>%
        shape = NULL, title = "Type I errors") +
   guides(fill = guide_legend(nrow = 2, order = 1),
          alpha = guide_legend(ncol = 3, order = 2)) +
-  # scale_fill_viridis_d(option = "turbo", direction = -1) +
-  scale_fill_grey() +
+  scale_fill_viridis_d(option = "turbo", direction = -1) +
+  # scale_fill_grey() +
   facet_grid(sim ~ sampling) +
   coord_cartesian(ylim = c(0, 0.15)) +
   theme(legend.position = "none") -> p1; p1
@@ -119,7 +119,7 @@ res_complex_power %>%
   ggplot(aes(n, rej_rate5, fill = name,
              #alpha = n_rank_def / .data$n_sims[1] * 100
              )) +
-  geom_bar(stat = "identity", position = "dodge", width = 0.9) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.9, alpha = 0.8) +
   geom_errorbar(aes(ymin = .data[[var_name]] - .data[[crit_name]],
                     ymax = .data[[var_name]] + .data[[crit_name]]),
                 col = "black", width = 0.2, alpha = 1,
@@ -131,13 +131,16 @@ res_complex_power %>%
        shape = NULL, title = "Power analysis") +
   guides(fill = guide_legend(nrow = 1, order = 1),
          alpha = guide_legend(ncol = 3, order = 2)) +
-  # scale_fill_viridis_d(option = "turbo", direction = -1) +
-  scale_fill_grey() +
+  scale_fill_viridis_d(option = "turbo", direction = -1) +
+  # scale_fill_grey() +
   facet_grid(sim ~ sampling) +
   coord_cartesian(ylim = c(0, 1)) -> p2; p2
 
 cowplot::plot_grid(p1, p2, ncol = 1, rel_heights = c(0.8, 1))
 ggsave("complex_plot_bw.pdf", width = 7, height = 9)
+ggsave("complex_type1.png", p1, width = 7, height = 5)
+ggsave("complex_power.png", p2, width = 7, height = 5)
+
 
 load("vignettes/articles/simplots.RData")
 ggsave("hist_1_srs.pdf", p_hist_a + theme(panel.grid = element_blank()),
