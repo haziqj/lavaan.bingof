@@ -603,8 +603,9 @@ Example:</p>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://testthat.r-lib.org" class="external-link">testthat</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Loading required package: testthat</span></span>
-<span><span class="va">B</span>  <span class="op">&lt;-</span> <span class="fu">lavaan.bingof</span><span class="fu">:::</span><span class="fu">Beta_mat_design</span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loading required package: testthat</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">B</span>  <span class="op">&lt;-</span> <span class="fu">lavaan.bingof</span><span class="fu">:::</span><span class="fu">Beta_mat_design</span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">G</span>  <span class="op">&lt;-</span> <span class="fu">lavaan.bingof</span><span class="fu">::</span><span class="fu"><a href="../reference/transformation-matrices.html">create_G_mat</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">T2</span> <span class="op">&lt;-</span> <span class="fu">lavaan.bingof</span><span class="fu">::</span><span class="fu"><a href="../reference/transformation-matrices.html">create_T2_mat</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
 <span></span>
@@ -626,8 +627,9 @@ Example:</p>
 <span><span class="co">#&gt; attr(,"pairwise")</span></span>
 <span><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
 <span><span class="co">#&gt; [1,]    1    1    2</span></span>
-<span><span class="co">#&gt; [2,]    2    3    3</span></span>
-<span><span class="va">B</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">T2</span></span>
+<span><span class="co">#&gt; [2,]    2    3    3</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">B</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">T2</span></span>
 <span><span class="co">#&gt;       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]</span></span>
 <span><span class="co">#&gt;  [1,]   -1   -1   -1   -1   -1   -1    0    0</span></span>
 <span><span class="co">#&gt;  [2,]    0    0    1    1    0    0    0    0</span></span>
@@ -640,12 +642,14 @@ Example:</p>
 <span><span class="co">#&gt;  [9,]   -1   -1   -1    0   -1   -1   -1    0</span></span>
 <span><span class="co">#&gt; [10,]    0    1    0    0    0    1    0    0</span></span>
 <span><span class="co">#&gt; [11,]    0    0    1    0    0    0    1    0</span></span>
-<span><span class="co">#&gt; [12,]    1    0    0    0    1    0    0    0</span></span>
-<span><span class="fu"><a href="https://testthat.r-lib.org/reference/test_that.html" class="external-link">test_that</a></span><span class="op">(</span><span class="st">"G and BT2 are equal"</span>, <span class="op">{</span></span>
+<span><span class="co">#&gt; [12,]    1    0    0    0    1    0    0    0</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://testthat.r-lib.org/reference/test_that.html" class="external-link">test_that</a></span><span class="op">(</span><span class="st">"G and BT2 are equal"</span>, <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://testthat.r-lib.org/reference/equality-expectations.html" class="external-link">expect_equal</a></span><span class="op">(</span><span class="va">G</span>, <span class="va">B</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">T2</span>, ignore_attr <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>  </span>
 <span><span class="op">}</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Test passed</span></span>
-<span></span>
+<span><span class="co">#&gt; Test passed</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span></span>
 <span><span class="co"># equal</span></span>
 <span><span class="va">B</span></span>
@@ -661,8 +665,9 @@ Example:</p>
 <span><span class="co">#&gt;  [9,]    0   -1   -1    0    0    1</span></span>
 <span><span class="co">#&gt; [10,]    0    1    0    0    0   -1</span></span>
 <span><span class="co">#&gt; [11,]    0    0    1    0    0   -1</span></span>
-<span><span class="co">#&gt; [12,]    0    0    0    0    0    1</span></span>
-<span><span class="op">(</span><span class="va">altB</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">G</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/ginv.html" class="external-link">ginv</a></span><span class="op">(</span><span class="va">T2</span><span class="op">)</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [12,]    0    0    0    0    0    1</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">altB</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">G</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/ginv.html" class="external-link">ginv</a></span><span class="op">(</span><span class="va">T2</span><span class="op">)</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       [,1] [,2] [,3] [,4] [,5] [,6]</span></span>
 <span><span class="co">#&gt;  [1,]   -1   -1    0    1    0    0</span></span>
 <span><span class="co">#&gt;  [2,]    1    0    0   -1    0    0</span></span>
@@ -675,8 +680,9 @@ Example:</p>
 <span><span class="co">#&gt;  [9,]    0   -1   -1    0    0    1</span></span>
 <span><span class="co">#&gt; [10,]    0    1    0    0    0   -1</span></span>
 <span><span class="co">#&gt; [11,]    0    0    1    0    0   -1</span></span>
-<span><span class="co">#&gt; [12,]    0    0    0    0    0    1</span></span>
-<span><span class="fu"><a href="https://testthat.r-lib.org/reference/test_that.html" class="external-link">test_that</a></span><span class="op">(</span><span class="st">"B can be created from T2 inv"</span>, <span class="op">{</span></span>
+<span><span class="co">#&gt; [12,]    0    0    0    0    0    1</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://testthat.r-lib.org/reference/test_that.html" class="external-link">test_that</a></span><span class="op">(</span><span class="st">"B can be created from T2 inv"</span>, <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://testthat.r-lib.org/reference/equality-expectations.html" class="external-link">expect_equal</a></span><span class="op">(</span><span class="va">B</span>, <span class="va">altB</span>, ignore_attr <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Test passed</span></span></code></pre></div>
@@ -732,7 +738,7 @@ Dividing by <span class="math inline">\(n\)</span> gives the desired result.</p>
 \end{align*}\]</span></p>
 <p><strong>Actually, this might not work…</strong></p>
 </div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan.bingof</span><span class="fu">:::</span><span class="fu">fit_facmod_pml</span><span class="op">(</span><span class="fl">1</span>, <span class="st">"srs"</span>, <span class="fl">1000</span><span class="op">)</span><span class="op">$</span><span class="va">fit</span></span>
 <span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">lavaan.bingof</span><span class="fu">:::</span><span class="fu">calc_test_stuff</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/attach.html" class="external-link">attach</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>

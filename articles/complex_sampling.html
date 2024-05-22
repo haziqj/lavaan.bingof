@@ -355,13 +355,15 @@ The true model parameter values <span class="math inline">\({\boldsymbol\theta}\
 <code class="sourceCode R"><span><span class="co"># Univariate moments (model-implied)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pi1</span>, <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="co">#&gt;     y1     y2     y3     y4     y5 </span></span>
-<span><span class="co">#&gt; 0.9236 0.7088 0.5517 0.7642 0.8708</span></span>
-<span></span>
+<span><span class="co">#&gt; 0.9236 0.7088 0.5517 0.7642 0.8708</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Univariate moments (population statistics)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">prop1</span>, <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="co">#&gt;     y1     y2     y3     y4     y5 </span></span>
-<span><span class="co">#&gt; 0.9240 0.7083 0.5515 0.7643 0.8709</span></span>
-<span></span>
+<span><span class="co">#&gt; 0.9240 0.7083 0.5515 0.7643 0.8709</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Errors (percentage)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="op">(</span><span class="va">prop1</span> <span class="op">-</span> <span class="va">pi1</span><span class="op">)</span> <span class="op">/</span> <span class="va">pi1</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    y1    y2    y3    y4    y5 </span></span>
@@ -370,20 +372,23 @@ The true model parameter values <span class="math inline">\({\boldsymbol\theta}\
 <div class="section level3">
 <h3 id="model-fit">Model fit<a class="anchor" aria-label="anchor" href="#model-fit"></a>
 </h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Comparison of lambda values</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
 <span><span class="co">#&gt; eta1=~y1 eta1=~y2 eta1=~y3 eta1=~y4 eta1=~y5 </span></span>
-<span><span class="co">#&gt;     0.80     0.70     0.47     0.38     0.34</span></span>
-<span><span class="va">true_vals</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
+<span><span class="co">#&gt;     0.80     0.70     0.47     0.38     0.34</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">true_vals</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
 <span><span class="co">#&gt; lambda1 lambda2 lambda3 lambda4 lambda5 </span></span>
-<span><span class="co">#&gt;    0.80    0.70    0.47    0.38    0.34</span></span>
-<span></span>
+<span><span class="co">#&gt;    0.80    0.70    0.47    0.38    0.34</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Comparison of threshold values</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt; y1|t1 y2|t1 y3|t1 y4|t1 y5|t1 </span></span>
-<span><span class="co">#&gt; -1.43 -0.55 -0.13 -0.72 -1.13</span></span>
-<span><span class="va">true_vals</span><span class="op">[</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt; -1.43 -0.55 -0.13 -0.72 -1.13</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">true_vals</span><span class="op">[</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt;  tau1  tau2  tau3  tau4  tau5 </span></span>
 <span><span class="co">#&gt; -1.43 -0.55 -0.13 -0.72 -1.13</span></span></code></pre></div>
 </div>
@@ -440,7 +445,7 @@ The true model parameter values <span class="math inline">\({\boldsymbol\theta}\
 <h2 id="performing-a-complex-sampling-procedure">Performing a complex sampling procedure<a class="anchor" aria-label="anchor" href="#performing-a-complex-sampling-procedure"></a>
 </h2>
 <p>There are three functions that perform the three complex sampling procedures described earlier.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Stratified sampling</span></span>
 <span><span class="op">(</span><span class="va">samp1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_data_bin_complex.html">gen_data_bin_strat</a></span><span class="op">(</span>population <span class="op">=</span> <span class="va">pop</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3,000 × 9</span></span></span>
@@ -456,8 +461,9 @@ The true model parameter values <span class="math inline">\({\boldsymbol\theta}\
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> A     A101   A101l 0.599 1     1     1     1     1    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> A     A101   A101q 0.599 1     1     0     1     1    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> A     A101   A101v 0.599 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,990 more rows</span></span></span>
-<span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,990 more rows</span></span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Two-stage cluster sampling</span></span>
 <span><span class="op">(</span><span class="va">samp2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_data_bin_complex.html">gen_data_bin_clust</a></span><span class="op">(</span>population <span class="op">=</span> <span class="va">pop</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3,155 × 9</span></span></span>
@@ -473,8 +479,9 @@ The true model parameter values <span class="math inline">\({\boldsymbol\theta}\
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> A     A100   A100l  1.48 1     1     1     1     0    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> A     A100   A100l  1.48 1     1     0     0     1    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> A     A100   A100l  1.48 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3,145 more rows</span></span></span>
-<span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3,145 more rows</span></span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Two-stage stratified cluster sampling</span></span>
 <span><span class="op">(</span><span class="va">samp3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_data_bin_complex.html">gen_data_bin_strcl</a></span><span class="op">(</span>population <span class="op">=</span> <span class="va">pop</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3,039 × 9</span></span></span>
