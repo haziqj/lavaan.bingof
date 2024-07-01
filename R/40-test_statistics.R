@@ -616,54 +616,54 @@ Wald_test_v2 <- function(object, Sigma2 = NULL, approx_Omega2 = FALSE,
 #' @export
 Wald_diag_test <- Wald_test_v2
 
-Wald_diag_RS_test <- function(object, Sigma2 = NULL, approx_Omega2 = FALSE,
-                              .order = 2) {
-  .order <- match.arg(as.character(.order), c("1", "2"))
-  list2env(test_begin(object, Sigma2, approx_Omega2), environment())
+# Wald_diag_RS_test <- function(object, Sigma2 = NULL, approx_Omega2 = FALSE,
+#                               .order = 2) {
+#   .order <- match.arg(as.character(.order), c("1", "2"))
+#   list2env(test_begin(object, Sigma2, approx_Omega2), environment())
+#
+#   omega_diag <- diag(Omega2)
+#   Xi <- diag(1 / omega_diag)
+#   X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
+#
+#   # Rao-Scott adjustment
+#   mat <- Omega2 %*% diag(1 / omega_diag)
+#   delta <- eigen(mat)$values
+#
+#   X2 <- X2 / mean(delta)
+#   df <- S
+#   if (.order == "2") {
+#     a_sq <- mean((delta - mean(delta)) ^ 2) / mean(delta) ^ 2
+#     # a_sq <- (sd(delta) / mean(delta)) ^ 2
+#     X2 <- X2 / (1 + a_sq)
+#     df <- S / (1 + a_sq)
+#   }
+#
+#   data.frame(X2 = X2, df = df, name = paste0("WaldDiag,RS", .order)) %>%
+#     after_test(., Xi, S)
+# }
 
-  omega_diag <- diag(Omega2)
-  Xi <- diag(1 / omega_diag)
-  X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
-
-  # Rao-Scott adjustment
-  mat <- Omega2 %*% diag(1 / omega_diag)
-  delta <- eigen(mat)$values
-
-  X2 <- X2 / mean(delta)
-  df <- S
-  if (.order == "2") {
-    a_sq <- mean((delta - mean(delta)) ^ 2) / mean(delta) ^ 2
-    # a_sq <- (sd(delta) / mean(delta)) ^ 2
-    X2 <- X2 / (1 + a_sq)
-    df <- S / (1 + a_sq)
-  }
-
-  data.frame(X2 = X2, df = df, name = paste0("WaldDiag,RS", .order)) %>%
-    after_test(., Xi, S)
-}
-
-Wald_diag_RS_approx_test <- function(object, Sigma2 = NULL,
-                                     approx_Omega2 = FALSE,  .order = 2) {
-  .order <- match.arg(as.character(.order), c("1", "2"))
-  list2env(test_begin(object, Sigma2, approx_Omega2), environment())
-
-  omega_diag <- diag(Omega2)
-  Xi <- diag(1 / omega_diag)
-  X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
-  delta <- approx_delta
-
-  X2 <- X2 / mean(delta)
-  df <- S
-  if (.order == "2") {
-    a_sq <- mean((delta - mean(delta)) ^ 2) / mean(delta) ^ 2
-    # a_sq <- (sd(delta) / mean(delta)) ^ 2
-    X2 <- X2 / (1 + a_sq)
-    df <- S / (1 + a_sq)
-  }
-
-  data.frame(X2 = X2, df = df, name = paste0("WaldDiag,RSaprx", .order)) %>%
-    after_test(., Xi, S)
-}
+# Wald_diag_RS_approx_test <- function(object, Sigma2 = NULL,
+#                                      approx_Omega2 = FALSE,  .order = 2) {
+#   .order <- match.arg(as.character(.order), c("1", "2"))
+#   list2env(test_begin(object, Sigma2, approx_Omega2), environment())
+#
+#   omega_diag <- diag(Omega2)
+#   Xi <- diag(1 / omega_diag)
+#   X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
+#   delta <- approx_delta
+#
+#   X2 <- X2 / mean(delta)
+#   df <- S
+#   if (.order == "2") {
+#     a_sq <- mean((delta - mean(delta)) ^ 2) / mean(delta) ^ 2
+#     # a_sq <- (sd(delta) / mean(delta)) ^ 2
+#     X2 <- X2 / (1 + a_sq)
+#     df <- S / (1 + a_sq)
+#   }
+#
+#   data.frame(X2 = X2, df = df, name = paste0("WaldDiag,RSaprx", .order)) %>%
+#     after_test(., Xi, S)
+# }
 
 Wald_test_v3 <- function(object, Sigma2 = NULL) {
   list2env(test_begin(object, Sigma2, .approx_Omega2 = FALSE), environment())
@@ -711,27 +711,27 @@ Pearson_test_v1 <- function(object, Sigma2 = NULL, approx_Omega2 = FALSE,
 #' @export
 Pearson_RS_test <- Pearson_test_v1
 
-Pearson_RS_approx_test <- function(object, Sigma2 = NULL, approx_Omega2 = FALSE,
-                                   .order = 2) {
-  .order <- match.arg(as.character(.order), c("1", "2"))
-  list2env(test_begin(object, Sigma2, approx_Omega2), environment())
-
-  Xi <- diag(1 / pi2_hat)
-  X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
-  delta <- approx_delta
-
-  X2 <- X2 / mean(delta)
-  df <- S
-  if (.order == "2") {
-    a_sq <- mean((delta - mean(delta)) ^ 2) / mean(delta) ^ 2
-    # a_sq <- (sd(delta) / mean(delta)) ^ 2
-    X2 <- X2 / (1 + a_sq)
-    df <- S / (1 + a_sq)
-  }
-
-  data.frame(X2 = X2, df = df, name = paste0("Pearson,RSaprx", .order)) %>%
-    after_test(., Xi, S)
-}
+# Pearson_RS_approx_test <- function(object, Sigma2 = NULL, approx_Omega2 = FALSE,
+#                                    .order = 2) {
+#   .order <- match.arg(as.character(.order), c("1", "2"))
+#   list2env(test_begin(object, Sigma2, approx_Omega2), environment())
+#
+#   Xi <- diag(1 / pi2_hat)
+#   X2 <- N * colSums(e2_hat * (Xi %*% e2_hat))
+#   delta <- approx_delta
+#
+#   X2 <- X2 / mean(delta)
+#   df <- S
+#   if (.order == "2") {
+#     a_sq <- mean((delta - mean(delta)) ^ 2) / mean(delta) ^ 2
+#     # a_sq <- (sd(delta) / mean(delta)) ^ 2
+#     X2 <- X2 / (1 + a_sq)
+#     df <- S / (1 + a_sq)
+#   }
+#
+#   data.frame(X2 = X2, df = df, name = paste0("Pearson,RSaprx", .order)) %>%
+#     after_test(., Xi, S)
+# }
 
 Pearson_test_v2 <- function(object, Sigma2 = NULL, approx_Omega2 = FALSE,
                             .order = "3") {
@@ -807,16 +807,10 @@ all_tests <- function(object, sim = NULL, Sigma2 = NULL, Hinv = NULL) {
     # Wald_diag_test(test_stuff, .order = 1),
     # Wald_diag_test(test_stuff, .order = 2),
     Wald_diag_test(test_stuff, .order = 3),
-    # Wald_diag_RS_test(test_stuff, .order = 1),
-    # Wald_diag_RS_test(test_stuff, .order = 2),
-    # Wald_diag_RS_approx_test(test_stuff, .order = 2),
 
     # Pearson_test(test_stuff, .order = 1),
     # Pearson_test(test_stuff, .order = 2),
     Pearson_test(test_stuff, .order = 3),
-    # Pearson_RS_test(test_stuff, .order = 1),
-    # Pearson_RS_test(test_stuff, .order = 2)
-    # Pearson_RS_approx_test(test_stuff, .order = 2)
 
     # RSS_test(test_stuff, .order = 1),
     # RSS_test(test_stuff, .order = 2),
