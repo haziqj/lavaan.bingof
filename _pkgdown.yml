@@ -53,10 +53,10 @@ articles:
   navbar: Technical details
   contents:
   - articles/intro
-  - articles/tech_details
-  - articles/proofs
+  # - articles/tech_details
+  # - articles/proofs
   - articles/complex_sampling
-  - articles/sigma
+  # - articles/sigma
 - title: Simulation study
   navbar: Simulation study
   # desc: >
@@ -65,9 +65,6 @@ articles:
   contents:
   - articles/sim_results
   - articles/sim_tables
-- title: Comparing ML and PL estimators
-  contents: 
-    - articles/mle 
 - title: Outro
   contents:
   - articles/outro

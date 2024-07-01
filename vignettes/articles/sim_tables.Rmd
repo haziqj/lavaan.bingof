@@ -9,6 +9,7 @@ pkgdown:
   extension: pdf
 ---
 
+
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -21,6 +22,12 @@ theme_set(theme_bw())
 library(kableExtra)
 library(lavaan.bingof)
 nn <- c(500, 1000, 2500, 5000, 10000)
+
+# Load sim results, if not downloaded go to https://osf.io/2d97y/
+load("res_srs_type1.rda")
+load("res_srs_power.rda")
+load("res_complex_type1.rda")
+load("res_complex_power.rda")
 
 colour_cells <- function(x, crit = crit10, alpha = 0.1) {
   where_colour <- !is.na(x) & !(abs(x - alpha) < crit)
@@ -55,7 +62,11 @@ fix_table <- function(x, nsim = res_srs_type1$n_sims[1],
 }
 ```
 
-Download the \LaTeX source from this [link](https://raw.githubusercontent.com/haziqj/lavaan.bingof/gh-pages/articles/sim_tables.tex).
+Notes:
+
+- Download the \LaTeX source from this [link](https://raw.githubusercontent.com/haziqj/lavaan.bingof/gh-pages/articles/sim_tables.tex).
+
+- Highlighted in red are the cells where the rejection rate is significantly different from the nominal level.
 
 ## Simple random sampling
 
@@ -70,7 +81,7 @@ for(the_n in nn) {
     select(sim, name, everything(), -n)
   fix_table(tab) %>%
     kbl(booktabs = TRUE, digits = 3, escape = FALSE, align = "lrrrrrrr") %>%
-    kable_styling(latex_options = c("HOLD_position", "scale_down"),
+    kable_styling(latex_options = c("HOLD_position", "scale_up"),
                   font_size = 7) %>%
     add_header_above(c(" " = 5, "Rejection rate" = 3)) %>%
     collapse_rows(1:2, row_group_label_position = "stack", 
@@ -89,7 +100,7 @@ for(the_n in nn) {
     select(sim, name, everything(), -n)
   fix_table(tab, highlight = FALSE) %>%
     kbl(booktabs = TRUE, digits = 3, escape = FALSE, align = "lrrrrrrr") %>%
-    kable_styling(latex_options = c("HOLD_position", "scale_down"),
+    kable_styling(latex_options = c("HOLD_position", "scale_up"),
                   font_size = 7) %>%
     add_header_above(c(" " = 5, "Rejection rate" = 3)) %>%
     collapse_rows(1:2, row_group_label_position = "stack", 
@@ -102,7 +113,7 @@ for(the_n in nn) {
 <!--Complex sampling results-->
 
 ```{r, results = "asis"}
-samps <- c("Stratified", "Cluster", "Strat-clust")
+samps <- c("Cluster", "Strat-clust")
 # samps <- "Cluster"
 for (the_samp in samps) {
   cat(paste0("  \n## ", the_samp, " sampling", "  \n"))
@@ -118,7 +129,7 @@ for (the_samp in samps) {
     fix_table(tab) %>%
       select(-sim) %>%
       kbl(booktabs = TRUE, digits = 3, escape = FALSE, align = "lrrrrrr") %>%
-      kable_styling(latex_options = c("HOLD_position", "scale_down"),
+      kable_styling(latex_options = c("HOLD_position", "scale_up"),
                     font_size = 7) %>%
       add_header_above(c(" " = 4, "Rejection rate" = 3)) %>%
       pack_rows(index = table(tab$sim)) %>%
@@ -137,7 +148,7 @@ for (the_samp in samps) {
     fix_table(tab, highlight = FALSE) %>%
       select(-sim) %>%
       kbl(booktabs = TRUE, digits = 3, escape = FALSE, align = "lrrrrrr") %>%
-      kable_styling(latex_options = c("HOLD_position", "scale_down"),
+      kable_styling(latex_options = c("HOLD_position", "scale_up"),
                     font_size = 7) %>%
       add_header_above(c(" " = 4, "Rejection rate" = 3)) %>%
       pack_rows(index = table(tab$sim)) %>%
