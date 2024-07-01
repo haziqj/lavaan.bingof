@@ -14,28 +14,28 @@ coverage](https://codecov.io/gh/haziqj/lavaan.bingof/branch/main/graph/badge.svg
 
 <!-- https://github.com/r-lib/pkgdown/issues/133 -->
 
-![](https://raw.githubusercontent.com/haziqj/lavaan.bingof/main/data-raw/mult_bern_data.png)
+![](https://raw.githubusercontent.com/haziqj/lavaan.bingof/main/inst/mult_bern_data.png)
 
-This is the accompanying R package for the research paper
+This is the accompanying R package for the article
 
-> Jamil, H., Moustaki, I., & Skinner, C. (2023). Goodness-of-fit tests
-> for composite likelihood estimation under simple random and complex
-> survey sampling. *Manuscript in preparation*.
+> Jamil, H., Moustaki, I., & Skinner, C. (2024). Pairwise likelihood
+> estimation and limited-information goodness-of-fit test statistics for
+> binary factor analysis models under complex survey sampling. *British
+> Journal of Mathematical and Statistical Psychology*. (to appear)
 
 This package contains the functions to compute the test statistics and
 conduct simulation studies described in the above manuscript. Currently,
 the package implements the following tests based on univariate and
 bivariate residuals of a binary factor analysis model:
 
-|     | Name                    | R function          | Remarks                                          |
-|-----|-------------------------|---------------------|--------------------------------------------------|
-| 1   | Wald test               | `Wald_test()`       | Described in Reiser (1996)                       |
-| 2   | Wald test (diagonal)    | `Wald_diag_test()`  | A more efficient Wald test                       |
-| 3   | Wald test (VCOV free)   | `Wald_vcovf_test()` | Described in Maydeu-Olivares and Joe (2005,2006) |
-| 4   | Pearson test            | `Pearson_RS_test()` | Rao-Scott adjusments                             |
-| 5   | Pearson test            | `Pearson_test()`    | Moment matching approximation                    |
-| 6   | Residual sum of squares | `RSS_test()`        | Moment matching approximation                    |
-| 7   | Multinomial test        | `Multn_test()`      | Moment matching approximation                    |
+|  | Name | R function | Remarks |
+|----|----|----|----|
+| 1 | Wald test | `Wald_test()` | Described in Reiser (1996) |
+| 2 | Wald test (diagonal) | `Wald_diag_test()` | A more efficient Wald test |
+| 3 | Wald test (VCOV free) | `Wald_vcovf_test()` | Described in Maydeu-Olivares and Joe (2005,2006) |
+| 4 | Pearson test | `Pearson_test()` | Moment matching approximation |
+| 5 | Residual sum of squares | `RSS_test()` | Moment matching approximation |
+| 6 | Multinomial test | `Multn_test()` | Moment matching approximation |
 
 ## Installation
 
@@ -46,10 +46,6 @@ Install this package from this GitHub repository:
 pak::pkg_install("haziqj/lavaan.bingof")
 library(lavaan.bingof)  # load package
 ```
-
-Note: This package depends on the modified `{lavaan}` package version
-0.6-14.9002, which can be installed from the GitHub repository at
-[`haziqj/lavaan`](https://github.com/haziqj/lavaan).
 
 ## Usage
 
@@ -66,6 +62,9 @@ There are three main functionalities of this package:
     studies for Type I errors and power.
 
 ### Create a simulated data set of ordinal binary responses
+
+The true parameter values are according to the models specified in the
+research article.
 
 ``` r
 (dat <- gen_data_bin(n = 1000, seed = 123))
@@ -91,6 +90,9 @@ There are three main functionalities of this package:
 # Fit lavaan model using PML estimation
 (mod <- txt_mod(model_no = 1))
 #> [1] "eta1 =~ NA*y1 + y2 + y3 + y4 + y5"
+```
+
+``` r
 fit <- lavaan::sem(mod, dat, std.lv = TRUE, estimator = "PML")
 
 # Test statistics
@@ -103,7 +105,7 @@ all_tests(fit)
 #> 3 0.862  3.31 WaldDiag,MM3 0.872      15    15
 #> 4 1.86   3.63 Pearson,MM3  0.709      15    15
 #> 5 2.30   4.18 RSS,MM3      0.707      15    15
-#> 6 2.79   5.00 Multn,MM3    0.732      15    15
+#> 6 1.86   3.62 Multn,MM3    0.708      15    15
 ```
 
 ### Test statistics under a complex sampling scheme
@@ -127,6 +129,9 @@ all_tests(fit)
 #>  9 A     A105   A105o 0.651 1     1     1     1     1    
 #> 10 A     A105   A105o 0.651 1     1     1     1     1    
 #> # ℹ 3,030 more rows
+```
+
+``` r
 
 # Fit lavaan model and create survey object
 fit0 <- lavaan::sem(mod, dat, std.lv = TRUE, estimator = "PML")  # ignore wt
@@ -137,9 +142,12 @@ fit1 <- lavaan::sem(mod, dat, std.lv = TRUE, estimator = "PML",
 Wald_test(fit0)
 #>         X2 df name      pval Xi_rank  S
 #> 1 4.561825  5 Wald 0.4716543      13 15
+```
+
+``` r
 Wald_test(fit1)  # with sampling weights
 #>         X2 df name      pval Xi_rank  S
-#> 1 3.859095  5 Wald 0.5698761      13 15
+#> 1 3.863999  5 Wald 0.5691583      13 15
 ```
 
 ### Simulation wrapper
@@ -148,11 +156,14 @@ Wald_test(fit1)  # with sampling weights
 # Conduct a simulation study based on a 5 factor model (32 repetitions only for
 # illustration). Data generated according to a stratified complex sample.
 (pc <- parallel::detectCores())   # how many cores do we have?
-#> [1] 32
+#> [1] 8
+```
+
+``` r
 
 res <- run_ligof_sims(model_no = 1, nsim = pc, ncores = pc - 2, samp = "strat",
                       simtype = "type1")
-#>|======================================================================| 100%
+#>   |                                                                              |                                                                      |   0%  |                                                                              |=========                                                             |  12%  |                                                                              |==================                                                    |  25%  |                                                                              |==========================                                            |  38%  |                                                                              |===================================                                   |  50%  |                                                                              |============================================                          |  62%  |                                                                              |====================================================                  |  75%  |                                                                              |=============================================================         |  88%  |                                                                              |======================================================================| 100%
 ```
 
 <!-- #>|======================================================================| 100% -->
@@ -163,19 +174,19 @@ res
 #> ── LIGOF simulations summary ───────────────────────────────────────────────────
 #> 
 #> Model 1 (1F 5V) using stratified sampling design (n = 1000)
-#> • Converged: 32 / 32
-#> • Rank deficient: 0 / 32
+#> • Converged: 8 / 8
+#> • Rank deficient: 0 / 8
 #> • Significance level: 0.05
 #> 
 #> 
 #> ============  ==============  =============  =========
 #> Test name     Rejection rate  Mean X2 value  Mean d.f.
 #> ============  ==============  =============  =========
-#> Wald                   0.156           6.51       5.00
-#> WaldVCF                0.094           6.24       5.00
-#> WaldDiag,MM3           0.031           3.84       3.39
-#> Pearson,MM3            0.062           3.73       3.19
-#> RSS,MM3                0.125           4.53       3.83
-#> Multn,MM3              0.094           6.31       5.00
+#> Wald                       0           5.21       5.00
+#> WaldVCF                    0           5.19       5.00
+#> WaldDiag,MM3               0           3.60       3.41
+#> Pearson,MM3                0           3.73       3.33
+#> RSS,MM3                    0           4.33       4.00
+#> Multn,MM3                  0           3.73       3.33
 #> ============  ==============  =============  =========
 ```

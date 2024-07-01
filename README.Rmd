@@ -26,9 +26,9 @@ library(tidyverse)
 <!-- https://github.com/r-lib/pkgdown/issues/133 -->
 ![](https://raw.githubusercontent.com/haziqj/lavaan.bingof/main/inst/mult_bern_data.png)
 
-This is the accompanying R package for the research paper
+This is the accompanying R package for the article
 
-> Jamil, H., Moustaki, I., & Skinner, C. (2023). Goodness-of-fit tests for composite likelihood estimation under simple random and complex survey sampling. *Manuscript in preparation*.
+> Jamil, H., Moustaki, I., & Skinner, C. (2024). Pairwise likelihood estimation and limited-information goodness-of-fit test statistics for binary factor analysis models under complex survey sampling. *British Journal of Mathematical and Statistical Psychology*. (to appear)
 
 This package contains the functions to compute the test statistics and conduct simulation studies described in the above manuscript.
 Currently, the package implements the following tests based on univariate and bivariate residuals of a binary factor analysis model:
@@ -38,11 +38,9 @@ Currently, the package implements the following tests based on univariate and bi
 | 1 | Wald test               | `Wald_test()`       | Described in Reiser (1996)                       |
 | 2 | Wald test (diagonal)    | `Wald_diag_test()`    | A more efficient Wald test                       |
 | 3 | Wald test (VCOV free)  | `Wald_vcovf_test()`    | Described in Maydeu-Olivares and Joe (2005,2006) |
-| 4 | Pearson test            | `Pearson_RS_test()` | Rao-Scott adjusments                             |
-| 5 | Pearson test            | `Pearson_test()` | Moment matching approximation                    |
-| 6 | Residual sum of squares | `RSS_test()`        | Moment matching approximation                    |
-| 7 | Multinomial test        | `Multn_test()`      | Moment matching approximation                    |
-
+| 4 | Pearson test            | `Pearson_test()` | Moment matching approximation                    |
+| 5 | Residual sum of squares | `RSS_test()`        | Moment matching approximation                    |
+| 6 | Multinomial test        | `Multn_test()`      | Moment matching approximation                    |
 
 ## Installation
 
@@ -53,8 +51,6 @@ Install this package from this GitHub repository:
 pak::pkg_install("haziqj/lavaan.bingof")
 library(lavaan.bingof)  # load package
 ```
-
-Note: This package depends on the modified `{lavaan}` package version 0.6-14.9002, which can be installed from the GitHub repository at [`haziqj/lavaan`](https://github.com/haziqj/lavaan).
 
 ## Usage
 
@@ -67,6 +63,8 @@ There are three main functionalities of this package:
 3. Wrap functions 1 and 2 in a convenient way to perform simulation studies for Type I errors and power.
 
 ### Create a simulated data set of ordinal binary responses
+
+The true parameter values are according to the models specified in the research article.
 
 ```{r}
 (dat <- gen_data_bin(n = 1000, seed = 123))

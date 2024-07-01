@@ -39,8 +39,6 @@ reference:
   contents:
   - run_ligof_sims
   - ligof_sims.methods
-  - sim_results
-  - sim_results_all
 
 - title: Utility functions
   contents:
@@ -59,9 +57,6 @@ articles:
   # - articles/sigma
 - title: Simulation study
   navbar: Simulation study
-  # desc: >
-  #   These articles are used to test various pkgdown features that can not
-  #   easily be tested automatically.
   contents:
   - articles/sim_results
   - articles/sim_tables
