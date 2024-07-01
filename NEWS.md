@@ -1,5 +1,11 @@
 # lavaan.bingof (development version)
 
+## 2024-07-01
+
+- Preparing package for "public" release, as article is about to be accepted.
+- Slim down the package to only the necessary functions.
+- All simulation results and scripts are moved to https://osf.io/2d97y/ 
+
 ## 2023-09-11
 
 - Added some functionality to investigate informative sampling a la Muthen (2005). Functions involved: `gen_data_bin_wt()` and also in the `run_ligof_sims()` wrapper.

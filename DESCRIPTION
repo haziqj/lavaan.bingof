@@ -1,7 +1,7 @@
 Package: lavaan.bingof
 Type: Package
 Title: Limited Information Goodness of Fit Tests for Binary Factor Models
-Version: 0.1.1.9006
+Version: 0.1.2
 Authors@R: 
     c(person("Haziq", "Jamil", 
              email = "haziq.jamil@gmail.com",
@@ -49,7 +49,6 @@ Imports:
     tibble,
     tidyr,
     utils
-Remotes: yrosseel/lavaan
 RoxygenNote: 7.3.1
 Roxygen: list(markdown = TRUE)
 Depends: 
