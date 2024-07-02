@@ -1,3 +1,6 @@
+library(tidyverse)
+theme_set(theme_bw())
+
 # If not downloaded, go to https://osf.io/2d97y/
 load("res_srs_type1.rda")
 load("res_srs_power.rda")
@@ -31,17 +34,18 @@ bind_rows(
                       xmax = rej_rate + crit),
                   position = position_dodge(width = 0.5)) +
   facet_grid(sim ~ alpha_lab, labeller = label_parsed, scales = "free") +
+  ggsci::scale_colour_d3() +
   # jcolors::scale_colour_jcolors(palette = "pal8") +
-  scale_colour_grey() +
+  # scale_colour_grey() +
   scale_alpha_manual(values = c(0.4, 1)) +
-  # scale_x_continuous(breaks = alpha / 100) +
+  scale_x_continuous(labels = scales::percent) +
   scale_shape_manual(values = c(16, 17, 15, 4, 1)) +
   labs(x = "Rejection rate", y = NULL, alpha = "Within\n95% interval",
        shape = "Sample size", col = "Sample size") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        panel.grid = element_blank())
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-ggsave("srs_type1_bw.pdf", width = 7, height = 9)
+ggsave("srs_type1.pdf", width = 7, height = 9)
 
 bind_rows(
   select(res_srs_power, name, sim, n, rej_rate = rej_rate10, crit = crit10) %>%
@@ -62,22 +66,23 @@ bind_rows(
   # geom_ribbon(aes(ymin = rej_rate - crit, ymax = rej_rate + crit,
   #                 fill = name), col = NA, alpha = 0.1) +
   geom_point() +
-  geom_line(aes(linetype = name)) +
+  geom_line(linewidth = 0.7) +
   # geom_hline(aes(yintercept = alpha / 100), linetype = "dashed", col = "grey40") +
   scale_shape_manual(values = c(16, 17, 15, 3, 7, 8, 11, 16, 17, 15, 3, 7)) +
   facet_grid(sim ~ alpha_lab, labeller = label_parsed) +
-  scale_x_continuous(breaks = unique(res_srs_power$n)) +
-  # scale_colour_viridis_d(option = "turbo", direction = -1) +
-  scale_colour_grey() +
+  scale_x_continuous(labels = scales::comma) +
+  scale_colour_viridis_d(option = "turbo", direction = -1) +
+  # scale_colour_grey() +
   scale_fill_viridis_d(option = "turbo", direction = -1) +
   guides(col = guide_legend(nrow = 2), shape = guide_legend(nrow = 2)) +
   labs(fill = NULL, col = NULL, shape = NULL, linetype = NULL,
        x = "Sample size (n)", y = "Rejection rate") +
-  theme(legend.position = "bottom", panel.grid = element_blank(),
+  theme_bw() +
+  theme(legend.position = "bottom", #panel.grid = element_blank(),
         axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
         legend.key.width = unit(1.5,"cm"))
 
-ggsave("srs_power_bw.pdf", width = 7, height = 9)
+ggsave("srs_power.pdf", width = 7, height = 9)
 
 # Complex plots
 alpha <- 5
@@ -109,6 +114,7 @@ res_complex_type1 %>%
   # scale_fill_grey() +
   facet_grid(sim ~ sampling) +
   coord_cartesian(ylim = c(0, 0.15)) +
+  theme_bw() +
   theme(legend.position = "none") -> p1; p1
 # ggsave("complex_type1.pdf", width = 7, height = 5)
 
@@ -129,6 +135,7 @@ res_complex_power %>%
                 position = position_dodge(width = 0.9)) +
   scale_linetype_manual(NULL, values = "dashed") +
   scale_alpha("% rank\ndef.", range = c(1, 0.5)) +
+  theme_bw() +
   theme(legend.position = "bottom") +
   labs(x = "Sample size", y = "Rejection proportion", fill = NULL,
        shape = NULL, title = "Power analysis") +
@@ -141,15 +148,15 @@ res_complex_power %>%
 
 # Save plots -------------------------------------------------------------------
 cowplot::plot_grid(p1, p2, ncol = 1, rel_heights = c(0.8, 1))
-ggsave("complex_plot_bw.pdf", width = 7, height = 9)
+ggsave("complex_plot.pdf", width = 7, height = 9)
 ggsave("complex_type1.png", p1, width = 7, height = 5)
 ggsave("complex_power.png", p2, width = 7, height = 5)
-ggsave("hist_1_srs.pdf", p_hist_a + theme(panel.grid = element_blank()),
-       width = 7, height = 9)
-ggsave("hist_1_strat.pdf", p_hist_b + theme(panel.grid = element_blank()),
-       width = 7, height = 9)
-ggsave("hist_1_clust.pdf", p_hist_c + theme(panel.grid = element_blank()),
-       width = 7, height = 9)
-ggsave("hist_1_strcl.pdf", p_hist_d + theme(panel.grid = element_blank()),
-       width = 7, height = 9)
+# ggsave("hist_1_srs.pdf", p_hist_a + theme(panel.grid = element_blank()),
+#        width = 7, height = 9)
+# ggsave("hist_1_strat.pdf", p_hist_b + theme(panel.grid = element_blank()),
+#        width = 7, height = 9)
+# ggsave("hist_1_clust.pdf", p_hist_c + theme(panel.grid = element_blank()),
+#        width = 7, height = 9)
+# ggsave("hist_1_strcl.pdf", p_hist_d + theme(panel.grid = element_blank()),
+#        width = 7, height = 9)
 
