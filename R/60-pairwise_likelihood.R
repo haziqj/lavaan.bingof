@@ -144,40 +144,39 @@ create_pairwise_table_baseRv2 <- function(data, wt = NULL) {
 
 create_pairwise_table <- create_pairwise_table_baseRv2
 
-theta_to_Vy <- function(theta) {
-  convert_theta <- function(.theta) {
-    lambdas <- .theta[grepl("lambda", names(.theta))]
-    rhos <- .theta[grepl("rho", names(.theta))]
-    taus <- .theta[grepl("tau", names(.theta))]
-
-    list(lambdas = lambdas, rhos = rhos, taus = taus)
-  }
-
-  lambdas <- taus <- NULL  # to be overwritten by next line
-  list2env(convert_theta(theta), environment())
-
-  # loadings
-  Lambda <- get_Lambda(model_no)
-  Lambda[Lambda != 0] <- lambdas
-
-  # factor correlations (if any)
-  rhos <- 2 / (1 + exp(-rhos)) - 1  # expit [-1, 1]
-  Psi <- cov_lv_mat(model_no)
-  Psi[Psi != 1] <- rhos
-
-  # thresholds
-  tau <- taus
-
-  # Var(ystar)
-  neta <- ncol(Lambda)
-  nitems <- nrow(Lambda)
-  Theta <- matrix(0, nrow = nitems, ncol = nitems)
-  diag(Theta) <- 1 - diag(Lambda %*% Psi %*% t(Lambda))
-  Vy <- Lambda %*% Psi %*% t(Lambda) + Theta
-
-  Vy
-}
-
+# theta_to_Vy <- function(theta) {
+#   convert_theta <- function(.theta) {
+#     lambdas <- .theta[grepl("lambda", names(.theta))]
+#     rhos <- .theta[grepl("rho", names(.theta))]
+#     taus <- .theta[grepl("tau", names(.theta))]
+#
+#     list(lambdas = lambdas, rhos = rhos, taus = taus)
+#   }
+#
+#   lambdas <- taus <- NULL  # to be overwritten by next line
+#   list2env(convert_theta(theta), environment())
+#
+#   # loadings
+#   Lambda <- get_Lambda(model_no)
+#   Lambda[Lambda != 0] <- lambdas
+#
+#   # factor correlations (if any)
+#   rhos <- 2 / (1 + exp(-rhos)) - 1  # expit [-1, 1]
+#   Psi <- cov_lv_mat(model_no)
+#   Psi[Psi != 1] <- rhos
+#
+#   # thresholds
+#   tau <- taus
+#
+#   # Var(ystar)
+#   neta <- ncol(Lambda)
+#   nitems <- nrow(Lambda)
+#   Theta <- matrix(0, nrow = nitems, ncol = nitems)
+#   diag(Theta) <- 1 - diag(Lambda %*% Psi %*% t(Lambda))
+#   Vy <- Lambda %*% Psi %*% t(Lambda) + Theta
+#
+#   Vy
+# }
 
 pl_fn <- function(theta, model_no, data, wt = NULL) {
 

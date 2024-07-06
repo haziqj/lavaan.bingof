@@ -42,4 +42,4 @@ all_res <-
       bind_rows()
   })
 
-save(all_res, file = "all_res.RData")
+save(all_res, file = "all_res.rda")
