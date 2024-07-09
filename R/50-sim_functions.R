@@ -93,7 +93,7 @@ run_ligof_sims <- function(model_no = 1, nsim = 1000, samp_size = 1000,
   # Begin sims -----------------------------------------------------------------
   res <- foreach(
     i = 1:nsim, #.combine = bind_rows,
-    .packages = c("tidyverse", "lavaan"),
+    .packages = c("dplyr", "tidyr", "purrr", "tibble", "magrittr", "lavaan"),
     .export = ls(globalenv()),
     .errorhandling = "pass",
     .options.snow = list(progress = progress)
