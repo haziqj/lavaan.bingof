@@ -1,14 +1,13 @@
 pandoc: 3.1.11
-pkgdown: 2.0.9
+pkgdown: 2.1.0
 pkgdown_sha: ~
 articles:
-  complex_sampling: complex_sampling.html
-  intro: intro.html
-  outro: outro.html
-  sim_results: sim_results.html
-  sim_tables: sim_tables.pdf
-last_built: 2024-07-06T00:58Z
+  articles/complex_sampling: complex_sampling.html
+  articles/intro: intro.html
+  articles/outro: outro.html
+  articles/sim_results: sim_results.html
+  articles/sim_tables: sim_tables.pdf
+last_built: 2024-07-09T00:52Z
 urls:
   reference: https://haziqj.ml/lavaan.bingof/reference
   article: https://haziqj.ml/lavaan.bingof/articles
-

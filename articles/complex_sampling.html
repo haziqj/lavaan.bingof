@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="lavaan.bingof">
 <title>Complex sampling procedure • lavaan.bingof</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Complex sampling procedure">
-<meta property="og:description" content="lavaan.bingof">
 <!-- mathjax --><!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script> --><!-- dynamically load mathjax for compatibility with self-contained --><script>
   (function () {
@@ -52,67 +52,59 @@ for (let popover of popovers) {
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
-    
+
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">lavaan.bingof</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
-    
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <h6 class="dropdown-header" data-toc-skip>Technical details</h6>
-    <a class="dropdown-item" href="../articles/intro.html">Introduction</a>
-    <a class="dropdown-item" href="../articles/complex_sampling.html">Complex sampling procedure</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Simulation study</h6>
-    <a class="dropdown-item" href="../articles/sim_results.html">Description and results</a>
-    <a class="dropdown-item" href="../articles/sim_tables.pdf">Tables of simulation results (PDF)</a>
-    <div class="dropdown-divider"></div>
-    <a class="dropdown-item" href="../articles/index.html">More articles...</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Technical details</h6></li>
+    <li><a class="dropdown-item" href="../articles/intro.html">Introduction</a></li>
+    <li><a class="dropdown-item" href="../articles/complex_sampling.html">Complex sampling procedure</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Simulation study</h6></li>
+    <li><a class="dropdown-item" href="../articles/sim_results.html">Description and results</a></li>
+    <li><a class="dropdown-item" href="../articles/sim_tables.pdf">Tables of simulation results (PDF)</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
+  </ul>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Changelog</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
-
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/haziqj/lavaan.bingof/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
+</form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/haziqj/lavaan.bingof/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
-    
+
   </div>
 </nav><div class="container template-article">
 
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Complex sampling procedure</h1>
+
+      <h1>Complex sampling procedure</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/haziqj/lavaan.bingof/blob/HEAD/vignettes/articles/complex_sampling.Rmd" class="external-link"><code>vignettes/articles/complex_sampling.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/haziqj/lavaan.bingof/blob/main/vignettes/articles/complex_sampling.Rmd" class="external-link"><code>vignettes/articles/complex_sampling.Rmd</code></a></small>
       <div class="d-none name"><code>complex_sampling.Rmd</code></div>
     </div>
 
@@ -354,15 +346,13 @@ The true model parameter values <span class="math inline">\({\boldsymbol\theta}\
 <code class="sourceCode R"><span><span class="co"># Univariate moments (model-implied)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pi1</span>, <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="co">#&gt;     y1     y2     y3     y4     y5 </span></span>
-<span><span class="co">#&gt; 0.9236 0.7088 0.5517 0.7642 0.8708</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co">#&gt; 0.9236 0.7088 0.5517 0.7642 0.8708</span></span>
+<span></span>
 <span><span class="co"># Univariate moments (population statistics)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">prop1</span>, <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="co">#&gt;     y1     y2     y3     y4     y5 </span></span>
-<span><span class="co">#&gt; 0.9240 0.7083 0.5515 0.7643 0.8709</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co">#&gt; 0.9240 0.7083 0.5515 0.7643 0.8709</span></span>
+<span></span>
 <span><span class="co"># Errors (percentage)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="op">(</span><span class="va">prop1</span> <span class="op">-</span> <span class="va">pi1</span><span class="op">)</span> <span class="op">/</span> <span class="va">pi1</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    y1    y2    y3    y4    y5 </span></span>
@@ -371,23 +361,20 @@ The true model parameter values <span class="math inline">\({\boldsymbol\theta}\
 <div class="section level3">
 <h3 id="model-fit">Model fit<a class="anchor" aria-label="anchor" href="#model-fit"></a>
 </h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Comparison of lambda values</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
 <span><span class="co">#&gt; eta1=~y1 eta1=~y2 eta1=~y3 eta1=~y4 eta1=~y5 </span></span>
-<span><span class="co">#&gt;     0.80     0.70     0.47     0.38     0.34</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">true_vals</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
+<span><span class="co">#&gt;     0.80     0.70     0.47     0.38     0.34</span></span>
+<span><span class="va">true_vals</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
 <span><span class="co">#&gt; lambda1 lambda2 lambda3 lambda4 lambda5 </span></span>
-<span><span class="co">#&gt;    0.80    0.70    0.47    0.38    0.34</span></span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co">#&gt;    0.80    0.70    0.47    0.38    0.34</span></span>
+<span></span>
 <span><span class="co"># Comparison of threshold values</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt; y1|t1 y2|t1 y3|t1 y4|t1 y5|t1 </span></span>
-<span><span class="co">#&gt; -1.43 -0.55 -0.13 -0.72 -1.13</span></span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">true_vals</span><span class="op">[</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt; -1.43 -0.55 -0.13 -0.72 -1.13</span></span>
+<span><span class="va">true_vals</span><span class="op">[</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt;  tau1  tau2  tau3  tau4  tau5 </span></span>
 <span><span class="co">#&gt; -1.43 -0.55 -0.13 -0.72 -1.13</span></span></code></pre></div>
 </div>
@@ -444,7 +431,7 @@ The true model parameter values <span class="math inline">\({\boldsymbol\theta}\
 <h2 id="performing-a-complex-sampling-procedure">Performing a complex sampling procedure<a class="anchor" aria-label="anchor" href="#performing-a-complex-sampling-procedure"></a>
 </h2>
 <p>There are three functions that perform the three complex sampling procedures described earlier.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Stratified sampling</span></span>
 <span><span class="op">(</span><span class="va">samp1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_data_bin_complex.html">gen_data_bin_strat</a></span><span class="op">(</span>population <span class="op">=</span> <span class="va">pop</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3,000 × 9</span></span></span>
@@ -460,9 +447,8 @@ The true model parameter values <span class="math inline">\({\boldsymbol\theta}\
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> A     A101   A101l 0.599 1     1     1     1     1    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> A     A101   A101q 0.599 1     1     0     1     1    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> A     A101   A101v 0.599 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,990 more rows</span></span></span></code></pre></div>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,990 more rows</span></span></span>
+<span></span>
 <span><span class="co"># Two-stage cluster sampling</span></span>
 <span><span class="op">(</span><span class="va">samp2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_data_bin_complex.html">gen_data_bin_clust</a></span><span class="op">(</span>population <span class="op">=</span> <span class="va">pop</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3,155 × 9</span></span></span>
@@ -478,9 +464,8 @@ The true model parameter values <span class="math inline">\({\boldsymbol\theta}\
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> A     A100   A100l  1.48 1     1     1     1     0    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> A     A100   A100l  1.48 1     1     0     0     1    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> A     A100   A100l  1.48 1     1     1     1     1    </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3,145 more rows</span></span></span></code></pre></div>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3,145 more rows</span></span></span>
+<span></span>
 <span><span class="co"># Two-stage stratified cluster sampling</span></span>
 <span><span class="op">(</span><span class="va">samp3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_data_bin_complex.html">gen_data_bin_strcl</a></span><span class="op">(</span>population <span class="op">=</span> <span class="va">pop</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3,039 × 9</span></span></span>
@@ -601,7 +586,7 @@ Then, a standard estimator of <span class="math inline">\({\boldsymbol\Sigma}\)<
 </div>
 </div>
 </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
 
@@ -612,15 +597,15 @@ Then, a standard estimator of <span class="math inline">\({\boldsymbol\Sigma}\)<
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
     </footer>
 </div>
 
-  
 
-  
+
+
 
   </body>
 </html>

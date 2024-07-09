@@ -1,78 +1,28 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/404.html</loc>
-  </url>
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/articles/complex_sampling.html</loc>
-  </url>
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/articles/intro.html</loc>
-  </url>
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/articles/outro.html</loc>
-  </url>
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/articles/sim_results.html</loc>
-  </url>
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/index.html</loc>
-  </url>
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/reference/all_tests.html</loc>
-  </url>
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/reference/create_resp_pattern.html</loc>
-  </url>
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/reference/gen_data_bin.html</loc>
-  </url>
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/reference/gen_data_bin_complex.html</loc>
-  </url>
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/reference/gen_data_bin_wt.html</loc>
-  </url>
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/reference/get_true_values.html</loc>
-  </url>
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/reference/get_uni_bi_moments.html</loc>
-  </url>
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/reference/lavaan.bingof-package.html</loc>
-  </url>
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/reference/ligof-test-stats.html</loc>
-  </url>
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/reference/ligof_sims.methods.html</loc>
-  </url>
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/reference/make_population.html</loc>
-  </url>
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/reference/run_ligof_sims.html</loc>
-  </url>
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/reference/transformation-matrices.html</loc>
-  </url>
-  <url>
-    <loc>https://haziqj.ml/lavaan.bingof/reference/txt_mod.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://haziqj.ml/lavaan.bingof/404.html</loc></url>
+<url><loc>https://haziqj.ml/lavaan.bingof/LICENSE.html</loc></url>
+<url><loc>https://haziqj.ml/lavaan.bingof/articles/complex_sampling.html</loc></url>
+<url><loc>https://haziqj.ml/lavaan.bingof/articles/index.html</loc></url>
+<url><loc>https://haziqj.ml/lavaan.bingof/articles/intro.html</loc></url>
+<url><loc>https://haziqj.ml/lavaan.bingof/articles/outro.html</loc></url>
+<url><loc>https://haziqj.ml/lavaan.bingof/articles/sim_results.html</loc></url>
+<url><loc>https://haziqj.ml/lavaan.bingof/authors.html</loc></url>
+<url><loc>https://haziqj.ml/lavaan.bingof/index.html</loc></url>
+<url><loc>https://haziqj.ml/lavaan.bingof/news/index.html</loc></url>
+<url><loc>https://haziqj.ml/lavaan.bingof/reference/all_tests.html</loc></url>
+<url><loc>https://haziqj.ml/lavaan.bingof/reference/create_resp_pattern.html</loc></url>
+<url><loc>https://haziqj.ml/lavaan.bingof/reference/gen_data_bin.html</loc></url>
+<url><loc>https://haziqj.ml/lavaan.bingof/reference/gen_data_bin_complex.html</loc></url>
+<url><loc>https://haziqj.ml/lavaan.bingof/reference/gen_data_bin_wt.html</loc></url>
+<url><loc>https://haziqj.ml/lavaan.bingof/reference/get_true_values.html</loc></url>
+<url><loc>https://haziqj.ml/lavaan.bingof/reference/get_uni_bi_moments.html</loc></url>
+<url><loc>https://haziqj.ml/lavaan.bingof/reference/index.html</loc></url>
+<url><loc>https://haziqj.ml/lavaan.bingof/reference/lavaan.bingof-package.html</loc></url>
+<url><loc>https://haziqj.ml/lavaan.bingof/reference/ligof-test-stats.html</loc></url>
+<url><loc>https://haziqj.ml/lavaan.bingof/reference/ligof_sims.methods.html</loc></url>
+<url><loc>https://haziqj.ml/lavaan.bingof/reference/make_population.html</loc></url>
+<url><loc>https://haziqj.ml/lavaan.bingof/reference/run_ligof_sims.html</loc></url>
+<url><loc>https://haziqj.ml/lavaan.bingof/reference/transformation-matrices.html</loc></url>
+<url><loc>https://haziqj.ml/lavaan.bingof/reference/txt_mod.html</loc></url>
 </urlset>
+
