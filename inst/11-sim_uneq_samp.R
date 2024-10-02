@@ -3,7 +3,7 @@ library(lavaan.bingof)
 library(furrr)
 library(cli)
 library(gt)
-plan(multisession, workers = parallel::detectCores() - 2)
+plan(multisession, workers = parallel::detectCores() - 1)
 nsims <- 1000
 
 # 1. Run additional simulations for smaller sample sizes n = 500 and n =
@@ -12,8 +12,8 @@ nsims <- 1000
 
 # 2. Another table showing Wald and Pearson (unadjusted vs weighted)
 
-make_wt_res <- function(samp_size = 5000, type = "bias_se", .popfac = 1 / 0.01) {
-  model_no <- 1
+make_wt_res <- function(samp_size = 5000, type = "bias_se", .popfac = 1 / 0.01,
+                        model_no = 1) {
   dat <- gen_data_bin_wt(model_no, n = samp_size, popfac = .popfac)
   fit0 <- lavaan::sem(model = txt_mod(model_no), data = dat, estimator = "PML",
                       std.lv = TRUE, sampling.weights = NULL)
@@ -264,4 +264,4 @@ tab_test_stats_gt <-
   )
 
 # Save tables ------------------------------------------------------------------
-save(tab_bias_gt, tab_se_gt, tab_test_stats_gt, file = "sims_uneq_samp.RData")
+save(tab_bias_gt, tab_se_gt, tab_test_stats_gt, file = "sims_uneq_samp_mod5.RData")
