@@ -77,7 +77,8 @@ for (n in c(500, 1000, 5000)) {
 
   out <-
     future_map(seq_len(nsims), \(x) {
-      make_wt_res(samp_size = n, type = "bias_se", .popfac = 500000 / n)
+      make_wt_res(samp_size = n, type = "bias_se", .popfac = 500000 / n,
+                  model_no = 5)
     }, .progress = TRUE, .options = furrr_options(seed = NULL))
 
   out <-
@@ -121,10 +122,18 @@ tab_bias <-
 
 tab_bias_gt <-
   tab_bias |>
+  filter(
+    name %in% c("eta1=~y1", "eta1=~y2", "eta1=~y3", "eta1=~y4", "eta1=~y5",
+                "y1|t1", "y2|t1", "y3|t1", "y4|t1", "y5|t1",
+                "eta1~~eta2", "eta1~~eta3", "eta2~~eta3")
+  ) |>
   mutate(
     name = gsub("eta1=~y", "$\\\\lambda_", name),
     name = gsub("y", "$\\\\tau_", name),
     name = gsub("\\|t1", "", name),
+    name = gsub("eta1~~eta2$", "$\\\\rho_{12}", name),
+    name = gsub("eta1~~eta3$", "$\\\\rho_{13}", name),
+    name = gsub("eta2~~eta3$", "$\\\\rho_{23}", name),
     name = paste0(name, "$")
   ) |>
   gt(rowname_col = "name") |>
@@ -149,6 +158,10 @@ tab_bias_gt <-
   tab_spanner(
     label = "Bias",
     columns = starts_with("bias")
+  ) |>
+  tab_row_group(
+    label = md("**Factor correlations**"),
+    rows = contains("rho")
   ) |>
   tab_row_group(
     label = md("**Thresholds**"),
@@ -180,10 +193,18 @@ tab_se <-
 
 tab_se_gt <-
   tab_se |>
+  filter(
+    name %in% c("eta1=~y1", "eta1=~y2", "eta1=~y3", "eta1=~y4", "eta1=~y5",
+                "y1|t1", "y2|t1", "y3|t1", "y4|t1", "y5|t1",
+                "eta1~~eta2", "eta1~~eta3", "eta2~~eta3")
+  ) |>
   mutate(
     name = gsub("eta1=~y", "$\\\\lambda_", name),
     name = gsub("y", "$\\\\tau_", name),
     name = gsub("\\|t1", "", name),
+    name = gsub("eta1~~eta2$", "$\\\\rho_{12}", name),
+    name = gsub("eta1~~eta3$", "$\\\\rho_{13}", name),
+    name = gsub("eta2~~eta3$", "$\\\\rho_{23}", name),
     name = paste0(name, "$")
   ) |>
   gt(rowname_col = "name") |>
@@ -208,6 +229,10 @@ tab_se_gt <-
   tab_spanner(
     label = "SD/SE",
     columns = starts_with("ratio_")
+  ) |>
+  tab_row_group(
+    label = md("**Factor correlations**"),
+    rows = contains("rho")
   ) |>
   tab_row_group(
     label = md("**Thresholds**"),
