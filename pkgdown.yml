@@ -1,5 +1,5 @@
 pandoc: 3.1.11
-pkgdown: 2.1.0
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   articles/complex_sampling: complex_sampling.html
@@ -7,7 +7,7 @@ articles:
   articles/outro: outro.html
   articles/sim_results: sim_results.html
   articles/sim_tables: sim_tables.pdf
-last_built: 2024-07-09T01:32Z
+last_built: 2024-10-02T03:12Z
 urls:
   reference: https://haziqj.ml/lavaan.bingof/reference
   article: https://haziqj.ml/lavaan.bingof/articles

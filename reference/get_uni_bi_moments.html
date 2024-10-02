@@ -121,21 +121,19 @@ probabilities only) based on model i.e. <code>pidot1</code> and <code>pidot2</co
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html" class="external-link">sem</a></span><span class="op">(</span><span class="fu"><a href="txt_mod.html">txt_mod</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="gen_data_bin.html">gen_data_bin</a></span><span class="op">(</span><span class="fl">1</span>, n <span class="op">=</span> <span class="fl">500</span><span class="op">)</span>, std.lv <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>                   estimator <span class="op">=</span> <span class="st">"PML"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>lavaan-&gt;lav_lavaan_step15_baseline():  </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>    estimation of the baseline model failed.</span>
 <span class="r-in"><span><span class="fu">get_uni_bi_moments</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pdot1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.916 0.694 0.548 0.752 0.880</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.900 0.684 0.516 0.768 0.832</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pidot1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9159984 0.6940003 0.5480027 0.7520066 0.8799972</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9000135 0.6842161 0.5160261 0.7679428 0.8319697</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pdot2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.672 0.518 0.714 0.818 0.418 0.574 0.628 0.434 0.494 0.680</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.656 0.480 0.716 0.770 0.396 0.550 0.602 0.402 0.438 0.640</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pidot2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.6716173 0.5183115 0.7148629 0.8173105 0.4159191 0.5732946 0.6318769</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.4371332 0.4926238 0.6767766</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.6590328 0.4827144 0.7072080 0.7674862 0.3862124 0.5522356 0.5988018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.4089467 0.4429206 0.6500071</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
@@ -148,7 +146,7 @@ probabilities only) based on model i.e. <code>pidot1</code> and <code>pidot2</co
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>
