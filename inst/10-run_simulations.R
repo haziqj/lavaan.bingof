@@ -4,14 +4,14 @@ analysis_path <- dirname(rstudioapi::getSourceEditorContext()$path)
 
 # All simulations --------------------------------------------------------------
 for (sim_type in c("type1", "power")) {
-  for (samp_method in c("srs", "clust", "strcl")) {
+  for (samp_method in c("clust", "strcl")) {
     for (the_samp_size in c(500, 1000, 2500, 5000, 10000)) {
       for (mod_no in c(1:5)) {
         sim_name <- paste0(samp_method, mod_no, "_n", the_samp_size, "_",
                            sim_type)
         cat("[", as.character(Sys.time()), "]", "Now running simulation",
             sim_name, "\n")
-        sim <- run_ligof_sims(mod_no, samp_size = the_samp_size, nsim = 1000,
+        sim <- run_ligof_sims(mod_no, samp_size = the_samp_size, nsim = 250,
                               samp = samp_method, simtype = sim_type,
                               starting_seed = NULL, wt = NULL,
                               pop_Sigma = FALSE, Sigma2 = "theoretical")
@@ -42,4 +42,4 @@ all_res <-
       bind_rows()
   })
 
-save(all_res, file = "all_res.rda")
+save(all_res, file = "all_res_nowt.rda")

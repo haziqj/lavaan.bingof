@@ -4,7 +4,7 @@ library(jcolors)
 library(lavaan.bingof)
 
 # If not downloaded, go to https://osf.io/2d97y/
-load("all_res.RData")
+load("all_res_nowt.rda")
 
 grab_sims <- function(x = all_res, samp = "srs", type = "type1",
                       the_n = c(500, 1000, 2500, 5000, 10000)) {
@@ -144,19 +144,19 @@ save(res_srs_power, file = "res_srs_power.rda")
 
 # Complex sampling results -----------------------------------------------------
 res_complex_type1 <- bind_rows(
-  bind_cols(summarise_sims("strat", "type1"), sampling = "Stratified"),
+  # bind_cols(summarise_sims("strat", "type1"), sampling = "Stratified"),
   bind_cols(summarise_sims("clust", "type1"), sampling = "Cluster"),
   bind_cols(summarise_sims("strcl", "type1"), sampling = "Strat-clust")
 ) %>%
-  mutate(sampling = factor(sampling, levels = c("Stratified", "Cluster",
+  mutate(sampling = factor(sampling, levels = c("Cluster",
                                                 "Strat-clust")))
 
 res_complex_power <- bind_rows(
-  bind_cols(summarise_sims("strat", "power"), sampling = "Stratified"),
+  # bind_cols(summarise_sims("strat", "power"), sampling = "Stratified"),
   bind_cols(summarise_sims("clust", "power"), sampling = "Cluster"),
   bind_cols(summarise_sims("strcl", "power"), sampling = "Strat-clust")
 ) %>%
-  mutate(sampling = factor(sampling, levels = c("Stratified", "Cluster",
+  mutate(sampling = factor(sampling, levels = c("Cluster",
                                                 "Strat-clust")))
 
 complex_plot <- function(x = res_complex_type1, alpha = 10, dashed_line = TRUE,
