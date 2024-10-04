@@ -9,3 +9,4 @@ docs
 *.aux
 *.out
 .RDataTmp
+inst/Rsave/*
