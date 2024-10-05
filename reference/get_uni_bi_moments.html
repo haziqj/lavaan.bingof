@@ -121,19 +121,21 @@ probabilities only) based on model i.e. <code>pidot1</code> and <code>pidot2</co
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html" class="external-link">sem</a></span><span class="op">(</span><span class="fu"><a href="txt_mod.html">txt_mod</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="gen_data_bin.html">gen_data_bin</a></span><span class="op">(</span><span class="fl">1</span>, n <span class="op">=</span> <span class="fl">500</span><span class="op">)</span>, std.lv <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>                   estimator <span class="op">=</span> <span class="st">"PML"</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>lavaan-&gt;lav_object_post_check():  </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>    some estimated ov variances are negative</span>
 <span class="r-in"><span><span class="fu">get_uni_bi_moments</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pdot1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.922 0.690 0.554 0.782 0.856</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.920 0.712 0.562 0.786 0.860</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pidot1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9219978 0.6899261 0.5539548 0.7820773 0.8559863</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9199913 0.7120347 0.5620351 0.7859767 0.8599871</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pdot2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.666 0.542 0.732 0.802 0.434 0.576 0.604 0.468 0.496 0.670</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.696 0.536 0.742 0.810 0.436 0.582 0.630 0.450 0.498 0.686</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pidot2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.6651669 0.5411414 0.7376357 0.7991085 0.4396183 0.5664772 0.6063987</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.4646005 0.4925844 0.6782527</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.6960956 0.5380370 0.7406908 0.8090064 0.4307265 0.5823818 0.6335411</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.4551140 0.4955261 0.6850943</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
