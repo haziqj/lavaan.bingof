@@ -3,8 +3,9 @@ library(lavaan.bingof)
 library(furrr)
 library(cli)
 library(gt)
-plan(multisession, workers = parallel::detectCores() - 1)
+plan(multisession, workers = parallel::detectCores() - 2)
 nsims <- 1000
+conflicted::conflict_prefer("filter", "dplyr")
 
 # 1. Run additional simulations for smaller sample sizes n = 500 and n =
 # 1000(with the n = 5000). Table showing mean bias, mean abs. bias, mean
@@ -12,9 +13,11 @@ nsims <- 1000
 
 # 2. Another table showing Wald and Pearson (unadjusted vs weighted)
 
+pop <- make_population(5)
 make_wt_res <- function(samp_size = 5000, type = "bias_se", .popfac = 1 / 0.01,
-                        model_no = 1) {
-  dat <- gen_data_bin_wt(model_no, n = samp_size, popfac = .popfac)
+                        model_no = 5) {
+  # dat <- gen_data_bin_wt(model_no, n = samp_size, popfac = .popfac)
+  dat <- gen_data_bin_strat(pop, n = samp_size)
   fit0 <- lavaan::sem(model = txt_mod(model_no), data = dat, estimator = "PML",
                       std.lv = TRUE, sampling.weights = NULL)
   fit1 <- lavaan::sem(model = txt_mod(model_no), data = dat, estimator = "PML",
@@ -77,7 +80,8 @@ for (n in c(500, 1000, 5000)) {
 
   out <-
     future_map(seq_len(nsims), \(x) {
-      make_wt_res(samp_size = n, type = "bias_se", .popfac = 500000 / n,
+      make_wt_res(samp_size = n, type = "bias_se",
+                  .popfac = 50000 / n,
                   model_no = 5)
     }, .progress = TRUE, .options = furrr_options(seed = NULL))
 
@@ -91,23 +95,23 @@ for (n in c(500, 1000, 5000)) {
 res_bias_se_df <- do.call(rbind, res)
 
 # Test statistics
-res <- list()
-for (n in c(500, 1000, 5000)) {
-  cli_alert_info("Running with sample size n = {n}")
-
-  out <-
-    future_map(seq_len(nsims), \(x) {
-      make_wt_res(samp_size = n, type = "test_stats", .popfac = 500000 / n)
-    }, .progress = TRUE, .options = furrr_options(seed = NULL))
-
-  out <-
-    out[sapply(out, is_tibble)] |>
-    do.call(what = rbind)
-
-  res <- c(res, list(out))
-  cat("\n")
-}
-res_test_stats <- do.call(rbind, res)
+# res <- list()
+# for (n in c(500, 1000, 5000)) {
+#   cli_alert_info("Running with sample size n = {n}")
+#
+#   out <-
+#     future_map(seq_len(nsims), \(x) {
+#       make_wt_res(samp_size = n, type = "test_stats", .popfac = 500000 / n)
+#     }, .progress = TRUE, .options = furrr_options(seed = NULL))
+#
+#   out <-
+#     out[sapply(out, is_tibble)] |>
+#     do.call(what = rbind)
+#
+#   res <- c(res, list(out))
+#   cat("\n")
+# }
+# res_test_stats <- do.call(rbind, res)
 
 # Create bias table ------------------------------------------------------------
 tab_bias <-
@@ -119,6 +123,11 @@ tab_bias <-
     .by = c(n, method, name)
   ) |>
   pivot_wider(names_from = c(method, n), values_from = c(bias))
+
+# Relative bias?
+tab_bias <-
+  tab_bias |>
+  mutate(across(PML_500:PMLW_5000, ~ .x / truth))
 
 tab_bias_gt <-
   tab_bias |>
@@ -139,6 +148,7 @@ tab_bias_gt <-
   gt(rowname_col = "name") |>
   fmt_number(columns = -"truth", decimals = 3) |>
   fmt_markdown("name") |>
+  fmt_percent(contains("PML"), decimals = 1) |>
   tab_spanner(
     label = md("$n = 500$"),
     columns = ends_with("_500")
@@ -176,7 +186,7 @@ tab_bias_gt <-
     contains("PML_") ~ "PML",
     contains("PMLW_") ~ "PMLW",
     truth = "True values"
-  )
+  ); tab_bias_gt
 
 # Create se table --------------------------------------------------------------
 tab_se <-
@@ -210,6 +220,7 @@ tab_se_gt <-
   gt(rowname_col = "name") |>
   fmt_number(decimals = 2) |>
   fmt_markdown("name") |>
+  fmt_percent(contains("cov"), decimals = 1) |>
   tab_spanner(
     label = md("$n = 500$"),
     columns = ends_with("_500")
@@ -245,48 +256,48 @@ tab_se_gt <-
   cols_label(
     contains("PML_") ~ "PML",
     contains("PMLW_") ~ "PMLW"
-  )
+  ); tab_se_gt
 
 # Create test stats table ------------------------------------------------------
-tab_test_stats <-
-  res_test_stats |>
-  filter(name %in% c("WaldVCF", "Pearson,MM3")) |>
-  mutate(name = gsub(",MM3", "", name)) |>
-  summarise(
-    rejrate = mean(pval < 0.05),
-    X2 = mean(X2),
-    df = mean(df),
-    .by = c(n, method, name)
-  ) |>
-  mutate(X2df = glue::glue("{iprior::dec_plac(X2,2)} ({iprior::dec_plac(df,2)})")) |>
-  select(-X2, -df) |>
-  pivot_wider(names_from = c(name, method), values_from = c(rejrate, X2df))
-
-tab_test_stats_gt <-
-  gt(tab_test_stats) |>
-  # fmt_auto() |>
-  fmt_number(columns = -n, decimals = 3) |>
-  tab_spanner(
-    label = "Wald",
-    columns = contains("Wald")
-  ) |>
-  tab_spanner(
-    label = "Pearson",
-    columns = contains("Pearson")
-  ) |>
-  tab_spanner(
-    label = "Rej. Rate",
-    columns = contains("rejrate")
-  ) |>
-  tab_spanner(
-    label = md("$X^2$ (df)"),
-    columns = contains("X2df")
-  ) |>
-  cols_label(
-    n = "Sample size",
-    contains("PML") ~ "PML",
-    contains("PMLW") ~ "PMLW"
-  )
+# tab_test_stats <-
+#   res_test_stats |>
+#   filter(name %in% c("WaldVCF", "Pearson,MM3")) |>
+#   mutate(name = gsub(",MM3", "", name)) |>
+#   summarise(
+#     rejrate = mean(pval < 0.05),
+#     X2 = mean(X2),
+#     df = mean(df),
+#     .by = c(n, method, name)
+#   ) |>
+#   mutate(X2df = glue::glue("{iprior::dec_plac(X2,2)} ({iprior::dec_plac(df,2)})")) |>
+#   select(-X2, -df) |>
+#   pivot_wider(names_from = c(name, method), values_from = c(rejrate, X2df))
+#
+# tab_test_stats_gt <-
+#   gt(tab_test_stats) |>
+#   # fmt_auto() |>
+#   fmt_number(columns = -n, decimals = 3) |>
+#   tab_spanner(
+#     label = "Wald",
+#     columns = contains("Wald")
+#   ) |>
+#   tab_spanner(
+#     label = "Pearson",
+#     columns = contains("Pearson")
+#   ) |>
+#   tab_spanner(
+#     label = "Rej. Rate",
+#     columns = contains("rejrate")
+#   ) |>
+#   tab_spanner(
+#     label = md("$X^2$ (df)"),
+#     columns = contains("X2df")
+#   ) |>
+#   cols_label(
+#     n = "Sample size",
+#     contains("PML") ~ "PML",
+#     contains("PMLW") ~ "PMLW"
+#   )
 
 # Save tables ------------------------------------------------------------------
-save(tab_bias_gt, tab_se_gt, tab_test_stats_gt, file = "sims_uneq_samp_mod5.RData")
+save(tab_bias_gt, tab_se_gt, file = "sims_uneq_samp_mod5.RData")
