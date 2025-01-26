@@ -1,1 +1,34 @@
-{{< lipsum 1 >}}
+- Focus on the $M_2$ statistic, most commonly used in the literature, which involves only the univariate and bivariate moments of the data.
+  - Higher-order moments often lead to sparse or empty cells in the contingency tables, violating the chi-square approximations for test statistics. Even if not so,  higher-order moments are more sensitive to minor model misspecifications leading to false rejections of otherwise adequate models.
+  - Empirical studies show that lower-order moments are sufficient. E.g. Factor analysis and IRT, misfit often manifests in bivariate associations (e.g. residual correlations) [@cai2014new]
+  - [@maydeu2006limited] demonstrated by way of simulation that the $M_2$ statistic achieves better Type I error control and comparable power to full-information tests like Pearson's $X^2$, especially in sparse data.
+  - Higher order moments require integrating over high-dimensional latent variables and can be come intractable. Estimation via pairwise likelihood for instance harmonises well with the $M_2$ statistic.
+  - Bivariate margins provide actionable insights. Bivariate residuals are easier to interpret and localise specific item paris contributing to misfit.
+  
+
+Other software
+
+- [mirt]{.pkg} [@chalmers2012mirt] is a comprehensive R package for fitting IRT models. It is a versatile package that can fit a wide range of IRT models, including multidimensional models, graded response models, and models with multiple group comparisons. It also provides a range of fit statistics, including the $M_2$ statistic, and can be used to conduct a range of simulation studies. The package is well-documented and has a large user base, making it a popular choice for IRT analysis in R.
+- [dcm2]{.pkg} [@hoover2023dcm2] A collection of functions for calculating the M2 model fit statistic for diagnostic classification models as described by Liu et al. (2016) <doi:10.3102/1076998615621293>. These functions provide multiple sources of information for model fit according to the M2 statistic, including the M2 statistic, the *p* value for that M2 statistic, and the Root Mean Square Error of Approximation based on the M2 statistic.
+- Function `M2.Factor()` provided in the [FactorCopula]{.pkg} package [@kadhem2023factorcopula] Estimation, model selection and goodness-of-fit of (1) factor copula models for mixed continuous and discrete data in Kadhem and Nikoloulopoulos (2021) <doi:10.1111/bmsp.12231>; (2) bi-factor and second-order copula models for item response data in Kadhem and Nikoloulopoulos (2023) <doi:10.1007/s11336-022-09894-2>; (3) factor tree copula models for item response data in Kadhem and Nikoloulopoulos (2022) <doi:10.48550/arXiv.2201.00339>.
+2. Commercial Software
+
+(a) IRTPRO
+
+Implementation: Reports the M₂ statistic alongside other fit indices (e.g., AIC, BIC) for IRT models. Primarily used for large-scale educational assessments 8.
+Strengths: Supports advanced IRT models (e.g., multidimensional, mixed-format tests) and provides graphical diagnostics.
+3. Specialized Tools
+
+(a) GDINA (R Package)
+
+Integration: While not directly implementing M₂, it pairs with dcm2 to fit diagnostic models and compute M₂ for model fit evaluation 911.
+(b) Mplus (General SEM Software)
+
+Note: While not explicitly mentioned in the search results, Mplus is widely known to support limited-information GOF tests like M₂ for categorical data models, given its extensive SEM and IRT capabilities.
+
+Key Trends and Gaps
+
+Open-Source Dominance: Most implementations are in R (e.g., mirt, dcm2), reflecting the open-source community’s focus on flexible, modular psychometric tools 19.
+Commercial Adoption: IRTPRO is a notable exception, catering to users needing GUI-driven workflows 8.
+Niche Extensions: FactorCopula highlights M₂’s versatility beyond IRT, extending to copula models for mixed data 6.
+Sparse High-Order Support: Most software avoids higher-order moments (e.g., trivariate) due to computational constraints, favoring bivariate residuals 16.
