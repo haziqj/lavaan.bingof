@@ -1,0 +1,46 @@
+project:
+  type: manuscript
+  output-dir: ../docs/manuscript
+
+manuscript:
+  article: index.qmd
+
+format:
+  jss-html:
+    number-sections: true
+    # comments:
+    #   hypothesis: true
+  jss-pdf:
+    link-citations: true
+    keep-tex: true
+    journal:
+      # type: article
+      cite-shortnames: true
+      suppress: [title]
+      include-jss-default: false
+    # fig-width: 7
+    # fig-height: 5
+    fig-pos: 'htbp'
+    # header-includes:
+    #   # - \input{maths_shortcuts.tex}
+    #   # - \usepackage{setspace}
+    #   # - \onehalfspacing
+    output-file: jamil2025lavaanligof
+
+execute:
+  freeze: auto
+
+# notebook-links: false
+
+bibliography:
+  - refs-HJ.bib
+# csl: apa.csl
+
+citation:
+  type: article-journal
+  title: 'lavaan.ligof: Limited Information Goodness-of-Fit Tests for Confirmatory Factor Analysis Models in R'
+  issued: 2025
+  # container-title: "Journal of Data Science Software"
+  # doi: "10.23915/reprodocs.00010"
+  # url: https://example.com/summarizing-output
+google-scholar: true

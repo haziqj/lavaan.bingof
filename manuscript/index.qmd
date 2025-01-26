@@ -1,0 +1,87 @@
+---
+title: '[lavaan.ligof]{.pkg}: Limited Information Goodness-of-Fit Tests for Confirmatory Factor Analysis Models in [R]{.proglang}'
+authors:
+  - name: Haziq Jamil
+    orcid: 0000-0003-3298-1010
+    email: haziq.jamil@ubd.edu.bn
+    # corresponding: true
+    url: "https://haziqj.ml"
+    affiliations:
+      - name: Universiti Brunei Darussalam
+        id: ubd
+        department: Mathematical Sciences, Faculty of Science
+        address: Universiti Brunei Darussalam, Jalan Tungku Link
+        city: Bandar Seri Begawan
+        country: Brunei
+        postal-code: BE 1410
+      - name: London School of Economics and Political Science
+        id: lse
+        department: Department of Statistics
+        address: Columbia House, Houghton Street
+        city: London
+        country: United Kingdom
+        postal-code: WC2A 2AE
+# date: "31 January 2025"
+date-modified: last-modified
+nocite: |
+  @*
+abstract: |
+  {{< lipsum 1 >}}
+keywords:
+  - limited information
+  - goodness of fit tests
+  - confirmatory factor analysis
+  - multivariate analysis
+keywords-formatted:
+  - limited information
+  - goodness of fit tests
+  - confirmatory factor analysis
+  - multivariate analysis
+---
+
+## Introduction
+
+::: callout
+The introduction is in principle "as usual". However, it should usually embed both the implemented *methods* and the *software* into the respective relevant literature. For the latter both competing and complementary software should be discussed (within the same software environment and beyond), bringing out relative (dis)advantages. All software mentioned should be properly `@cited`'d. (See also [Using BibTeX] for more details on {{< bibtex >}}.)
+
+For writing about software JSS requires authors to use the markup `[]{.proglang}` (programming languages and large programmable systems), `[]{.pkg}` (software packages), back ticks like \`code\` for code (functions, commands, arguments, etc.).
+
+If there is such markup in (sub)section titles (as above), a plain text version has to be provided in the {{< latex >}} command as well. Below we also illustrate how abbrevations should be introduced and citation commands can be employed. See the {{< latex >}} code for more details.
+:::
+
+{{< include _intro.qmd >}}
+
+## Methods
+
+## Software
+
+## Summary and discussion
+
+<!-- ## Methodology -->
+
+<!-- {{< include _method.qmd >}} -->
+
+<!-- ## Simulation Study -->
+
+<!-- {{< include _simulation.qmd >}} -->
+
+<!-- ## Discussion -->
+
+<!-- {{< include _discussion.qmd >}} -->
+
+## Computational details {.unnumbered}
+
+## Acknowledgments {.unnumbered}
+
+
+## References {.unnumbered}
+
+::: {#refs}
+:::
+
+## Appendix {.unnumbered}
+
+{{< include _appendix.qmd >}}
+
+
+
