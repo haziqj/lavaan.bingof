@@ -53,21 +53,15 @@ If there is such markup in (sub)section titles (as above), a plain text version 
 
 ## Methods
 
+{{< include _method.qmd >}}
+
 ## Software
+
+{{< include _software.qmd >}}
 
 ## Summary and discussion
 
-<!-- ## Methodology -->
-
-<!-- {{< include _method.qmd >}} -->
-
-<!-- ## Simulation Study -->
-
-<!-- {{< include _simulation.qmd >}} -->
-
-<!-- ## Discussion -->
-
-<!-- {{< include _discussion.qmd >}} -->
+{{< include _discussion.qmd >}}
 
 ## Computational details {.unnumbered}
 

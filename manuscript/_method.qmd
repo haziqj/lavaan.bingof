@@ -1,23 +1,7 @@
-## Structural Equation Models
-
-- Define a generic SEM model
-
-$$
-y = \nu + \Lambda \eta + \epsilon \\
-\eta = B \eta + \zeta\\
-\epsilon \sim N(0, \Theta_\epsilon)\\
-\zeta \sim N(0, \Psi)\\
-$$ {#eq-sem}
-
-## Estimation methods
-
-### Maximum likelihood estimation
+### CFA with ordinal items
 
 {{< lipsum 1 >}}
 
-### Reduced-bias estimation
-
-- Explain how the reduced-bias estimation works.
+### LIGOF tests
 
 {{< lipsum 1 >}}
-
