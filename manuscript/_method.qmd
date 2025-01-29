@@ -1,6 +1,117 @@
+---
+bibliography: refs-HJ.bib
+---
+
+```{r}
+#| results: asis
+#| echo: false
+# LaTeX shortcuts 
+cat(readr::read_file("maths_shortcuts.tex"))
+``` 
+
+### Multinomial representation
+
+Let $\bY = (Y_1,\dots,Y_p)^\top$ be a vector of ordinal variables such that each $Y_i$ takes one and only one value from the set $\{0,1,\dots,m_i-1\}$.
+We can assume a multinoulli distribution for each $Y_i$, for which the joint distribution is
+$$
+\Pr(\bY = \by) = \Pr(Y_1 = y_1, \dots, Y_p = y_p).
+$$
+Note that there are a total of $R=\prod_{i=1}^p m_i$ possible joint probabilities corresponding to all possible response patterns of the form $\by = (y_1,\dots,y_p)$, where $y_i = 1,\dots,m_i$.
+The sum of all response probabilities must equal one.
+
+<!-- Each component of this vector can be marginalised to obtain the univariate probabilities -->
+
+<!-- univariate probabilities... -->
+
+<!-- bivariate probabilities... -->
+
+<!-- can go more than this, tetravariate and beyond, but stop here. -->
+
+<!-- GOAL: Explain $\bpi_2 = [\dot\bpi_1, \dot\bpi_2]$. -->
+
+Suppose that $\cY = \{ \by^{(h)} \}$ is an independent and identically distributed (iid) sample of size $n$ from the distribution of $\bY$.
+Let $p_r = \hat n_r / n$ be the $r$th entry of the $R$-vector of proportions $\bp$, with $\hat n_r$ denoting the frequency of the occurence of the response pattern $\by_r$ in the sample $\cY$.
+The random vector $\hat\bn = (\hat n_1,\dots,\hat n_R)^\top$ follows a multinomial distribution with parameters $n$, $R$, and $\bpi = (\bpi_1,\dots,\bpi_R)^\top$.
+The mean of $\bn$ is $\E(\bn) = n\bp$, while the variance-covariance matrix of $\bn$ is
+$$
+\Var(\hat\bn) = n \big( \diag(\bpi) -  \bpi \bpi^\top \big) =: n\bSigma.
+$$
+It is widely known, as a consequence of the central limit theorem, that for iid samples,
+$$
+\sqrt n (\bp - \bpi) \xrightarrow{\text D} {\N}_R(\bzero, \bSigma).
+$$
+See [@agresti2002categorical] for more details.
+This limiting result serves as one of the ingredients for the derivation of the goodness-of-fit tests for categorical data, as we will see later on.
+
 ### CFA with ordinal items
 
-{{< lipsum 1 >}}
+To describe a factor model for ordinal items, consider the following *underlying variable* setup.
+Each observed ordinal response $Y_i$ is assumed to be manifested due to the thresholding of certain underlying continuous random variables $Y^*_i$, $i=1,\dots,p$.
+The connection is made as follows:
+$$
+Y_i = \begin{cases}
+0 & \hphantom{\tau_{m-1}^{(i)} \leq \,\,} Y^*_i < \tau_1^{(i)} \\
+1 &  \ \ \tau_{1}^{(i)} \leq  Y^*_i < \tau_2^{(i)} \\
+2 &  \ \ \tau_{2}^{(i)} \leq  Y^*_i < \tau_3^{(i)} \\
+\vdots &  \hphantom{\tau_{1}^{(i)} \leq \ \ \ } \vdots \\
+m_i-1 & \tau_{m_i-1}^{(i)} \leq Y^*_i .
+\end{cases}
+$$
+Evidently, the model is invariant to a linear transformation: 
+scaling and shifting the underlying variables $Y_i^*$ do not affect the outcome of the ordinal variable $Y_i$.
+For this reason it is convenient to assume, for the purposes of model identifiability, a zero mean Gaussian distribution $\bY^* \sim \N_p(\bzero,\bSigma_{\by^*})$, where $\bSigma_{\by^*}$ is a correlation matrix.
+
+The underlying continuous variables $\bY^*$, unlike their discrete counterparts $\bY$, are now suitable to be modelled using a factor analysis model.
+Here, the goal is to find a set of latent factors $\bfeta = (\eta_1,\dots,\eta_q)^\top \in \bbR^q$, with $q \ll p$, that sufficiently explain the covariance structure of the $p$-dimensional variable space.
+This is achieved by the relationship
+$$
+\bY^* = \bLambda \bfeta + \bepsilon,
+$$
+where $\bLambda$ is a (often sparse) $p \times q$ matrix of factor loadings, and $\bepsilon$ is a vector of residuals.
+Certain distributional assumptions are made, namely that $\bfeta \sim \N_q(\bzero,\bPsi)$ with $\bPsi$ a correlation matrix, $\bepsilon \sim \N_p(\bzero,\bTheta_{\bepsilon})$ with $\bTheta_{\bepsilon} = \bI - \diag(\bLambda \bPsi \bLambda^\top)$, and that $\Cov(\bfeta,\bepsilon) = \bzero$.
+Together, this implies that the polychoric correlation matrix of $\bY$ is given by
+$$
+\bSigma_{\by^*} = \bLambda \bPsi \bLambda^\top + \bTheta_{\bepsilon}.
+$$
+As a remark, the underlying variable approach is commonly employed in the context of confirmatory factor analysis (CFA) models due to the ease of modelling, though other approaches such as item response theory (IRT) models are also available.
+
+For this factor analysis model, the parameters of interest are the non-zero entries $\blambda$ of the loading matrix $\bLambda$, the unique non-diagonal entries $\brho$ in the factor correlation matrix $\bPsi$, and the thresholds $\btau^{(i)} = (\tau_1^{(i)},\dots,\tau_{m_i-1}^{(i)})^\top$ for each ordinal item $Y_i$.
+Collectively, these parameters are denoted by $\btheta = (\blambda^\top,\brho^\top,\btau^{(1)},\dots,\btau^{(p)})^\top$ belonging to some parameter space $\bTheta$.
+
+Estimation of model parameters involve the minimisation of some fit function $F(\btheta)$, which is typically a discrepancy function measuring the difference between the observed and expected covariance matrices.
+There are two types of estimation methods available: 
+Full information methods and limited information methods.
+The former uses the joint probability distribution of all variables, thus considering the entire data structure.
+Examples of this include maximum likelihood estimation, minimum chi-squared estimator, and certain Bayesian methods.
+
+One limitation of full information methods is that they require the computation of high-dimensional integrals, which can be computationally expensive.
+Specifically for the MLE, the likelihood function is
+$$
+L(\btheta \mid \cY) = \prod_{r=1}^R \left[ \idotsint \phi_p(\by^* \mid \bzero, \bSigma_{\by^*}) \right]^{\hat n_r},
+$$
+which is expensive to compute for large $p$.
+
+Limited information methods on the other hand are based on low-dimensional margins.
+
+
+- Full information (e.g. ML)
+- Limited information (e.g. composite likelihood, WLSMV, DWLS)
+
+...
+
+Consider $\sqrt n$-consistent and asymptotically normal estimators $\hat\btheta$ satisfying
+$$
+\sqrt n (\hat\btheta - \btheta) = \bH \sqrtn \big(\bp - \bpi(\btheta)\big) + o_p(1)
+$$
+for some $t \times R$ matrix $\bH$.
+This includes minimum variance (a.k.a. best asymptotically normal, BAN) estimators such as the MLE or the minimum chi-square estimator.
+It also includes WLSMV, DWLS and maximum composite likelihood estimators such as the pairwise maximum likelihood estimator.
+
+- For the MLE, $\bH=\cI^{-1} \bDelta^\top \bD^{-1}$, where $\cI=\bDelta^\top \bD^{-1}\bDelta$ is the Fisher information matrix, and $\bDelta=\partial \bpi(\btheta)/\partial\btheta$ and $\bD = \diag(\bpi(\btheta))$.
+
+- 
+
+
 
 ### LIGOF tests
 
