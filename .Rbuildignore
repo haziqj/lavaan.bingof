@@ -11,3 +11,4 @@
 ^data-raw$
 ^codecov\.yml$
 ^.DS_Store$
+^manuscript$
