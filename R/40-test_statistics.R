@@ -38,7 +38,7 @@ extract_lavaan_info <- function(lavobject) {
   # In lavaan 0.6-18.2002, the names have been lowercased!
   lavcache[[1]]$LONG <- lavcache[[1]]$long
 
-  TH      <- lavobject@Fit@TH[[1]]
+  TH      <- as.numeric(lavobject@Model@GLIST$tau)
   th.idx  <- lavobject@Model@th.idx[[1]]
   if(lavobject@Model@nexo == 0) {
     nvar <- lavobject@Model@nvar
