@@ -1,11 +1,11 @@
-library(plFA)
+suppressPackageStartupMessages(library(plFA))
 dat <- gen_data_bin(n = 1000, seed = 123)
 mod <- "eta =~ y1 + y2 + y3 + y4 + y5"
 fit1 <- plFA::cfa(mod, dat, std.lv = TRUE)
 fit2 <- lavaan::cfa(mod, dat, std.lv = TRUE, estimator = "PML")
 
 test_that("Coefficients and implied cov mat similar", {
-  expect_equal(coef(fit1), coef(fit2), tolerance = 1e-5)
+  expect_equal(lavaan::coef(fit1), lavaan::coef(fit2), tolerance = 1e-5)
   expect_equal(fit1@Fit@Sigma.hat, fit2@Fit@Sigma.hat, tolerance = 1e-5)
 })
 
